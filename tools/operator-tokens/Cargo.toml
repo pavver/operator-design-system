@@ -1,0 +1,11 @@
+[package]
+name = "operator-tokens"
+description = "Generates platform token sources (CSS, Rust, Kotlin) from tokens/tokens.toml."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+anyhow = "1"
+toml = { version = "0.9", features = ["preserve_order"] }

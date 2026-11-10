@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Tokens are up to date
+        run: cargo run -p operator-tokens -- --check
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Clippy (host crates)
+        run: cargo clippy -p operator-tokens -p operator-ui-tokens -- -D warnings
+      - name: Clippy (web crates)
+        run: cargo clippy --target wasm32-unknown-unknown -p operator-ui -p operator-ui-demo -- -D warnings

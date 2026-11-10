@@ -1,0 +1,9 @@
+[package]
+name = "operator-ui-tokens"
+description = "Generated Operator UI design tokens shared by every Rust UI toolkit (Leptos, egui)."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]

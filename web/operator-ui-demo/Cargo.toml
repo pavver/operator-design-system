@@ -1,0 +1,12 @@
+[package]
+name = "operator-ui-demo"
+description = "Interactive gallery of Operator UI web components."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+operator-ui.workspace = true
+leptos.workspace = true
+console_error_panic_hook = "0.1.7"

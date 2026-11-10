@@ -1,0 +1,15 @@
+[package]
+name = "operator-ui"
+description = "Operator UI core component library for Leptos."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+operator-ui-tokens.workspace = true
+leptos.workspace = true
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+gloo-timers = { version = "0.4.0", features = ["futures"] }
+web-sys = { workspace = true, features = ["HtmlElement", "HtmlInputElement", "DomRect", "Element", "EventTarget", "PointerEvent", "KeyboardEvent", "CssStyleDeclaration", "Window", "Document"] }

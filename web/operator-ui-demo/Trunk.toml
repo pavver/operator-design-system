@@ -1,0 +1,11 @@
+[build]
+target = "index.html"
+dist = "dist"
+
+[serve]
+addresses = ["127.0.0.1"]
+port = 8090
+open = false
+
+[watch]
+watch = [".", "../operator-ui", "../../crates/operator-ui-tokens"]
