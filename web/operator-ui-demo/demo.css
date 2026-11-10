@@ -30,6 +30,9 @@ body { background: #181818; }
   box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-border);
 }
 .demo-brand { display: flex; flex-direction: column; gap: var(--op-dim-gap-micro); }
+.demo-links { display: flex; gap: var(--op-dim-pad-card); margin-top: var(--op-dim-pad-tight); }
+.demo-links a { color: var(--op-text-secondary); text-decoration: none; }
+.demo-links a:hover { color: var(--op-accent); }
 .demo-controls { display: flex; flex-direction: column; gap: var(--op-dim-margin-screen); }
 .demo-nav { display: flex; flex-direction: column; }
 .demo-nav a {

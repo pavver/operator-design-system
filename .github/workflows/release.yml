@@ -1,0 +1,89 @@
+name: Release
+
+# A pushed `vX.Y.Z` tag publishes a GitHub Release and redeploys the gallery to GitHub Pages.
+# A manual run redeploys the gallery from the chosen ref without creating a release.
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: trunk
+
+      - name: Tag matches the workspace version
+        if: github.event_name == 'push'
+        run: |
+          version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)
+          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match workspace version ${version}" >&2
+            exit 1
+          fi
+
+      - name: Checks
+        run: |
+          cargo run -p operator-tokens -- --check
+          cargo fmt --all -- --check
+          cargo clippy -p operator-tokens -p operator-ui-tokens -- -D warnings
+          cargo clippy --target wasm32-unknown-unknown -p operator-ui -p operator-ui-demo -- -D warnings
+
+      - name: Build gallery
+        working-directory: web/operator-ui-demo
+        run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: web/operator-ui-demo/dist
+
+      - name: Release notes
+        if: github.event_name == 'push'
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: RELEASE_NOTES.md
+
+      - name: Package gallery
+        if: github.event_name == 'push'
+        run: |
+          cd web/operator-ui-demo/dist
+          zip -qr "../../../operator-ui-gallery-${GITHUB_REF_NAME}.zip" .
+
+      - name: Publish release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          files: operator-ui-gallery-${{ github.ref_name }}.zip
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

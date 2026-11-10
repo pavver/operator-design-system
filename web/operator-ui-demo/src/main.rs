@@ -193,7 +193,7 @@ fn tokens_section() -> impl IntoView {
                 <span class="demo-muted op-t-caption">
                     {format!("{name} · {} / {} TU · {}", t.size, t.line, t.weight)}
                 </span>
-                <span class=class>"Камера 3 · Ворота — Gate camera 0x4F2A"</span>
+                <span class=class>"Gate camera 03 · North entrance · 0x4F2A"</span>
             </div>
         }
     })
@@ -430,6 +430,9 @@ fn action_button_section() -> impl IntoView {
 // App shell
 // ---------------------------------------------------------------------------
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+const REPO_URL: &str = "https://github.com/pavver/operator-design-system";
+
 const NAV: [(&str, &str); 5] = [
     ("tokens", "Tokens"),
     ("text-field", "TextField"),
@@ -496,7 +499,12 @@ fn App() -> impl IntoView {
                 <aside class="demo-aside">
                     <div class="demo-brand">
                         <span class="op-t-app-title">"Operator UI"</span>
-                        <span class="op-t-caption demo-muted">"web · leptos"</span>
+                        <span class="op-t-caption demo-muted">{format!("v{VERSION} · web · leptos")}</span>
+                        <span class="demo-links op-t-caption">
+                            <a href=REPO_URL>"GitHub"</a>
+                            <a href=format!("{REPO_URL}/tree/main/docs")>"Docs"</a>
+                            <a href=format!("{REPO_URL}/releases")>"Releases"</a>
+                        </span>
                     </div>
                     {controls(dark, b)}
                     <nav class="demo-nav op-t-body-small">

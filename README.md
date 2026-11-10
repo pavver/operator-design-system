@@ -3,6 +3,8 @@
 A compact, technical design system for applications that monitor and control devices.
 It looks like a terminal or a control panel: Cascadia Code everywhere, gray editor-like surfaces, warm signal colors, sharp corners, and honest feedback for every async action.
 
+**Live gallery:** <https://pavver.github.io/operator-design-system/>
+
 The repository contains three things:
 
 * **The system:** principles, units, color, type, motion, and the shared state model, in [docs](docs).
@@ -36,6 +38,7 @@ Engineering:
 * [Tokens and code generation](docs/tokens.md)
 * [Porting to a new platform](docs/porting.md)
 * [Web (Leptos)](docs/platforms/web.md)
+* [Releasing](docs/releasing.md)
 
 ## Repository Layout
 
@@ -47,6 +50,7 @@ generated/kotlin/        generated Compose tokens
 web/operator-ui/         Leptos component library
 web/operator-ui-demo/    interactive gallery
 docs/                    the design system itself
+scripts/release.sh       release helper
 ```
 
 ## Quick Start

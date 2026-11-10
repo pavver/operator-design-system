@@ -9,12 +9,15 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: trunk
       - name: Tokens are up to date
         run: cargo run -p operator-tokens -- --check
       - name: Format
@@ -23,3 +26,6 @@ jobs:
         run: cargo clippy -p operator-tokens -p operator-ui-tokens -- -D warnings
       - name: Clippy (web crates)
         run: cargo clippy --target wasm32-unknown-unknown -p operator-ui -p operator-ui-demo -- -D warnings
+      - name: Gallery builds
+        working-directory: web/operator-ui-demo
+        run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
