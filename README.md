@@ -31,9 +31,11 @@ The repository contains three things:
 | Header | [header.md](docs/components/header.md) | Reviewed |
 | ConfirmDialog | [confirm-dialog.md](docs/components/confirm-dialog.md) | Reviewed |
 | ConsoleTerminal | [console-terminal.md](docs/components/console-terminal.md) | Reviewed |
+| MarqueeText | [marquee-text.md](docs/components/marquee-text.md) | Draft |
+| ThemeToggle | [theme-toggle.md](docs/components/theme-toggle.md) | Draft |
 | Icon, ProgressIndicator, Divider, Card | [primitives.md](docs/components/primitives.md) | Reviewed |
 
-New components are added one at a time, after each one has been reviewed in every state.
+New components start as **Draft** and become **Reviewed** after they have been checked in every state.
 
 ## Documentation
 

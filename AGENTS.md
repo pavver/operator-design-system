@@ -6,7 +6,7 @@ Rules for AI agents contributing to this repository.
 
 * The repository holds the design system, its tokens, and its platform implementations.
 * Application-specific or third-party branded assets do not belong here.
-* A component is added only after it has been reviewed in every state.
+* A new component starts as Draft and becomes Reviewed only after the maintainer has checked it in every state.
 * Each change to a component updates its implementation and its specification in the same commit.
 
 ## Language and Formatting
@@ -20,7 +20,7 @@ Rules for AI agents contributing to this repository.
 * Spatial values use Design Units (`1 DU = 4 logical points`) and the tokens in [tokens/tokens.toml](tokens/tokens.toml).
 * Font sizes and line heights use Type Units (`1 TU = 1 scalable logical point`).
 * Raw `px`, `dp`, `sp`, `pt`, and `rem` values are prohibited in specifications and component code.
-  The only exceptions are the unit definitions themselves and runtime pointer geometry.
+  The only exceptions are the unit definitions themselves and geometry measured at runtime (pointer positions, element sizes).
 
 ## Geometry
 

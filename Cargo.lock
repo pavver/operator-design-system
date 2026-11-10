@@ -905,6 +905,7 @@ dependencies = [
  "js-sys",
  "leptos",
  "operator-ui-tokens",
+ "send_wrapper",
  "wasm-bindgen",
  "web-sys",
 ]

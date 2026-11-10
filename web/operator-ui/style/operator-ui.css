@@ -778,3 +778,83 @@
   .op-root *, .op-root *::before, .op-root *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
   .op-root .op-spinner, .op-root .op-run rect { animation-duration: 2s !important; animation-iteration-count: infinite !important; }
 }
+
+/* ------------------------------------------------------------------ */
+/* MarqueeText                                                         */
+/* ------------------------------------------------------------------ */
+.op-marquee { display: block; min-width: 0; max-width: 100%; overflow: hidden; white-space: nowrap; }
+.op-marquee[data-clickable] { cursor: pointer; }
+.op-marquee-track { display: inline-flex; will-change: transform; }
+.op-marquee-text { flex: none; white-space: pre; }
+.op-marquee-gap { flex: none; }
+.op-marquee-track[data-run="a"] { animation-name: op-marquee-a; animation-timing-function: linear; animation-iteration-count: 1; }
+.op-marquee-track[data-run="b"] { animation-name: op-marquee-b; animation-timing-function: linear; animation-iteration-count: 1; }
+@keyframes op-marquee-a { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
+@keyframes op-marquee-b { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
+@media (prefers-reduced-motion: reduce) {
+  .op-marquee-track[data-run] { animation: none; }
+  .op-marquee[data-overflow] .op-marquee-track { display: block; overflow: hidden; text-overflow: ellipsis; }
+}
+.op-marquee-tip {
+  position: fixed;
+  z-index: 60;
+  width: max-content;
+  padding: var(--op-dim-pad-tight) var(--op-dim-gutter);
+  background-color: var(--op-surface);
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  color: var(--op-text-primary);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* ThemeToggle (after the Day/Night Toggle by Jhey Tompkins, MIT)      */
+/* ------------------------------------------------------------------ */
+.op-theme-toggle {
+  --sb-w: var(--op-dim-spinner-stroke);
+  --sb-base: color-mix(in srgb, var(--op-border) 50%, transparent);
+  --tt-ease: cubic-bezier(0.4, -0.2, 0.4, 1.2);
+  --tt-time: 450ms;
+  display: block;
+  flex: none;
+  padding: 0;
+  border-radius: 999px;
+}
+.op-theme-toggle[data-state="disabled"] { --sb-base: var(--op-disabled-border); }
+.op-tt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.op-tt-sky { fill: var(--op-toggle-day-sky); transition: fill 400ms var(--op-ease-standard); }
+.op-theme-toggle[data-dark] .op-tt-sky { fill: var(--op-toggle-night-sky); }
+.op-theme-toggle[data-state="disabled"] .op-tt-sky { fill: var(--op-disabled-surface); }
+.op-tt-star {
+  fill: var(--op-toggle-star);
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0.3);
+  transition: opacity var(--tt-time) var(--tt-ease), transform var(--tt-time) var(--tt-ease);
+}
+.op-theme-toggle[data-dark] .op-tt-star { opacity: 0.95; transform: scale(1); }
+.op-tt-clouds { transition: transform var(--tt-time) var(--tt-ease), opacity var(--tt-time) var(--tt-ease); }
+.op-theme-toggle[data-dark] .op-tt-clouds { transform: translateY(var(--tt-cloud-drop)); opacity: 0; }
+.op-tt-cloud { fill: var(--op-toggle-cloud); opacity: 0.95; }
+.op-tt-cloud-back { fill: var(--op-toggle-cloud-back); opacity: 0.45; }
+.op-tt-thumb { transition: transform var(--tt-time) var(--tt-ease); }
+.op-theme-toggle[data-dark] .op-tt-thumb { transform: translateX(var(--tt-travel)); }
+.op-tt-body { transition: opacity var(--op-motion-state-color) var(--op-ease-standard); }
+.op-theme-toggle[data-state="pending"] .op-tt-body { opacity: 0; }
+.op-tt-halo { fill: var(--op-toggle-star); transition: opacity var(--tt-time) var(--tt-ease); }
+.op-theme-toggle[data-dark] .op-tt-halo { opacity: 0; }
+.op-tt-sun { fill: var(--op-toggle-sun); }
+.op-tt-moon { transform: translateX(var(--tt-moon-shift)); transition: transform var(--tt-time) var(--tt-ease); }
+.op-theme-toggle[data-dark] .op-tt-moon { transform: translateX(0); }
+.op-tt-moon-disk { fill: var(--op-toggle-moon); }
+.op-tt-crater { fill: var(--op-toggle-crater); }
+.op-tt-spinner { position: absolute; z-index: 2; display: grid; place-items: center; transition: left var(--tt-time) var(--tt-ease); }
+@media (prefers-reduced-motion: reduce) {
+  .op-theme-toggle * { transition-duration: 0s !important; }
+}

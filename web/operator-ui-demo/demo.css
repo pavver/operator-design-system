@@ -88,3 +88,5 @@ body { background: #181818; }
   .demo-main { padding: var(--op-dim-margin-screen); }
   .demo-grid-2, .demo-type-row { grid-template-columns: minmax(0, 1fr); }
 }
+
+.demo-marquee-box { width: calc(var(--op-du) * 60); max-width: 100%; padding: var(--op-dim-gutter) var(--op-dim-pad-card); background: var(--op-surface); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }

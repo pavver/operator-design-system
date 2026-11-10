@@ -845,6 +845,73 @@ fn dialog_section() -> impl IntoView {
     }
 }
 
+fn marquee_section() -> impl IntoView {
+    let long = "Gate camera 03 · North entrance · perimeter zone B · infrared enabled · 0x4F2A";
+    view! {
+        <Section
+            id="marquee"
+            title="MarqueeText"
+            note="Overflowing text waits 2 s, scrolls at 7.5 DU/s and pauses 1.2 s between loops. Hover or long-press shows the full text."
+        >
+            <div class="demo-stack demo-narrow">
+                <div class="demo-labelled">
+                    <span class="op-t-caption demo-muted">"Overflowing, row title"</span>
+                    <div class="demo-marquee-box"><MarqueeText text=long class="op-t-row-title"/></div>
+                </div>
+                <div class="demo-labelled">
+                    <span class="op-t-caption demo-muted">"Fits, stays still"</span>
+                    <div class="demo-marquee-box"><MarqueeText text="Gate camera 03" class="op-t-row-title"/></div>
+                </div>
+                <div class="demo-labelled">
+                    <span class="op-t-caption demo-muted">"Two loops, custom tooltip"</span>
+                    <div class="demo-marquee-box">
+                        <MarqueeText
+                            text=long
+                            class="op-t-body"
+                            iterations=2
+                            tooltip_text="Camera 03 at the north entrance"
+                        />
+                    </div>
+                </div>
+            </div>
+        </Section>
+    }
+}
+
+fn theme_toggle_section() -> impl IntoView {
+    let b = backend();
+    let local = RwSignal::new(false);
+    let remote = RwSignal::new(true);
+    view! {
+        <Section
+            id="theme-toggle"
+            title="ThemeToggle"
+            note="Day/night switch after Jhey Tompkins' CodePen (MIT). The async variant shows a spinner and slides back on error."
+        >
+            <Row label="Interactive">
+                <Cell label="Sync">
+                    <ThemeToggle dark=local on_toggle=Callback::new(move |v: bool| local.set(v))/>
+                </Cell>
+                <Cell label="Async">
+                    <ThemeToggle
+                        dark=remote
+                        on_toggle=Callback::new(move |v: bool| remote.set(v))
+                        on_toggle_async=AsyncAction::new(move |v: bool| b.call(format!("theme dark={v}")))
+                    />
+                </Cell>
+            </Row>
+            <Row label="Static states">
+                <Cell label="Day"><ThemeToggle dark=false/></Cell>
+                <Cell label="Night"><ThemeToggle dark=true/></Cell>
+                <Cell label="Pending"><ThemeToggle dark=true state=ControlState::Pending/></Cell>
+                <Cell label="Success"><ThemeToggle dark=false state=ControlState::Success/></Cell>
+                <Cell label="Error"><ThemeToggle dark=true state=ControlState::Error/></Cell>
+                <Cell label="Disabled"><ThemeToggle dark=false enabled=false/></Cell>
+            </Row>
+        </Section>
+    }
+}
+
 fn card_section() -> impl IntoView {
     view! {
         <Section id="card" title="Card · Divider" note="Rectangular container, 3 DU padding, surface or surface_alt background.">
@@ -870,7 +937,7 @@ fn card_section() -> impl IntoView {
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const REPO_URL: &str = "https://github.com/pavver/operator-design-system";
 
-const NAV: [(&str, &str); 17] = [
+const NAV: [(&str, &str); 19] = [
     ("tokens", "Tokens"),
     ("action-button", "ActionButton"),
     ("icon-button", "IconButton"),
@@ -885,16 +952,16 @@ const NAV: [(&str, &str); 17] = [
     ("status-badge", "StatusBadge"),
     ("avatar", "Avatar"),
     ("header", "Header"),
+    ("marquee", "MarqueeText"),
+    ("theme-toggle", "ThemeToggle"),
     ("dialog", "ConfirmDialog"),
     ("card", "Card"),
     ("console", "Console"),
 ];
 
 fn controls(dark: RwSignal<bool>, b: Backend) -> impl IntoView {
-    let mode_index = RwSignal::new(0usize);
     let outcome_index = RwSignal::new(2usize);
     let latency = RwSignal::new("1200 ms".to_string());
-    Effect::new(move |_| dark.set(mode_index.get() == 0));
     Effect::new(move |_| {
         b.outcome.set(match outcome_index.get() {
             0 => Outcome::Success,
@@ -914,10 +981,7 @@ fn controls(dark: RwSignal<bool>, b: Backend) -> impl IntoView {
         <div class="demo-controls">
             <div class="demo-labelled">
                 <span class="op-t-caption demo-muted">"Mode"</span>
-                <SegmentedControl
-                    items=vec![SegmentItem::item("Dark", icons::DARK_MODE), SegmentItem::item("Light", icons::LIGHT_MODE)]
-                    selected=mode_index
-                />
+                <ThemeToggle dark=dark on_toggle=Callback::new(move |v: bool| dark.set(v))/>
             </div>
             <div class="demo-labelled">
                 <span class="op-t-caption demo-muted">"Next result"</span>
@@ -975,6 +1039,8 @@ fn App() -> impl IntoView {
                     {badge_section()}
                     {avatar_section()}
                     {header_section()}
+                    {marquee_section()}
+                    {theme_toggle_section()}
                     {dialog_section()}
                     {card_section()}
                     <Section id="console" title="ConsoleTerminal" note="Event log of this page; auto-scrolls to the newest line.">
