@@ -21,3 +21,10 @@ videocam = { material = "videocam" }
 search = { material = "search" }
 settings = { material = "settings" }
 refresh = { material = "refresh" }
+add = { material = "add" }
+remove = { material = "remove" }
+delete = { material = "delete" }
+arrow_back = { material = "arrow_back" }
+arrow_drop_down = { material = "arrow_drop_down" }
+chevron_right = { material = "chevron_right" }
+more_vert = { material = "more_vert" }

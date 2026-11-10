@@ -15,12 +15,25 @@ The repository contains three things:
 
 | Component | Specification | Web (Leptos) |
 | :--- | :--- | :--- |
+| ActionButton | [action-button.md](docs/components/action-button.md) | Reviewed |
+| IconButton | [icon-button.md](docs/components/icon-button.md) | Reviewed |
+| AsyncSwitch | [switch.md](docs/components/switch.md) | Reviewed |
+| AsyncCheckbox | [checkbox.md](docs/components/checkbox.md) | Reviewed |
+| CheckboxGroup | [checkbox-group.md](docs/components/checkbox-group.md) | Reviewed |
 | TextField | [text-field.md](docs/components/text-field.md) | Reviewed |
 | Slider | [slider.md](docs/components/slider.md) | Reviewed |
+| Stepper | [stepper.md](docs/components/stepper.md) | Reviewed |
 | SegmentedControl | [segmented-control.md](docs/components/segmented-control.md) | Reviewed |
-| ActionButton | [action-button.md](docs/components/action-button.md) | Draft (TextField dependency) |
+| DropdownMenu | [dropdown-menu.md](docs/components/dropdown-menu.md) | Reviewed |
+| ListItem | [list-item.md](docs/components/list-item.md) | Reviewed |
+| StatusBadge | [status-badge.md](docs/components/status-badge.md) | Reviewed |
+| Avatar | [avatar.md](docs/components/avatar.md) | Reviewed |
+| Header | [header.md](docs/components/header.md) | Reviewed |
+| ConfirmDialog | [confirm-dialog.md](docs/components/confirm-dialog.md) | Reviewed |
+| ConsoleTerminal | [console-terminal.md](docs/components/console-terminal.md) | Reviewed |
+| Icon, ProgressIndicator, Divider, Card | [primitives.md](docs/components/primitives.md) | Reviewed |
 
-Components are added one at a time, after each one has been reviewed in every state.
+New components are added one at a time, after each one has been reviewed in every state.
 
 ## Documentation
 

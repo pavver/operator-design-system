@@ -340,10 +340,30 @@ pub mod palettes {
 /// Vector icons imported from tokens/icons.
 pub mod icons {
     use super::Icon;
+    pub const ADD: Icon = Icon {
+        name: "add",
+        view_box: "0 -960 960 960",
+        paths: &["M444-444H240v-72h204v-204h72v204h204v72H516v204h-72v-204Z"],
+    };
+    pub const ARROW_BACK: Icon = Icon {
+        name: "arrow_back",
+        view_box: "0 -960 960 960",
+        paths: &["m330-444 201 201-51 51-288-288 288-288 51 51-201 201h438v72H330Z"],
+    };
+    pub const ARROW_DROP_DOWN: Icon = Icon {
+        name: "arrow_drop_down",
+        view_box: "0 -960 960 960",
+        paths: &["M480-384 288-576h384L480-384Z"],
+    };
     pub const CHECK: Icon = Icon {
         name: "check",
         view_box: "0 -960 960 960",
         paths: &["M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"],
+    };
+    pub const CHEVRON_RIGHT: Icon = Icon {
+        name: "chevron_right",
+        view_box: "0 -960 960 960",
+        paths: &["M522-480 333-669l51-51 240 240-240 240-51-51 189-189Z"],
     };
     pub const CLOSE: Icon = Icon {
         name: "close",
@@ -359,11 +379,25 @@ pub mod icons {
             "M479.96-144Q340-144 242-242t-98-238q0-140 97.93-238t237.83-98q13.06 0 25.65 1 12.59 1 25.59 3-39 29-62 72t-23 92q0 85 58.5 143.5T648-446q49 0 92-23t72-62q2 13 3 25.59t1 25.65q0 139.9-98.04 237.83t-238 97.93Zm.04-72q82 0 148.78-47.07Q695.55-310.15 727-386q-20 5-39.67 8.5Q667.67-374 648-374q-113.86 0-193.93-80.07Q374-534.14 374-648q0-19.67 3.5-39.33Q381-707 386-727q-75.85 31.45-122.93 98.22Q216-562 216-480q0 110 77 187t187 77Zm-14-250Z",
         ],
     };
+    pub const DELETE: Icon = Icon {
+        name: "delete",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M240-144v-552h-48v-72h192v-48h192v48h192v72h-48v552H240Zm72-72h336v-480H312v480Zm72-72h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z",
+        ],
+    };
     pub const LIGHT_MODE: Icon = Icon {
         name: "light_mode",
         view_box: "0 -960 960 960",
         paths: &[
             "M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm-.23 72Q400-288 344-344.23q-56-56.22-56-136Q288-560 344.23-616q56.22-56 136-56Q560-672 616-615.77q56 56.22 56 136Q672-400 615.77-344q-56.22 56-136 56ZM216-444H48v-72h168v72Zm696 0H744v-72h168v72ZM444-744v-168h72v168h-72Zm0 696v-168h72v168h-72ZM269-642 166-742l51-55 102 104-50 51Zm474 475L642-268l49-51 103 101-51 51ZM640-691l102-101 51 49-100 103-53-51ZM163-217l105-99 49 47-98 104-56-52Zm317-263Z",
+        ],
+    };
+    pub const MORE_VERT: Icon = Icon {
+        name: "more_vert",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M479.79-192Q450-192 429-213.21t-21-51Q408-294 429.21-315t51-21Q510-336 531-314.79t21 51Q552-234 530.79-213t-51 21Zm0-216Q450-408 429-429.21t-21-51Q408-510 429.21-531t51-21Q510-552 531-530.79t21 51Q552-450 530.79-429t-51 21Zm0-216Q450-624 429-645.21t-21-51Q408-726 429.21-747t51-21Q510-768 531-746.79t21 51Q552-666 530.79-645t-51 21Z",
         ],
     };
     pub const REFRESH: Icon = Icon {
@@ -372,6 +406,11 @@ pub mod icons {
         paths: &[
             "M480-192q-120 0-204-84t-84-204q0-120 84-204t204-84q65 0 120.5 27t95.5 72v-99h72v240H528v-72h131q-29-44-76-70t-103-26q-90 0-153 63t-63 153q0 90 63 153t153 63q84 0 144-55.5T693-456h74q-9 112-91 188t-196 76Z",
         ],
+    };
+    pub const REMOVE: Icon = Icon {
+        name: "remove",
+        view_box: "0 -960 960 960",
+        paths: &["M232-444v-72h496v72H232Z"],
     };
     pub const SEARCH: Icon = Icon {
         name: "search",
@@ -410,11 +449,18 @@ pub mod icons {
     };
 
     pub const ALL: &[Icon] = &[
+        ADD,
+        ARROW_BACK,
+        ARROW_DROP_DOWN,
         CHECK,
+        CHEVRON_RIGHT,
         CLOSE,
         DARK_MODE,
+        DELETE,
         LIGHT_MODE,
+        MORE_VERT,
         REFRESH,
+        REMOVE,
         SEARCH,
         SETTINGS,
         VIDEOCAM,

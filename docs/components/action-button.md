@@ -2,9 +2,7 @@
 
 Rectangular button that runs an async action and shows its outcome.
 
-Status: **draft**.
-It is published because [TextField](text-field.md) uses it as the save button.
-Its standalone behavior has not been reviewed yet.
+Status: **reviewed** on web.
 
 ## Anatomy
 

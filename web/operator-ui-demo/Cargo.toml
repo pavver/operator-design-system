@@ -9,4 +9,5 @@ publish = false
 [dependencies]
 operator-ui.workspace = true
 leptos.workspace = true
+js-sys.workspace = true
 console_error_panic_hook = "0.1.7"

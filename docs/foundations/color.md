@@ -63,4 +63,4 @@ That file is the single source of truth; this document explains the roles.
   Their RGB channels never interpolate toward the base color, which prevents gray intermediate frames.
 * Dark and light palettes have an identical key set.
   The token generator rejects a palette with missing or extra keys.
-* Additional token groups (`status_*`, `switch_*`, `term_*`) exist for components that are not yet published.
+* Component-specific groups: `status_*` for [StatusBadge](../components/status-badge.md), `switch_*` for [AsyncSwitch](../components/switch.md), and `term_*` for [ConsoleTerminal](../components/console-terminal.md).

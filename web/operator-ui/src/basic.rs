@@ -1,4 +1,4 @@
-//! Basic building blocks: Icon and ProgressIndicator.
+//! Basic building blocks: Icon, ProgressIndicator, Divider, Card.
 
 use crate::core::du;
 use leptos::prelude::*;
@@ -67,5 +67,29 @@ pub fn ProgressIndicator(
                 stroke-width=stroke_px
             ></circle>
         </svg>
+    }
+}
+
+/// Horizontal divider line.
+#[component]
+pub fn Divider(
+    /// Thickness in DU.
+    #[prop(default = dim::BORDER)]
+    thickness: f32,
+) -> impl IntoView {
+    view! { <div class="op-divider" role="separator" style:height=du(thickness)></div> }
+}
+
+/// Rectangular container with surface background and a standard border.
+#[component]
+pub fn Card(
+    #[prop(optional)] alt: bool,
+    #[prop(optional, into)] class: String,
+    children: Children,
+) -> impl IntoView {
+    view! {
+        <div class=format!("op-card {class}") class:op-card-alt=alt>
+            {children()}
+        </div>
     }
 }
