@@ -3,14 +3,9 @@
 //! Based on the Day/Night Toggle by Jhey Tompkins (https://codepen.io/jh3y/pen/LYgjpYZ), MIT License.
 //! The cloud outlines are taken from the original; see NOTICE.md.
 
-use crate::basic::ProgressIndicator;
-use crate::core::{
-    AsyncAction, ControlState, JobToken, PendingRun, Press, du, sleep_ms, spawn_ripple,
-    use_state_visual,
-};
+use crate::core::{ControlState, Press, du, spawn_ripple};
 use leptos::prelude::*;
-use leptos::task::spawn_local;
-use operator_ui_tokens::{DU_POINTS, dim};
+use operator_ui_tokens::DU_POINTS;
 use std::sync::atomic::{AtomicU32, Ordering};
 
 const CLOUD_BACK: &str = "M335 147.5c0 27.89-22.61 50.5-50.5 50.5a50.78 50.78 0 0 1-9.29-.853c-2.478 12.606-10.595 23.188-21.615 29.011C245.699 243.749 228.03 256 207.5 256a50.433 50.433 0 0 1-16.034-2.599A41.811 41.811 0 0 1 166 262a41.798 41.798 0 0 1-22.893-6.782A42.21 42.21 0 0 1 135 256a41.82 41.82 0 0 1-19.115-4.592A41.84 41.84 0 0 1 88 262c-1.827 0-3.626-.117-5.391-.343C74.911 270.448 63.604 276 51 276c-23.196 0-42-18.804-42-42s18.804-42 42-42c1.827 0 3.626.117 5.391.343C64.089 183.552 75.396 178 88 178a41.819 41.819 0 0 1 19.115 4.592C114.532 176.002 124.298 172 135 172a41.798 41.798 0 0 1 22.893 6.782 42.066 42.066 0 0 1 7.239-.773C174.137 164.159 189.749 155 207.5 155c.601 0 1.199.01 1.794.031A41.813 41.813 0 0 1 234 147h.002c.269-27.66 22.774-50 50.498-50 27.89 0 50.5 22.61 50.5 50.5Z";
@@ -29,8 +24,6 @@ const STARS: [(f32, f32, f32); 7] = [
 
 /// Thumb inset from the track edge, in DU.
 const THUMB_PAD: f32 = 0.625;
-const SUCCESS_HOLD_MS: u32 = 500;
-const ERROR_HOLD_MS: u32 = 600;
 
 static NEXT_ID: AtomicU32 = AtomicU32::new(0);
 
@@ -47,19 +40,13 @@ fn star_path(x: f32, y: f32, r: f32) -> String {
 
 /// Pill-shaped day/night switch with a sun that turns into a moon.
 ///
-/// Without `on_toggle_async` the toggle calls `on_toggle` immediately.
-/// With it, the toggle shows a spinner, calls `on_toggle` only after success, and slides back on error.
+/// A click calls `on_toggle` with the opposite value immediately; theme changes are local and never wait.
 #[component]
 pub fn ThemeToggle(
     /// `true` for night (dark), `false` for day (light).
     #[prop(into)]
     dark: Signal<bool>,
     #[prop(optional, into)] on_toggle: Option<Callback<bool>>,
-    #[prop(optional, into)] on_toggle_async: Option<AsyncAction<bool>>,
-    #[prop(default = true.into(), into)] enabled: Signal<bool>,
-    /// External state; when `Some`, it overrides the local async state.
-    #[prop(optional, into)]
-    state: Signal<Option<ControlState>>,
     /// Width in DU.
     #[prop(default = 17.0)]
     width: f32,
@@ -72,71 +59,15 @@ pub fn ThemeToggle(
     let track_clip = format!("op-tt-track-{uid}");
     let thumb_clip = format!("op-tt-thumb-{uid}");
 
-    let pending_target = RwSignal::new(None::<bool>);
-    let feedback = RwSignal::new(ControlState::Idle);
-    let job = JobToken::new();
     let press = Press::new();
-    let has_action = on_toggle.is_some() || on_toggle_async.is_some();
-    let on_toggle_async = StoredValue::new(on_toggle_async);
-
-    let effective = Signal::derive(move || pending_target.get().unwrap_or_else(|| dark.get()));
+    let interactive = on_toggle.is_some();
     let current = Signal::derive(move || {
-        if !enabled.get() {
-            ControlState::Disabled
-        } else if let Some(s) = state.get() {
-            s
-        } else if pending_target.get().is_some() {
-            ControlState::Pending
-        } else if feedback.get() != ControlState::Idle {
-            feedback.get()
-        } else if press.pressed.get() {
+        if press.pressed.get() {
             ControlState::Pressed
         } else {
             ControlState::Idle
         }
     });
-    let visual = use_state_visual(current);
-    let clickable = move || {
-        has_action
-            && !matches!(
-                current.get(),
-                ControlState::Disabled | ControlState::Pending
-            )
-    };
-
-    let toggle = move || {
-        let target = !dark.get_untracked();
-        let Some(action) = on_toggle_async.get_value() else {
-            if let Some(cb) = on_toggle {
-                cb.run(target);
-            }
-            return;
-        };
-        let id = job.next();
-        pending_target.set(Some(target));
-        feedback.set(ControlState::Idle);
-        spawn_local(async move {
-            let result = action.call(target).await;
-            if !job.is_current(id) {
-                return;
-            }
-            pending_target.set(None);
-            let hold = if result.is_success() {
-                if let Some(cb) = on_toggle {
-                    cb.run(target);
-                }
-                feedback.set(ControlState::Success);
-                SUCCESS_HOLD_MS
-            } else {
-                feedback.set(ControlState::Error);
-                ERROR_HOLD_MS
-            };
-            sleep_ms(hold).await;
-            if job.is_current(id) {
-                feedback.set(ControlState::Idle);
-            }
-        });
-    };
 
     // Geometry in SVG user units (1 unit = 1 logical point).
     let w = width * DU_POINTS;
@@ -161,21 +92,18 @@ pub fn ThemeToggle(
             role="switch"
             class="op-sb op-rippled op-theme-toggle"
             aria-label=label
-            aria-checked=move || effective.get().to_string()
-            aria-busy=move || (current.get() == ControlState::Pending).then_some("true")
-            aria-disabled=move || (!clickable()).then_some("true")
+            aria-checked=move || dark.get().to_string()
+            aria-disabled=(!interactive).then_some("true")
             style:width=du(width)
             style:height=du(height)
             style:--sb-rx=format!("{}px", h / 2.0)
             style:--tt-travel=format!("{travel}px")
             style:--tt-moon-shift=format!("{d}px")
             style:--tt-cloud-drop=format!("{}px", 160.0)
-            data-dark=move || effective.get().then_some("")
-            data-state=move || visual.state.get()
-            data-result=move || visual.result.get()
-            data-fading=move || visual.fading.get().then_some("")
+            data-dark=move || dark.get().then_some("")
+            data-state=move || current.get().as_str()
             on:pointerdown=move |ev| {
-                if clickable() {
+                if interactive {
                     press.down();
                     spawn_ripple(&ev);
                 }
@@ -184,8 +112,8 @@ pub fn ThemeToggle(
             on:pointerleave=move |_| press.up()
             on:pointercancel=move |_| press.up()
             on:click=move |_| {
-                if clickable() {
-                    toggle();
+                if let Some(cb) = on_toggle {
+                    cb.run(!dark.get_untracked());
                 }
             }
         >
@@ -226,22 +154,6 @@ pub fn ThemeToggle(
                     </g>
                 </g>
             </svg>
-            <Show when=move || current.get() == ControlState::Pending>
-                <span
-                    class="op-tt-spinner"
-                    style:left=move || du(THUMB_PAD + if effective.get() { width - height } else { 0.0 })
-                    style:top=du(THUMB_PAD)
-                    style:width=du(height - 2.0 * THUMB_PAD)
-                    style:height=du(height - 2.0 * THUMB_PAD)
-                >
-                    <ProgressIndicator
-                        size=(height - 2.0 * THUMB_PAD) * 0.65
-                        stroke=dim::SPINNER_STROKE
-                        color="var(--op-pending)"
-                    />
-                </span>
-            </Show>
-            <PendingRun/>
         </button>
     }
 }

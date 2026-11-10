@@ -879,34 +879,29 @@ fn marquee_section() -> impl IntoView {
 }
 
 fn theme_toggle_section() -> impl IntoView {
-    let b = backend();
     let local = RwSignal::new(false);
-    let remote = RwSignal::new(true);
     view! {
         <Section
             id="theme-toggle"
             title="ThemeToggle"
-            note="Day/night switch after Jhey Tompkins' CodePen (MIT). The async variant shows a spinner and slides back on error."
+            note="Day/night switch after Jhey Tompkins' CodePen (MIT). It switches instantly; the sidebar Mode control is the same component."
         >
             <Row label="Interactive">
-                <Cell label="Sync">
+                <Cell label="Default">
                     <ThemeToggle dark=local on_toggle=Callback::new(move |v: bool| local.set(v))/>
                 </Cell>
-                <Cell label="Async">
+                <Cell label="Large, 24 × 10 DU">
                     <ThemeToggle
-                        dark=remote
-                        on_toggle=Callback::new(move |v: bool| remote.set(v))
-                        on_toggle_async=AsyncAction::new(move |v: bool| b.call(format!("theme dark={v}")))
+                        dark=local
+                        on_toggle=Callback::new(move |v: bool| local.set(v))
+                        width=24.0
+                        height=10.0
                     />
                 </Cell>
             </Row>
-            <Row label="Static states">
+            <Row label="Static">
                 <Cell label="Day"><ThemeToggle dark=false/></Cell>
                 <Cell label="Night"><ThemeToggle dark=true/></Cell>
-                <Cell label="Pending"><ThemeToggle dark=true state=ControlState::Pending/></Cell>
-                <Cell label="Success"><ThemeToggle dark=false state=ControlState::Success/></Cell>
-                <Cell label="Error"><ThemeToggle dark=true state=ControlState::Error/></Cell>
-                <Cell label="Disabled"><ThemeToggle dark=false enabled=false/></Cell>
             </Row>
         </Section>
     }

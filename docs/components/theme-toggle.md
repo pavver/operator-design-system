@@ -17,8 +17,7 @@ The pill track and the round thumb are an allowed exception to the rectangular g
 | :--- | :--- |
 | Size | `17 DU` × `7.5 DU` by default. |
 | Thumb | Circle with a diameter of the height minus `1.25 DU`, inset `0.625 DU`. |
-| Outline | State border with the spinner stroke (`0.375 DU`); base color `border` at 50%. |
-| Spinner | `65%` of the thumb diameter, `pending`. |
+| Outline | `0.25 DU`, `border` at 50%; `border_strong` while pressed. |
 
 ## Colors
 
@@ -35,8 +34,6 @@ The illustration uses dedicated tokens that are identical in both modes:
 | `toggle_cloud_back` | `#D9D9D9` | Back clouds, 45% opacity. |
 | `toggle_star` | `#FFFFFF` | Stars and sun halos. |
 
-Disabled replaces the sky with `disabled_surface`.
-
 ## Motion
 
 * All parts move over `450 ms` with `cubic-bezier(0.4, -0.2, 0.4, 1.2)`, a slight overshoot.
@@ -46,22 +43,18 @@ Disabled replaces the sky with `disabled_surface`.
 
 ## Behavior
 
-* Without an async handler, a click calls `on_toggle` with the opposite value immediately.
-* With an async handler:
-  1. The thumb slides to the requested side and is replaced by a spinner; the outline runs `pending`; clicks are ignored.
-  2. On **success**, `on_toggle` is called, and the outline pulses `success` for `500 ms`.
-  3. On **error**, the thumb slides back with the same motion, and the outline pulses `error` for `600 ms`.
-  4. The result then fades out over `500 ms`.
+* A click calls `on_toggle` with the opposite value immediately.
+* The toggle has no async, disabled, or result states.
+  A theme is a local preference: it must apply at once, and persisting it is the caller's background task.
+  Where the theme cannot be changed, for example while it follows the system setting, hide the toggle instead of disabling it.
+* Press feedback: ripple clipped to the pill and a `border_strong` outline.
 
 ## API
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `dark` | bool | required | `true` for night. |
-| `on_toggle` | callback `(bool)` | none | Commits the new value. |
-| `on_toggle_async` | async `(bool) -> ActionResult` | none | Persists the value before `on_toggle`. |
-| `enabled` | bool | `true` | Interactivity. |
-| `state` | `ControlState?` | none | External state override. |
+| `on_toggle` | callback `(bool)` | none | Called with the new value; without it the toggle is static. |
 | `width` | DU | `17` | Width. |
 | `height` | DU | `7.5` | Height. |
 | `label` | string | `"Dark mode"` | Accessible name. |

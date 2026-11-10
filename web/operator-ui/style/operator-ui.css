@@ -816,7 +816,6 @@
 /* ThemeToggle (after the Day/Night Toggle by Jhey Tompkins, MIT)      */
 /* ------------------------------------------------------------------ */
 .op-theme-toggle {
-  --sb-w: var(--op-dim-spinner-stroke);
   --sb-base: color-mix(in srgb, var(--op-border) 50%, transparent);
   --tt-ease: cubic-bezier(0.4, -0.2, 0.4, 1.2);
   --tt-time: 450ms;
@@ -825,11 +824,9 @@
   padding: 0;
   border-radius: 999px;
 }
-.op-theme-toggle[data-state="disabled"] { --sb-base: var(--op-disabled-border); }
 .op-tt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .op-tt-sky { fill: var(--op-toggle-day-sky); transition: fill 400ms var(--op-ease-standard); }
 .op-theme-toggle[data-dark] .op-tt-sky { fill: var(--op-toggle-night-sky); }
-.op-theme-toggle[data-state="disabled"] .op-tt-sky { fill: var(--op-disabled-surface); }
 .op-tt-star {
   fill: var(--op-toggle-star);
   transform-box: fill-box;
@@ -845,8 +842,6 @@
 .op-tt-cloud-back { fill: var(--op-toggle-cloud-back); opacity: 0.45; }
 .op-tt-thumb { transition: transform var(--tt-time) var(--tt-ease); }
 .op-theme-toggle[data-dark] .op-tt-thumb { transform: translateX(var(--tt-travel)); }
-.op-tt-body { transition: opacity var(--op-motion-state-color) var(--op-ease-standard); }
-.op-theme-toggle[data-state="pending"] .op-tt-body { opacity: 0; }
 .op-tt-halo { fill: var(--op-toggle-star); transition: opacity var(--tt-time) var(--tt-ease); }
 .op-theme-toggle[data-dark] .op-tt-halo { opacity: 0; }
 .op-tt-sun { fill: var(--op-toggle-sun); }
@@ -854,7 +849,6 @@
 .op-theme-toggle[data-dark] .op-tt-moon { transform: translateX(0); }
 .op-tt-moon-disk { fill: var(--op-toggle-moon); }
 .op-tt-crater { fill: var(--op-toggle-crater); }
-.op-tt-spinner { position: absolute; z-index: 2; display: grid; place-items: center; transition: left var(--tt-time) var(--tt-ease); }
 @media (prefers-reduced-motion: reduce) {
   .op-theme-toggle * { transition-duration: 0s !important; }
 }
