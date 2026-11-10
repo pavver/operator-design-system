@@ -49,6 +49,6 @@ The generator rejects a palette with a missing or extra key.
 
 ## Icons
 
-An icon is an SVG file with a `viewBox` and one or more `<path d="...">` elements.
-Paths are filled with the current content color.
+Icons are Material Symbols Sharp, declared in [tokens/icons.toml](../tokens/icons.toml) and imported into [tokens/icons](../tokens/icons).
+See [foundations/iconography.md](foundations/iconography.md) for the rules and the import steps.
 The generator embeds every icon in the Rust output as `icons::<NAME>`.

@@ -33,6 +33,11 @@ Rules for AI agents contributing to this repository.
 * Never edit generated files; run `cargo run -p operator-tokens` instead.
 * Every palette must keep the same key set.
 
+## Icons
+
+* Use Material Symbols Sharp through [tokens/icons.toml](tokens/icons.toml) and `tools/import_material_symbols.py`.
+* Draw a custom icon only when no Material symbol fits, and follow [docs/foundations/iconography.md](docs/foundations/iconography.md).
+
 ## Behavior
 
 * Follow [docs/foundations/states.md](docs/foundations/states.md) for every interactive component.

@@ -8,5 +8,7 @@ The font is not covered by the MIT or Apache-2.0 license of this repository.
 
 ## Icons
 
-The SVG paths in [tokens/icons](tokens/icons) are derived from Google Material Icons.
-Material Icons are licensed under the Apache License 2.0.
+The icons in [tokens/icons](tokens/icons) are [Material Symbols](https://github.com/google/material-design-icons) (Sharp style) by Google.
+They are licensed under the Apache License 2.0.
+The import keeps only their `viewBox` and path data.
+Icons marked `custom = true` in [tokens/icons.toml](tokens/icons.toml) are original work of this project.

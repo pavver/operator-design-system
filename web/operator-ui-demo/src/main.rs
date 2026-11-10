@@ -464,7 +464,7 @@ fn controls(dark: RwSignal<bool>, b: Backend) -> impl IntoView {
             <div class="demo-labelled">
                 <span class="op-t-caption demo-muted">"Mode"</span>
                 <SegmentedControl
-                    items=vec![SegmentItem::item("Dark", icons::DARK_MODE), SegmentItem::item("Light", icons::WB_SUNNY)]
+                    items=vec![SegmentItem::item("Dark", icons::DARK_MODE), SegmentItem::item("Light", icons::LIGHT_MODE)]
                     selected=mode_index
                 />
             </div>

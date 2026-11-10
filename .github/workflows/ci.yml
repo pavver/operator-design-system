@@ -18,6 +18,8 @@ jobs:
       - uses: taiki-e/install-action@v2
         with:
           tool: trunk
+      - name: Icons match Material Symbols
+        run: python3 tools/import_material_symbols.py --check
       - name: Tokens are up to date
         run: cargo run -p operator-tokens -- --check
       - name: Format

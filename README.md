@@ -30,6 +30,7 @@ Foundations:
 * [Units: DU and TU](docs/foundations/units.md)
 * [Color](docs/foundations/color.md)
 * [Typography](docs/foundations/typography.md)
+* [Iconography](docs/foundations/iconography.md)
 * [Motion](docs/foundations/motion.md)
 * [States and async feedback](docs/foundations/states.md)
 
@@ -45,6 +46,7 @@ Engineering:
 ```
 tokens/                  tokens.toml and SVG icons (source of truth)
 tools/operator-tokens/   token generator
+tools/import_material_symbols.py  icon importer
 crates/operator-ui-tokens/  generated Rust tokens (no_std)
 generated/kotlin/        generated Compose tokens
 web/operator-ui/         Leptos component library

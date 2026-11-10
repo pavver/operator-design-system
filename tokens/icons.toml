@@ -1,0 +1,23 @@
+# Icon manifest: every file in tokens/icons/ must be listed here.
+#
+# Material Symbols Sharp is the default source.
+# Import or refresh with `python3 tools/import_material_symbols.py`.
+#
+# Fields:
+#   material = Material Symbols name (https://fonts.google.com/icons?icon.style=Sharp)
+#   fill     = true for the filled variant (default false, outlined)
+#   opsz     = optical size: 20 (default, for icons up to 5 DU), 24, 40 or 48
+#   custom   = true for an icon drawn from scratch because no Material symbol fits;
+#              custom icons use a 0 0 24 24 viewBox, sharp corners and filled paths.
+
+[icons]
+check = { material = "check" }
+close = { material = "close" }
+visibility = { material = "visibility" }
+visibility_off = { material = "visibility_off" }
+dark_mode = { material = "dark_mode" }
+light_mode = { material = "light_mode" }
+videocam = { material = "videocam" }
+search = { material = "search" }
+settings = { material = "settings" }
+refresh = { material = "refresh" }

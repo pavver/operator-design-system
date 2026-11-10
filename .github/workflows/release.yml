@@ -43,6 +43,7 @@ jobs:
 
       - name: Checks
         run: |
+          python3 tools/import_material_symbols.py --check
           cargo run -p operator-tokens -- --check
           cargo fmt --all -- --check
           cargo clippy -p operator-tokens -p operator-ui-tokens -- -D warnings
