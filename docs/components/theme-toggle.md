@@ -3,7 +3,7 @@
 Day/night switch for light and dark mode.
 A sun slides across a sky with clouds and turns into a moon among stars while it moves.
 
-Status: **draft**, new on web.
+Status: **reviewed** on web.
 
 It is based on the [Day/Night Toggle](https://codepen.io/jh3y/pen/LYgjpYZ) by Jhey Tompkins, MIT License.
 The cloud outlines, sky, sun, and moon colors, and the easing come from the original.

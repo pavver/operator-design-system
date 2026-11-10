@@ -3,7 +3,7 @@
 Single-line text for bounded containers.
 Text that does not fit scrolls slowly instead of being cut, and the full text is available in a tooltip.
 
-Status: **draft**, new on web.
+Status: **reviewed** on web.
 
 ## Use
 
