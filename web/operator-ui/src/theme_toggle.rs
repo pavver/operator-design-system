@@ -57,7 +57,6 @@ pub fn ThemeToggle(
 ) -> impl IntoView {
     let uid = NEXT_ID.fetch_add(1, Ordering::Relaxed);
     let track_clip = format!("op-tt-track-{uid}");
-    let thumb_clip = format!("op-tt-thumb-{uid}");
 
     let press = Press::new();
     let interactive = on_toggle.is_some();
@@ -98,7 +97,6 @@ pub fn ThemeToggle(
             style:height=du(height)
             style:--sb-rx=format!("{}px", h / 2.0)
             style:--tt-travel=format!("{travel}px")
-            style:--tt-moon-shift=format!("{d}px")
             style:--tt-cloud-drop=format!("{}px", 160.0)
             data-dark=move || dark.get().then_some("")
             data-state=move || current.get().as_str()
@@ -122,9 +120,6 @@ pub fn ThemeToggle(
                     <clipPath id=track_clip.clone()>
                         <rect width=w height=h rx=h / 2.0></rect>
                     </clipPath>
-                    <clipPath id=thumb_clip.clone()>
-                        <circle cx=r cy=r r=r></circle>
-                    </clipPath>
                 </defs>
                 <rect class="op-tt-sky" width=w height=h rx=h / 2.0></rect>
                 <g clip-path=format!("url(#{track_clip})")>
@@ -140,14 +135,11 @@ pub fn ThemeToggle(
                             <g class="op-tt-body">
                                 <circle class="op-tt-halo" cx=r cy=r r=r * 2.1 opacity="0.12"></circle>
                                 <circle class="op-tt-halo" cx=r cy=r r=r * 1.55 opacity="0.22"></circle>
-                                <circle class="op-tt-sun" cx=r cy=r r=r></circle>
-                                <g clip-path=format!("url(#{thumb_clip})")>
-                                    <g class="op-tt-moon">
-                                        <circle class="op-tt-moon-disk" cx=r cy=r r=r + 0.5></circle>
-                                        <circle class="op-tt-crater" cx=d * 0.42 cy=d * 0.26 r=r * 0.22></circle>
-                                        <circle class="op-tt-crater" cx=d * 0.68 cy=d * 0.62 r=r * 0.25></circle>
-                                        <circle class="op-tt-crater" cx=d * 0.28 cy=d * 0.52 r=r * 0.35></circle>
-                                    </g>
+                                <circle class="op-tt-orb" cx=r cy=r r=r></circle>
+                                <g class="op-tt-craters">
+                                    <circle cx=d * 0.42 cy=d * 0.26 r=r * 0.22></circle>
+                                    <circle cx=d * 0.68 cy=d * 0.62 r=r * 0.25></circle>
+                                    <circle cx=d * 0.28 cy=d * 0.52 r=r * 0.35></circle>
                                 </g>
                             </g>
                         </g>

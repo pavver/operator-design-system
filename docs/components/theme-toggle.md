@@ -1,13 +1,14 @@
 # ThemeToggle
 
 Day/night switch for light and dark mode.
-A sun slides across a sky with clouds and turns into a moon among stars.
+A sun slides across a sky with clouds and turns into a moon among stars while it moves.
 
 Status: **draft**, new on web.
 
 It is based on the [Day/Night Toggle](https://codepen.io/jh3y/pen/LYgjpYZ) by Jhey Tompkins, MIT License.
 The cloud outlines, sky, sun, and moon colors, and the easing come from the original.
 The bear animation and idle twinkling of the original are left out; nothing moves while the toggle is idle.
+The original moon that slides over the sun is replaced by a single body that changes color.
 
 ## Geometry
 
@@ -38,7 +39,9 @@ The illustration uses dedicated tokens that are identical in both modes:
 
 * All parts move over `450 ms` with `cubic-bezier(0.4, -0.2, 0.4, 1.2)`, a slight overshoot.
 * The sky color changes over `400 ms`.
-* Day to night: the thumb slides right, the moon slides over the sun from the right, the halos fade, the clouds sink and fade, and seven stars grow from `30%` to full size.
+* The sun and the moon are one body.
+  While it slides, its color changes from `toggle_sun` to `toggle_moon` and the craters fade in, both over `450 ms` with the smooth curve.
+* Day to night: the body slides right and becomes the moon, the halos fade, the clouds sink and fade, and seven stars grow from `30%` to full size.
 * Night to day reverses every movement.
 
 ## Behavior

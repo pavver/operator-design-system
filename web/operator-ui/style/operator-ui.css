@@ -844,11 +844,11 @@
 .op-theme-toggle[data-dark] .op-tt-thumb { transform: translateX(var(--tt-travel)); }
 .op-tt-halo { fill: var(--op-toggle-star); transition: opacity var(--tt-time) var(--tt-ease); }
 .op-theme-toggle[data-dark] .op-tt-halo { opacity: 0; }
-.op-tt-sun { fill: var(--op-toggle-sun); }
-.op-tt-moon { transform: translateX(var(--tt-moon-shift)); transition: transform var(--tt-time) var(--tt-ease); }
-.op-theme-toggle[data-dark] .op-tt-moon { transform: translateX(0); }
-.op-tt-moon-disk { fill: var(--op-toggle-moon); }
-.op-tt-crater { fill: var(--op-toggle-crater); }
+/* One body: the sun turns into the moon while it moves; craters fade in. */
+.op-tt-orb { fill: var(--op-toggle-sun); transition: fill var(--tt-time) var(--op-ease-smooth); }
+.op-theme-toggle[data-dark] .op-tt-orb { fill: var(--op-toggle-moon); }
+.op-tt-craters { fill: var(--op-toggle-crater); opacity: 0; transition: opacity var(--tt-time) var(--op-ease-smooth); }
+.op-theme-toggle[data-dark] .op-tt-craters { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .op-theme-toggle * { transition-duration: 0s !important; }
 }
