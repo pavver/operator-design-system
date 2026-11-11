@@ -3,7 +3,7 @@
 Message in place of content that does not exist yet or was filtered out.
 It explains why the area is empty and what to do next.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 

@@ -216,3 +216,5 @@ body { background: #181818; }
 .sc-slider > :last-child { flex: 1 1 auto; }
 .sc-muted { color: var(--op-text-secondary); }
 .sc-seg { width: calc(var(--op-du) * 54); flex-shrink: 0; }
+.demo-load-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-dim-pad-content); }
+.demo-load-mode { width: calc(var(--op-du) * 45); }

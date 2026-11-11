@@ -2,7 +2,7 @@
 
 Placeholder shapes that hold the layout while content loads.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 
