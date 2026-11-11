@@ -54,7 +54,13 @@ body { background: #181818; }
 .docs-topbar { position: sticky; top: 0; z-index: 30; height: var(--docs-top); background: var(--op-surface); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-border); }
 .docs-topbar-inner { display: flex; align-items: center; gap: var(--op-dim-margin-screen); height: 100%; max-width: calc(var(--op-du) * 360); margin: 0 auto; padding: 0 var(--op-dim-margin-screen); }
 .docs-brand { display: inline-flex; align-items: center; gap: var(--op-dim-gutter); color: var(--op-text-primary) !important; text-decoration: none !important; }
-.docs-brand-mark { width: var(--op-dim-icon-medium); height: var(--op-dim-icon-medium); background: var(--op-accent); box-shadow: inset calc(var(--op-du) * -1.5) calc(var(--op-du) * -1.5) 0 var(--op-surface-alt); }
+.docs-brand-mark { width: var(--op-dim-icon-large); height: var(--op-dim-icon-large); flex: none; }
+.docs-brand-mark .lg-ac { fill: var(--op-accent); }
+.docs-brand-mark .lg-fg { fill: var(--op-icon); }
+.docs-brand-mark .lg-am { fill: color-mix(in srgb, var(--op-accent) 55%, var(--op-surface)); }
+.docs-brand-mark .lg-dim { fill: var(--op-icon-disabled); }
+.docs-brand-mark .lg-btn { fill: none; stroke: var(--op-border-strong); stroke-width: 0.75; }
+.docs-brand-mark .lg-br { fill: none; stroke: var(--op-icon); stroke-width: 1.5; }
 .docs-brand-name { font-size: var(--op-type-row-title-size); font-weight: 700; }
 .docs-version { padding: 0 var(--op-dim-pad-tight); color: var(--op-text-secondary); font-size: var(--op-type-caption-size); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
 .docs-topnav { display: flex; gap: var(--op-dim-margin-screen); }

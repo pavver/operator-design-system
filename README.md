@@ -1,3 +1,5 @@
+<img src="assets/brand/logo-animated.svg" width="96" height="96" alt="Operator UI logo">
+
 # Operator Design System
 
 A compact, technical design system for applications that monitor and control devices.
@@ -111,6 +113,7 @@ generated/kotlin/        generated Compose tokens
 web/operator-ui/         Leptos component library
 web/operator-ui-demo/    documentation site with live examples (renders docs/)
 docs/                    the design system itself
+assets/brand/            logo: still mark (also the favicon) and animated version
 scripts/release.sh       release helper
 ```
 

@@ -243,7 +243,16 @@ fn TopBar(dark: RwSignal<bool>, menu_open: RwSignal<bool>) -> impl IntoView {
                     <IconButton icon=icons::MENU label="Open navigation" on_click=Callback::new(move |()| menu_open.set(true))/>
                 </span>
                 <a class="docs-brand" href="#/">
-                    <span class="docs-brand-mark" aria-hidden="true"></span>
+                    <svg class="docs-brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect class="lg-ac" x="4.5" y="5" width="15" height="4"></rect>
+                        <rect class="lg-fg" x="4.5" y="10" width="11" height="4"></rect>
+                        <rect class="lg-am" x="16.5" y="10" width="3" height="4"></rect>
+                        <rect class="lg-dim" x="4.5" y="15" width="7" height="4"></rect>
+                        <rect class="lg-btn" x="12.875" y="15.375" width="6.25" height="3.25"></rect>
+                        <rect class="lg-fg" x="14.5" y="16.5" width="3" height="1"></rect>
+                        <path class="lg-br" d="M5.5 3H2.5v18h3"></path>
+                        <path class="lg-br" d="M18.5 3h3v18h-3"></path>
+                    </svg>
                     <span class="docs-brand-name">"Operator UI"</span>
                     <span class="docs-version">{format!("v{VERSION}")}</span>
                 </a>

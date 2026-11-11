@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="192" height="192" role="img" aria-label="Operator UI">
+  <!--
+    Operator UI logo, animated, 6 s loop.
+    0.00-1.05 s  bars slide in from the right, bottom row first, with the toast spring.
+    1.10-1.55 s  brackets snap in from both sides.
+    1.80-3.80 s  result pulse: left bracket success, right bracket error, stroke doubled, five 400 ms half-cycles.
+    3.80-4.30 s  result fade back to the neutral icon colour; this frame equals logo.svg.
+    5.60-6.00 s  fade out before the loop restarts.
+  -->
+  <style>
+    :root { --fg: #424242; --dim: #A0A0A0; --ac: #A35C00; --am: #D9B98A; --bd: #767676; --ok: #477A2E; --err: #B3361F; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #C5C5C5; --dim: #5A5A5A; --ac: #F0A53A; --am: #8A6630; --bd: #6E6E6E; --ok: #8CBF6E; --err: #E8664F; } }
+    .ac { fill: var(--ac); } .fg { fill: var(--fg); } .am { fill: var(--am); } .dim { fill: var(--dim); }
+    .btn { fill: none; stroke: var(--bd); stroke-width: 0.75; }
+    .br { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+
+    .mark, .row, .br { animation-duration: 6s; animation-iteration-count: infinite; animation-fill-mode: both; }
+    .mark { animation-name: mark; }
+    @keyframes mark { 0%, 93.3% { opacity: 1; } 100% { opacity: 0; } }
+
+    .r3 { animation-name: r3; } .r2 { animation-name: r2; } .r1 { animation-name: r1; }
+    @keyframes r3 { 0% { transform: translateX(18px); opacity: 0; animation-timing-function: cubic-bezier(.2,1.35,.4,1); } 9.2%, 100% { transform: none; opacity: 1; } }
+    @keyframes r2 { 0%, 4.2% { transform: translateX(18px); opacity: 0; animation-timing-function: cubic-bezier(.2,1.35,.4,1); } 13.3%, 100% { transform: none; opacity: 1; } }
+    @keyframes r1 { 0%, 8.3% { transform: translateX(18px); opacity: 0; animation-timing-function: cubic-bezier(.2,1.35,.4,1); } 17.5%, 100% { transform: none; opacity: 1; } }
+
+    .bl { animation-name: bl; } .brr { animation-name: brr; }
+    @keyframes bl {
+      0%, 18.3% { transform: translateX(-4px); opacity: 0; animation-timing-function: cubic-bezier(.2,1.35,.4,1); }
+      25.8% { transform: none; opacity: 1; stroke: var(--fg); stroke-width: 1.5; }
+      29.99% { stroke: var(--fg); stroke-width: 1.5; }
+      30% { stroke: var(--ok); stroke-width: 2.5; stroke-opacity: .55; }
+      36.7% { stroke-opacity: 1; } 43.3% { stroke-opacity: .55; } 50% { stroke-opacity: 1; } 56.7% { stroke-opacity: .55; }
+      63.3% { stroke: var(--ok); stroke-width: 2.5; stroke-opacity: 1; animation-timing-function: cubic-bezier(.4,0,.2,1); }
+      71.7%, 100% { transform: none; opacity: 1; stroke: var(--fg); stroke-width: 1.5; stroke-opacity: 1; }
+    }
+    @keyframes brr {
+      0%, 18.3% { transform: translateX(4px); opacity: 0; animation-timing-function: cubic-bezier(.2,1.35,.4,1); }
+      25.8% { transform: none; opacity: 1; stroke: var(--fg); stroke-width: 1.5; }
+      29.99% { stroke: var(--fg); stroke-width: 1.5; }
+      30% { stroke: var(--err); stroke-width: 2.5; stroke-opacity: .55; }
+      36.7% { stroke-opacity: 1; } 43.3% { stroke-opacity: .55; } 50% { stroke-opacity: 1; } 56.7% { stroke-opacity: .55; }
+      63.3% { stroke: var(--err); stroke-width: 2.5; stroke-opacity: 1; animation-timing-function: cubic-bezier(.4,0,.2,1); }
+      71.7%, 100% { transform: none; opacity: 1; stroke: var(--fg); stroke-width: 1.5; stroke-opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { .mark, .row, .br { animation: none; } }
+  </style>
+  <g class="mark">
+    <g class="row r1"><rect class="ac" x="4.5" y="5" width="15" height="4"/></g>
+    <g class="row r2"><rect class="fg" x="4.5" y="10" width="11" height="4"/><rect class="am" x="16.5" y="10" width="3" height="4"/></g>
+    <g class="row r3"><rect class="dim" x="4.5" y="15" width="7" height="4"/><rect class="btn" x="12.875" y="15.375" width="6.25" height="3.25"/><rect class="fg" x="14.5" y="16.5" width="3" height="1"/></g>
+    <path class="br bl" d="M5.5 3H2.5v18h3"/>
+    <path class="br brr" d="M18.5 3h3v18h-3"/>
+  </g>
+</svg>
