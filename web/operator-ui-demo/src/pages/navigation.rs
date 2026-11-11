@@ -102,12 +102,28 @@ pub fn sheet() -> AnyView {
     let left = RwSignal::new(false);
     let right = RwSignal::new(false);
     let bottom = RwSignal::new(false);
+    let log = RwSignal::new(false);
+    let events = || {
+        (1..=40)
+            .map(|i| {
+                let title = format!("Motion · zone {}", i % 4 + 1);
+                let subtitle = format!("14:{:02}:{:02} · Gate North", 59 - i, (i * 17) % 60);
+                view! { <ListItem title=title subtitle=subtitle/> }
+            })
+            .collect_view()
+    };
     view! {
         <Example title="Sides" note="Escape, the scrim, or the close button dismiss the sheet.">
             <ActionButton text="Navigation drawer" icon=icons::MENU on_click=instant(move || left.set(true))/>
             <ActionButton text="Details panel" on_click=instant(move || right.set(true))/>
             <ActionButton text="Bottom sheet" on_click=instant(move || bottom.set(true))/>
         </Example>
+        <Example title="Long content" note="The sheet body scrolls; the page behind it stays still, also when the wheel is over the scrim.">
+            <ActionButton text="Event log" on_click=instant(move || log.set(true))/>
+        </Example>
+        <Sheet open=log side=SheetSide::Right title="Event log">
+            {events()}
+        </Sheet>
         <Sheet open=left title="Operator">
             <ListItem title="Chats" leading=ViewFn::from(|| view! { <Icon icon=icons::INBOX size=dim::ICON_SMALL/> })/>
             <ListItem title="Cameras" leading=ViewFn::from(|| view! { <Icon icon=icons::VIDEOCAM size=dim::ICON_SMALL/> })/>

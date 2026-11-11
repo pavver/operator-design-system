@@ -218,3 +218,4 @@ body { background: #181818; }
 .sc-seg { width: calc(var(--op-du) * 54); flex-shrink: 0; }
 .demo-load-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-dim-pad-content); }
 .demo-load-mode { width: calc(var(--op-du) * 45); }
+.demo-resize { resize: horizontal; overflow: hidden; min-width: calc(var(--op-du) * 30); max-width: 100%; padding-bottom: calc(var(--op-du) * 3); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-divider); }

@@ -8,7 +8,8 @@ pub fn toolbar() -> AnyView {
     let b = backend();
     let query = RwSignal::new(String::new());
     view! {
-        <Example title="Command bar" note="Arrow keys move focus between the controls." block=true>
+        <Example title="Command bar" note="Arrow keys move focus between the controls. Drag the bottom-right corner to narrow the bar: it scrolls sideways instead of wrapping." block=true>
+            <div class="demo-resize">
             <Toolbar label="Recordings">
                 <ToolbarTitle text="Recordings"/>
                 <ToolbarSeparator/>
@@ -22,6 +23,7 @@ pub fn toolbar() -> AnyView {
                     on_select=Callback::new(move |id: String| b.log(format!("[UI] toolbar menu: {id}")))
                 />
             </Toolbar>
+            </div>
         </Example>
         <Example title="Dense" block=true>
             <Toolbar dense=true>
