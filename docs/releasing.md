@@ -27,7 +27,7 @@ While the version is `0.x`, a minor bump may change component behavior or APIs.
    scripts/release.sh 0.2.0 --push
    ```
 
-   It sets the workspace version, runs the same checks as CI, commits `chore(release): v0.2.0`, creates the tag, and pushes both.
+   It sets the workspace version and the `tag = "vX.Y.Z"` pins in README.md, runs the same checks as CI, commits `chore(release): v0.2.0`, creates the tag, and pushes both.
 3. The [Release workflow](../.github/workflows/release.yml) verifies that the tag matches the workspace version, builds the documentation site, publishes the release, and deploys GitHub Pages.
 
 ## Release Notes

@@ -27,6 +27,8 @@ fi
 
 # The first `version = ` line in the workspace manifest is [workspace.package].
 sed -i "0,/^version = \".*\"/s//version = \"${version}\"/" Cargo.toml
+# README examples pin the crate with `tag = "vX.Y.Z"`.
+sed -i -E "s/tag = \"v[0-9]+\.[0-9]+\.[0-9]+\"/tag = \"v${version}\"/g" README.md
 
 cargo run -q -p operator-tokens -- --check
 cargo fmt --all -- --check
@@ -35,7 +37,7 @@ cargo clippy -q --target wasm32-unknown-unknown -p operator-ui -p operator-ui-de
 scripts/check-features.sh
 cargo test -q -p operator-ui --lib --features full
 
-git add Cargo.toml Cargo.lock
+git add Cargo.toml Cargo.lock README.md
 git commit -q -m "chore(release): v${version}"
 git tag -a "v${version}" -m "v${version}"
 echo "created commit and tag v${version}"
