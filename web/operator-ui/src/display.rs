@@ -2,6 +2,7 @@
 
 use crate::basic::{Icon, ProgressIndicator};
 use crate::core::{Press, du, spawn_ripple, tu};
+use crate::scroll::ScrollView;
 use crate::theme::OperatorTheme;
 use leptos::prelude::*;
 use operator_ui_tokens::{dim, icons};
@@ -503,7 +504,8 @@ pub fn ConsoleTerminal(
         }
     });
     view! {
-        <div node_ref=node class="op-sb op-terminal" data-state="idle" role="log" style:height=du(height)>
+        <div class="op-sb op-terminal" data-state="idle" role="log" style:height=du(height)>
+            <ScrollView node_ref=node viewport_class="op-terminal-log" focusable=true>
             {move || {
                 logs.get()
                     .into_iter()
@@ -513,6 +515,7 @@ pub fn ConsoleTerminal(
                     })
                     .collect_view()
             }}
+            </ScrollView>
         </div>
     }
 }

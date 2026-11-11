@@ -913,6 +913,7 @@ dependencies = [
  "operator-ui-tokens",
  "send_wrapper",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
 ]
 
