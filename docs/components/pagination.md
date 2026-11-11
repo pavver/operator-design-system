@@ -2,7 +2,7 @@
 
 Navigation between numbered pages of a long list or table.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Geometry
 

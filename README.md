@@ -53,7 +53,7 @@ The repository contains three things:
 | Dialog | [dialog.md](docs/components/dialog.md) | Reviewed |
 | Tabs | [tabs.md](docs/components/tabs.md) | Reviewed |
 | Sheet | [sheet.md](docs/components/sheet.md) | Draft |
-| Pagination | [pagination.md](docs/components/pagination.md) | Draft |
+| Pagination | [pagination.md](docs/components/pagination.md) | Reviewed |
 | DataTable | [data-table.md](docs/components/data-table.md) | Draft |
 | Counter | [counter.md](docs/components/counter.md) | Draft |
 | PropertyList | [property-list.md](docs/components/property-list.md) | Draft |
