@@ -101,7 +101,7 @@ body { background: #181818; }
 .docs-example-title { margin: 0; font-size: var(--op-type-section-title-size); line-height: var(--op-type-section-title-line); font-weight: 700; }
 .docs-example-note { margin: 0; color: var(--op-text-secondary); font-size: var(--op-type-body-small-size); }
 .docs-example { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-dim-margin-screen); padding: var(--op-dim-section-gap); background: var(--op-background); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
-.docs-example[data-block] { flex-direction: column; align-items: stretch; }
+.docs-example[data-block] { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
 .docs-root[data-op-mode="light"] .docs-example { background-image: radial-gradient(color-mix(in srgb, var(--op-border) 60%, transparent) var(--op-dim-border), transparent var(--op-dim-border)); background-size: calc(var(--op-du) * 4) calc(var(--op-du) * 4); }
 .docs-root[data-op-mode="dark"] .docs-example { background-image: radial-gradient(color-mix(in srgb, var(--op-border) 70%, transparent) var(--op-dim-border), transparent var(--op-dim-border)); background-size: calc(var(--op-du) * 4) calc(var(--op-du) * 4); }
 
