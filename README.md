@@ -155,8 +155,8 @@ New components start as draft and become reviewed after they have been checked i
 | Toast | [toast.md](docs/components/toast.md) | ✅ |
 | Banner | [banner.md](docs/components/banner.md) | ✅ |
 | LinearProgress | [linear-progress.md](docs/components/linear-progress.md) | ✅ |
-| Skeleton | [skeleton.md](docs/components/skeleton.md) | 🚧 |
-| EmptyState | [empty-state.md](docs/components/empty-state.md) | 🚧 |
+| Skeleton | [skeleton.md](docs/components/skeleton.md) | ✅ |
+| EmptyState | [empty-state.md](docs/components/empty-state.md) | ✅ |
 | StatusBadge | [status-badge.md](docs/components/status-badge.md) | ✅ |
 
 **Overlays**
@@ -185,7 +185,7 @@ New components start as draft and become reviewed after they have been checked i
 | Accordion, Collapsible | [accordion.md](docs/components/accordion.md) | ✅ |
 | Counter | [counter.md](docs/components/counter.md) | ✅ |
 | Avatar | [avatar.md](docs/components/avatar.md) | ✅ |
-| CodeBlock | [code-block.md](docs/components/code-block.md) | 🚧 |
+| CodeBlock | [code-block.md](docs/components/code-block.md) | ✅ |
 | Kbd | [kbd.md](docs/components/kbd.md) | ✅ |
 | ConsoleTerminal | [console-terminal.md](docs/components/console-terminal.md) | ✅ |
 | MarqueeText | [marquee-text.md](docs/components/marquee-text.md) | ✅ |

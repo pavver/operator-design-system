@@ -29,12 +29,14 @@ reviewed = [
     "checkbox",
     "checkbox-group",
     "chip",
+    "code-block",
     "combobox",
     "confirm-dialog",
     "console-terminal",
     "counter",
     "dialog",
     "dropdown-menu",
+    "empty-state",
     "header",
     "icon-button",
     "kbd",
@@ -49,6 +51,7 @@ reviewed = [
     "scrollbar",
     "search-field",
     "segmented-control",
+    "skeleton",
     "slider",
     "split-pane",
     "status-badge",
@@ -63,12 +66,9 @@ reviewed = [
 ]
 
 draft = [
-    "code-block",
     "data-table",
-    "empty-state",
     "property-list",
     "sheet",
-    "skeleton",
     "toolbar",
 ]
 

@@ -2,7 +2,7 @@
 
 Monospaced block for code, configuration, and log output, with a copy button.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Geometry
 
