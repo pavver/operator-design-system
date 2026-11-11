@@ -51,6 +51,7 @@ reviewed = [
     "scrollbar",
     "search-field",
     "segmented-control",
+    "sheet",
     "skeleton",
     "slider",
     "split-pane",
@@ -68,7 +69,6 @@ reviewed = [
 draft = [
     "data-table",
     "property-list",
-    "sheet",
     "toolbar",
 ]
 

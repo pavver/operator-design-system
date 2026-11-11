@@ -165,7 +165,7 @@ New components start as draft and become reviewed after they have been checked i
 | :--- | :--- | :---: |
 | Dialog | [dialog.md](docs/components/dialog.md) | ✅ |
 | ConfirmDialog (Dialog preset) | [confirm-dialog.md](docs/components/confirm-dialog.md) | ✅ |
-| Sheet | [sheet.md](docs/components/sheet.md) | 🚧 |
+| Sheet | [sheet.md](docs/components/sheet.md) | ✅ |
 
 **Navigation**
 

@@ -3,7 +3,7 @@
 Panel that slides in from a screen edge over a scrim.
 On the left it is the navigation drawer; on the right a details panel; at the bottom a sheet of actions.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Geometry
 
