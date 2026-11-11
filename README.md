@@ -55,9 +55,9 @@ The repository contains three things:
 | Sheet | [sheet.md](docs/components/sheet.md) | Draft |
 | Pagination | [pagination.md](docs/components/pagination.md) | Reviewed |
 | DataTable | [data-table.md](docs/components/data-table.md) | Draft |
-| Counter | [counter.md](docs/components/counter.md) | Draft |
+| Counter | [counter.md](docs/components/counter.md) | Reviewed |
 | PropertyList | [property-list.md](docs/components/property-list.md) | Draft |
-| Accordion, Collapsible | [accordion.md](docs/components/accordion.md) | Draft |
+| Accordion, Collapsible | [accordion.md](docs/components/accordion.md) | Reviewed |
 | CodeBlock | [code-block.md](docs/components/code-block.md) | Draft |
 | Kbd | [kbd.md](docs/components/kbd.md) | Reviewed |
 | Toolbar | [toolbar.md](docs/components/toolbar.md) | Draft |

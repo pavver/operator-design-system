@@ -2,7 +2,7 @@
 
 Compact number badge for unread messages, alarms, or totals.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Geometry
 

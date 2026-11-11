@@ -21,6 +21,7 @@ default = ["reviewed"]
 
 # Group features
 reviewed = [
+    "accordion",
     "action-button",
     "avatar",
     "banner",
@@ -30,6 +31,7 @@ reviewed = [
     "combobox",
     "confirm-dialog",
     "console-terminal",
+    "counter",
     "dialog",
     "dropdown-menu",
     "header",
@@ -60,9 +62,7 @@ reviewed = [
 ]
 
 draft = [
-    "accordion",
     "code-block",
-    "counter",
     "data-table",
     "empty-state",
     "property-list",

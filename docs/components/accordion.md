@@ -3,7 +3,7 @@
 Sections with header rows that show or hide their content.
 A standalone section is a Collapsible; an Accordion keeps only one section open.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Geometry
 
