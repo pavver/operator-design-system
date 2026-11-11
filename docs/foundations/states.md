@@ -42,6 +42,19 @@ It is layered as follows, from bottom to top:
    It runs clockwise and completes one lap in `2000 ms`.
    The base outline stays visible underneath it.
 
+### Delayed spinner
+
+The running segment starts immediately and is the primary confirmation that the action was accepted.
+Controls that also show a spinner inside use the shared `PendingIndicator` (see [primitives.md](../components/primitives.md#pendingindicator)).
+
+* The spinner appears only after `Pending` has lasted `pending_indicator_delay` (`700 ms`).
+* Until then the control keeps its regular content (label, icon, check mark, thumb).
+* Fast requests therefore show only the running segment followed by the result pulse, never two competing animations.
+* Once shown, the spinner fades in over `pending_indicator_fade` (`200 ms`), linear.
+* Leaving `Pending` removes the spinner immediately and resets the delay.
+* Repeated `Pending` writes, such as consecutive Stepper clicks, do not restart the delay.
+* The spinner rotation (`spinner_lap`) is independent of the segment lap.
+
 ### Result exit
 
 When a result state ends, the component remembers which result it was.

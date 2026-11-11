@@ -1,10 +1,11 @@
 //! ActionButton and IconButton.
 
-use crate::basic::{Icon, ProgressIndicator};
+use crate::basic::{Icon, PendingIndicator};
 use crate::core::{
     ActionResult, AsyncAction, ControlState, JobToken, PendingRun, Press, du, sleep_ms,
-    spawn_ripple, use_state_visual,
+    spawn_ripple, use_pending_indicator, use_state_visual,
 };
+use crate::overlay::{InsideTooltip, Tooltip};
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
@@ -55,6 +56,7 @@ pub fn ActionButton(
             ControlState::Idle
         }
     });
+    let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
     let border_state = Signal::derive(move || {
         let s = current.get();
         if s == ControlState::Pending && !show_pending_border {
@@ -152,11 +154,8 @@ pub fn ActionButton(
                 <span class="op-btn-content">
                     {move || {
                         let s = current.get();
-                        if s == ControlState::Pending {
-                            view! {
-                                <ProgressIndicator size=dim::ICON_SMALL stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
-                            }
-                                .into_any()
+                        if show_spinner.get() {
+                            view! { <PendingIndicator size=dim::ICON_SMALL/> }.into_any()
                         } else if s.is_result() && show_flash.get() {
                             flash_icon(s, dim::ICON_SMALL)
                         } else {
@@ -206,6 +205,7 @@ pub fn IconButton(
             local.get()
         }
     });
+    let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
     let visual = use_state_visual(current);
     let clickable = move || has_action && enabled.get() && current.get() != ControlState::Pending;
 
@@ -235,12 +235,15 @@ pub fn IconButton(
         }
     };
 
-    view! {
+    // The label doubles as the tooltip; an explicit parent Tooltip takes over instead.
+    let tooltip_text = label
+        .clone()
+        .filter(|_| use_context::<InsideTooltip>().is_none());
+    let button = view! {
         <button
             type="button"
             class="op-sb op-sb-bg op-rippled op-icon-btn"
-            aria-label=label.clone()
-            title=label
+            aria-label=label
             style:width=du(size)
             style:height=du(size)
             data-state=move || visual.state.get()
@@ -265,9 +268,8 @@ pub fn IconButton(
         >
             {move || {
                 let s = current.get();
-                if s == ControlState::Pending {
-                    view! { <ProgressIndicator size=icon_size stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }
-                        .into_any()
+                if show_spinner.get() {
+                    view! { <PendingIndicator size=icon_size/> }.into_any()
                 } else if s.is_result() && show_flash.get() {
                     flash_icon(s, icon_size)
                 } else {
@@ -276,5 +278,9 @@ pub fn IconButton(
             }}
             <PendingRun/>
         </button>
+    };
+    match tooltip_text {
+        Some(text) => view! { <Tooltip text=text>{button}</Tooltip> }.into_any(),
+        None => button.into_any(),
     }
 }

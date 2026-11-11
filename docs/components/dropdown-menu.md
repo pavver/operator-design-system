@@ -21,7 +21,7 @@ Status: **reviewed** on web.
 | :--- | :--- |
 | Field | `surface`, `text_primary`, state border. |
 | Open field | `Selected` state: `accent` outline. |
-| List | `surface` with an `accent` outline; scrollbar in `accent`. |
+| List | `surface` with an `accent` outline; the library [Scrollbar](scrollbar.md). |
 | Selected option | `accent` at 8% background, `accent` bold text. |
 | Pressed option | `pressed`. |
 
@@ -30,7 +30,7 @@ Status: **reviewed** on web.
 * Clicking the field opens or closes the list.
 * Clicking outside the list closes it.
 * Choosing an option updates the value, calls the callback, and closes the list.
-* While `Pending`, the arrow is replaced by a `pending` spinner and the field ignores input.
+* While `Pending`, the field ignores input and the arrow is replaced by the [delayed spinner](../foundations/states.md#delayed-spinner).
 * `Disabled` uses the disabled colors and ignores input.
 
 ## API

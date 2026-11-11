@@ -61,6 +61,8 @@ object OperatorMotion {
     const val LocalFlashTail: Int = 300
     const val PendingLap: Int = 2000
     const val SpinnerLap: Int = 900
+    const val PendingIndicatorDelay: Int = 700
+    const val PendingIndicatorFade: Int = 200
     const val SegmentSlide: Int = 150
     const val DialogEnter: Int = 150
     const val TooltipHideDelay: Int = 800

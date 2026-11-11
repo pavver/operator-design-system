@@ -61,6 +61,8 @@
   --op-motion-local-flash-tail: 300ms;
   --op-motion-pending-lap: 2000ms;
   --op-motion-spinner-lap: 900ms;
+  --op-motion-pending-indicator-delay: 700ms;
+  --op-motion-pending-indicator-fade: 200ms;
   --op-motion-segment-slide: 150ms;
   --op-motion-dialog-enter: 150ms;
   --op-motion-tooltip-hide-delay: 800ms;

@@ -30,13 +30,14 @@ The capsule track and the round thumb are an allowed exception to the rectangula
 | Thumb outline | `border_strong` | `border_strong` |
 
 The off state is deliberately red and the on state green, so the value can be read at a glance.
-While pending, the track turns `surface_alt` and the thumb becomes a transparent `pending` spinner in the center.
+While pending, the track turns `surface_alt` and the thumb moves to the center.
+It keeps its fill and icon until the [delayed spinner](../foundations/states.md#delayed-spinner) appears; then it turns transparent and shows the spinner.
 Disabled uses `disabled_surface` for the track and `text_disabled` for the thumb.
 
 ## Behavior
 
 1. A click requests the opposite value and enters `Pending`.
-   The thumb moves to the center and shows a spinner; clicks are ignored.
+   The thumb moves to the center and shows the spinner after the delay; clicks are ignored.
 2. On **success** the thumb moves to the new side and the track pulses `success`.
 3. On **error** the thumb returns to the original side and the track pulses `error`.
 4. After `800 ms` the switch returns to `Idle` and the result fades out over `500 ms`.

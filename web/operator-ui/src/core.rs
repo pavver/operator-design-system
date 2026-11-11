@@ -202,6 +202,35 @@ pub fn use_state_visual(state: Signal<ControlState>) -> StateVisual {
     }
 }
 
+/// Returns `true` once `pending` has stayed `true` for `motion.pending_indicator_delay`.
+///
+/// Fast requests therefore show only the running Pending border, never the spinner.
+/// Controls render their regular content while the returned signal is `false`.
+pub fn use_pending_indicator(pending: impl Fn() -> bool + Send + Sync + 'static) -> Signal<bool> {
+    // A memo notifies only on real changes, so repeated `Pending` writes do not restart the delay.
+    let pending = Memo::new(move |_| pending());
+    let elapsed = RwSignal::new(false);
+    let job = JobToken::new();
+    let delay_ms = operator_ui_tokens::motion::PENDING_INDICATOR_DELAY_MS;
+
+    Effect::new(move |_| {
+        let id = job.next();
+        elapsed.set(false);
+        if pending.get() {
+            set_timeout(
+                move || {
+                    if job.is_current(id) {
+                        elapsed.set(true);
+                    }
+                },
+                Duration::from_millis(u64::from(delay_ms)),
+            );
+        }
+    });
+
+    Signal::derive(move || pending.get() && elapsed.get())
+}
+
 /// Tracks pointer press state for a control.
 #[derive(Clone, Copy)]
 pub struct Press {

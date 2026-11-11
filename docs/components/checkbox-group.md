@@ -26,7 +26,7 @@ Status: **reviewed** on web.
 | Unselected | `surface` | `text_primary`, 500 | `border` | Empty box with `border` outline |
 | Selected | `accent` at 15% | `accent`, 700 | `accent` at 1.5x | `accent` box with `accent` check |
 | Pressed | `pressed` | — | `border_strong` | — |
-| `Pending` | — | — | Running segment | `pending` spinner |
+| `Pending` | — | — | Running segment | the [delayed spinner](../foundations/states.md#delayed-spinner) |
 | `Success` / `Error` | — | — | Pulsing result outline | Check in the result color |
 
 ## Behavior

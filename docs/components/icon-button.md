@@ -25,7 +25,7 @@ Status: **reviewed** on web.
 | `Idle` | `surface` | `icon` |
 | `Pressed` | `pressed` | `icon` |
 | `Selected` | `selection` | `icon` |
-| `Pending` | `surface` | `pending` spinner at the icon size; running border |
+| `Pending` | `surface` | Running border; icon, then the [delayed spinner](../foundations/states.md#delayed-spinner) at the icon size |
 | `Success` | `success` at 15% | `check` in `success` |
 | `Error` | `error` at 15% | `close` in `error` |
 | `Disabled` | `disabled_surface` | `icon_disabled` |
@@ -43,7 +43,7 @@ Status: **reviewed** on web.
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `icon` | icon | required | The icon. |
-| `label` | string | none | Accessible name and tooltip. Required in practice. |
+| `label` | string | none | Accessible name, also shown as a library [Tooltip](tooltip.md) unless the button is already inside one. Required in practice. |
 | `size` | DU | `8` | Button size. |
 | `icon_size` | DU | `4` | Icon size. |
 | `state` | `ControlState?` | none | External state override. |

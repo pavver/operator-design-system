@@ -20,7 +20,7 @@ Status: **reviewed** on web.
 | :--- | :--- |
 | Unchecked | `surface`, `border` outline. |
 | Checked | `accent` at 15%, `accent` outline at 1.5x stroke, `accent` check. |
-| `Pending` | Running `pending` segment, `pending` spinner instead of the check. |
+| `Pending` | Running `pending` segment, check stays, then the [delayed spinner](../foundations/states.md#delayed-spinner) replaces it. |
 | `Success` | Pulsing `success` outline; the check, if shown, is `success`. |
 | `Error` | Pulsing `error` outline; the restored check, if shown, is `error`. |
 | `Disabled` | `disabled_surface`, `disabled_border`, `icon_disabled` check, `text_disabled` label. |

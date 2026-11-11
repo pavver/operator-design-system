@@ -55,7 +55,7 @@ Status: **reviewed** on web.
 | State | Track | Thumb |
 | :--- | :--- | :--- |
 | `Idle` | `border` outline. | `border` outline, `accent` dot. |
-| `Pending` | Running `pending` segment. | Static outline, `pending` spinner. |
+| `Pending` | Running `pending` segment. | Static outline; dot, then the [delayed spinner](../foundations/states.md#delayed-spinner). |
 | `Success` | Pulsing `success` outline. | Pulsing outline, `check` icon. |
 | `Error` | Pulsing `error` outline. | Pulsing outline, `close` icon. |
 | `Disabled` | `disabled_border`. | `disabled_surface`, no interaction. |

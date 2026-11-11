@@ -25,7 +25,7 @@ Status: **reviewed** on web.
 | :--- | :--- |
 | Button | `surface`, `icon`; pressed `pressed` with `border_strong`. |
 | Button at a limit | `disabled_surface`, `icon_disabled`, ignores clicks. |
-| Clicked button while pending | `pending` spinner instead of the sign. |
+| Clicked button while pending | Sign, then the [delayed spinner](../foundations/states.md#delayed-spinner); consecutive clicks do not restart the delay. |
 | Clicked button on result | `check` in `success` or `close` in `error`. |
 | Opposite button while pending | Muted like a disabled button, but still clickable. |
 | Whole control | Running segment while pending, pulsing result outline after. |

@@ -27,7 +27,7 @@ Status: **reviewed** on web.
 | :--- | :--- | :--- | :--- |
 | `Idle` | `surface` | `text_primary` | `border` |
 | `Pressed` | `pressed` | `text_primary` | `border_strong` |
-| `Pending` | `surface` | `pending` spinner | Running segment, unless disabled by `show_pending_border` |
+| `Pending` | `surface` | Label, then the [delayed spinner](../foundations/states.md#delayed-spinner) | Running segment, unless disabled by `show_pending_border` |
 | `Success` | `success` at 15% | `success` | Pulsing `success` |
 | `Error` | `error` at 15% | `error` | Pulsing `error` |
 | `Disabled` | `disabled_surface` | `text_disabled` | `disabled_border` |

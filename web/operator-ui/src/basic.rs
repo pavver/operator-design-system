@@ -70,6 +70,23 @@ pub fn ProgressIndicator(
     }
 }
 
+/// Spinner used by every async control in the `Pending` state.
+///
+/// Gate it with [`crate::core::use_pending_indicator`] so it appears only for slow requests.
+/// It fades in over `motion.pending_indicator_fade`; replacing the visual here changes every control at once.
+#[component]
+pub fn PendingIndicator(
+    /// Size in DU.
+    #[prop(default = dim::ICON_SMALL)]
+    size: f32,
+) -> impl IntoView {
+    view! {
+        <span class="op-pending-indicator">
+            <ProgressIndicator size=size stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
+        </span>
+    }
+}
+
 /// Horizontal divider line.
 #[component]
 pub fn Divider(

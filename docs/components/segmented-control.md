@@ -59,7 +59,7 @@ Status: **reviewed** on web.
 ### Async
 
 1. Clicking an item that is not selected moves the indicator to it.
-   The indicator enters `Pending` and the target item shows a `pending` spinner instead of its content.
+   The indicator enters `Pending` and the target item keeps its content until the [delayed spinner](../foundations/states.md#delayed-spinner) replaces it.
 2. While pending, all items ignore input.
 3. On **success** the selection is committed.
    The indicator and the selected item flash `Success` for `500 ms`, then fade back to the selected look.

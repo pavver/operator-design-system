@@ -17,6 +17,17 @@ Status: **reviewed** on web.
 * Size and stroke in DU; `6 DU` with a `0.5 DU` stroke by default.
 * Inside controls it uses `spinner_stroke` (`0.375 DU`) and the `pending` color.
 * Round line caps.
+* Async controls do not use it directly while `Pending`; they use `PendingIndicator`.
+
+## PendingIndicator
+
+* The single spinner shown inside async controls in the `Pending` state.
+* Wraps `ProgressIndicator` with `spinner_stroke` (`0.375 DU`) and the `pending` color.
+* Size in DU, `icon_small` (`4 DU`) by default.
+* Fades in over `pending_indicator_fade` (`200 ms`).
+* Gated by `use_pending_indicator`, which turns `true` once `Pending` has lasted `pending_indicator_delay` (`700 ms`).
+* Replacing its visual changes the spinner in every control at once.
+* Behavior is defined in [states.md](../foundations/states.md#delayed-spinner).
 
 ## Divider
 

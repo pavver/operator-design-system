@@ -126,6 +126,8 @@ pub mod motion {
     pub const LOCAL_FLASH_TAIL_MS: u32 = 300;
     pub const PENDING_LAP_MS: u32 = 2000;
     pub const SPINNER_LAP_MS: u32 = 900;
+    pub const PENDING_INDICATOR_DELAY_MS: u32 = 700;
+    pub const PENDING_INDICATOR_FADE_MS: u32 = 200;
     pub const SEGMENT_SLIDE_MS: u32 = 150;
     pub const DIALOG_ENTER_MS: u32 = 150;
     pub const TOOLTIP_HIDE_DELAY_MS: u32 = 800;

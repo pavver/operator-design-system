@@ -1,11 +1,12 @@
 //! TextField, Slider, Stepper, SegmentedControl and DropdownMenu.
 
-use crate::basic::{Icon, ProgressIndicator};
+use crate::basic::{Icon, PendingIndicator};
 use crate::buttons::ActionButton;
 use crate::core::{
     ActionResult, AsyncAction, ControlState, JobToken, PendingRun, Press, du, sleep_ms,
-    spawn_ripple, use_state_visual,
+    spawn_ripple, use_pending_indicator, use_state_visual,
 };
+use crate::scroll::ScrollView;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
@@ -244,6 +245,7 @@ pub fn Slider(
     });
     let thumb_visual = use_state_visual(thumb_state);
     let tone = use_state_visual(current);
+    let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
 
     let fraction = Signal::derive(move || {
         if max > min {
@@ -443,10 +445,8 @@ pub fn Slider(
                             data-fading=move || tone.fading.get().then_some("")
                         >
                             {move || match current.get() {
-                                ControlState::Pending => {
-                                    view! {
-                                        <ProgressIndicator size=3.0 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
-                                    }
+                                ControlState::Pending if show_spinner.get() => {
+                                    view! { <PendingIndicator size=3.0/> }
                                         .into_any()
                                 }
                                 ControlState::Success => view! { <Icon icon=icons::CHECK size=3.5/> }.into_any(),
@@ -553,6 +553,7 @@ pub fn Stepper(
         let disabled_visual =
             move || !allowed.get() || (direction.get() == Some(!increment) && pending.get());
         let mine = move || direction.get() == Some(increment);
+        let show_spinner = use_pending_indicator(move || mine() && pending.get());
         let (icon, label) = if increment {
             (icons::ADD, "Increase")
         } else {
@@ -588,9 +589,8 @@ pub fn Stepper(
                     data-fading=move || tone.fading.get().then_some("")
                 >
                     {move || {
-                        if mine() && pending.get() {
-                            view! { <ProgressIndicator size=3.0 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }
-                                .into_any()
+                        if show_spinner.get() {
+                            view! { <PendingIndicator size=3.0/> }.into_any()
                         } else if mine() && current.get() == ControlState::Success {
                             view! { <Icon icon=icons::CHECK size=dim::ICON_SMALL label="Success"/> }.into_any()
                         } else if mine() && current.get() == ControlState::Error {
@@ -720,6 +720,7 @@ pub fn SegmentedControl(
             let press = Press::new();
             let is_selected = move || target.get() == index;
             let busy = move || pending_index.get().is_some();
+            let show_spinner = use_pending_indicator(move || pending_index.get() == Some(index));
             let tone = move || {
                 if !enabled.get() {
                     "disabled"
@@ -759,11 +760,8 @@ pub fn SegmentedControl(
                     }
                 >
                     {move || {
-                        if pending_index.get() == Some(index) {
-                            view! {
-                                <ProgressIndicator size=dim::ICON_SMALL stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
-                            }
-                                .into_any()
+                        if show_spinner.get() {
+                            view! { <PendingIndicator size=dim::ICON_SMALL/> }.into_any()
                         } else {
                             let item = item.clone();
                             view! {
@@ -843,6 +841,7 @@ pub fn DropdownMenu(
         }
     });
     let visual = use_state_visual(border_state);
+    let show_spinner = use_pending_indicator(move || external.get() == ControlState::Pending);
     let clickable = move || {
         enabled.get()
             && !matches!(
@@ -859,87 +858,87 @@ pub fn DropdownMenu(
     let options = StoredValue::new(options);
 
     view! {
-        <div class="op-dropdown">
-            {label.map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
-            <div class="op-dropdown-anchor">
-                <button
-                    type="button"
-                    class="op-sb op-rippled op-dropdown-trigger"
-                    aria-haspopup="listbox"
-                    aria-expanded=move || expanded.get().to_string()
-                    aria-disabled=move || (!clickable()).then_some("true")
-                    data-state=move || visual.state.get()
-                    data-result=move || visual.result.get()
-                    data-fading=move || visual.fading.get().then_some("")
-                    on:pointerdown=move |ev| {
-                        if clickable() {
-                            press.down();
-                            spawn_ripple(&ev);
-                        }
-                    }
-                    on:pointerup=move |_| press.up()
-                    on:pointerleave=move |_| press.up()
-                    on:pointercancel=move |_| press.up()
-                    on:click=move |_| {
-                        if clickable() {
-                            expanded.update(|e| *e = !*e);
-                        }
-                    }
-                    on:keydown=move |ev| {
-                        if ev.key() == "Escape" {
-                            expanded.set(false);
-                        }
-                    }
-                >
-                    <span class="op-dropdown-value">{move || selected.get()}</span>
-                    {move || {
-                        if external.get() == ControlState::Pending {
-                            view! {
-                                <ProgressIndicator size=dim::ICON_SMALL stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
+            <div class="op-dropdown">
+                {label.map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
+                <div class="op-dropdown-anchor">
+                    <button
+                        type="button"
+                        class="op-sb op-rippled op-dropdown-trigger"
+                        aria-haspopup="listbox"
+                        aria-expanded=move || expanded.get().to_string()
+                        aria-disabled=move || (!clickable()).then_some("true")
+                        data-state=move || visual.state.get()
+                        data-result=move || visual.result.get()
+                        data-fading=move || visual.fading.get().then_some("")
+                        on:pointerdown=move |ev| {
+                            if clickable() {
+                                press.down();
+                                spawn_ripple(&ev);
                             }
-                                .into_any()
-                        } else {
-                            view! { <span class="op-dropdown-arrow"><Icon icon=icons::ARROW_DROP_DOWN size=5.0/></span> }
-                                .into_any()
                         }
-                    }}
-                    <PendingRun/>
-                </button>
-                <Show when=move || expanded.get()>
-                    <div class="op-dropdown-scrim" on:click=move |_| expanded.set(false)></div>
-                    <div class="op-dropdown-menu" role="listbox">
-                        {options
-                            .get_value()
-                            .into_iter()
-                            .map(|option| {
-                                let value = option.clone();
-                                let is_selected = {
-                                    let option = option.clone();
-                                    move || selected.with(|s| *s == option)
-                                };
-                                view! {
-                                    <button
-                                        type="button"
-                                        role="option"
-                                        class="op-rippled op-dropdown-item"
-                                        aria-selected=move || is_selected().to_string()
-                                        on:pointerdown=move |ev| spawn_ripple(&ev)
-                                        on:click=move |_| {
-                                            selected.set(value.clone());
-                                            if let Some(cb) = on_select {
-                                                cb.run(value.clone());
+                        on:pointerup=move |_| press.up()
+                        on:pointerleave=move |_| press.up()
+                        on:pointercancel=move |_| press.up()
+                        on:click=move |_| {
+                            if clickable() {
+                                expanded.update(|e| *e = !*e);
+                            }
+                        }
+                        on:keydown=move |ev| {
+                            if ev.key() == "Escape" {
+                                expanded.set(false);
+                            }
+                        }
+                    >
+                        <span class="op-dropdown-value">{move || selected.get()}</span>
+                        {move || {
+                            if show_spinner.get() {
+                                view! { <PendingIndicator size=dim::ICON_SMALL/> }
+                                    .into_any()
+                            } else {
+                                view! { <span class="op-dropdown-arrow"><Icon icon=icons::ARROW_DROP_DOWN size=5.0/></span> }
+                                    .into_any()
+                            }
+                        }}
+                        <PendingRun/>
+                    </button>
+                    <Show when=move || expanded.get()>
+                        <div class="op-dropdown-scrim" on:click=move |_| expanded.set(false)></div>
+                        <div class="op-dropdown-menu" role="listbox">
+                            <ScrollView>
+                            {options
+                                .get_value()
+                                .into_iter()
+                                .map(|option| {
+                                    let value = option.clone();
+                                    let is_selected = {
+                                        let option = option.clone();
+                                        move || selected.with(|s| *s == option)
+                                    };
+                                    view! {
+                                        <button
+                                            type="button"
+                                            role="option"
+                                            class="op-rippled op-dropdown-item"
+                                            aria-selected=move || is_selected().to_string()
+                                            on:pointerdown=move |ev| spawn_ripple(&ev)
+                                            on:click=move |_| {
+                                                selected.set(value.clone());
+                                                if let Some(cb) = on_select {
+                                                    cb.run(value.clone());
+                                                }
+                                                expanded.set(false);
                                             }
-                                            expanded.set(false);
-                                        }
-                                    >
-                                        {option}
-                                    </button>
-                                }
-                            })
-                            .collect_view()}
-                    </div>
-                </Show>
+                                        >
+                                            {option}
+                                        </button>
+                                    }
+                                })
+                                .collect_view()}
+    </ScrollView>
+                        </div>
+                    </Show>
+                </div>
             </div>
-        </div>
-    }
+        }
 }

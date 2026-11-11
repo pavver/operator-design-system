@@ -1,13 +1,13 @@
 //! AsyncSwitch, AsyncCheckbox and CheckboxGroup.
 
-use crate::basic::{Icon, ProgressIndicator};
+use crate::basic::{Icon, PendingIndicator};
 use crate::core::{
     AsyncAction, ControlState, JobToken, PendingRun, Press, sleep_ms, spawn_ripple,
-    use_state_visual,
+    use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{dim, icons, motion};
+use operator_ui_tokens::{icons, motion};
 use std::collections::HashMap;
 
 /// Shared async toggle flow: Pending -> result -> hold -> Idle, with rollback on error.
@@ -75,6 +75,7 @@ pub fn AsyncSwitch(
         }
     });
     let visual = use_state_visual(current);
+    let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
     let clickable = move || {
         has_action
             && !matches!(
@@ -101,6 +102,7 @@ pub fn AsyncSwitch(
             data-state=move || visual.state.get()
             data-result=move || visual.result.get()
             data-fading=move || visual.fading.get().then_some("")
+            data-spinner=move || show_spinner.get().then_some("")
             on:pointerdown=move |ev| {
                 if clickable() {
                     press.down();
@@ -118,9 +120,8 @@ pub fn AsyncSwitch(
         >
             <span class="op-switch-thumb">
                 {move || {
-                    if current.get() == ControlState::Pending {
-                        view! { <ProgressIndicator size=3.5 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }
-                            .into_any()
+                    if show_spinner.get() {
+                        view! { <PendingIndicator size=3.5/> }.into_any()
                     } else {
                         let icon = if value.get() { icons::CHECK } else { icons::CLOSE };
                         view! { <Icon icon=icon size=3.0/> }.into_any()
@@ -169,6 +170,7 @@ pub fn AsyncCheckbox(
     });
     let visual = use_state_visual(border_state);
     let tone = use_state_visual(current);
+    let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
     let clickable = move || {
         has_action
             && !matches!(
@@ -220,9 +222,8 @@ pub fn AsyncCheckbox(
                     data-fading=move || tone.fading.get().then_some("")
                 >
                     {move || {
-                        if current.get() == ControlState::Pending {
-                            view! { <ProgressIndicator size=3.0 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }
-                                .into_any()
+                        if show_spinner.get() {
+                            view! { <PendingIndicator size=3.0/> }.into_any()
                         } else if value.get() {
                             view! { <Icon icon=icons::CHECK size=3.5/> }.into_any()
                         } else {
@@ -292,6 +293,8 @@ pub fn CheckboxGroup(
             });
             let visual = use_state_visual(border_state);
             let tone = use_state_visual(item_state);
+            let show_spinner =
+                use_pending_indicator(move || item_state.get() == ControlState::Pending);
             let clickable = move || item_state.get() == ControlState::Idle;
             let click = move || {
                 let id = id.clone();
@@ -346,11 +349,8 @@ pub fn CheckboxGroup(
                             data-fading=move || tone.fading.get().then_some("")
                         >
                             {move || {
-                                if item_state.get() == ControlState::Pending {
-                                    view! {
-                                        <ProgressIndicator size=3.0 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
-                                    }
-                                        .into_any()
+                                if show_spinner.get() {
+                                    view! { <PendingIndicator size=3.0/> }.into_any()
                                 } else if is_selected.get() {
                                     view! { <Icon icon=icons::CHECK size=3.0/> }.into_any()
                                 } else {
