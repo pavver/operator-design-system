@@ -35,6 +35,16 @@ Any other language is shown without highlighting.
 
 The built-in highlighter is a small line scanner, so it does not understand string templates, heredocs, or YAML block scalars.
 
+## Arborium
+
+The optional `arborium` Cargo feature enables Tree-sitter-based syntax highlighting through the arborium crate.
+The operator-ui crate enables no language grammars by default.
+An application enables `arborium` together with the specific `arborium/lang-*` features it requires in its own `Cargo.toml`.
+When arborium does not support the requested language or the grammar is not compiled in, highlighting falls back to the built-in scanner.
+Compiling arborium for WebAssembly requires an LLVM and clang toolchain that supports the `wasm32-unknown-unknown` target.
+Enabling arborium increases the compiled release WebAssembly binary size.
+In a minimal application rendering a highlighted code block with `arborium/lang-rust`, the raw WebAssembly size increased by approximately 3.50 MB (from 2.28 MB to 5.78 MB), and the gzip-compressed size increased by approximately 634 KB (from 490 KB to 1.12 MB).
+
 ## Behavior
 
 * Long lines scroll horizontally; with `wrap` they wrap and break anywhere.

@@ -7,17 +7,23 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+# Features excluded from the per-feature loop:
+# - Group and meta features (tested separately or alias).
+# - arborium: requires clang/LLVM with wasm target support, which CI and most users do not have.
+EXCLUDE_FEATURES=("default" "reviewed" "draft" "full" "arborium")
+
 echo "==> Checking core (no features)..."
 cargo clippy -q --target wasm32-unknown-unknown -p operator-ui --no-default-features -- -D warnings
 
 features=$(python3 -c '
-import json, subprocess
+import json, subprocess, sys
 out = subprocess.check_output(["cargo", "metadata", "--no-deps", "--format-version", "1"])
 pkg = next(p for p in json.loads(out)["packages"] if p["name"] == "operator-ui")
+excluded = set(sys.argv[1:])
 for f in sorted(pkg["features"]):
-    if f not in ("default", "reviewed", "draft", "full"):
+    if f not in excluded:
         print(f)
-')
+' "${EXCLUDE_FEATURES[@]}")
 
 for f in $features; do
     echo "==> Checking feature: $f..."

@@ -79,6 +79,10 @@ Applications can opt out of default features and select individual components:
 operator-ui = { git = "https://github.com/pavver/operator-design-system", default-features = false, features = ["action-button", "toast"] }
 ```
 
+The optional `arborium` feature enables Tree-sitter syntax highlighting for `CodeBlock` using the arborium crate.
+It is excluded from group features because compiling its C tree-sitter grammars to WebAssembly requires LLVM and clang with wasm support.
+Applications enable `arborium` and the individual `arborium/lang-*` grammars they need in their own manifest.
+
 Pin a release with `tag = "vX.Y.Z"`; component features are available from the first release after v0.5.0.
 
 Unused components ship neither code nor CSS in the final build.

@@ -7,6 +7,8 @@ use crate::core::styled_text::line_view;
 use leptos::prelude::*;
 use operator_ui_tokens::{dim, icons};
 
+#[cfg(feature = "arborium")]
+mod arborium;
 mod highlight;
 mod langs;
 
@@ -31,6 +33,22 @@ pub fn CodeBlock(
     max_height: Option<f32>,
 ) -> impl IntoView {
     let lang = language.as_deref().and_then(highlight::find);
+    #[cfg(feature = "arborium")]
+    let lines = {
+        let lang_name = language.clone();
+        move || {
+            code.with(|c| {
+                if let Some(name) = lang_name.as_deref()
+                    && let Some(lines) = arborium::highlight(c, name)
+                {
+                    lines
+                } else {
+                    highlight::highlight(c, lang)
+                }
+            })
+        }
+    };
+    #[cfg(not(feature = "arborium"))]
     let lines = move || code.with(|c| highlight::highlight(c, lang));
     let has_head = language.is_some() || copy;
     view! {
