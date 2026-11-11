@@ -21,6 +21,15 @@ All values are in milliseconds and live in the `[motion]` table of [tokens.toml]
 | `dialog_enter` | `150` | Dialog entry. |
 | `tooltip_hide_delay` | `800` | Delay before a value tooltip hides. |
 | `alarm_flash_half` | `250` | Half period of alarm flashing. |
+| `tooltip_show_delay` | `500` | Hover time before a Tooltip opens. |
+| `long_press` | `500` | Touch hold that counts as a long press. |
+| `toast_duration` | `4000` | Visible time of a Toast. |
+| `toast_error_duration` | `8000` | Visible time of an error toast. |
+| `sheet_slide` | `200` | Sheet entry. |
+| `expand` | `200` | Height change of a Collapsible. |
+| `skeleton_lap` | `1500` | One sweep of the Skeleton highlight. |
+| `search_debounce` | `300` | Typing pause before a SearchField reports. |
+| `overscroll_release` | `300` | Spring-back of stretch overscroll. |
 
 ## Curves
 

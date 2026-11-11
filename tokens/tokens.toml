@@ -109,6 +109,15 @@ segment_slide = 150
 dialog_enter = 150
 tooltip_hide_delay = 800
 alarm_flash_half = 250
+tooltip_show_delay = 500
+long_press = 500
+toast_duration = 4000
+toast_error_duration = 8000
+sheet_slide = 200
+expand = 200
+skeleton_lap = 1500
+search_debounce = 300
+overscroll_release = 300
 
 # ---------------------------------------------------------------------------
 # Themes
@@ -137,6 +146,7 @@ warning = "#DCC36A"
 error = "#E8664F"
 info = "#6FB3C8"
 pending = "#6FB3C8"
+hover = "#252525"
 pressed = "#2A2A2A"
 selection = "#3A2F1F"
 ripple = "#F0A53A"
@@ -202,6 +212,7 @@ warning = "#8A6D00"
 error = "#B3361F"
 info = "#2C7489"
 pending = "#2C7489"
+hover = "#F4F4F4"
 pressed = "#EBEBEB"
 selection = "#F5E6D0"
 ripple = "#A35C00"

@@ -19,6 +19,7 @@ That file is the single source of truth; this document explains the roles.
 | `background` | `#181818` | `#F8F8F8` | Application background. |
 | `surface` | `#1F1F1F` | `#FFFFFF` | Controls, fields, cards. |
 | `surface_alt` | `#141414` | `#F0F0F0` | Sunken areas: segment tracks, terminals. |
+| `hover` | `#252525` | `#F4F4F4` | Hover background on pointer devices. |
 | `pressed` | `#2A2A2A` | `#EBEBEB` | Pressed background. |
 | `selection` | `#3A2F1F` | `#F5E6D0` | Selected background. |
 | `disabled_surface` | `#1B1B1B` | `#F3F3F3` | Disabled background. |

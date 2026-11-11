@@ -65,6 +65,15 @@ object OperatorMotion {
     const val DialogEnter: Int = 150
     const val TooltipHideDelay: Int = 800
     const val AlarmFlashHalf: Int = 250
+    const val TooltipShowDelay: Int = 500
+    const val LongPress: Int = 500
+    const val ToastDuration: Int = 4000
+    const val ToastErrorDuration: Int = 8000
+    const val SheetSlide: Int = 200
+    const val Expand: Int = 200
+    const val SkeletonLap: Int = 1500
+    const val SearchDebounce: Int = 300
+    const val OverscrollRelease: Int = 300
 }
 
 data class OperatorPalette(
@@ -88,6 +97,7 @@ data class OperatorPalette(
     val error: Color,
     val info: Color,
     val pending: Color,
+    val hover: Color,
     val pressed: Color,
     val selection: Color,
     val ripple: Color,
@@ -155,6 +165,7 @@ object OperatorPalettes {
         error = Color(0xFFE8664F),
         info = Color(0xFF6FB3C8),
         pending = Color(0xFF6FB3C8),
+        hover = Color(0xFF252525),
         pressed = Color(0xFF2A2A2A),
         selection = Color(0xFF3A2F1F),
         ripple = Color(0xFFF0A53A),
@@ -220,6 +231,7 @@ object OperatorPalettes {
         error = Color(0xFFB3361F),
         info = Color(0xFF2C7489),
         pending = Color(0xFF2C7489),
+        hover = Color(0xFFF4F4F4),
         pressed = Color(0xFFEBEBEB),
         selection = Color(0xFFF5E6D0),
         ripple = Color(0xFFA35C00),

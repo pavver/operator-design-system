@@ -130,6 +130,15 @@ pub mod motion {
     pub const DIALOG_ENTER_MS: u32 = 150;
     pub const TOOLTIP_HIDE_DELAY_MS: u32 = 800;
     pub const ALARM_FLASH_HALF_MS: u32 = 250;
+    pub const TOOLTIP_SHOW_DELAY_MS: u32 = 500;
+    pub const LONG_PRESS_MS: u32 = 500;
+    pub const TOAST_DURATION_MS: u32 = 4000;
+    pub const TOAST_ERROR_DURATION_MS: u32 = 8000;
+    pub const SHEET_SLIDE_MS: u32 = 200;
+    pub const EXPAND_MS: u32 = 200;
+    pub const SKELETON_LAP_MS: u32 = 1500;
+    pub const SEARCH_DEBOUNCE_MS: u32 = 300;
+    pub const OVERSCROLL_RELEASE_MS: u32 = 300;
 }
 
 /// A complete semantic color palette for one theme and mode.
@@ -155,6 +164,7 @@ pub struct Palette {
     pub error: Rgba,
     pub info: Rgba,
     pub pending: Rgba,
+    pub hover: Rgba,
     pub pressed: Rgba,
     pub selection: Rgba,
     pub ripple: Rgba,
@@ -249,6 +259,7 @@ pub mod palettes {
         error: Rgba::new(232, 102, 79, 255),
         info: Rgba::new(111, 179, 200, 255),
         pending: Rgba::new(111, 179, 200, 255),
+        hover: Rgba::new(37, 37, 37, 255),
         pressed: Rgba::new(42, 42, 42, 255),
         selection: Rgba::new(58, 47, 31, 255),
         ripple: Rgba::new(240, 165, 58, 255),
@@ -315,6 +326,7 @@ pub mod palettes {
         error: Rgba::new(179, 54, 31, 255),
         info: Rgba::new(44, 116, 137, 255),
         pending: Rgba::new(44, 116, 137, 255),
+        hover: Rgba::new(244, 244, 244, 255),
         pressed: Rgba::new(235, 235, 235, 255),
         selection: Rgba::new(245, 230, 208, 255),
         ripple: Rgba::new(163, 92, 0, 255),
@@ -374,15 +386,37 @@ pub mod icons {
         view_box: "0 -960 960 960",
         paths: &["m330-444 201 201-51 51-288-288 288-288 51 51-201 201h438v72H330Z"],
     };
+    pub const ARROW_DOWNWARD: Icon = Icon {
+        name: "arrow_downward",
+        view_box: "0 -960 960 960",
+        paths: &["M444-768v438L243-531l-51 51 288 288 288-288-51-51-201 201v-438h-72Z"],
+    };
     pub const ARROW_DROP_DOWN: Icon = Icon {
         name: "arrow_drop_down",
         view_box: "0 -960 960 960",
         paths: &["M480-384 288-576h384L480-384Z"],
     };
+    pub const ARROW_UPWARD: Icon = Icon {
+        name: "arrow_upward",
+        view_box: "0 -960 960 960",
+        paths: &["M444-192v-438L243-429l-51-51 288-288 288 288-51 51-201-201v438h-72Z"],
+    };
     pub const CHECK: Icon = Icon {
         name: "check",
         view_box: "0 -960 960 960",
         paths: &["M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"],
+    };
+    pub const CHECK_CIRCLE: Icon = Icon {
+        name: "check_circle",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "m429-336 238-237-51-51-187 186-85-84-51 51 136 135Zm51 240q-79 0-149-30t-122.5-82.5Q156-261 126-331T96-480q0-80 30-149.5t82.5-122Q261-804 331-834t149-30q80 0 149.5 30t122 82.5Q804-699 834-629.5T864-480q0 79-30 149t-82.5 122.5Q699-156 629.5-126T480-96Zm0-72q130 0 221-91t91-221q0-130-91-221t-221-91q-130 0-221 91t-91 221q0 130 91 221t221 91Zm0-312Z",
+        ],
+    };
+    pub const CHEVRON_LEFT: Icon = Icon {
+        name: "chevron_left",
+        view_box: "0 -960 960 960",
+        paths: &["M576-240 336-480l240-240 51 51-189 189 189 189-51 51Z"],
     };
     pub const CHEVRON_RIGHT: Icon = Icon {
         name: "chevron_right",
@@ -394,6 +428,13 @@ pub mod icons {
         view_box: "0 -960 960 960",
         paths: &[
             "m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z",
+        ],
+    };
+    pub const CONTENT_COPY: Icon = Icon {
+        name: "content_copy",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M288-240v-624h528v624H288Zm72-72h384v-480H360v480ZM144-96v-624h72v552h456v72H144Zm216-216v-480 480Z",
         ],
     };
     pub const DARK_MODE: Icon = Icon {
@@ -410,12 +451,62 @@ pub mod icons {
             "M240-144v-552h-48v-72h192v-48h192v48h192v72h-48v552H240Zm72-72h336v-480H312v480Zm72-72h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z",
         ],
     };
+    pub const DOWNLOAD: Icon = Icon {
+        name: "download",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M480-336 288-528l51-51 105 105v-342h72v342l105-105 51 51-192 192ZM192-192v-144h72v72h432v-72h72v144H192Z",
+        ],
+    };
+    pub const EDIT: Icon = Icon {
+        name: "edit",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M216-216h51l375-375-51-51-375 375v51Zm-72 72v-153l549-549 153 153-549 549H144Zm600-549-51-51 51 51Zm-127.95 76.95L591-642l51 51-25.95-25.05Z",
+        ],
+    };
+    pub const ERROR: Icon = Icon {
+        name: "error",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M479.79-288q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM444-432h72v-240h-72v240Zm36.28 336Q401-96 331-126t-122.5-82.5Q156-261 126-330.96t-30-149.5Q96-560 126-629.5q30-69.5 82.5-122T330.96-834q69.96-30 149.5-30t149.04 30q69.5 30 122 82.5T834-629.28q30 69.73 30 149Q864-401 834-331t-82.5 122.5Q699-156 629.28-126q-69.73 30-149 30Zm-.28-72q130 0 221-91t91-221q0-130-91-221t-221-91q-130 0-221 91t-91 221q0 130 91 221t221 91Zm0-312Z",
+        ],
+    };
+    pub const EXPAND_MORE: Icon = Icon {
+        name: "expand_more",
+        view_box: "0 -960 960 960",
+        paths: &["M480-333 240-573l51-51 189 189 189-189 51 51-240 240Z"],
+    };
+    pub const FILTER_LIST: Icon = Icon {
+        name: "filter_list",
+        view_box: "0 -960 960 960",
+        paths: &["M384-264v-72h192v72H384ZM240-444v-72h480v72H240Zm-96-180v-72h672v72H144Z"],
+    };
+    pub const INBOX: Icon = Icon {
+        name: "inbox",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M144-144v-672h672v672H144Zm72-72h528v-144H632q-23 43-63.5 69.5T480-264q-49 0-89.5-26T328-360H216v144Zm264-120q40 0 68-28t28-68h168v-312H216v312h168q0 40 28 68t68 28ZM216-216h528-528Z",
+        ],
+    };
+    pub const INFO: Icon = Icon {
+        name: "info",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M444-288h72v-240h-72v240Zm35.79-312q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm.49 504Q401-96 331-126t-122.5-82.5Q156-261 126-330.96t-30-149.5Q96-560 126-629.5q30-69.5 82.5-122T330.96-834q69.96-30 149.5-30t149.04 30q69.5 30 122 82.5T834-629.28q30 69.73 30 149Q864-401 834-331t-82.5 122.5Q699-156 629.28-126q-69.73 30-149 30Zm-.28-72q130 0 221-91t91-221q0-130-91-221t-221-91q-130 0-221 91t-91 221q0 130 91 221t221 91Zm0-312Z",
+        ],
+    };
     pub const LIGHT_MODE: Icon = Icon {
         name: "light_mode",
         view_box: "0 -960 960 960",
         paths: &[
             "M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm-.23 72Q400-288 344-344.23q-56-56.22-56-136Q288-560 344.23-616q56.22-56 136-56Q560-672 616-615.77q56 56.22 56 136Q672-400 615.77-344q-56.22 56-136 56ZM216-444H48v-72h168v72Zm696 0H744v-72h168v72ZM444-744v-168h72v168h-72Zm0 696v-168h72v168h-72ZM269-642 166-742l51-55 102 104-50 51Zm474 475L642-268l49-51 103 101-51 51ZM640-691l102-101 51 49-100 103-53-51ZM163-217l105-99 49 47-98 104-56-52Zm317-263Z",
         ],
+    };
+    pub const MENU: Icon = Icon {
+        name: "menu",
+        view_box: "0 -960 960 960",
+        paths: &["M144-264v-72h672v72H144Zm0-180v-72h672v72H144Zm0-180v-72h672v72H144Z"],
     };
     pub const MORE_VERT: Icon = Icon {
         name: "more_vert",
@@ -471,17 +562,37 @@ pub mod icons {
             "m637-425-62-62q4-38-23-65.5T487-576l-62-62q13-5 27-7.5t28-2.5q70 0 119 49t49 119q0 14-2.5 28t-8.5 27Zm133 133-52-52q36-28 65.5-61.5T833-480q-49-101-144.5-158.5T480-696q-26 0-51 3t-49 10l-58-58q38-15 77.5-21t80.5-6q143 0 261.5 77.5T912-480q-22 57-58.5 103.5T770-292Zm-2 202L638-220q-38 14-77.5 21t-80.5 7q-143 0-261.5-77.5T48-480q22-57 58-104t84-85L90-769l51-51 678 679-51 51ZM241-617q-35 28-65 61.5T127-480q49 101 144.5 158.5T480-264q26 0 51-3.5t50-9.5l-45-45q-14 5-28 7.5t-28 2.5q-70 0-119-49t-49-119q0-14 3.5-28t6.5-28l-81-81Zm287 89Zm-96 96Z",
         ],
     };
+    pub const WARNING: Icon = Icon {
+        name: "warning",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "m48-144 432-720 432 720H48Zm127-72h610L480-724 175-216Zm304.79-48q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM444-384h72v-192h-72v192Zm36-86Z",
+        ],
+    };
 
     pub const ALL: &[Icon] = &[
         ADD,
         ARROW_BACK,
+        ARROW_DOWNWARD,
         ARROW_DROP_DOWN,
+        ARROW_UPWARD,
         CHECK,
+        CHECK_CIRCLE,
+        CHEVRON_LEFT,
         CHEVRON_RIGHT,
         CLOSE,
+        CONTENT_COPY,
         DARK_MODE,
         DELETE,
+        DOWNLOAD,
+        EDIT,
+        ERROR,
+        EXPAND_MORE,
+        FILTER_LIST,
+        INBOX,
+        INFO,
         LIGHT_MODE,
+        MENU,
         MORE_VERT,
         REFRESH,
         REMOVE,
@@ -490,5 +601,6 @@ pub mod icons {
         VIDEOCAM,
         VISIBILITY,
         VISIBILITY_OFF,
+        WARNING,
     ];
 }

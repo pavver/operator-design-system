@@ -28,3 +28,17 @@ arrow_back = { material = "arrow_back" }
 arrow_drop_down = { material = "arrow_drop_down" }
 chevron_right = { material = "chevron_right" }
 more_vert = { material = "more_vert" }
+info = { material = "info" }
+warning = { material = "warning" }
+error = { material = "error" }
+check_circle = { material = "check_circle" }
+inbox = { material = "inbox" }
+content_copy = { material = "content_copy" }
+expand_more = { material = "expand_more" }
+chevron_left = { material = "chevron_left" }
+menu = { material = "menu" }
+arrow_upward = { material = "arrow_upward" }
+arrow_downward = { material = "arrow_downward" }
+edit = { material = "edit" }
+download = { material = "download" }
+filter_list = { material = "filter_list" }

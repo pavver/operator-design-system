@@ -65,6 +65,15 @@
   --op-motion-dialog-enter: 150ms;
   --op-motion-tooltip-hide-delay: 800ms;
   --op-motion-alarm-flash-half: 250ms;
+  --op-motion-tooltip-show-delay: 500ms;
+  --op-motion-long-press: 500ms;
+  --op-motion-toast-duration: 4000ms;
+  --op-motion-toast-error-duration: 8000ms;
+  --op-motion-sheet-slide: 200ms;
+  --op-motion-expand: 200ms;
+  --op-motion-skeleton-lap: 1500ms;
+  --op-motion-search-debounce: 300ms;
+  --op-motion-overscroll-release: 300ms;
 }
 
 [data-op-theme="operator"][data-op-mode="dark"] {
@@ -89,6 +98,7 @@
   --op-error: #E8664F;
   --op-info: #6FB3C8;
   --op-pending: #6FB3C8;
+  --op-hover: #252525;
   --op-pressed: #2A2A2A;
   --op-selection: #3A2F1F;
   --op-ripple: #F0A53A;
@@ -156,6 +166,7 @@
   --op-error: #B3361F;
   --op-info: #2C7489;
   --op-pending: #2C7489;
+  --op-hover: #F4F4F4;
   --op-pressed: #EBEBEB;
   --op-selection: #F5E6D0;
   --op-ripple: #A35C00;
