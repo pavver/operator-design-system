@@ -210,6 +210,16 @@ pub struct Palette {
     pub term_bright_magenta: Rgba,
     pub term_bright_cyan: Rgba,
     pub term_bright_white: Rgba,
+    pub syntax_keyword: Rgba,
+    pub syntax_string: Rgba,
+    pub syntax_number: Rgba,
+    pub syntax_comment: Rgba,
+    pub syntax_type: Rgba,
+    pub syntax_function: Rgba,
+    pub syntax_constant: Rgba,
+    pub syntax_property: Rgba,
+    pub syntax_meta: Rgba,
+    pub syntax_punctuation: Rgba,
 }
 
 /// Available themes.
@@ -305,6 +315,16 @@ pub mod palettes {
         term_bright_magenta: Rgba::new(214, 112, 214, 255),
         term_bright_cyan: Rgba::new(41, 184, 219, 255),
         term_bright_white: Rgba::new(229, 229, 229, 255),
+        syntax_keyword: Rgba::new(232, 167, 90, 255),
+        syntax_string: Rgba::new(157, 191, 122, 255),
+        syntax_number: Rgba::new(201, 155, 216, 255),
+        syntax_comment: Rgba::new(110, 118, 129, 255),
+        syntax_type: Rgba::new(111, 179, 200, 255),
+        syntax_function: Rgba::new(216, 194, 122, 255),
+        syntax_constant: Rgba::new(224, 140, 106, 255),
+        syntax_property: Rgba::new(140, 180, 224, 255),
+        syntax_meta: Rgba::new(169, 155, 201, 255),
+        syntax_punctuation: Rgba::new(157, 157, 157, 255),
     };
 
     pub const OPERATOR_LIGHT: Palette = Palette {
@@ -372,6 +392,16 @@ pub mod palettes {
         term_bright_magenta: Rgba::new(188, 5, 188, 255),
         term_bright_cyan: Rgba::new(5, 152, 188, 255),
         term_bright_white: Rgba::new(165, 165, 165, 255),
+        syntax_keyword: Rgba::new(163, 92, 0, 255),
+        syntax_string: Rgba::new(71, 122, 46, 255),
+        syntax_number: Rgba::new(122, 62, 157, 255),
+        syntax_comment: Rgba::new(118, 118, 118, 255),
+        syntax_type: Rgba::new(44, 116, 137, 255),
+        syntax_function: Rgba::new(122, 92, 0, 255),
+        syntax_constant: Rgba::new(166, 70, 31, 255),
+        syntax_property: Rgba::new(4, 81, 165, 255),
+        syntax_meta: Rgba::new(106, 90, 140, 255),
+        syntax_punctuation: Rgba::new(97, 97, 97, 255),
     };
 }
 

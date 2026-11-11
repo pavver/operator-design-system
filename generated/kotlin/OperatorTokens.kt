@@ -142,7 +142,17 @@ data class OperatorPalette(
     val termBrightBlue: Color,
     val termBrightMagenta: Color,
     val termBrightCyan: Color,
-    val termBrightWhite: Color
+    val termBrightWhite: Color,
+    val syntaxKeyword: Color,
+    val syntaxString: Color,
+    val syntaxNumber: Color,
+    val syntaxComment: Color,
+    val syntaxType: Color,
+    val syntaxFunction: Color,
+    val syntaxConstant: Color,
+    val syntaxProperty: Color,
+    val syntaxMeta: Color,
+    val syntaxPunctuation: Color
 )
 
 object OperatorPalettes {
@@ -210,7 +220,17 @@ object OperatorPalettes {
         termBrightBlue = Color(0xFF3B8EEA),
         termBrightMagenta = Color(0xFFD670D6),
         termBrightCyan = Color(0xFF29B8DB),
-        termBrightWhite = Color(0xFFE5E5E5)
+        termBrightWhite = Color(0xFFE5E5E5),
+        syntaxKeyword = Color(0xFFE8A75A),
+        syntaxString = Color(0xFF9DBF7A),
+        syntaxNumber = Color(0xFFC99BD8),
+        syntaxComment = Color(0xFF6E7681),
+        syntaxType = Color(0xFF6FB3C8),
+        syntaxFunction = Color(0xFFD8C27A),
+        syntaxConstant = Color(0xFFE08C6A),
+        syntaxProperty = Color(0xFF8CB4E0),
+        syntaxMeta = Color(0xFFA99BC9),
+        syntaxPunctuation = Color(0xFF9D9D9D)
     )
     val OperatorLight = OperatorPalette(
         background = Color(0xFFF8F8F8),
@@ -276,6 +296,16 @@ object OperatorPalettes {
         termBrightBlue = Color(0xFF0451A5),
         termBrightMagenta = Color(0xFFBC05BC),
         termBrightCyan = Color(0xFF0598BC),
-        termBrightWhite = Color(0xFFA5A5A5)
+        termBrightWhite = Color(0xFFA5A5A5),
+        syntaxKeyword = Color(0xFFA35C00),
+        syntaxString = Color(0xFF477A2E),
+        syntaxNumber = Color(0xFF7A3E9D),
+        syntaxComment = Color(0xFF767676),
+        syntaxType = Color(0xFF2C7489),
+        syntaxFunction = Color(0xFF7A5C00),
+        syntaxConstant = Color(0xFFA6461F),
+        syntaxProperty = Color(0xFF0451A5),
+        syntaxMeta = Color(0xFF6A5A8C),
+        syntaxPunctuation = Color(0xFF616161)
     )
 }
