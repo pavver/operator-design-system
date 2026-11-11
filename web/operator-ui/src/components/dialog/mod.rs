@@ -159,7 +159,7 @@ pub fn Dialog(
                             <IconButton icon=icons::CLOSE label="Close" on_click=Callback::new(move |()| open.set(false))/>
                         </Show>
                     </div>
-                    <ScrollView class="op-dialog-body" viewport_class="op-dialog-content">{move || children.with_value(|c| c())}</ScrollView>
+                    <ScrollView class="op-dialog-body" viewport_class="op-dialog-content op-scroll-contain">{move || children.with_value(|c| c())}</ScrollView>
                     {footer()}
                     <PendingRun/>
                 </div>

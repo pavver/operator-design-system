@@ -102,7 +102,7 @@ pub fn DropdownMenu(
                     <Show when=move || expanded.get()>
                         <div class="op-dropdown-scrim" on:click=move |_| expanded.set(false)></div>
                         <div class="op-dropdown-menu" role="listbox">
-                            <ScrollView>
+                            <ScrollView viewport_class="op-scroll-contain">
                             {options
                                 .get_value()
                                 .into_iter()

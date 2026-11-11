@@ -213,7 +213,7 @@ pub fn Combobox(
                     </div>
                     <Show when=move || open.get() && enabled.get()>
                         <div class="op-dropdown-menu" role="listbox" on:mousedown=|ev| ev.prevent_default()>
-                            <ScrollView node_ref=list_ref>
+                            <ScrollView node_ref=list_ref viewport_class="op-scroll-contain">
                             {move || {
                                 let list = filtered.get();
                                 if list.is_empty() {

@@ -42,6 +42,8 @@ Color and width changes take `state_color` (`150 ms`), linear.
 2. Pressing the empty track pages toward the pointer by 90% of the visible length.
 3. The bar follows scrolling, resizing of the container and its children, and content changes.
 4. The bar is hidden from assistive technology; the scrolling element stays the accessible scroll region.
+5. `ScrollView` chains scrolling like native scrolling: with nothing left to scroll, the wheel or swipe moves the page.
+   Overlays (menus, dropdowns, Combobox, Dialog, Sheet) add `op-scroll-contain`, so the page under them stays still.
 
 ## Native Fallback
 

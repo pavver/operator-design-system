@@ -2,7 +2,10 @@
 /* Scrollbar / ScrollView                                              */
 /* ------------------------------------------------------------------ */
 .op-scrollview { position: relative; display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; min-height: 0; max-height: 100%; }
-.op-scrollview-viewport { flex: 1 1 auto; min-width: 0; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.op-scrollview-viewport { flex: 1 1 auto; min-width: 0; min-height: 0; overflow: auto; }
+/* Scroll chains to the page like native scrolling; overlays opt out with op-scroll-contain
+   so the page under a menu or dialog stays still. */
+.op-scroll-contain { overscroll-behavior: contain; }
 .op-scrollview-viewport[data-axis="y"] { overflow-x: hidden; }
 .op-scrollview-viewport[data-axis="x"] { overflow-y: hidden; }
 .op-root .op-scroll-native-off { scrollbar-width: none; }

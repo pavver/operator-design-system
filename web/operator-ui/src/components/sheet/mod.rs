@@ -76,7 +76,7 @@ pub fn Sheet(
                                 </div>
                             }
                         })}
-                    <ScrollView class="op-sheet-body">{move || children.with_value(|c| c())}</ScrollView>
+                    <ScrollView class="op-sheet-body" viewport_class="op-scroll-contain">{move || children.with_value(|c| c())}</ScrollView>
                 </div>
             </div>
         </Show>

@@ -203,7 +203,7 @@ pub fn Menu(
                 }
                 on:contextmenu=|e| e.prevent_default()
             >
-                <ScrollView viewport_class="op-menu-list">
+                <ScrollView viewport_class="op-menu-list op-scroll-contain">
                 {items
                     .get_value()
                     .into_iter()
