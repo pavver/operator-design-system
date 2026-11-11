@@ -26,11 +26,7 @@
 </p>
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/screenshots/home-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="assets/screenshots/home-light.png">
-    <img src="assets/screenshots/home-dark.png" width="880" alt="Operator UI documentation site with live async controls">
-  </picture>
+  <img src="assets/screenshots/showcase.png" width="880" alt="A device panel built from Operator UI components in dark and light mode">
 </p>
 
 ## Overview
@@ -234,7 +230,7 @@ web/operator-ui/                  Leptos component library
 web/operator-ui-demo/             documentation site with live examples (renders docs/)
 docs/                             the design system itself
 assets/brand/                     logo: still mark (also the favicon) and animated version
-assets/screenshots/               README screenshots
+assets/screenshots/               README screenshot (from the demo page #/showcase)
 scripts/                          release and feature-check helpers
 ```
 

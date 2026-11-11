@@ -202,3 +202,17 @@ body { background: #181818; }
   .docs-title { font-size: calc(var(--op-tu) * 26); line-height: calc(var(--op-tu) * 32); }
 }
 .demo-wide { margin: 0; padding: var(--op-dim-pad-card); font-size: var(--op-type-console-size); line-height: var(--op-type-console-line); white-space: pre; }
+
+/* ---- Showcase (#/showcase, README screenshot) ---- */
+.sc-page { min-height: 100vh; background: #101010; }
+.sc-root { display: grid; grid-template-columns: repeat(2, calc(var(--op-du) * 150)); gap: calc(var(--op-du) * 5); padding: calc(var(--op-du) * 5); justify-content: center; align-items: start; }
+.sc-theme { background: var(--op-background); color: var(--op-text-primary); font-family: var(--op-font); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
+.sc-panel { display: flex; flex-direction: column; }
+.sc-section { padding: calc(var(--op-du) * 4) calc(var(--op-du) * 3) calc(var(--op-du) * 2); color: var(--op-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; border-bottom: var(--op-dim-border) solid var(--op-divider); }
+.sc-list > * { border-bottom: var(--op-dim-border) solid var(--op-divider); }
+.sc-body { display: flex; flex-direction: column; gap: calc(var(--op-du) * 3); padding: calc(var(--op-du) * 3); }
+.sc-buttons { display: flex; flex-wrap: wrap; gap: calc(var(--op-du) * 2); }
+.sc-slider { display: flex; align-items: center; gap: calc(var(--op-du) * 3); width: calc(var(--op-du) * 70); }
+.sc-slider > :last-child { flex: 1 1 auto; }
+.sc-muted { color: var(--op-text-secondary); }
+.sc-seg { width: calc(var(--op-du) * 54); flex-shrink: 0; }

@@ -6,6 +6,7 @@
 mod docs;
 mod kit;
 mod pages;
+mod showcase;
 
 use kit::{Backend, SimBar};
 use leptos::ev;
@@ -519,5 +520,10 @@ fn App() -> impl IntoView {
 
 fn main() {
     console_error_panic_hook::set_once();
-    mount_to_body(App);
+    // `#/showcase` is a standalone page without the documentation chrome.
+    if parse_route(&current_hash()).slug == "showcase" {
+        mount_to_body(|| view! { <ThemeRoot class="sc-page"><showcase::Showcase/></ThemeRoot> });
+    } else {
+        mount_to_body(App);
+    }
 }
