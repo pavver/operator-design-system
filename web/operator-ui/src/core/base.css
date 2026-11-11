@@ -60,3 +60,7 @@
   .op-root *, .op-root *::before, .op-root *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
   .op-root .op-spinner, .op-root .op-run rect { animation-duration: 2s !important; animation-iteration-count: infinite !important; }
 }
+
+/* Page scroll lock while a modal overlay (Dialog, Sheet) is open; the gutter keeps the layout from shifting. */
+html[data-op-scroll-lock] { overflow: hidden; }
+html[data-op-scroll-lock="gutter"] { scrollbar-gutter: stable; }

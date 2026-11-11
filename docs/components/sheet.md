@@ -22,7 +22,8 @@ Status: **draft** on web.
 * The sheet slides in from its edge over `sheet_slide` (`200 ms`) with the standard curve while the scrim fades in.
 * Opening moves focus into the sheet.
 * Escape, a scrim click, or the close button closes it.
-* The body scrolls on its own and does not scroll the page behind it.
+* The body scrolls on its own.
+* While the sheet is open, the page behind it does not scroll, also under the scrim.
 
 ## API
 

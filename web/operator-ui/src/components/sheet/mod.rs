@@ -33,6 +33,7 @@ pub fn Sheet(
         SheetSide::Right => "right",
         SheetSide::Bottom => "bottom",
     };
+    crate::core::use_page_scroll_lock(open);
     Effect::new(move |_| {
         if open.get() {
             request_animation_frame(move || {

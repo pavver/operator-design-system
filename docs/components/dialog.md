@@ -25,6 +25,7 @@ The dialog is a dynamic container and follows the clamp model from [units.md](..
 
 * Enter: scrim fades in and the dialog scales from 95% over `dialog_enter` (`150 ms`).
 * Opening moves focus into the dialog.
+* While the dialog is open, the page behind it does not scroll.
 * When `dismissible`, Escape, a scrim click, and the close button close it.
   A non-dismissible dialog hides the close button and must be closed by an action.
 * Without `on_confirm`, buttons come from `actions` and the caller closes the dialog.

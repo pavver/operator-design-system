@@ -68,6 +68,7 @@ pub fn Dialog(
             open.set(false);
         }
     };
+    crate::core::use_page_scroll_lock(open);
     Effect::new(move |_| {
         if open.get() {
             confirming.set(false);
