@@ -3,22 +3,12 @@
 /* ------------------------------------------------------------------ */
 .op-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-dim-pad-tight); }
 .op-page { display: grid; place-items: center; min-width: var(--op-dim-row-compact); height: var(--op-dim-row-compact); padding: 0 var(--op-dim-pad-tight); background-color: var(--op-surface); color: var(--op-text-primary); font-variant-numeric: tabular-nums; }
-.op-page[data-state="selected"] { background-color: var(--op-selection); color: var(--op-accent); font-weight: 700; }
 
-.op-page-gap, .op-page-compact { min-width: var(--op-dim-row-compact); text-align: center; color: var(--op-text-secondary); }
-.op-page-compact { padding: 0 var(--op-dim-gutter); font-variant-numeric: tabular-nums; }
-.op-page-jump { display: inline-flex; align-items: center; gap: var(--op-dim-pad-small); margin-left: var(--op-dim-gutter); color: var(--op-text-secondary); font-size: var(--op-type-caption-size); }
-.op-page-input {
-  height: var(--op-dim-row-compact);
-  padding: 0 var(--op-dim-pad-content);
-  border: none;
-  outline: none;
-  background-color: var(--op-surface);
-  color: var(--op-text-primary);
-  font: inherit;
-  font-size: var(--op-type-body-size);
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-.op-page-input::placeholder { color: var(--op-text-disabled); opacity: 1; }
+/* Current page: an editable field styled as the selected page. */
+.op-page-input { border: none; background-color: var(--op-selection); color: var(--op-accent); font: inherit; font-weight: 700; text-align: center; cursor: text; }
+.op-root .op-page-input:focus-visible { outline: none; }
+.op-page-input[data-state="focused"] { background-color: var(--op-surface); color: var(--op-text-primary); }
+.op-page-input::selection { background-color: var(--op-selection); color: var(--op-accent); }
 
+.op-page-gap { min-width: var(--op-dim-row-compact); text-align: center; color: var(--op-text-secondary); }
+.op-page-compact { display: inline-flex; align-items: center; gap: var(--op-dim-pad-small); padding: 0 var(--op-dim-pad-tight); color: var(--op-text-secondary); font-variant-numeric: tabular-nums; }

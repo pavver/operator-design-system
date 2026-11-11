@@ -144,7 +144,7 @@ pub fn pagination() -> AnyView {
             <Pagination page=small total=4usize/>
             <Pagination page=page total=24usize compact=true/>
         </Example>
-        <Example title="Jump to a page" note="Shown from 20 pages, or forced with jump. Type a number and press Enter; values past the end go to the last page." block=true>
+        <Example title="Type a page" note="Click the current page, type a number, and press Enter; values past the end go to the last page. Escape restores the page." block=true>
             <Pagination page=big total=480usize/>
             <span class="op-t-caption demo-muted">{move || format!("Page {} of 480", big.get())}</span>
             <Pagination page=big total=480usize compact=true/>
