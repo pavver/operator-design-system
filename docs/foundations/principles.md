@@ -30,6 +30,7 @@ Round shapes are allowed only where the round form is functional:
 
 * The slider thumb.
 * Switch tracks and thumbs.
+* Radio marks and their dots: the circle is the universal sign of a single choice.
 * Avatars of people.
 * Push-to-talk buttons.
 * Small dots such as slider ticks and status LEDs.

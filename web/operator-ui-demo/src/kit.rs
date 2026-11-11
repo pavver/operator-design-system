@@ -173,3 +173,11 @@ pub const STATES: [(&str, ControlState); 7] = [
     ("Selected", ControlState::Selected),
     ("Focused", ControlState::Focused),
 ];
+
+/// Wraps a synchronous handler as an action that succeeds at once.
+pub fn instant(f: impl Fn() + Send + Sync + 'static) -> AsyncAction {
+    AsyncAction::new(move |()| {
+        f();
+        async { ActionResult::Success }
+    })
+}
