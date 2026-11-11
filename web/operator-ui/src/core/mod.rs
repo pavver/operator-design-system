@@ -370,6 +370,7 @@ pub fn PendingRun() -> impl IntoView {
 }
 
 /// Result icon shown briefly after an async action completes.
+#[cfg(any(feature = "action-button", feature = "icon-button"))]
 pub(crate) fn flash_icon(state: ControlState, size: f32) -> AnyView {
     if state == ControlState::Success {
         view! { <span class="op-c-success"><crate::components::primitives::Icon icon=operator_ui_tokens::icons::CHECK size=size label="Success"/></span> }.into_any()
@@ -380,6 +381,7 @@ pub(crate) fn flash_icon(state: ControlState, size: f32) -> AnyView {
 }
 
 /// Shared async toggle flow: Pending -> result -> hold -> Idle, with rollback on error.
+#[cfg(any(feature = "checkbox", feature = "switch"))]
 pub(crate) fn run_toggle(
     action: AsyncAction<bool>,
     checked: RwSignal<bool>,
@@ -410,6 +412,7 @@ pub(crate) fn run_toggle(
 }
 
 /// Local copy of an external boolean that resets whenever the external value changes.
+#[cfg(any(feature = "checkbox", feature = "switch"))]
 pub(crate) fn mirrored(source: Signal<bool>) -> RwSignal<bool> {
     let local = RwSignal::new(source.get_untracked());
     Effect::new(move |_| local.set(source.get()));
@@ -417,6 +420,7 @@ pub(crate) fn mirrored(source: Signal<bool>) -> RwSignal<bool> {
 }
 
 /// Shared field state: disabled takes priority, then explicit state, then focused, else idle.
+#[cfg(any(feature = "combobox", feature = "search-field", feature = "text-area"))]
 pub(crate) fn field_state(
     enabled: Signal<bool>,
     state: Signal<Option<ControlState>>,
@@ -447,6 +451,7 @@ pub async fn copy_text(text: String) -> ActionResult {
     }
 }
 
+#[cfg(any(feature = "code-block", feature = "property-list"))]
 pub(crate) fn copy_action(text: Signal<String>) -> AsyncAction {
     AsyncAction::new(move |()| copy_text(text.get_untracked()))
 }

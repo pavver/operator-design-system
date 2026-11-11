@@ -65,6 +65,22 @@ The repository contains three things:
 
 New components start as **Draft** and become **Reviewed** after they have been checked in every state.
 
+## Cargo Features
+
+The `operator-ui` crate provides one feature per component.
+The `reviewed` feature is enabled by default and includes every reviewed component.
+The `draft` feature includes components still in progress.
+The `full` feature enables all reviewed and draft components.
+Applications can opt out of default features and select individual components:
+
+```toml
+operator-ui = { git = "https://github.com/pavver/operator-design-system", default-features = false, features = ["action-button", "toast"] }
+```
+
+Pin a release with `tag = "vX.Y.Z"`; component features are available from the first release after v0.5.0.
+
+Unused components ship neither code nor CSS in the final build.
+
 ## Documentation
 
 Foundations:

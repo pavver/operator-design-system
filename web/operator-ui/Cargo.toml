@@ -15,3 +15,108 @@ wasm-bindgen-futures.workspace = true
 send_wrapper = "0.6"
 gloo-timers = { version = "0.4.0", features = ["futures"] }
 web-sys = { workspace = true, features = ["HtmlElement", "HtmlInputElement", "DomRect", "Element", "EventTarget", "PointerEvent", "KeyboardEvent", "CssStyleDeclaration", "Window", "Document", "Node", "ResizeObserver", "Navigator", "Clipboard", "NodeList", "HtmlTextAreaElement", "WheelEvent", "TouchEvent", "TouchList", "Touch", "MediaQueryList", "MutationObserver", "MutationObserverInit", "HtmlCollection"] }
+
+[features]
+default = ["reviewed"]
+
+# Group features
+reviewed = [
+    "action-button",
+    "avatar",
+    "banner",
+    "checkbox",
+    "checkbox-group",
+    "chip",
+    "combobox",
+    "confirm-dialog",
+    "console-terminal",
+    "dropdown-menu",
+    "header",
+    "icon-button",
+    "kbd",
+    "list-item",
+    "marquee-text",
+    "menu",
+    "primitives",
+    "radio-group",
+    "scroll-area",
+    "scrollbar",
+    "search-field",
+    "segmented-control",
+    "slider",
+    "split-pane",
+    "status-badge",
+    "stepper",
+    "switch",
+    "tabs",
+    "text-area",
+    "text-field",
+    "theme-toggle",
+    "toast",
+    "tooltip",
+]
+
+draft = [
+    "accordion",
+    "code-block",
+    "counter",
+    "data-table",
+    "dialog",
+    "empty-state",
+    "linear-progress",
+    "pagination",
+    "property-list",
+    "sheet",
+    "skeleton",
+    "toolbar",
+]
+
+full = ["reviewed", "draft"]
+
+# Component features
+accordion = ["primitives"]
+action-button = ["primitives"]
+avatar = ["primitives", "status-badge"]
+banner = ["primitives", "toast"]
+checkbox = ["primitives"]
+checkbox-group = ["primitives"]
+chip = ["primitives"]
+code-block = ["icon-button", "scrollbar"]
+combobox = ["primitives", "scrollbar"]
+confirm-dialog = ["action-button"]
+console-terminal = ["scrollbar"]
+counter = []
+data-table = ["linear-progress", "primitives", "scrollbar"]
+dialog = ["icon-button", "scrollbar"]
+dropdown-menu = ["primitives", "scrollbar"]
+empty-state = ["primitives"]
+header = ["avatar", "primitives", "status-badge"]
+icon-button = ["primitives", "tooltip"]
+kbd = []
+linear-progress = []
+list-item = []
+marquee-text = ["tooltip"]
+menu = ["icon-button", "primitives", "scrollbar"]
+pagination = ["icon-button"]
+primitives = []
+property-list = ["icon-button"]
+radio-group = ["checkbox-group", "primitives"]
+scroll-area = ["scrollbar"]
+scrollbar = []
+search-field = ["primitives"]
+segmented-control = ["primitives"]
+sheet = ["icon-button", "scrollbar"]
+skeleton = []
+slider = ["primitives"]
+split-pane = ["scrollbar"]
+status-badge = ["primitives"]
+stepper = ["primitives"]
+switch = ["primitives"]
+tabs = ["primitives"]
+text-area = ["scrollbar", "tooltip"]
+text-field = ["action-button", "primitives"]
+theme-toggle = []
+toast = ["primitives"]
+toolbar = []
+tooltip = []
+

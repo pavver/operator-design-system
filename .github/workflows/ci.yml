@@ -28,6 +28,8 @@ jobs:
         run: cargo clippy -p operator-tokens -p operator-ui-tokens -- -D warnings
       - name: Clippy (web crates)
         run: cargo clippy --target wasm32-unknown-unknown -p operator-ui -p operator-ui-demo -- -D warnings
+      - name: Clippy (each component feature)
+        run: scripts/check-features.sh
       - name: Gallery builds
         working-directory: web/operator-ui-demo
         run: trunk build --release --public-url "/${{ github.event.repository.name }}/"

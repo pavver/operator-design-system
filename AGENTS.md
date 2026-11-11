@@ -10,6 +10,9 @@ Rules for AI agents contributing to this repository.
 * Each change to a component updates its implementation and its specification in the same commit.
 * The documentation site renders `docs/**/*.md` directly, so a specification is also the human-facing page.
 * A new component needs a Markdown file in `docs/components/`, live examples in `web/operator-ui-demo/src/pages/`, and a sidebar entry in `web/operator-ui-demo/src/main.rs`.
+* A new component gets its own folder in `web/operator-ui/src/components/` and its own feature in [web/operator-ui/Cargo.toml](web/operator-ui/Cargo.toml).
+* Its feature lists the component features it uses.
+* It joins `draft` and moves to `reviewed` when its spec status changes.
 
 ## Language and Formatting
 
@@ -49,6 +52,7 @@ Rules for AI agents contributing to this repository.
 
 * No `.unwrap()` or `.expect()`.
 * Run `cargo fmt` and `cargo clippy` (host crates, and the web crates with `--target wasm32-unknown-unknown`) before committing; the code must be warning-free.
+* `scripts/check-features.sh` must pass before committing.
 * `cargo run -p operator-tokens -- --check` must pass.
 
 ## Git

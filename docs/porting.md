@@ -17,7 +17,7 @@ Each component then becomes mostly layout.
 
 | Primitive | Responsibility | Web reference |
 | :--- | :--- | :--- |
-| `ControlState`, `ActionResult` | State and result types. | `core.rs` |
+| `ControlState`, `ActionResult` | State and result types. | `src/core/` |
 | Async action | A handler `(value) -> future of ActionResult`. | `AsyncAction` |
 | Job token | Ignores results of superseded requests. | `JobToken` |
 | State visual | Tracks the current state, the last result, and the exit fade. | `use_state_visual` |

@@ -7,7 +7,7 @@ license.workspace = true
 publish = false
 
 [dependencies]
-operator-ui.workspace = true
+operator-ui = { workspace = true, features = ["full"] }
 leptos.workspace = true
 js-sys.workspace = true
 console_error_panic_hook = "0.1.7"
