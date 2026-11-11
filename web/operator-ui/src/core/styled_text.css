@@ -1,0 +1,20 @@
+/* ------------------------------------------------------------------ */
+/* Styled text (CodeBlock, ConsoleTerminal)                            */
+/* ------------------------------------------------------------------ */
+.op-st-b { font-weight: 700; }
+.op-st-d { opacity: 0.6; }
+.op-st-i { font-style: italic; }
+.op-st-u { text-decoration: underline; }
+.op-st-s { text-decoration: line-through; }
+.op-st-u.op-st-s { text-decoration: underline line-through; }
+
+.op-syn-keyword { color: var(--op-syntax-keyword); }
+.op-syn-string { color: var(--op-syntax-string); }
+.op-syn-number { color: var(--op-syntax-number); }
+.op-syn-comment { color: var(--op-syntax-comment); font-style: italic; }
+.op-syn-type { color: var(--op-syntax-type); }
+.op-syn-function { color: var(--op-syntax-function); }
+.op-syn-constant { color: var(--op-syntax-constant); }
+.op-syn-property { color: var(--op-syntax-property); }
+.op-syn-meta { color: var(--op-syntax-meta); }
+.op-syn-punctuation { color: var(--op-syntax-punctuation); }

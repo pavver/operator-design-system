@@ -8,6 +8,8 @@ const TOKENS_CSS: &str = include_str!("../../style/tokens.css");
 const BASE_CSS: &str = include_str!("base.css");
 const STATE_CSS: &str = include_str!("state.css");
 const HOVER_CSS: &str = include_str!("hover.css");
+#[cfg(any(feature = "code-block", feature = "console-terminal"))]
+const STYLED_TEXT_CSS: &str = include_str!("styled_text.css");
 
 fn stylesheet() -> &'static str {
     static CSS: LazyLock<String> = LazyLock::new(|| {
@@ -45,6 +47,8 @@ fn stylesheet() -> &'static str {
             crate::components::avatar::CSS,
             #[cfg(feature = "header")]
             crate::components::header::CSS,
+            #[cfg(any(feature = "code-block", feature = "console-terminal"))]
+            STYLED_TEXT_CSS,
             #[cfg(feature = "console-terminal")]
             crate::components::console_terminal::CSS,
             #[cfg(feature = "confirm-dialog")]

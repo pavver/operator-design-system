@@ -39,14 +39,14 @@ impl Backend {
             outcome: RwSignal::new(Outcome::Alternate),
             flip: StoredValue::new(false),
             logs: RwSignal::new(vec![format!(
-                "{} [UI] Operator UI documentation ready",
+                "\x1b[2m{}\x1b[22m \x1b[34m[UI]\x1b[39m Operator UI documentation ready",
                 timestamp()
             )]),
         }
     }
 
     pub fn log(self, line: impl Into<String>) {
-        let line = format!("{} {}", timestamp(), line.into());
+        let line = format!("\x1b[2m{}\x1b[22m {}", timestamp(), line.into());
         self.logs.update(|l| {
             l.push(line);
             if l.len() > 200 {
@@ -56,7 +56,7 @@ impl Backend {
     }
 
     pub async fn call(self, what: String) -> ActionResult {
-        self.log(format!("[TX] {what}"));
+        self.log(format!("\x1b[36m[TX]\x1b[39m {what}"));
         sleep_ms(self.latency_ms.get_untracked()).await;
         let ok = match self.outcome.get_untracked() {
             Outcome::Success => true,
@@ -67,10 +67,12 @@ impl Backend {
             }
         };
         if ok {
-            self.log(format!("[SUCCESS] {what}"));
+            self.log(format!("\x1b[32m[OK]\x1b[39m {what}"));
             ActionResult::Success
         } else {
-            self.log(format!("[ERROR] {what}: timeout"));
+            self.log(format!(
+                "\x1b[1;31m[ERROR]\x1b[22;39m {what}: \x1b[4mtimeout\x1b[24m"
+            ));
             ActionResult::Error(Some("timeout".into()))
         }
     }

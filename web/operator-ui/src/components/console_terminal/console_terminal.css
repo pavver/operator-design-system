@@ -11,11 +11,6 @@
   font-size: var(--op-type-console-size);
   line-height: var(--op-type-console-line);
 }
-.op-terminal-line { white-space: pre-wrap; overflow-wrap: anywhere; }
-.op-terminal-line[data-tone="error"] { color: var(--op-term-bright-red); }
-.op-terminal-line[data-tone="warning"] { color: var(--op-term-bright-yellow); }
-.op-terminal-line[data-tone="debug"] { color: var(--op-term-bright-blue); }
-.op-terminal-line[data-tone="success"] { color: var(--op-term-bright-green); }
-.op-terminal-line[data-tone="io"] { color: var(--op-term-bright-cyan); }
+.op-terminal-line { min-height: var(--op-type-console-line); white-space: pre-wrap; overflow-wrap: anywhere; }
 
 .op-terminal-log { display: flex; flex-direction: column; gap: var(--op-dim-gap-micro); padding: var(--op-dim-gutter); }

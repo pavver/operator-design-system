@@ -1,6 +1,8 @@
 //! Shared interaction primitives: control states, async actions, state-border visuals, ripple and units.
 
 pub mod overlay;
+#[cfg(any(feature = "code-block", feature = "console-terminal"))]
+pub(crate) mod styled_text;
 pub mod theme;
 
 pub use overlay::*;
