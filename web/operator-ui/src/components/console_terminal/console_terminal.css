@@ -18,3 +18,4 @@
 .op-terminal-line[data-tone="success"] { color: var(--op-term-bright-green); }
 .op-terminal-line[data-tone="io"] { color: var(--op-term-bright-cyan); }
 
+.op-terminal-log { display: flex; flex-direction: column; gap: var(--op-dim-gap-micro); padding: var(--op-dim-gutter); }

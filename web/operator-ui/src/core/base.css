@@ -52,3 +52,11 @@
 [data-tone="warning"] { --tone: var(--op-warning); }
 [data-tone="error"] { --tone: var(--op-error); }
 
+/* Shared fade used by overlays and the pending indicator. */
+@keyframes op-fade-in { from { opacity: 0; } }
+
+/* Reduced motion: collapse every animation except the running pending indicators. */
+@media (prefers-reduced-motion: reduce) {
+  .op-root *, .op-root *::before, .op-root *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+  .op-root .op-spinner, .op-root .op-run rect { animation-duration: 2s !important; animation-iteration-count: infinite !important; }
+}
