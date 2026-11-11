@@ -41,7 +41,7 @@ The repository contains three things:
 | Tooltip | [tooltip.md](docs/components/tooltip.md) | Reviewed |
 | Toast | [toast.md](docs/components/toast.md) | Reviewed |
 | Banner | [banner.md](docs/components/banner.md) | Reviewed |
-| LinearProgress | [linear-progress.md](docs/components/linear-progress.md) | Draft |
+| LinearProgress | [linear-progress.md](docs/components/linear-progress.md) | Reviewed |
 | Skeleton | [skeleton.md](docs/components/skeleton.md) | Draft |
 | EmptyState | [empty-state.md](docs/components/empty-state.md) | Draft |
 | TextArea | [text-area.md](docs/components/text-area.md) | Reviewed |
@@ -50,7 +50,7 @@ The repository contains three things:
 | Combobox | [combobox.md](docs/components/combobox.md) | Reviewed |
 | Chip | [chip.md](docs/components/chip.md) | Reviewed |
 | Menu, MenuButton, ContextMenu | [menu.md](docs/components/menu.md) | Reviewed |
-| Dialog | [dialog.md](docs/components/dialog.md) | Draft |
+| Dialog | [dialog.md](docs/components/dialog.md) | Reviewed |
 | Tabs | [tabs.md](docs/components/tabs.md) | Reviewed |
 | Sheet | [sheet.md](docs/components/sheet.md) | Draft |
 | Pagination | [pagination.md](docs/components/pagination.md) | Draft |

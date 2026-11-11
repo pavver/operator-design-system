@@ -3,7 +3,7 @@
 Modal window for a focused task: a short form, details, or a choice between options.
 It is the shell for every modal window; [ConfirmDialog](confirm-dialog.md) is its preset for confirming one action.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Geometry
 

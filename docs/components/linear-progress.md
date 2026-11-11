@@ -2,7 +2,7 @@
 
 Horizontal bar for the progress of a long operation, such as an upload or a scan.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 
