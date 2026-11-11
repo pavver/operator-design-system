@@ -36,7 +36,12 @@ const NAV: &[(&str, &[&str])] = &[
     ),
     (
         "Actions",
-        &["components/action-button", "components/icon-button"],
+        &[
+            "components/action-button",
+            "components/icon-button",
+            "components/menu",
+            "components/toolbar",
+        ],
     ),
     (
         "Selection",
@@ -44,6 +49,7 @@ const NAV: &[(&str, &[&str])] = &[
             "components/switch",
             "components/checkbox",
             "components/checkbox-group",
+            "components/radio-group",
             "components/segmented-control",
             "components/slider",
             "components/stepper",
@@ -53,23 +59,66 @@ const NAV: &[(&str, &[&str])] = &[
     ),
     (
         "Text input",
-        &["components/text-field", "components/dropdown-menu"],
+        &[
+            "components/text-field",
+            "components/text-area",
+            "components/search-field",
+            "components/dropdown-menu",
+            "components/combobox",
+        ],
     ),
-    ("Feedback", &["components/status-badge"]),
-    ("Overlays", &["components/confirm-dialog"]),
-    ("Navigation", &["components/header", "components/tabs"]),
+    (
+        "Feedback",
+        &[
+            "components/tooltip",
+            "components/toast",
+            "components/banner",
+            "components/linear-progress",
+            "components/skeleton",
+            "components/empty-state",
+            "components/status-badge",
+        ],
+    ),
+    (
+        "Overlays",
+        &[
+            "components/dialog",
+            "components/confirm-dialog",
+            "components/sheet",
+        ],
+    ),
+    (
+        "Navigation",
+        &[
+            "components/header",
+            "components/tabs",
+            "components/pagination",
+        ],
+    ),
     (
         "Data display",
         &[
             "components/list-item",
+            "components/data-table",
+            "components/property-list",
+            "components/accordion",
+            "components/counter",
             "components/avatar",
+            "components/code-block",
             "components/kbd",
             "components/console-terminal",
             "components/marquee-text",
             "components/primitives",
         ],
     ),
-    ("Layout", &["components/split-pane"]),
+    (
+        "Layout",
+        &[
+            "components/split-pane",
+            "components/scroll-area",
+            "components/scrollbar",
+        ],
+    ),
 ];
 
 fn group_of(slug: &str) -> Option<&'static str> {
@@ -390,11 +439,12 @@ fn NotFound(slug: String) -> impl IntoView {
     view! {
         <div class="docs-page">
             <article class="docs-article">
-                <div class="docs-not-found">
-                    <h1 class="docs-title">"Page not found"</h1>
-                    <p class="docs-lead">{format!("There is no page named \"{slug}\".")}</p>
-                    <a class="docs-cta" href="#/">"Back to the start"</a>
-                </div>
+                <EmptyState
+                    icon=icons::SEARCH
+                    title="Page not found"
+                    description=format!("There is no page named \"{slug}\".")
+                    actions=ViewFn::from(|| view! { <a class="docs-cta" href="#/">"Back to the start"</a> })
+                />
             </article>
         </div>
     }
@@ -413,12 +463,6 @@ fn App() -> impl IntoView {
     let slug = Memo::new(move |_| route.with(|r| r.slug.clone()));
     let menu_open = RwSignal::new(false);
     let close_menu = Callback::new(move |()| menu_open.set(false));
-    let esc = window_event_listener(ev::keydown, move |e| {
-        if e.key() == "Escape" {
-            menu_open.set(false);
-        }
-    });
-    on_cleanup(move || esc.remove());
 
     // Scroll to the anchor after the page renders, or to the top on a new page.
     Effect::new(move |_| {
@@ -448,6 +492,7 @@ fn App() -> impl IntoView {
 
     view! {
         <ThemeRoot theme=theme dark=dark class="docs-root">
+            <ToastHost>
                 <TopBar dark=dark menu_open=menu_open/>
                 <div class="docs-layout" data-home=move || slug.with(String::is_empty).then_some("")>
                     <aside class="docs-sidebar">
@@ -455,12 +500,10 @@ fn App() -> impl IntoView {
                     </aside>
                     <main class="docs-main">{content}</main>
                 </div>
-                <Show when=move || menu_open.get()>
-                    <div class="docs-drawer-scrim" on:click=move |_| menu_open.set(false)></div>
-                    <aside class="docs-drawer" aria-label="Navigation">
-                        <Sidebar route=route on_navigate=close_menu/>
-                    </aside>
-                </Show>
+                <Sheet open=menu_open title="Operator UI">
+                    <Sidebar route=route on_navigate=close_menu/>
+                </Sheet>
+            </ToastHost>
         </ThemeRoot>
     }
 }

@@ -2,6 +2,7 @@
 
 pub mod core;
 pub mod data;
+pub mod feedback;
 pub mod foundations;
 pub mod inputs;
 pub mod layout;
@@ -37,10 +38,32 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/marquee-text" => (core::marquee, false),
         "components/theme-toggle" => (core::theme_toggle, false),
         "components/primitives" => (core::primitives, false),
+        "components/tooltip" => (feedback::tooltip, false),
+        "components/toast" => (feedback::toast, true),
+        "components/banner" => (feedback::banner, false),
+        "components/linear-progress" => (feedback::linear_progress, false),
+        "components/skeleton" => (feedback::skeleton, false),
+        "components/empty-state" => (feedback::empty_state, false),
+        "components/text-area" => (inputs::text_area, false),
+        "components/search-field" => (inputs::search_field, false),
+        "components/radio-group" => (inputs::radio_group, true),
+        "components/combobox" => (inputs::combobox, false),
         "components/chip" => (inputs::chip, false),
+        "components/menu" => (navigation::menu, false),
+        "components/dialog" => (navigation::dialog, true),
         "components/tabs" => (navigation::tabs, false),
+        "components/sheet" => (navigation::sheet, false),
+        "components/pagination" => (navigation::pagination, false),
+        "components/data-table" => (data::data_table, true),
+        "components/counter" => (data::counter, false),
+        "components/property-list" => (data::property_list, false),
+        "components/accordion" => (data::accordion, false),
+        "components/code-block" => (data::code_block, false),
         "components/kbd" => (data::kbd, false),
+        "components/toolbar" => (layout::toolbar, true),
         "components/split-pane" => (layout::split_pane, false),
+        "components/scroll-area" => (layout::scroll_area, false),
+        "components/scrollbar" => (layout::scrollbar, false),
         _ => return None,
     };
     Some(entry)

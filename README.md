@@ -36,10 +36,32 @@ The repository contains three things:
 | MarqueeText | [marquee-text.md](docs/components/marquee-text.md) | Reviewed |
 | ThemeToggle | [theme-toggle.md](docs/components/theme-toggle.md) | Reviewed |
 | Icon, ProgressIndicator, Divider, Card | [primitives.md](docs/components/primitives.md) | Reviewed |
+| Tooltip | [tooltip.md](docs/components/tooltip.md) | Reviewed |
+| Toast | [toast.md](docs/components/toast.md) | Reviewed |
+| Banner | [banner.md](docs/components/banner.md) | Reviewed |
+| LinearProgress | [linear-progress.md](docs/components/linear-progress.md) | Draft |
+| Skeleton | [skeleton.md](docs/components/skeleton.md) | Draft |
+| EmptyState | [empty-state.md](docs/components/empty-state.md) | Draft |
+| TextArea | [text-area.md](docs/components/text-area.md) | Reviewed |
+| SearchField | [search-field.md](docs/components/search-field.md) | Reviewed |
+| RadioGroup | [radio-group.md](docs/components/radio-group.md) | Reviewed |
+| Combobox | [combobox.md](docs/components/combobox.md) | Reviewed |
 | Chip | [chip.md](docs/components/chip.md) | Reviewed |
+| Menu, MenuButton, ContextMenu | [menu.md](docs/components/menu.md) | Reviewed |
+| Dialog | [dialog.md](docs/components/dialog.md) | Draft |
 | Tabs | [tabs.md](docs/components/tabs.md) | Reviewed |
+| Sheet | [sheet.md](docs/components/sheet.md) | Draft |
+| Pagination | [pagination.md](docs/components/pagination.md) | Draft |
+| DataTable | [data-table.md](docs/components/data-table.md) | Draft |
+| Counter | [counter.md](docs/components/counter.md) | Draft |
+| PropertyList | [property-list.md](docs/components/property-list.md) | Draft |
+| Accordion, Collapsible | [accordion.md](docs/components/accordion.md) | Draft |
+| CodeBlock | [code-block.md](docs/components/code-block.md) | Draft |
 | Kbd | [kbd.md](docs/components/kbd.md) | Reviewed |
+| Toolbar | [toolbar.md](docs/components/toolbar.md) | Draft |
 | SplitPane | [split-pane.md](docs/components/split-pane.md) | Reviewed |
+| ScrollArea | [scroll-area.md](docs/components/scroll-area.md) | Reviewed |
+| Scrollbar | [scrollbar.md](docs/components/scrollbar.md) | Reviewed |
 
 New components start as **Draft** and become **Reviewed** after they have been checked in every state.
 
