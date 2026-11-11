@@ -1,34 +1,4 @@
 /* ------------------------------------------------------------------ */
 /* ConfirmDialog                                                       */
 /* ------------------------------------------------------------------ */
-.op-dialog-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: var(--op-dim-margin-screen);
-  background: rgb(0 0 0 / 55%);
-  animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
-}
-.op-dialog {
-  display: flex;
-  flex-direction: column;
-  gap: var(--op-dim-margin-screen);
-  width: min(calc(var(--op-du) * 75), 100%);
-  padding: var(--op-dim-margin-screen);
-  background-color: var(--op-surface);
-  animation: op-dialog-in var(--op-motion-dialog-enter) var(--op-ease-standard);
-}
-.op-dialog-title { color: var(--op-text-primary); font-size: var(--op-type-app-title-size); line-height: var(--op-type-app-title-line); font-weight: 700; }
 .op-dialog-message { color: var(--op-text-secondary); }
-.op-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--op-dim-pad-card); }
-.op-dialog-btn { height: var(--op-dim-row-compact); }
-@keyframes op-fade-in { from { opacity: 0; } }
-@keyframes op-dialog-in { from { opacity: 0; transform: scale(0.95); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .op-root *, .op-root *::before, .op-root *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
-  .op-root .op-spinner, .op-root .op-run rect { animation-duration: 2s !important; animation-iteration-count: infinite !important; }
-}
-

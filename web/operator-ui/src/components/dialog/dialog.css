@@ -1,13 +1,28 @@
 /* ------------------------------------------------------------------ */
-/* Dialog (generic)                                                    */
+/* Dialog                                                              */
 /* ------------------------------------------------------------------ */
-.op-dialog-generic { gap: 0; padding: 0; max-height: calc(100vh - var(--op-dim-margin-screen) * 2); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
-.op-root .op-dialog-generic:focus-visible { outline: none; }
+.op-dialog-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--op-dim-margin-screen);
+  background: rgb(0 0 0 / 55%);
+  animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
+}
+.op-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--op-dim-margin-screen) * 2);
+  background-color: var(--op-surface);
+  animation: op-dialog-in var(--op-motion-dialog-enter) var(--op-ease-standard);
+}
+@keyframes op-dialog-in { from { opacity: 0; transform: scale(0.95); } }
+.op-root .op-dialog:focus-visible { outline: none; }
 .op-dialog-head { display: flex; align-items: center; gap: var(--op-dim-gutter); padding: var(--op-dim-gutter) var(--op-dim-gutter) var(--op-dim-gutter) var(--op-dim-margin-screen); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
-.op-dialog-head .op-dialog-title { flex: 1; min-width: 0; font-size: var(--op-type-screen-title-size); line-height: var(--op-type-screen-title-line); }
+.op-dialog-title { flex: 1; min-width: 0; color: var(--op-text-primary); font-size: var(--op-type-screen-title-size); line-height: var(--op-type-screen-title-line); font-weight: 700; }
 .op-dialog-body { flex: 1; }
-.op-menu-list { padding: var(--op-dim-pad-tight) 0; }
-.op-terminal-log { display: flex; flex-direction: column; gap: var(--op-dim-gap-micro); padding: var(--op-dim-gutter); }
 .op-dialog-content { padding: var(--op-dim-margin-screen); display: flex; flex-direction: column; gap: var(--op-dim-pad-card); }
-.op-dialog-generic .op-dialog-actions { padding: var(--op-dim-pad-card) var(--op-dim-margin-screen); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-divider); }
-
+.op-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--op-dim-pad-card); padding: var(--op-dim-pad-card) var(--op-dim-margin-screen); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-divider); }
+.op-dialog-btn { height: var(--op-dim-row-compact); }

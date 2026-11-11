@@ -50,26 +50,17 @@ pub fn dialog() -> AnyView {
     let name = RwSignal::new("Gate North".to_string());
     let host = RwSignal::new("192.168.1.40".to_string());
     let save = AsyncAction::new(move |()| async move {
-        let r = b
-            .call(format!("save camera {}", name.get_untracked()))
-            .await;
-        if r.is_success() {
-            open.set(false);
-        }
-        r
+        b.call(format!("save camera {}", name.get_untracked()))
+            .await
     });
     view! {
-        <Example title="Form dialog" note="Width follows clamp(75 DU, 90% of the viewport, 140 DU).">
+        <Example title="Form dialog" note="Save runs inside the dialog: success closes it, error keeps it open. Width follows clamp(75 DU, 90% of the viewport, 140 DU).">
             <ActionButton text="Edit camera…" icon=icons::EDIT on_click=instant(move || open.set(true))/>
             <Dialog
                 open=open
                 title="Edit camera"
-                actions=ViewFn::from(move || {
-                    view! {
-                        <ActionButton text="Cancel" on_click=instant(move || open.set(false)) class="op-dialog-btn"/>
-                        <ActionButton text="Save" icon=icons::CHECK on_click=save.clone() class="op-dialog-btn"/>
-                    }
-                })
+                confirm_text="Save"
+                on_confirm=save
             >
                 <TextField value=name placeholder="Name" label="Name"/>
                 <TextField value=host placeholder="Host" label="Host"/>

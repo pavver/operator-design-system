@@ -1,15 +1,17 @@
-//! Modal confirmation dialog: ConfirmDialog.
+//! Modal confirmation dialog: ConfirmDialog, a preset of Dialog.
 
-use crate::components::action_button::ActionButton;
-use crate::core::{
-    ActionResult, AsyncAction, ControlState, PendingRun, sleep_ms, use_state_visual,
-};
+use crate::components::dialog::Dialog;
+use crate::core::AsyncAction;
 use leptos::prelude::*;
-use leptos::task::spawn_local;
 
 pub(crate) const CSS: &str = include_str!("confirm_dialog.css");
 
+/// Width of a confirmation dialog in DU.
+const WIDTH: f32 = 75.0;
+
 /// Modal confirmation dialog; the confirm action runs asynchronously and closes the dialog on success.
+///
+/// A [`Dialog`] with a message, fixed width, the `alertdialog` role, and Cancel and confirm buttons.
 #[component]
 pub fn ConfirmDialog(
     open: RwSignal<bool>,
@@ -20,97 +22,19 @@ pub fn ConfirmDialog(
     #[prop(default = true)] destructive: bool,
     #[prop(into)] on_confirm: AsyncAction,
 ) -> impl IntoView {
-    let confirming = RwSignal::new(false);
-    let dialog_state = RwSignal::new(ControlState::Idle);
-    let border = Signal::derive(move || {
-        let s = dialog_state.get();
-        if s != ControlState::Idle {
-            s
-        } else if confirming.get() {
-            ControlState::Pending
-        } else {
-            ControlState::Idle
-        }
-    });
-    let visual = use_state_visual(border);
-
-    Effect::new(move |_| {
-        if open.get() {
-            confirming.set(false);
-            dialog_state.set(ControlState::Idle);
-        }
-    });
-
-    let dismiss = move || {
-        if !confirming.get_untracked() {
-            open.set(false);
-        }
-    };
-    let cancel = AsyncAction::new(move |()| async move {
-        open.set(false);
-        ActionResult::Success
-    });
-    let confirm = AsyncAction::new(move |()| {
-        let action = on_confirm.clone();
-        async move {
-            confirming.set(true);
-            dialog_state.set(ControlState::Pending);
-            let result = action.call(()).await;
-            dialog_state.set(result.clone().into());
-            let success = result.is_success();
-            spawn_local(async move {
-                sleep_ms(500).await;
-                if success {
-                    open.set(false);
-                } else {
-                    dialog_state.set(ControlState::Idle);
-                    sleep_ms(300).await;
-                    confirming.set(false);
-                }
-            });
-            result
-        }
-    });
-
     view! {
-        <Show when=move || open.get()>
-            <div
-                class="op-dialog-scrim"
-                on:click=move |_| dismiss()
-                on:keydown=move |ev| {
-                    if ev.key() == "Escape" {
-                        dismiss();
-                    }
-                }
-            >
-                <div
-                    class="op-sb op-dialog"
-                    role="alertdialog"
-                    aria-modal="true"
-                    data-state=move || visual.state.get()
-                    data-result=move || visual.result.get()
-                    data-fading=move || visual.fading.get().then_some("")
-                    on:click=|ev| ev.stop_propagation()
-                >
-                    <div class="op-dialog-title">{move || title.get()}</div>
-                    <div class="op-dialog-message">{move || message.get()}</div>
-                    <div class="op-dialog-actions">
-                        <ActionButton
-                            text=cancel_text
-                            enabled=Signal::derive(move || !confirming.get())
-                            on_click=cancel.clone()
-                            class="op-dialog-btn"
-                        />
-                        <ActionButton
-                            text=confirm_text
-                            dangerous=destructive
-                            on_click=confirm.clone()
-                            class="op-dialog-btn"
-                        />
-                    </div>
-                    <PendingRun/>
-                </div>
-            </div>
-        </Show>
+        <Dialog
+            open=open
+            title=title
+            min_width=WIDTH
+            max_width=WIDTH
+            on_confirm=on_confirm
+            confirm_text=confirm_text
+            cancel_text=cancel_text
+            destructive=destructive
+            alert=true
+        >
+            <div class="op-dialog-message">{move || message.get()}</div>
+        </Dialog>
     }
 }
