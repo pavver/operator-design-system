@@ -8,4 +8,4 @@ port = 8090
 open = false
 
 [watch]
-watch = [".", "../operator-ui", "../../crates/operator-ui-tokens"]
+watch = [".", "../operator-ui", "../../crates/operator-ui-tokens", "../../docs"]

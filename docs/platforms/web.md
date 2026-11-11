@@ -1,9 +1,10 @@
 # Web (Leptos)
 
 [web/operator-ui](../../web/operator-ui) is the component library for Leptos 0.8 in client-side rendering mode.
-[web/operator-ui-demo](../../web/operator-ui-demo) is the gallery used to review every component and state.
+[web/operator-ui-demo](../../web/operator-ui-demo) is the documentation site.
+It has one page per foundation and component with live examples, and it is where every component is reviewed in every state.
 
-## Gallery
+## Documentation Site
 
 Requirements: the `wasm32-unknown-unknown` target and [Trunk](https://trunkrs.dev).
 
@@ -14,7 +15,13 @@ trunk serve
 ```
 
 Open `http://127.0.0.1:8090/`.
-The sidebar switches dark and light mode, forces the next backend result (success, error, or alternating), and sets the simulated latency.
+The top bar switches dark and light mode.
+Pages with async examples show a simulated backend bar that forces the next result (success, error, or alternating) and sets the latency.
+
+The page text is not written in Rust.
+The build script renders every file in [docs](..) to HTML, so each page shows the same Markdown that AI agents read.
+Links between Markdown files become links between pages; links to other repository files open on GitHub.
+To document a new component, add its Markdown file and register its examples in `src/pages/mod.rs` and its place in the sidebar in `src/main.rs`.
 
 ## Usage
 
@@ -44,7 +51,7 @@ fn Settings() -> impl IntoView {
 ```
 
 The application provides Cascadia Code through `@font-face`.
-The gallery shows how in [demo.css](../../web/operator-ui-demo/demo.css).
+The documentation site shows how in [demo.css](../../web/operator-ui-demo/demo.css).
 
 ## Implementation Notes
 

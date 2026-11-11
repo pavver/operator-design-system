@@ -165,12 +165,12 @@
   pointer-events: none;
   background: color-mix(in srgb, var(--op-ripple) var(--op-ripple-alpha), transparent);
   transform: scale(0);
-  animation: op-ripple 550ms var(--op-ease-standard) forwards;
+  animation: op-ripple 330ms var(--op-ease-standard) forwards;
+  transition: opacity 220ms var(--op-ease-standard);
 }
-@keyframes op-ripple {
-  60% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0; }
-}
+/* The ripple grows and holds its last frame while the pointer is down; data-out fades it after release. */
+@keyframes op-ripple { to { transform: scale(1); } }
+.op-ripple[data-out] { opacity: 0; }
 
 /* ------------------------------------------------------------------ */
 /* ActionButton                                                        */
@@ -795,7 +795,7 @@
   .op-marquee-track[data-run] { animation: none; }
   .op-marquee[data-overflow] .op-marquee-track { display: block; overflow: hidden; text-overflow: ellipsis; }
 }
-.op-marquee-tip {
+.op-tooltip {
   position: fixed;
   z-index: 60;
   width: max-content;
@@ -851,4 +851,158 @@
 .op-theme-toggle[data-dark] .op-tt-craters { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .op-theme-toggle * { transition-duration: 0s !important; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Chip                                                                */
+/* ------------------------------------------------------------------ */
+.op-chip-set { display: flex; flex-wrap: wrap; align-items: center; }
+.op-chip {
+  display: inline-flex;
+  align-items: stretch;
+  height: var(--op-dim-row-dense);
+  background-color: var(--op-surface);
+  color: var(--op-text-primary);
+  font-size: var(--op-type-body-small-size);
+  line-height: var(--op-type-body-small-line);
+  vertical-align: middle;
+}
+.op-chip[data-state="pressed"] { background-color: var(--op-pressed); }
+.op-chip[data-selected] { background-color: var(--op-selection); color: var(--op-accent); }
+.op-chip[data-state="disabled"] { background-color: var(--op-disabled-surface); color: var(--op-text-disabled); }
+.op-chip-main { display: inline-flex; align-items: center; gap: var(--op-dim-pad-tight); padding: 0 var(--op-dim-gutter); white-space: nowrap; }
+.op-chip-check { display: inline-flex; }
+.op-chip-remove { display: grid; place-items: center; width: var(--op-dim-row-dense); margin-left: calc(var(--op-dim-pad-tight) * -1); color: var(--op-text-secondary); }
+.op-chip-remove:hover { color: var(--op-error); }
+
+/* ------------------------------------------------------------------ */
+/* Tabs                                                                */
+/* ------------------------------------------------------------------ */
+.op-tabs { width: 100%; overflow-x: auto; scrollbar-width: none; }
+.op-tabs-list { position: relative; display: flex; min-width: max-content; }
+.op-tabs[data-fill] .op-tabs-list { min-width: 100%; }
+.op-tabs[data-fill] .op-tab { flex: 1; justify-content: center; }
+.op-tab {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--op-dim-pad-tight);
+  height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-content);
+  color: var(--op-text-secondary);
+  font-size: var(--op-type-caption-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: color var(--op-motion-segment-slide) var(--op-ease-standard);
+}
+.op-tab:hover { color: var(--op-text-primary); }
+.op-tab[data-active] { color: var(--op-accent); font-weight: 700; }
+.op-tab-count { min-width: calc(var(--op-du) * 4); padding: 0 var(--op-dim-pad-tight); background-color: var(--op-surface-alt); color: var(--op-text-secondary); text-align: center; font-weight: 700; }
+.op-tab[data-active] .op-tab-count { background-color: var(--op-accent); color: var(--op-on-accent); }
+.op-tabs-indicator { position: absolute; left: 0; bottom: 0; z-index: 0; transition: transform var(--op-motion-segment-slide) linear, width var(--op-motion-segment-slide) linear; }
+/* Line: a sliding accent underline over a divider. */
+.op-tabs[data-variant="line"] .op-tabs-list { box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
+.op-tabs[data-variant="line"] .op-tabs-indicator { height: var(--op-dim-border-thick); background-color: var(--op-accent); }
+/* Folder: the active tab opens into the content through an accent baseline (Android main screen). */
+.op-tabs[data-variant="folder"] { box-shadow: inset 0 calc(var(--op-dim-border-thick) * -1) 0 var(--op-accent); }
+.op-tabs[data-variant="folder"]:not([data-fill]) { display: flex; }
+.op-tabs[data-variant="folder"]:not([data-fill]) .op-tabs-list { flex: none; }
+.op-tabs[data-variant="folder"] .op-tabs-list {
+  background-color: var(--op-surface-alt);
+  box-shadow: inset 0 var(--op-dim-border) 0 var(--op-border), inset var(--op-dim-border) 0 0 var(--op-border), inset calc(var(--op-dim-border) * -1) 0 0 var(--op-border), inset 0 calc(var(--op-dim-border-thick) * -1) 0 var(--op-accent);
+}
+.op-tabs[data-variant="folder"] .op-tabs-indicator {
+  top: 0;
+  background-color: var(--op-background);
+  box-shadow: inset 0 var(--op-dim-border-thick) 0 var(--op-accent), inset var(--op-dim-border-thick) 0 0 var(--op-accent), inset calc(var(--op-dim-border-thick) * -1) 0 0 var(--op-accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Kbd                                                                 */
+/* ------------------------------------------------------------------ */
+.op-kbd-group { display: inline-flex; align-items: center; gap: var(--op-dim-gap-micro); vertical-align: middle; }
+/* A key cap: a darker body seen as bevels on the sides and a thick front edge,
+   and a lighter top face with a highlight along its top. */
+.op-kbd {
+  --kbd-face: color-mix(in srgb, var(--op-text-primary) 10%, var(--op-surface));
+  --kbd-body: color-mix(in srgb, var(--op-background) 55%, var(--op-border-strong));
+  display: inline-flex;
+  flex: none;
+  min-width: calc(var(--op-du) * 6.5);
+  height: calc(var(--op-du) * 6.5);
+  padding: var(--op-dim-border) var(--op-dim-gap-micro) var(--op-dim-pad-tight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kbd-body) 80%, var(--op-text-primary)), var(--kbd-body));
+  box-shadow:
+    inset 0 0 0 var(--op-dim-border) color-mix(in srgb, var(--op-background) 60%, transparent),
+    0 var(--op-dim-border) var(--op-dim-gap-micro) rgb(0 0 0 / 35%);
+  color: var(--op-text-primary);
+  font: inherit;
+  font-size: var(--op-type-caption-size);
+  line-height: 1;
+  font-weight: 600;
+  vertical-align: middle;
+}
+.op-kbd[data-size="wide"] { min-width: calc(var(--op-du) * 11); }
+.op-kbd[data-size="space"] { min-width: calc(var(--op-du) * 26); }
+.op-kbd-cap {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--op-dim-pad-tight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--op-text-primary) 6%, var(--kbd-face)), var(--kbd-face));
+  box-shadow: inset 0 var(--op-dim-border) 0 color-mix(in srgb, var(--op-text-primary) 18%, transparent);
+  white-space: nowrap;
+}
+.op-kbd[data-size="wide"] .op-kbd-cap { justify-content: flex-start; }
+.op-kbd-plus { color: var(--op-text-secondary); font-size: var(--op-type-caption-size); }
+
+/* ------------------------------------------------------------------ */
+/* SplitPane                                                           */
+/* ------------------------------------------------------------------ */
+.op-split { display: flex; width: 100%; height: 100%; min-height: 0; overflow: hidden; }
+.op-split[data-vertical] { flex-direction: column; }
+.op-split-pane { flex: 0 0 auto; min-width: 0; min-height: 0; overflow: auto; }
+.op-split-pane-end { flex: 1 1 0; }
+.op-split-handle { position: relative; flex: none; width: var(--op-dim-gutter); margin: 0 calc(var(--op-dim-pad-tight) * -0.5); z-index: 2; cursor: col-resize; touch-action: none; display: grid; place-items: center; }
+.op-split[data-vertical] > .op-split-handle { width: auto; height: var(--op-dim-gutter); margin: calc(var(--op-dim-pad-tight) * -0.5) 0; cursor: row-resize; }
+.op-split-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: var(--op-dim-border); transform: translateX(-50%); background-color: var(--op-border); transition: background-color var(--op-motion-state-color) var(--op-ease-standard), width var(--op-motion-state-color) var(--op-ease-standard); }
+.op-split[data-vertical] > .op-split-handle::before { top: 50%; bottom: auto; left: 0; right: 0; width: auto; height: var(--op-dim-border); transform: translateY(-50%); }
+.op-split-handle:hover::before, .op-split[data-dragging] > .op-split-handle::before, .op-split-handle:focus-visible::before { background-color: var(--op-accent); width: var(--op-dim-border-thick); }
+.op-split[data-vertical] > .op-split-handle:hover::before, .op-split[data-vertical][data-dragging] > .op-split-handle::before, .op-split[data-vertical] > .op-split-handle:focus-visible::before { width: auto; height: var(--op-dim-border-thick); }
+.op-root .op-split-handle:focus-visible { outline: none; }
+.op-split-grip { position: relative; width: var(--op-dim-pad-tight); height: var(--op-dim-icon-large); background: repeating-linear-gradient(180deg, var(--op-border-strong) 0 var(--op-dim-border), transparent var(--op-dim-border) var(--op-dim-gap-micro)); }
+.op-split[data-vertical] .op-split-grip { width: var(--op-dim-icon-large); height: var(--op-dim-pad-tight); background: repeating-linear-gradient(90deg, var(--op-border-strong) 0 var(--op-dim-border), transparent var(--op-dim-border) var(--op-dim-gap-micro)); }
+.op-split[data-dragging] { user-select: none; }
+
+/* ------------------------------------------------------------------ */
+/* Hover                                                               */
+/* ------------------------------------------------------------------ */
+/* Pointer devices only; touch screens keep the press state alone.
+   Hover applies to the idle state; pressed, selected, pending, results and disabled keep their own look. */
+@media (hover: hover) {
+  .op-sb[data-state="idle"]:hover,
+  .op-checkbox:hover > .op-checkbox-box[data-state="idle"] { --sb-base: var(--op-border-strong); }
+
+  .op-btn[data-state="idle"]:hover { --bg: var(--op-hover); }
+  .op-btn.op-danger[data-state="idle"]:hover { --bg: color-mix(in srgb, var(--op-error) 22%, transparent); }
+  .op-icon-btn[data-state="idle"]:hover { --bg: var(--op-hover); }
+  .op-group-tile[data-state="idle"]:not([data-checked]):hover { background-color: var(--op-hover); }
+  .op-group-tile[data-state="idle"][data-checked]:hover { background-color: color-mix(in srgb, var(--op-accent) 22%, transparent); }
+  .op-checkbox:hover > .op-checkbox-box[data-state="idle"] { background-color: var(--op-hover); }
+  .op-dropdown-trigger[data-state="idle"]:hover { background-color: var(--op-hover); }
+  .op-dropdown-item:not([aria-selected="true"]):hover { background-color: var(--op-hover); }
+  .op-seg-item[data-tone="idle"]:not([data-pressed]):hover { background-color: var(--op-hover); }
+  .op-stepper-btn:not([data-pressed]):not([data-muted]):hover { background-color: var(--op-hover); }
+  .op-list-row[role="button"][data-bg="idle"]:hover { background-color: var(--op-hover); }
+  .op-chip[data-state="idle"]:not([data-selected]):hover { background-color: var(--op-hover); }
+  .op-chip[data-state="idle"][data-selected]:hover { background-color: color-mix(in srgb, var(--op-accent) 22%, var(--op-surface)); }
+  .op-field[data-state="idle"]:hover { --sb-base: var(--op-border-strong); }
+  /* The tab sits above the baseline, so its hover fill stops short of it. */
+  .op-tab:not([data-active]):hover { background: linear-gradient(var(--op-hover), var(--op-hover)) top / 100% calc(100% - var(--tab-baseline, 0px)) no-repeat; }
+  .op-tabs[data-variant="folder"] .op-tab { --tab-baseline: var(--op-dim-border-thick); }
+  .op-tabs[data-variant="line"] .op-tab { --tab-baseline: var(--op-dim-border); }
 }

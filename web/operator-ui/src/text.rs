@@ -19,14 +19,14 @@ pub mod marquee {
     pub const VELOCITY_DU: f32 = 7.5;
     /// Gap between the end of the text and its repeated start, in DU.
     pub const SPACING_DU: f32 = 6.0;
-    /// Tooltip auto-dismiss delay after the pointer leaves or the finger lifts, in milliseconds.
-    pub const TOOLTIP_DISMISS_MS: u32 = 3500;
+    /// Tooltip auto-dismiss delay after the finger lifts, in milliseconds.
+    pub const TOOLTIP_DISMISS_MS: u32 = crate::overlay::tooltip::DISMISS_MS;
     /// Touch hold time that opens the tooltip, in milliseconds.
-    pub const LONG_PRESS_MS: u32 = 500;
+    pub const LONG_PRESS_MS: u32 = crate::overlay::tooltip::LONG_PRESS_MS;
     /// Tooltip distance from the anchor, in DU.
-    pub const TOOLTIP_GAP_DU: f32 = 1.5;
+    pub const TOOLTIP_GAP_DU: f32 = crate::overlay::tooltip::GAP_DU;
     /// Tooltip maximum width, in DU.
-    pub const TOOLTIP_MAX_WIDTH_DU: f32 = 75.0;
+    pub const TOOLTIP_MAX_WIDTH_DU: f32 = crate::overlay::tooltip::MAX_WIDTH_DU;
 }
 
 #[derive(Clone, Copy)]
@@ -82,7 +82,10 @@ pub fn MarqueeText(
 
     // Measures the text against the host and (re)starts the marquee cycle.
     let measure = move || {
-        let (Some(h), Some(p)) = (host.get_untracked(), probe.get_untracked()) else {
+        let (Some(h), Some(p)) = (
+            host.try_get_untracked().flatten(),
+            probe.try_get_untracked().flatten(),
+        ) else {
             return;
         };
         let width = f64::from(p.offset_width());
@@ -149,33 +152,22 @@ pub fn MarqueeText(
 
     // Tooltip placement: above the anchor, flipped below near the top, clamped to the viewport.
     let place_tooltip = move || {
-        let (Some(h), Some(t)) = (host.get_untracked(), tip.get_untracked()) else {
+        let (Some(h), Some(t)) = (
+            host.try_get_untracked().flatten(),
+            tip.try_get_untracked().flatten(),
+        ) else {
             return;
         };
-        let Some(window) = web_sys::window() else {
-            return;
-        };
-        let vw = window
-            .inner_width()
-            .ok()
-            .and_then(|v| v.as_f64())
-            .unwrap_or(0.0);
-        let vh = window
-            .inner_height()
-            .ok()
-            .and_then(|v| v.as_f64())
-            .unwrap_or(0.0);
-        let anchor = h.get_bounding_client_rect();
-        let w = f64::from(t.offset_width());
-        let ht = f64::from(t.offset_height());
-        let gap = f64::from(marquee::TOOLTIP_GAP_DU * DU_POINTS);
-        let left = (anchor.left() + (anchor.width() - w) / 2.0).clamp(0.0, (vw - w).max(0.0));
-        let top = if anchor.top() >= ht + gap {
-            anchor.top() - ht - gap
-        } else {
-            (anchor.bottom() + gap).min((vh - ht).max(0.0))
-        };
-        tip_pos.set(Some(TooltipPos { left, top }));
+        let p = crate::overlay::place_above(
+            &h.get_bounding_client_rect(),
+            f64::from(t.offset_width()),
+            f64::from(t.offset_height()),
+            marquee::TOOLTIP_GAP_DU,
+        );
+        tip_pos.set(Some(TooltipPos {
+            left: p.left,
+            top: p.top,
+        }));
     };
 
     let open_tip = move || {
@@ -212,7 +204,7 @@ pub fn MarqueeText(
             if !tip_open.get_untracked() {
                 return;
             }
-            let inside = host.get_untracked().is_some_and(|h| {
+            let inside = host.try_get_untracked().flatten().is_some_and(|h| {
                 e.target()
                     .and_then(|t| t.dyn_into::<web_sys::Node>().ok())
                     .is_some_and(|n| h.contains(Some(&n)))
@@ -320,7 +312,7 @@ pub fn MarqueeText(
             <Show when=move || tip_open.get()>
                 <div
                     node_ref=tip
-                    class="op-marquee-tip op-t-caption"
+                    class="op-tooltip op-t-caption"
                     role="tooltip"
                     style:max-width=crate::core::du(marquee::TOOLTIP_MAX_WIDTH_DU)
                     style:visibility=move || if tip_pos.get().is_some() { "visible" } else { "hidden" }

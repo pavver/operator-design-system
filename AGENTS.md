@@ -8,6 +8,8 @@ Rules for AI agents contributing to this repository.
 * Application-specific or third-party branded assets do not belong here.
 * A new component starts as Draft and becomes Reviewed only after the maintainer has checked it in every state.
 * Each change to a component updates its implementation and its specification in the same commit.
+* The documentation site renders `docs/**/*.md` directly, so a specification is also the human-facing page.
+* A new component needs a Markdown file in `docs/components/`, live examples in `web/operator-ui-demo/src/pages/`, and a sidebar entry in `web/operator-ui-demo/src/main.rs`.
 
 ## Language and Formatting
 

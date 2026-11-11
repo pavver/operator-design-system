@@ -3,7 +3,9 @@
 A compact, technical design system for applications that monitor and control devices.
 It looks like a terminal or a control panel: Cascadia Code everywhere, gray editor-like surfaces, warm signal colors, sharp corners, and honest feedback for every async action.
 
-**Live gallery:** <https://pavver.github.io/operator-design-system/>
+**Documentation and live examples:** <https://pavver.github.io/operator-design-system/>
+
+The site renders the same Markdown files from [docs](docs) that AI agents read, next to live examples of every component.
 
 The repository contains three things:
 
@@ -34,6 +36,10 @@ The repository contains three things:
 | MarqueeText | [marquee-text.md](docs/components/marquee-text.md) | Reviewed |
 | ThemeToggle | [theme-toggle.md](docs/components/theme-toggle.md) | Reviewed |
 | Icon, ProgressIndicator, Divider, Card | [primitives.md](docs/components/primitives.md) | Reviewed |
+| Chip | [chip.md](docs/components/chip.md) | Reviewed |
+| Tabs | [tabs.md](docs/components/tabs.md) | Reviewed |
+| Kbd | [kbd.md](docs/components/kbd.md) | Reviewed |
+| SplitPane | [split-pane.md](docs/components/split-pane.md) | Reviewed |
 
 New components start as **Draft** and become **Reviewed** after they have been checked in every state.
 
@@ -65,7 +71,7 @@ tools/import_material_symbols.py  icon importer
 crates/operator-ui-tokens/  generated Rust tokens (no_std)
 generated/kotlin/        generated Compose tokens
 web/operator-ui/         Leptos component library
-web/operator-ui-demo/    interactive gallery
+web/operator-ui-demo/    documentation site with live examples (renders docs/)
 docs/                    the design system itself
 scripts/release.sh       release helper
 ```
@@ -74,7 +80,7 @@ scripts/release.sh       release helper
 
 ```bash
 cargo run -p operator-tokens          # regenerate tokens after editing tokens/tokens.toml
-cd web/operator-ui-demo && trunk serve # open http://127.0.0.1:8090/
+cd web/operator-ui-demo && trunk serve # open http://127.0.0.1:8090/ (documentation site)
 ```
 
 ## License

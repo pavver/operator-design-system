@@ -77,7 +77,17 @@ Some components define exceptions in their own specification.
 
 A bounded ripple in the `ripple` color spreads from the pointer position inside the control.
 Its opacity is `24%` in dark mode and `16%` in light mode.
+The ripple grows to cover the control over `330 ms` and holds its last frame while the pointer stays down.
+It fades over `220 ms` only after the pointer is released and the growth has finished.
+Controls that act on release therefore show a steady pressed surface for as long as the press lasts.
 Press feedback is suppressed while the control is `Pending` or `Disabled`.
+
+## Hover Feedback
+
+On devices with a hovering pointer, an `Idle` control under the pointer shows a `hover` background and a `border_strong` outline.
+Danger buttons and checked or selected items deepen their own tint to `22%` instead of using `hover`.
+Hover never changes `Pressed`, `Selected`, `Pending`, `Success`, `Error`, or `Disabled` visuals.
+Touch screens have no hover state; press feedback alone confirms the touch.
 
 ## Focus
 

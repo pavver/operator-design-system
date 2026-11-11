@@ -13,4 +13,4 @@ wasm-bindgen.workspace = true
 js-sys.workspace = true
 send_wrapper = "0.6"
 gloo-timers = { version = "0.4.0", features = ["futures"] }
-web-sys = { workspace = true, features = ["HtmlElement", "HtmlInputElement", "DomRect", "Element", "EventTarget", "PointerEvent", "KeyboardEvent", "CssStyleDeclaration", "Window", "Document", "Node", "ResizeObserver"] }
+web-sys = { workspace = true, features = ["HtmlElement", "HtmlInputElement", "DomRect", "Element", "EventTarget", "PointerEvent", "KeyboardEvent", "CssStyleDeclaration", "Window", "Document", "Node", "ResizeObserver", "Navigator", "Clipboard", "NodeList", "HtmlTextAreaElement", "WheelEvent", "TouchEvent", "TouchList", "Touch", "MediaQueryList"] }

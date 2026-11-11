@@ -11,3 +11,8 @@ operator-ui.workspace = true
 leptos.workspace = true
 js-sys.workspace = true
 console_error_panic_hook = "0.1.7"
+wasm-bindgen.workspace = true
+web-sys = { workspace = true, features = ["Window", "Location", "Element", "HtmlElement", "ScrollIntoViewOptions", "ScrollBehavior", "ScrollLogicalPosition"] }
+
+[build-dependencies]
+pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }
