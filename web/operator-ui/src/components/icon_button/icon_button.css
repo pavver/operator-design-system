@@ -1,0 +1,18 @@
+/* ------------------------------------------------------------------ */
+/* IconButton                                                          */
+/* ------------------------------------------------------------------ */
+.op-icon-btn {
+  --bg: var(--op-surface);
+  --fg: var(--op-icon);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  background-color: var(--bg);
+  color: var(--fg);
+}
+.op-icon-btn[data-state="pressed"] { --bg: var(--op-pressed); }
+.op-icon-btn[data-state="selected"] { --bg: var(--op-selection); }
+.op-icon-btn[data-state="disabled"] { --fg: var(--op-icon-disabled); }
+.op-icon-btn[data-state="success"] { --fg: var(--op-success); }
+.op-icon-btn[data-state="error"] { --fg: var(--op-error); }
+

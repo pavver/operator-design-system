@@ -1,0 +1,46 @@
+/* ------------------------------------------------------------------ */
+/* TextArea                                                            */
+/* ------------------------------------------------------------------ */
+.op-textarea-wrap { display: flex; flex-direction: column; gap: var(--op-dim-pad-tight); width: 100%; }
+.op-textarea { display: flex; width: 100%; background-color: var(--op-surface); }
+.op-textarea[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-textarea-input {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: var(--op-text-primary);
+  caret-color: var(--op-accent);
+  padding: var(--op-dim-pad-content) var(--op-dim-pad-card);
+  min-height: calc(var(--op-type-body-line) * var(--ta-min-rows) + var(--op-dim-pad-content) * 2);
+  max-height: calc(var(--op-type-body-line) * var(--ta-max-rows) + var(--op-dim-pad-content) * 2);
+  overflow-y: auto;
+}
+.op-root .op-textarea-input:focus-visible { outline: none; }
+.op-textarea-input::placeholder { color: var(--op-text-disabled); opacity: 1; }
+.op-textarea-input:disabled { color: var(--op-text-disabled); }
+/* Manual height from the grip: the auto-grow limit no longer applies, the resize limit does. */
+.op-textarea[data-manual] .op-textarea-input { max-height: calc(var(--op-type-body-line) * var(--ta-resize-max-rows) + var(--op-dim-pad-content) * 2); }
+.op-textarea[data-resizing] { user-select: none; }
+/* Corner grip: three diagonal hatch lines in a 2 DU square, accent while hovered or dragged. */
+.op-textarea-grip-slot { position: absolute; right: 0; bottom: 0; z-index: 4; display: flex; }
+.op-textarea-grip {
+  display: block;
+  width: var(--op-dim-gutter);
+  height: var(--op-dim-gutter);
+  cursor: ns-resize;
+  touch-action: none;
+  color: var(--op-border-strong);
+  background: repeating-linear-gradient(135deg, transparent 0 calc(var(--op-dim-border) * 1.5), currentColor calc(var(--op-dim-border) * 1.5) calc(var(--op-dim-border) * 2.5));
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.op-textarea[data-resizing] .op-textarea-grip { color: var(--op-accent); }
+.op-textarea[data-state="disabled"] .op-textarea-grip { display: none; }
+@media (hover: hover) { .op-textarea-grip:hover { color: var(--op-text-secondary); } }
+.op-textarea-counter { align-self: flex-end; color: var(--op-text-secondary); font-variant-numeric: tabular-nums; }
+.op-textarea-counter[data-tone="warning"] { color: var(--op-warning); }
+.op-textarea-counter[data-tone="error"] { color: var(--op-error); }
+

@@ -1,0 +1,57 @@
+/* ------------------------------------------------------------------ */
+/* TextField                                                           */
+/* ------------------------------------------------------------------ */
+.op-field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-card);
+  background-color: var(--op-surface);
+  box-shadow: none;
+}
+/* Base outline drawn above trailing buttons so the focus border is never covered. */
+.op-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 var(--sb-base-w) var(--sb-base);
+  transition: box-shadow var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-field[data-fading]::before { transition-duration: var(--op-motion-result-fade); transition-timing-function: var(--op-ease-smooth); }
+.op-field[data-trailing] { padding-right: 0; }
+.op-field[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-field-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--op-type-body-size);
+  color: var(--op-text-primary);
+  caret-color: var(--op-accent);
+}
+.op-root .op-field-input:focus-visible { outline: none; }
+.op-field-input::placeholder { color: var(--op-text-disabled); opacity: 1; }
+.op-field-input:disabled { color: var(--op-text-disabled); }
+.op-field-reveal {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--op-dim-row-standard);
+  height: 100%;
+  color: var(--op-text-secondary);
+  cursor: pointer;
+  transition: color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-field-reveal:hover, .op-field-reveal[aria-pressed="true"] { color: var(--op-accent); }
+.op-field-reveal:disabled { color: var(--op-text-disabled); cursor: default; }
+.op-field-save-slot { display: flex; align-self: stretch; flex: none; }
+.op-field-save-slot .op-field-save { height: 100%; }
+.op-field-save { flex: none; min-width: calc(var(--op-du) * 12); max-width: calc(var(--op-du) * 30); }
+

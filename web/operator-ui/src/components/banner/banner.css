@@ -1,0 +1,26 @@
+/* ------------------------------------------------------------------ */
+/* Banner                                                              */
+/* ------------------------------------------------------------------ */
+.op-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--op-dim-gutter);
+  width: 100%;
+  padding: var(--op-dim-pad-card);
+  background-color: color-mix(in srgb, var(--tone) 15%, var(--op-surface));
+  box-shadow: inset var(--op-dim-border-thick) 0 0 var(--tone);
+  color: var(--op-text-primary);
+}
+/* The first text line is centered on the 8 DU icon. */
+.op-banner-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--op-dim-pad-tight); padding-top: calc((var(--op-du) * 8 - var(--op-type-body-line)) / 2); }
+.op-banner-title { font-weight: 700; }
+.op-banner-text { color: var(--op-text-primary); overflow-wrap: anywhere; }
+.op-banner-actions { display: flex; flex-wrap: wrap; gap: var(--op-dim-gutter); margin-top: var(--op-dim-pad-tight); }
+.op-banner-actions .op-btn { height: var(--op-dim-row-compact); }
+/* Banner actions take the tone instead of the neutral surface; danger buttons keep their own colors. */
+.op-banner-actions .op-btn:not(.op-danger) { --sb-base: color-mix(in srgb, var(--tone) 50%, transparent); }
+.op-banner-actions .op-btn:not(.op-danger)[data-state="idle"] { --bg: transparent; --fg: var(--tone); --ic: var(--tone); }
+.op-banner-actions .op-btn:not(.op-danger)[data-state="pressed"] { --bg: color-mix(in srgb, var(--tone) 25%, transparent); --fg: var(--tone); --ic: var(--tone); }
+.op-banner-actions .op-btn:not(.op-danger)[data-state="pending"] { --bg: transparent; }
+.op-banner-close { margin: calc(var(--op-dim-pad-small) * -1) calc(var(--op-dim-pad-small) * -1) 0 0; }
+

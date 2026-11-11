@@ -1,0 +1,30 @@
+/* ------------------------------------------------------------------ */
+/* ActionButton                                                        */
+/* ------------------------------------------------------------------ */
+.op-btn {
+  --bg: var(--op-surface);
+  --fg: var(--op-text-primary);
+  --ic: var(--op-icon);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-margin-screen);
+  background-color: var(--bg);
+  color: var(--fg);
+  font-size: var(--op-type-body-size);
+  line-height: var(--op-type-body-line);
+  font-weight: 500;
+  text-align: center;
+}
+.op-btn[data-state="pressed"] { --bg: var(--op-pressed); }
+.op-btn[data-state="selected"] { --bg: var(--op-selection); }
+.op-btn.op-danger { --bg: color-mix(in srgb, var(--op-error) 15%, transparent); --fg: var(--op-error); --ic: var(--op-error); }
+.op-btn.op-danger[data-state="pressed"] { --bg: color-mix(in srgb, var(--op-error) 30%, transparent); }
+.op-btn[data-state="success"] { --fg: var(--op-success); --ic: var(--op-success); }
+.op-btn[data-state="error"] { --fg: var(--op-error); --ic: var(--op-error); }
+.op-btn[data-state="disabled"] { --bg: var(--op-disabled-surface); --fg: var(--op-text-disabled); --ic: var(--op-icon-disabled); }
+.op-btn-content { display: inline-flex; align-items: center; justify-content: center; }
+.op-btn-label { display: inline-flex; align-items: center; justify-content: center; gap: var(--op-dim-gutter); }
+.op-btn-icon { display: inline-flex; color: var(--ic); transition: inherit; }
+

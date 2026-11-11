@@ -1,0 +1,7 @@
+/* ------------------------------------------------------------------ */
+/* ScrollArea                                                          */
+/* ------------------------------------------------------------------ */
+.op-scroll { overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; }
+.op-root .op-scroll:focus-visible { outline: var(--op-dim-border) solid var(--op-accent); outline-offset: calc(var(--op-dim-border) * -1); }
+.op-scroll-content { transition-property: transform; transition-timing-function: var(--op-ease-standard); will-change: transform; }
+

@@ -1,0 +1,16 @@
+/* ------------------------------------------------------------------ */
+/* Skeleton                                                            */
+/* ------------------------------------------------------------------ */
+.op-skeleton-group { display: flex; flex-direction: column; gap: var(--op-dim-pad-tight); width: 100%; }
+.op-skeleton {
+  display: block;
+  width: 100%;
+  background: linear-gradient(90deg, var(--op-surface-alt) 0%, var(--op-pressed) 50%, var(--op-surface-alt) 100%);
+  background-size: 300% 100%;
+  animation: op-shimmer var(--op-motion-skeleton-lap) linear infinite;
+}
+.op-skeleton[data-text] { height: var(--op-type-body-size); margin: calc((var(--op-type-body-line) - var(--op-type-body-size)) / 2) 0; }
+.op-skeleton[data-circle] { border-radius: 50%; flex: none; }
+@keyframes op-shimmer { from { background-position: 100% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .op-root .op-skeleton { animation: none !important; background: var(--op-surface-alt); } }
+

@@ -1,0 +1,31 @@
+/* ------------------------------------------------------------------ */
+/* CheckboxGroup                                                       */
+/* ------------------------------------------------------------------ */
+.op-group { display: flex; flex-direction: column; gap: var(--op-dim-gutter); width: 100%; }
+.op-group-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--op-dim-gutter);
+  width: 100%;
+  height: var(--op-dim-row-control);
+  padding: 0 var(--op-dim-margin-screen);
+  background-color: var(--op-surface);
+  color: var(--op-text-primary);
+  font-weight: 500;
+  text-align: left;
+}
+.op-group-tile[data-checked] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); color: var(--op-accent); font-weight: 700; }
+.op-group-tile[data-state="pressed"] { background-color: var(--op-pressed); }
+.op-group-name { flex: 1; min-width: 0; }
+.op-group-box {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  display: grid;
+  place-items: center;
+  flex: none;
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+}
+.op-group-box[data-checked] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-accent); }
+.op-group-mark { --tone-base: var(--op-accent); }
+

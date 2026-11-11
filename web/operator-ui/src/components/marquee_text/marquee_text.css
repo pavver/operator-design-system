@@ -1,0 +1,16 @@
+/* ------------------------------------------------------------------ */
+/* MarqueeText                                                         */
+/* ------------------------------------------------------------------ */
+.op-marquee { display: block; min-width: 0; max-width: 100%; overflow: hidden; white-space: nowrap; }
+.op-marquee[data-clickable] { cursor: pointer; }
+.op-marquee-track { display: inline-flex; will-change: transform; }
+.op-marquee-text { flex: none; white-space: pre; }
+.op-marquee-gap { flex: none; }
+.op-marquee-track[data-run="a"] { animation-name: op-marquee-a; animation-timing-function: linear; animation-iteration-count: 1; }
+.op-marquee-track[data-run="b"] { animation-name: op-marquee-b; animation-timing-function: linear; animation-iteration-count: 1; }
+@keyframes op-marquee-a { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
+@keyframes op-marquee-b { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
+@media (prefers-reduced-motion: reduce) {
+  .op-marquee-track[data-run] { animation: none; }
+  .op-marquee[data-overflow] .op-marquee-track { display: block; overflow: hidden; text-overflow: ellipsis; }
+}

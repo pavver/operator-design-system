@@ -1,0 +1,22 @@
+/* ------------------------------------------------------------------ */
+/* Counter                                                             */
+/* ------------------------------------------------------------------ */
+.op-counter {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--op-dim-icon-medium);
+  height: var(--op-dim-icon-medium);
+  padding: 0 var(--op-dim-pad-tight);
+  background-color: var(--op-accent);
+  color: var(--op-on-accent);
+  font-size: var(--op-type-caption-size);
+  line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.op-counter[data-tone="neutral"] { background-color: var(--op-surface-alt); color: var(--op-text-secondary); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
+.op-counter[data-tone="error"] { background-color: var(--op-error); color: var(--op-on-accent); }
+.op-with-counter { position: relative; display: inline-flex; }
+.op-with-counter-badge { position: absolute; top: calc(var(--op-dim-pad-tight) * -1); right: calc(var(--op-dim-pad-tight) * -1); z-index: 4; pointer-events: none; }
+

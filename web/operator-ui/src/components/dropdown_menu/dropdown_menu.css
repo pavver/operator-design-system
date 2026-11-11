@@ -1,0 +1,53 @@
+/* ------------------------------------------------------------------ */
+/* DropdownMenu                                                        */
+/* ------------------------------------------------------------------ */
+.op-dropdown { display: flex; flex-direction: column; width: 100%; }
+.op-dropdown-label {
+  padding-bottom: var(--op-dim-pad-tight);
+  color: var(--op-text-secondary);
+  font-size: var(--op-type-caption-size);
+  line-height: var(--op-type-caption-line);
+}
+.op-dropdown-anchor { position: relative; }
+.op-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--op-dim-gutter);
+  width: 100%;
+  height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-card);
+  background-color: var(--op-surface);
+  color: var(--op-text-primary);
+  font-weight: 500;
+}
+.op-dropdown-trigger[data-state="pressed"] { background-color: var(--op-pressed); }
+.op-dropdown-trigger[data-state="disabled"] { background-color: var(--op-disabled-surface); color: var(--op-text-disabled); }
+.op-dropdown-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.op-dropdown-arrow { display: inline-flex; color: var(--op-text-secondary); }
+.op-dropdown-trigger[data-state="disabled"] .op-dropdown-arrow { color: var(--op-text-disabled); }
+.op-dropdown-scrim { position: fixed; inset: 0; z-index: 20; }
+.op-dropdown-menu {
+  position: absolute;
+  z-index: 21;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(var(--op-du) * 50);
+  background-color: var(--op-surface);
+  border: var(--op-dim-border) solid var(--op-accent);
+}
+.op-dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--op-dim-row-control);
+  padding: 0 var(--op-dim-pad-card);
+  background-color: var(--op-surface);
+  color: var(--op-text-primary);
+  font-weight: 500;
+}
+.op-dropdown-item[aria-selected="true"] { background-color: color-mix(in srgb, var(--op-accent) 8%, var(--op-surface)); color: var(--op-accent); font-weight: 700; }
+

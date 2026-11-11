@@ -1,0 +1,8 @@
+/* ------------------------------------------------------------------ */
+/* Combobox                                                            */
+/* ------------------------------------------------------------------ */
+.op-combobox-arrow { pointer-events: none; }
+.op-dropdown-item[data-active] { background-color: var(--op-pressed); }
+.op-combobox-none { color: var(--op-text-secondary); font-weight: 400; cursor: default; }
+.op-match { background: none; color: var(--op-accent); font-weight: 700; }
+

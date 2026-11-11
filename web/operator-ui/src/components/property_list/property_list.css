@@ -1,0 +1,14 @@
+/* ------------------------------------------------------------------ */
+/* PropertyList                                                        */
+/* ------------------------------------------------------------------ */
+.op-props { margin: 0; width: 100%; container-type: inline-size; }
+.op-prop { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--op-dim-gutter); align-items: center; min-height: var(--op-dim-row-standard); padding: var(--op-dim-pad-tight) 0; box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
+.op-prop-label { color: var(--op-text-secondary); overflow-wrap: anywhere; }
+.op-prop-value { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: var(--op-dim-pad-tight); min-width: 0; color: var(--op-text-primary); }
+.op-prop-text { min-width: 0; overflow-wrap: anywhere; }
+/* 60 DU; container queries cannot read custom properties. */
+@container (max-width: 240px) {
+  .op-prop { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .op-prop-label { font-size: var(--op-type-caption-size); line-height: var(--op-type-caption-line); }
+}
+

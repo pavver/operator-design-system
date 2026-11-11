@@ -1,0 +1,103 @@
+/* ------------------------------------------------------------------ */
+/* State border (see docs/foundations/states.md)                       */
+/* Base outline: inset box-shadow (inner stroke containment).          */
+/* Result pulse: ::after, 2x stroke, alpha 0.55..1, 500 ms exit fade.  */
+/* Result background: ::before on .op-sb-bg, alpha-only fade.          */
+/* Pending: clockwise 25% segment drawn by .op-run.                    */
+/* ------------------------------------------------------------------ */
+.op-sb {
+  --sb-w: var(--op-dim-border);
+  --sb-base: var(--op-border);
+  --sb-base-w: var(--sb-w);
+  --sb-status: transparent;
+  position: relative;
+  isolation: isolate;
+  box-shadow: inset 0 0 0 var(--sb-base-w) var(--sb-base);
+  transition:
+    box-shadow var(--op-motion-state-color) var(--op-ease-standard),
+    background-color var(--op-motion-state-color) var(--op-ease-standard),
+    color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-sb[data-state="pressed"] { --sb-base: var(--op-border-strong); }
+.op-sb[data-state="disabled"] { --sb-base: var(--op-disabled-border); }
+.op-sb[data-state="focused"],
+.op-sb[data-state="selected"] { --sb-base: var(--op-accent); --sb-base-w: calc(var(--sb-w) * 1.5); }
+.op-sb[data-result="success"] { --sb-status: var(--op-success); }
+.op-sb[data-result="error"] { --sb-status: var(--op-error); }
+.op-sb[data-state="success"],
+.op-sb[data-state="error"] { transition-duration: 0s; }
+.op-sb[data-fading] { transition-duration: var(--op-motion-result-fade); transition-timing-function: var(--op-ease-smooth); }
+
+.op-sb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  border: calc(var(--sb-w) * 2) solid var(--sb-status);
+  opacity: 0;
+  transition: opacity var(--op-motion-result-fade) var(--op-ease-smooth);
+  animation: op-pulse var(--op-motion-result-pulse-half) var(--op-ease-standard) infinite alternate;
+}
+.op-sb-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--sb-status) 15%, transparent);
+  opacity: 0;
+  transition: opacity var(--op-motion-result-fade) var(--op-ease-smooth);
+}
+.op-sb[data-state="success"]::after,
+.op-sb[data-state="error"]::after,
+.op-sb-bg[data-state="success"]::before,
+.op-sb-bg[data-state="error"]::before { opacity: 1; transition: none; }
+@keyframes op-pulse {
+  from { border-color: color-mix(in srgb, var(--sb-status) 55%, transparent); }
+  to { border-color: var(--sb-status); }
+}
+
+.op-run {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 3;
+  display: none;
+}
+.op-sb[data-state="pending"] > .op-run { display: block; }
+.op-run rect {
+  x: calc(var(--sb-w) / 2);
+  y: calc(var(--sb-w) / 2);
+  width: calc(100% - var(--sb-w));
+  height: calc(100% - var(--sb-w));
+  rx: var(--sb-rx, 0);
+  fill: none;
+  stroke: var(--op-pending);
+  stroke-width: calc(var(--sb-w) * 1.5);
+  stroke-dasharray: 25 75;
+  animation: op-run var(--op-motion-pending-lap) linear infinite;
+}
+@keyframes op-run { to { stroke-dashoffset: -100; } }
+
+/* Bounded ripple */
+.op-rippled { position: relative; overflow: hidden; }
+.op-ripple {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--op-ripple) var(--op-ripple-alpha), transparent);
+  transform: scale(0);
+  animation: op-ripple 330ms var(--op-ease-standard) forwards;
+  transition: opacity 220ms var(--op-ease-standard);
+}
+/* The ripple grows and holds its last frame while the pointer is down; data-out fades it after release. */
+@keyframes op-ripple { to { transform: scale(1); } }
+.op-ripple[data-out] { opacity: 0; }
+

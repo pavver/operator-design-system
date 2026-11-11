@@ -1,0 +1,40 @@
+/* ------------------------------------------------------------------ */
+/* Kbd                                                                 */
+/* ------------------------------------------------------------------ */
+.op-kbd-group { display: inline-flex; align-items: center; gap: var(--op-dim-gap-micro); vertical-align: middle; }
+/* A key cap: a darker body seen as bevels on the sides and a thick front edge,
+   and a lighter top face with a highlight along its top. */
+.op-kbd {
+  --kbd-face: color-mix(in srgb, var(--op-text-primary) 10%, var(--op-surface));
+  --kbd-body: color-mix(in srgb, var(--op-background) 55%, var(--op-border-strong));
+  display: inline-flex;
+  flex: none;
+  min-width: calc(var(--op-du) * 6.5);
+  height: calc(var(--op-du) * 6.5);
+  padding: var(--op-dim-border) var(--op-dim-gap-micro) var(--op-dim-pad-tight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kbd-body) 80%, var(--op-text-primary)), var(--kbd-body));
+  box-shadow:
+    inset 0 0 0 var(--op-dim-border) color-mix(in srgb, var(--op-background) 60%, transparent),
+    0 var(--op-dim-border) var(--op-dim-gap-micro) rgb(0 0 0 / 35%);
+  color: var(--op-text-primary);
+  font: inherit;
+  font-size: var(--op-type-caption-size);
+  line-height: 1;
+  font-weight: 600;
+  vertical-align: middle;
+}
+.op-kbd[data-size="wide"] { min-width: calc(var(--op-du) * 11); }
+.op-kbd[data-size="space"] { min-width: calc(var(--op-du) * 26); }
+.op-kbd-cap {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--op-dim-pad-tight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--op-text-primary) 6%, var(--kbd-face)), var(--kbd-face));
+  box-shadow: inset 0 var(--op-dim-border) 0 color-mix(in srgb, var(--op-text-primary) 18%, transparent);
+  white-space: nowrap;
+}
+.op-kbd[data-size="wide"] .op-kbd-cap { justify-content: flex-start; }
+.op-kbd-plus { color: var(--op-text-secondary); font-size: var(--op-type-caption-size); }
+

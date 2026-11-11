@@ -1,0 +1,22 @@
+/* ------------------------------------------------------------------ */
+/* Toolbar                                                             */
+/* ------------------------------------------------------------------ */
+.op-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--op-dim-pad-tight);
+  min-height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-tight);
+  background-color: var(--op-surface);
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.op-toolbar[data-dense] { min-height: var(--op-dim-row-compact); gap: var(--op-dim-gap-micro); }
+.op-toolbar > * { flex: none; }
+.op-toolbar-title { padding: 0 var(--op-dim-pad-tight); font-weight: 500; white-space: nowrap; }
+.op-toolbar-sep { align-self: center; width: var(--op-dim-border); height: var(--op-dim-icon-large); margin: 0 var(--op-dim-pad-tight); background-color: var(--op-divider); }
+.op-toolbar-spacer { flex: 1 1 auto; min-width: var(--op-dim-gutter); }
+.op-toolbar .op-btn { height: var(--op-dim-row-compact); padding: 0 var(--op-dim-pad-card); }
+.op-toolbar .op-field { height: var(--op-dim-row-compact); }
+

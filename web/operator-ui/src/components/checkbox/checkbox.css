@@ -1,0 +1,25 @@
+/* ------------------------------------------------------------------ */
+/* AsyncCheckbox                                                       */
+/* ------------------------------------------------------------------ */
+.op-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--op-dim-gutter);
+  padding: var(--op-dim-pad-small) var(--op-dim-pad-tight);
+  color: var(--op-text-primary);
+  font-weight: 500;
+}
+.op-checkbox[data-disabled] { color: var(--op-text-disabled); }
+.op-checkbox-box {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  display: grid;
+  place-items: center;
+  flex: none;
+  background-color: var(--op-surface);
+}
+.op-checkbox-box[data-state="selected"] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); }
+.op-checkbox-box[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-checkbox-mark { --tone-base: var(--op-accent); }
+.op-checkbox[data-disabled] .op-checkbox-mark { --tone-base: var(--op-icon-disabled); }
+

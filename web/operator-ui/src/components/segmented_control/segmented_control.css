@@ -1,0 +1,49 @@
+/* ------------------------------------------------------------------ */
+/* SegmentedControl                                                    */
+/* ------------------------------------------------------------------ */
+.op-seg {
+  width: 100%;
+  padding: var(--op-dim-gap-micro);
+  background-color: var(--op-surface-alt);
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+}
+.op-seg[data-disabled] { background-color: var(--op-disabled-surface); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-disabled-border); }
+.op-seg-track { position: relative; display: flex; height: 100%; }
+.op-seg-slide {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  transition: transform var(--op-motion-segment-slide) linear;
+}
+.op-seg-indicator {
+  --sb-base: var(--op-accent);
+  height: 100%;
+  background-color: color-mix(in srgb, var(--op-accent) 15%, transparent);
+}
+.op-seg-indicator-async { --sb-base: var(--op-border); }
+.op-seg-indicator[data-state="success"] { background-color: color-mix(in srgb, var(--op-success) 15%, transparent); }
+.op-seg-indicator[data-state="error"] { background-color: color-mix(in srgb, var(--op-error) 15%, transparent); }
+.op-seg-item {
+  position: relative;
+  z-index: 4;
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  color: var(--op-text-secondary);
+  font-size: var(--op-type-body-small-size);
+  line-height: var(--op-type-body-small-line);
+  font-weight: 500;
+  transition:
+    color var(--op-motion-segment-slide) linear,
+    background-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-seg-item[data-pressed] { background-color: var(--op-pressed); }
+.op-seg-item[data-tone="selected"] { color: var(--op-accent); font-weight: 700; }
+.op-seg-item[data-tone="success"] { color: var(--op-success); font-weight: 700; }
+.op-seg-item[data-tone="error"] { color: var(--op-error); font-weight: 700; }
+.op-seg-item[data-tone="pending"] { color: var(--op-pending); }
+.op-seg-item[data-tone="disabled"] { color: var(--op-text-disabled); }
+.op-seg-content { display: inline-flex; align-items: center; gap: var(--op-dim-pad-small); white-space: nowrap; }
+

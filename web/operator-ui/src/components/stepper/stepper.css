@@ -1,0 +1,31 @@
+/* ------------------------------------------------------------------ */
+/* Stepper                                                             */
+/* ------------------------------------------------------------------ */
+.op-stepper { display: flex; height: var(--op-dim-row-compact); background-color: var(--op-surface); }
+.op-stepper-btn {
+  width: var(--op-dim-row-compact);
+  height: 100%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background-color: var(--op-surface);
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  transition: background-color var(--op-motion-state-color), box-shadow var(--op-motion-state-color);
+}
+.op-stepper-btn .op-tone { --tone-base: var(--op-icon); }
+.op-stepper-btn[data-pressed] { background-color: var(--op-pressed); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border-strong); }
+.op-stepper-btn[data-muted] { background-color: var(--op-disabled-surface); }
+.op-stepper-btn[data-muted] .op-tone { --tone-base: var(--op-icon-disabled); }
+.op-stepper-value {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  background-color: var(--op-surface-alt);
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  color: var(--op-text-primary);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.op-stepper-value[data-disabled] { color: var(--op-text-disabled); }
+

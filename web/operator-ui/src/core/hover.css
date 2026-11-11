@@ -1,0 +1,37 @@
+/* ------------------------------------------------------------------ */
+/* Hover                                                               */
+/* ------------------------------------------------------------------ */
+/* Pointer devices only; touch screens keep the press state alone.
+   Hover applies to the idle state; pressed, selected, pending, results and disabled keep their own look. */
+@media (hover: hover) {
+  .op-sb[data-state="idle"]:hover,
+  .op-checkbox:hover > .op-checkbox-box[data-state="idle"],
+  .op-radio:hover > .op-radio-box[data-state="idle"] { --sb-base: var(--op-border-strong); }
+
+  .op-btn[data-state="idle"]:hover { --bg: var(--op-hover); }
+  .op-btn.op-danger[data-state="idle"]:hover { --bg: color-mix(in srgb, var(--op-error) 22%, transparent); }
+  .op-icon-btn[data-state="idle"]:hover { --bg: var(--op-hover); }
+  .op-group-tile[data-state="idle"]:not([data-checked]):hover { background-color: var(--op-hover); }
+  .op-group-tile[data-state="idle"][data-checked]:hover { background-color: color-mix(in srgb, var(--op-accent) 22%, transparent); }
+  .op-checkbox:hover > .op-checkbox-box[data-state="idle"],
+  .op-radio:hover > .op-radio-box[data-state="idle"] { background-color: var(--op-hover); }
+  .op-dropdown-trigger[data-state="idle"]:hover { background-color: var(--op-hover); }
+  .op-dropdown-item:not([aria-selected="true"]):hover { background-color: var(--op-hover); }
+  .op-seg-item[data-tone="idle"]:not([data-pressed]):hover { background-color: var(--op-hover); }
+  .op-stepper-btn:not([data-pressed]):not([data-muted]):hover { background-color: var(--op-hover); }
+  .op-list-row[role="button"][data-bg="idle"]:hover { background-color: var(--op-hover); }
+  .op-chip[data-state="idle"]:not([data-selected]):hover { background-color: var(--op-hover); }
+  .op-chip[data-state="idle"][data-selected]:hover { background-color: color-mix(in srgb, var(--op-accent) 22%, var(--op-surface)); }
+  .op-page[data-state="idle"]:hover { background-color: var(--op-hover); }
+  .op-field[data-state="idle"]:hover,
+  .op-textarea[data-state="idle"]:hover { --sb-base: var(--op-border-strong); }
+  /* The tab sits above the baseline, so its hover fill stops short of it. */
+  .op-tab:not([data-active]):hover { background: linear-gradient(var(--op-hover), var(--op-hover)) top / 100% calc(100% - var(--tab-baseline, 0px)) no-repeat; }
+  .op-tabs[data-variant="folder"] .op-tab { --tab-baseline: var(--op-dim-border-thick); }
+  .op-tabs[data-variant="line"] .op-tab { --tab-baseline: var(--op-dim-border); }
+}
+
+/* Banner action hover: placed after the generic hover rules so the tone wins. */
+@media (hover: hover) {
+  .op-banner-actions .op-btn:not(.op-danger)[data-state="idle"]:hover { --bg: color-mix(in srgb, var(--tone) 12%, transparent); --sb-base: var(--tone); }
+}

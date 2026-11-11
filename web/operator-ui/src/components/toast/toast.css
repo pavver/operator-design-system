@@ -1,0 +1,72 @@
+/* ------------------------------------------------------------------ */
+/* Toast                                                               */
+/* ------------------------------------------------------------------ */
+.op-toast-stack {
+  --toast-shift: calc(var(--op-du) * 2);
+  position: fixed;
+  z-index: 70;
+  left: 50%;
+  bottom: var(--op-dim-margin-screen);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--op-dim-gutter);
+  width: min(calc(var(--op-du) * 105), calc(100vw - var(--op-dim-margin-screen) * 2));
+  pointer-events: none;
+}
+/* Top stacks grow downward with the newest toast nearest the edge and enter from above. */
+.op-toast-stack[data-position^="top"] { top: var(--op-dim-margin-screen); bottom: auto; flex-direction: column-reverse; --toast-shift: calc(var(--op-du) * -2); }
+.op-toast-stack[data-position$="start"] { left: var(--op-dim-margin-screen); transform: none; }
+.op-toast-stack[data-position$="end"] { left: auto; right: var(--op-dim-margin-screen); transform: none; }
+.op-toast {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "icon text action close";
+  align-items: center;
+  min-height: var(--op-dim-row-control);
+  padding: var(--op-dim-pad-tight) var(--op-dim-pad-tight) var(--op-dim-pad-tight) var(--op-dim-pad-card);
+  background-color: var(--op-surface);
+  box-shadow:
+    inset var(--op-dim-border-thick) 0 0 var(--tone),
+    inset 0 0 0 var(--op-dim-border) var(--op-border),
+    0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
+  color: var(--op-text-primary);
+  pointer-events: auto;
+  animation: op-toast-in var(--op-motion-dialog-enter) var(--op-ease-standard);
+  transition: opacity var(--op-motion-dialog-enter) var(--op-ease-standard), transform var(--op-motion-dialog-enter) var(--op-ease-standard);
+}
+.op-toast[data-leaving] { opacity: 0; transform: translateY(var(--toast-shift)); }
+@keyframes op-toast-in { from { opacity: 0; transform: translateY(var(--toast-shift)); } }
+.op-toast-icon, .op-banner-icon { display: inline-flex; color: var(--tone); flex: none; }
+.op-toast-icon { grid-area: icon; margin-right: var(--op-dim-gutter); }
+.op-toast-text { grid-area: text; min-width: 0; overflow-wrap: anywhere; padding: var(--op-dim-pad-tight) 0; }
+.op-toast-label { grid-area: label; display: none; color: var(--tone); font-size: var(--op-type-caption-size); line-height: var(--op-type-caption-line); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.op-toast-action { grid-area: action; margin-left: var(--op-dim-gutter); }
+.op-toast-close { grid-area: close; margin-left: var(--op-dim-gutter); }
+/* Tall toast (4+ text lines): icon, tone label and buttons form a header; the text spans the full width below. */
+.op-toast[data-tall] {
+  grid-template-areas: "icon label action close" "text text text text";
+  padding-bottom: var(--op-dim-pad-card);
+}
+.op-toast[data-tall] .op-toast-label { display: block; }
+.op-toast[data-tall] .op-toast-text { padding: var(--op-dim-pad-tight) var(--op-dim-pad-small) 0 0; }
+.op-toast-action {
+  flex: none;
+  height: var(--op-dim-row-compact);
+  padding: 0 var(--op-dim-gutter);
+  color: var(--op-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: var(--op-type-caption-size);
+}
+.op-toast-close, .op-banner-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--op-dim-row-compact);
+  height: var(--op-dim-row-compact);
+  color: var(--op-text-secondary);
+}
+.op-toast-close:hover, .op-banner-close:hover, .op-toast-action:hover { background-color: var(--op-hover); }
+

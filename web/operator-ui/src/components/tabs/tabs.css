@@ -1,0 +1,45 @@
+/* ------------------------------------------------------------------ */
+/* Tabs                                                                */
+/* ------------------------------------------------------------------ */
+.op-tabs { width: 100%; overflow-x: auto; scrollbar-width: none; }
+.op-tabs-list { position: relative; display: flex; min-width: max-content; }
+.op-tabs[data-fill] .op-tabs-list { min-width: 100%; }
+.op-tabs[data-fill] .op-tab { flex: 1; justify-content: center; }
+.op-tab {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--op-dim-pad-tight);
+  height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-content);
+  color: var(--op-text-secondary);
+  font-size: var(--op-type-caption-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: color var(--op-motion-segment-slide) var(--op-ease-standard);
+}
+.op-tab:hover { color: var(--op-text-primary); }
+.op-tab[data-active] { color: var(--op-accent); font-weight: 700; }
+.op-tab-count { min-width: calc(var(--op-du) * 4); padding: 0 var(--op-dim-pad-tight); background-color: var(--op-surface-alt); color: var(--op-text-secondary); text-align: center; font-weight: 700; }
+.op-tab[data-active] .op-tab-count { background-color: var(--op-accent); color: var(--op-on-accent); }
+.op-tabs-indicator { position: absolute; left: 0; bottom: 0; z-index: 0; transition: transform var(--op-motion-segment-slide) linear, width var(--op-motion-segment-slide) linear; }
+/* Line: a sliding accent underline over a divider. */
+.op-tabs[data-variant="line"] .op-tabs-list { box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
+.op-tabs[data-variant="line"] .op-tabs-indicator { height: var(--op-dim-border-thick); background-color: var(--op-accent); }
+/* Folder: the active tab opens into the content through an accent baseline (Android main screen). */
+.op-tabs[data-variant="folder"] { box-shadow: inset 0 calc(var(--op-dim-border-thick) * -1) 0 var(--op-accent); }
+.op-tabs[data-variant="folder"]:not([data-fill]) { display: flex; }
+.op-tabs[data-variant="folder"]:not([data-fill]) .op-tabs-list { flex: none; }
+.op-tabs[data-variant="folder"] .op-tabs-list {
+  background-color: var(--op-surface-alt);
+  box-shadow: inset 0 var(--op-dim-border) 0 var(--op-border), inset var(--op-dim-border) 0 0 var(--op-border), inset calc(var(--op-dim-border) * -1) 0 0 var(--op-border), inset 0 calc(var(--op-dim-border-thick) * -1) 0 var(--op-accent);
+}
+.op-tabs[data-variant="folder"] .op-tabs-indicator {
+  top: 0;
+  background-color: var(--op-background);
+  box-shadow: inset 0 var(--op-dim-border-thick) 0 var(--op-accent), inset var(--op-dim-border-thick) 0 0 var(--op-accent), inset calc(var(--op-dim-border-thick) * -1) 0 0 var(--op-accent);
+}
+

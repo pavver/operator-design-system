@@ -1,0 +1,39 @@
+/* ------------------------------------------------------------------ */
+/* Menu                                                                */
+/* ------------------------------------------------------------------ */
+.op-menu-anchor { display: inline-flex; }
+.op-context-area { display: contents; }
+.op-menu {
+  position: fixed;
+  z-index: 40;
+  min-width: calc(var(--op-du) * 45);
+  max-width: calc(var(--op-du) * 80);
+  max-height: calc(100vh - var(--op-dim-margin-screen) * 2);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--op-surface);
+  /* A real border: item backgrounds would paint over an inset shadow. */
+  border: var(--op-dim-border) solid var(--op-border-strong);
+  box-shadow: 0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
+  animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
+}
+.op-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--op-dim-gutter);
+  width: 100%;
+  min-height: var(--op-dim-row-compact);
+  padding: 0 var(--op-dim-pad-card) 0 var(--op-dim-gutter);
+  color: var(--op-text-primary);
+}
+.op-menu-item:hover, .op-menu-item:focus-visible { background-color: var(--op-hover); }
+.op-root .op-menu-item:focus-visible { outline: none; box-shadow: inset var(--op-dim-border-thick) 0 0 var(--op-accent); }
+.op-menu-item[data-danger] { color: var(--op-error); }
+.op-menu-item[aria-disabled="true"] { color: var(--op-text-disabled); background: none; cursor: default; }
+.op-menu-icon { display: inline-flex; width: var(--op-dim-icon-small); flex: none; color: var(--op-icon); }
+.op-menu-item[data-danger] .op-menu-icon { color: var(--op-error); }
+.op-menu-item[aria-disabled="true"] .op-menu-icon { color: var(--op-text-disabled); }
+.op-menu-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.op-menu-shortcut { flex: none; color: var(--op-text-secondary); font-size: var(--op-type-caption-size); }
+.op-menu-sep { height: var(--op-dim-border); margin: var(--op-dim-pad-tight) 0; background-color: var(--op-divider); }
+

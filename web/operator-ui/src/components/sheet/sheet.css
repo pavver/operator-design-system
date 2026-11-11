@@ -1,0 +1,24 @@
+/* ------------------------------------------------------------------ */
+/* Sheet                                                               */
+/* ------------------------------------------------------------------ */
+.op-sheet-scrim { position: fixed; inset: 0; z-index: 45; background: rgb(0 0 0 / 55%); animation: op-fade-in var(--op-motion-sheet-slide) var(--op-ease-standard); }
+.op-sheet {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--op-surface);
+  overflow: hidden;
+  animation: var(--sheet-anim) var(--op-motion-sheet-slide) var(--op-ease-standard);
+}
+.op-root .op-sheet:focus-visible { outline: none; }
+.op-sheet[data-side="left"] { --sheet-anim: op-sheet-left; top: 0; bottom: 0; left: 0; width: min(var(--sheet-size), 85vw); box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-border); }
+.op-sheet[data-side="right"] { --sheet-anim: op-sheet-right; top: 0; bottom: 0; right: 0; width: min(var(--sheet-size), 85vw); box-shadow: inset var(--op-dim-border) 0 0 var(--op-border); }
+.op-sheet[data-side="bottom"] { --sheet-anim: op-sheet-bottom; left: 0; right: 0; bottom: 0; max-height: min(var(--sheet-size), 85vh); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-border); }
+@keyframes op-sheet-left { from { transform: translateX(-100%); } }
+@keyframes op-sheet-right { from { transform: translateX(100%); } }
+@keyframes op-sheet-bottom { from { transform: translateY(100%); } }
+.op-sheet-handle { align-self: center; flex: none; width: calc(var(--op-du) * 10); height: var(--op-dim-pad-tight); margin-top: var(--op-dim-gutter); background-color: var(--op-border-strong); }
+.op-sheet-head { display: flex; align-items: center; gap: var(--op-dim-gutter); flex: none; min-height: var(--op-dim-row-control); padding: 0 var(--op-dim-gutter) 0 var(--op-dim-margin-screen); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
+.op-sheet-title { flex: 1; min-width: 0; font-size: var(--op-type-row-title-size); line-height: var(--op-type-row-title-line); font-weight: 500; }
+.op-sheet-body { flex: 1; }
+

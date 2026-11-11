@@ -1,0 +1,31 @@
+/* ------------------------------------------------------------------ */
+/* Primitives                                                          */
+/* ------------------------------------------------------------------ */
+.op-icon { display: block; flex: none; fill: currentColor; }
+.op-spinner { display: block; flex: none; animation: op-spin var(--op-motion-spinner-lap) linear infinite; }
+.op-spinner circle { fill: none; stroke-linecap: round; stroke-dasharray: 75 25; }
+@keyframes op-spin { to { transform: rotate(360deg); } }
+.op-pending-indicator { display: inline-flex; flex: none; animation: op-fade-in var(--op-motion-pending-indicator-fade) linear both; }
+
+.op-c-success { color: var(--op-success); display: inline-flex; }
+.op-c-error { color: var(--op-error); display: inline-flex; }
+
+.op-stack { display: inline-grid; place-items: center; }
+.op-stack > * { grid-area: 1 / 1; }
+.op-ghost { visibility: hidden; }
+
+.op-divider { width: 100%; height: var(--op-dim-border); background: var(--op-divider); flex: none; }
+
+.op-card { background: var(--op-surface); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); padding: var(--op-dim-pad-card); }
+.op-card-alt { background: var(--op-surface-alt); }
+
+/* State-colored content (icons, marks): base color from --tone-base, result colors snap in and fade out. */
+.op-tone {
+  display: inline-flex;
+  color: var(--tone-base, currentColor);
+  transition: color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-tone[data-state="success"] { color: var(--op-success); transition-duration: 0s; }
+.op-tone[data-state="error"] { color: var(--op-error); transition-duration: 0s; }
+.op-tone[data-fading] { transition-duration: var(--op-motion-result-fade); transition-timing-function: var(--op-ease-smooth); }
+

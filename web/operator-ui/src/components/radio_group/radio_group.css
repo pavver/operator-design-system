@@ -1,0 +1,23 @@
+/* ------------------------------------------------------------------ */
+/* RadioGroup (round mark: allowed exception, see principles.md)       */
+/* ------------------------------------------------------------------ */
+.op-radio-group { display: flex; flex-direction: column; }
+.op-radio-group[data-horizontal] { flex-direction: row; flex-wrap: wrap; column-gap: var(--op-dim-margin-screen); }
+.op-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--op-dim-pad-content);
+  min-height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-tight);
+  color: var(--op-text-primary);
+}
+.op-radio[aria-disabled="true"] { color: var(--op-text-disabled); cursor: default; }
+/* Round exception (docs/foundations/principles.md): the circle is the universal sign of a single choice. */
+.op-radio-box { --sb-rx: calc((var(--op-du) * 5 - var(--sb-w)) / 2); display: grid; place-items: center; width: calc(var(--op-du) * 5); height: calc(var(--op-du) * 5); flex: none; border-radius: 50%; background-color: var(--op-surface); }
+.op-radio-box[data-state="selected"] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); }
+.op-radio-box[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-radio-dot { width: var(--op-dim-pad-content); height: var(--op-dim-pad-content); border-radius: 50%; background-color: var(--op-accent); transform: scale(0); transition: transform var(--op-motion-state-color) var(--op-ease-standard); }
+.op-radio[data-checked] .op-radio-dot { transform: scale(1); }
+.op-radio[aria-disabled="true"] .op-radio-dot { background-color: var(--op-text-disabled); }
+.op-radio[aria-disabled="true"] .op-radio-label { color: var(--op-text-disabled); }
+

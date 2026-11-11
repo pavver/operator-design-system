@@ -1,0 +1,21 @@
+.op-tooltip-anchor { display: inline-flex; }
+.op-tooltip {
+  position: fixed;
+  z-index: 60;
+  width: max-content;
+  padding: var(--op-dim-pad-tight) var(--op-dim-gutter);
+  /* Raised layer, like Menu: sunken fill, strong outline and a drop shadow separate it from the page. */
+  background-color: var(--op-surface-alt);
+  box-shadow:
+    inset 0 0 0 var(--op-dim-border) var(--op-border-strong),
+    0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
+  color: var(--op-text-primary);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  pointer-events: none;
+}
+

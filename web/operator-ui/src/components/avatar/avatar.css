@@ -1,0 +1,18 @@
+/* ------------------------------------------------------------------ */
+/* Avatar                                                              */
+/* ------------------------------------------------------------------ */
+.op-avatar { position: relative; display: inline-block; flex: none; border-radius: var(--op-avatar-radius); }
+.op-avatar-layer { position: absolute; inset: 0; border-radius: var(--op-avatar-radius); }
+.op-avatar-letter {
+  display: grid;
+  place-items: center;
+  background-color: color-mix(in srgb, var(--op-avatar-color) 15%, transparent);
+  color: var(--op-avatar-color);
+  font-weight: 700;
+  line-height: 1;
+}
+.op-avatar-center { display: grid; place-items: center; overflow: hidden; }
+.op-avatar-img { width: 100%; height: 100%; object-fit: cover; }
+.op-avatar-outline { box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); pointer-events: none; }
+.op-avatar-badge { position: absolute; right: calc(var(--op-dim-border) * -1); bottom: calc(var(--op-dim-border) * -1); display: flex; }
+

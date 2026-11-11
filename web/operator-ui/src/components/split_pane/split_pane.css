@@ -1,0 +1,18 @@
+/* ------------------------------------------------------------------ */
+/* SplitPane                                                           */
+/* ------------------------------------------------------------------ */
+.op-split { display: flex; width: 100%; height: 100%; min-height: 0; overflow: hidden; }
+.op-split[data-vertical] { flex-direction: column; }
+.op-split-pane { flex: 0 0 auto; min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.op-split-pane-end { flex: 1 1 0; }
+.op-split-handle { position: relative; flex: none; width: var(--op-dim-gutter); margin: 0 calc(var(--op-dim-pad-tight) * -0.5); z-index: 2; cursor: col-resize; touch-action: none; display: grid; place-items: center; }
+.op-split[data-vertical] > .op-split-handle { width: auto; height: var(--op-dim-gutter); margin: calc(var(--op-dim-pad-tight) * -0.5) 0; cursor: row-resize; }
+.op-split-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: var(--op-dim-border); transform: translateX(-50%); background-color: var(--op-border); transition: background-color var(--op-motion-state-color) var(--op-ease-standard), width var(--op-motion-state-color) var(--op-ease-standard); }
+.op-split[data-vertical] > .op-split-handle::before { top: 50%; bottom: auto; left: 0; right: 0; width: auto; height: var(--op-dim-border); transform: translateY(-50%); }
+.op-split-handle:hover::before, .op-split[data-dragging] > .op-split-handle::before, .op-split-handle:focus-visible::before { background-color: var(--op-accent); width: var(--op-dim-border-thick); }
+.op-split[data-vertical] > .op-split-handle:hover::before, .op-split[data-vertical][data-dragging] > .op-split-handle::before, .op-split[data-vertical] > .op-split-handle:focus-visible::before { width: auto; height: var(--op-dim-border-thick); }
+.op-root .op-split-handle:focus-visible { outline: none; }
+.op-split-grip { position: relative; width: var(--op-dim-pad-tight); height: var(--op-dim-icon-large); background: repeating-linear-gradient(180deg, var(--op-border-strong) 0 var(--op-dim-border), transparent var(--op-dim-border) var(--op-dim-gap-micro)); }
+.op-split[data-vertical] .op-split-grip { width: var(--op-dim-icon-large); height: var(--op-dim-pad-tight); background: repeating-linear-gradient(90deg, var(--op-border-strong) 0 var(--op-dim-border), transparent var(--op-dim-border) var(--op-dim-gap-micro)); }
+.op-split[data-dragging] { user-select: none; }
+

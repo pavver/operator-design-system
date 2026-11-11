@@ -15,7 +15,7 @@ Icons marked `custom = true` in [tokens/icons.toml](tokens/icons.toml) are origi
 
 ## Day/Night Toggle
 
-[ThemeToggle](web/operator-ui/src/theme_toggle.rs) is based on the [Day/Night Toggle](https://codepen.io/jh3y/pen/LYgjpYZ) by Jhey Tompkins.
+[ThemeToggle](web/operator-ui/src/components/theme_toggle/mod.rs) is based on the [Day/Night Toggle](https://codepen.io/jh3y/pen/LYgjpYZ) by Jhey Tompkins.
 The cloud outlines, colors, and easing are taken from that work, which is licensed under the MIT License.
 Copyright (c) Jhey Tompkins.
 The MIT License text is in [LICENSE-MIT](LICENSE-MIT).

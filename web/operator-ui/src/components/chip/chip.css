@@ -1,0 +1,22 @@
+/* ------------------------------------------------------------------ */
+/* Chip                                                                */
+/* ------------------------------------------------------------------ */
+.op-chip-set { display: flex; flex-wrap: wrap; align-items: center; }
+.op-chip {
+  display: inline-flex;
+  align-items: stretch;
+  height: var(--op-dim-row-dense);
+  background-color: var(--op-surface);
+  color: var(--op-text-primary);
+  font-size: var(--op-type-body-small-size);
+  line-height: var(--op-type-body-small-line);
+  vertical-align: middle;
+}
+.op-chip[data-state="pressed"] { background-color: var(--op-pressed); }
+.op-chip[data-selected] { background-color: var(--op-selection); color: var(--op-accent); }
+.op-chip[data-state="disabled"] { background-color: var(--op-disabled-surface); color: var(--op-text-disabled); }
+.op-chip-main { display: inline-flex; align-items: center; gap: var(--op-dim-pad-tight); padding: 0 var(--op-dim-gutter); white-space: nowrap; }
+.op-chip-check { display: inline-flex; }
+.op-chip-remove { display: grid; place-items: center; width: var(--op-dim-row-dense); margin-left: calc(var(--op-dim-pad-tight) * -1); color: var(--op-text-secondary); }
+.op-chip-remove:hover { color: var(--op-error); }
+

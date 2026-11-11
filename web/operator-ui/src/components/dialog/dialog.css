@@ -1,0 +1,13 @@
+/* ------------------------------------------------------------------ */
+/* Dialog (generic)                                                    */
+/* ------------------------------------------------------------------ */
+.op-dialog-generic { gap: 0; padding: 0; max-height: calc(100vh - var(--op-dim-margin-screen) * 2); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
+.op-root .op-dialog-generic:focus-visible { outline: none; }
+.op-dialog-head { display: flex; align-items: center; gap: var(--op-dim-gutter); padding: var(--op-dim-gutter) var(--op-dim-gutter) var(--op-dim-gutter) var(--op-dim-margin-screen); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
+.op-dialog-head .op-dialog-title { flex: 1; min-width: 0; font-size: var(--op-type-screen-title-size); line-height: var(--op-type-screen-title-line); }
+.op-dialog-body { flex: 1; }
+.op-menu-list { padding: var(--op-dim-pad-tight) 0; }
+.op-terminal-log { display: flex; flex-direction: column; gap: var(--op-dim-gap-micro); padding: var(--op-dim-gutter); }
+.op-dialog-content { padding: var(--op-dim-margin-screen); display: flex; flex-direction: column; gap: var(--op-dim-pad-card); }
+.op-dialog-generic .op-dialog-actions { padding: var(--op-dim-pad-card) var(--op-dim-margin-screen); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-divider); }
+

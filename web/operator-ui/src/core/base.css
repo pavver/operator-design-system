@@ -1,0 +1,54 @@
+/* Operator UI component styles for the web. Spatial values use DU tokens, text uses TU tokens. */
+
+/* ------------------------------------------------------------------ */
+/* Root                                                                */
+/* ------------------------------------------------------------------ */
+.op-root {
+  --op-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --op-ease-smooth: cubic-bezier(0.45, 0, 0.55, 1);
+  --op-ripple-alpha: 24%;
+  font-family: var(--op-font);
+  font-size: var(--op-type-body-size);
+  line-height: var(--op-type-body-line);
+  color: var(--op-text-primary);
+  background: var(--op-background);
+  -webkit-font-smoothing: antialiased;
+}
+.op-root[data-op-mode="light"] { --op-ripple-alpha: 16%; }
+.op-root *, .op-root *::before, .op-root *::after { box-sizing: border-box; }
+/* Fallback for scroll containers that are not a ScrollView (e.g. app content): thin square native bars. */
+.op-root, .op-root * { scrollbar-width: thin; scrollbar-color: var(--op-border-strong) transparent; }
+.op-root ::-webkit-scrollbar { width: var(--op-dim-pad-tight); height: var(--op-dim-pad-tight); }
+.op-root ::-webkit-scrollbar-thumb { background-color: var(--op-border-strong); }
+.op-root ::-webkit-scrollbar-track, .op-root ::-webkit-scrollbar-corner { background: transparent; }
+:where(.op-root button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+:where(.op-root button[aria-disabled="true"]) { cursor: default; }
+.op-root :focus-visible { outline: var(--op-dim-border-thick) solid var(--op-accent); outline-offset: var(--op-dim-gap-micro); }
+
+.op-t-app-title { font-size: var(--op-type-app-title-size); line-height: var(--op-type-app-title-line); font-weight: var(--op-type-app-title-weight); }
+.op-t-screen-title { font-size: var(--op-type-screen-title-size); line-height: var(--op-type-screen-title-line); font-weight: var(--op-type-screen-title-weight); }
+.op-t-section-title { font-size: var(--op-type-section-title-size); line-height: var(--op-type-section-title-line); font-weight: var(--op-type-section-title-weight); }
+.op-t-row-title { font-size: var(--op-type-row-title-size); line-height: var(--op-type-row-title-line); font-weight: var(--op-type-row-title-weight); }
+.op-t-body { font-size: var(--op-type-body-size); line-height: var(--op-type-body-line); font-weight: var(--op-type-body-weight); }
+.op-t-body-small { font-size: var(--op-type-body-small-size); line-height: var(--op-type-body-small-line); font-weight: var(--op-type-body-small-weight); }
+.op-t-caption { font-size: var(--op-type-caption-size); line-height: var(--op-type-caption-line); font-weight: var(--op-type-caption-weight); }
+.op-t-console { font-size: var(--op-type-console-size); line-height: var(--op-type-console-line); font-weight: var(--op-type-console-weight); }
+
+/* ------------------------------------------------------------------ */
+/* Shared tones for messages (Toast, Banner)                           */
+/* ------------------------------------------------------------------ */
+[data-tone="info"] { --tone: var(--op-info); }
+[data-tone="success"] { --tone: var(--op-success); }
+[data-tone="warning"] { --tone: var(--op-warning); }
+[data-tone="error"] { --tone: var(--op-error); }
+

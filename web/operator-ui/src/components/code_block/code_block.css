@@ -1,0 +1,15 @@
+/* ------------------------------------------------------------------ */
+/* CodeBlock                                                           */
+/* ------------------------------------------------------------------ */
+.op-code { width: 100%; background-color: var(--op-surface-alt); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
+.op-code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--op-dim-gutter); min-height: var(--op-dim-row-compact); padding: 0 var(--op-dim-pad-tight) 0 var(--op-dim-pad-card); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
+.op-code-lang { color: var(--op-text-secondary); font-size: var(--op-type-caption-size); text-transform: uppercase; letter-spacing: 0.04em; }
+.op-code-body { margin: 0; padding: var(--op-dim-pad-card); width: max-content; min-width: 100%; font: inherit; font-size: var(--op-type-console-size); line-height: var(--op-type-console-line); color: var(--op-text-primary); tab-size: 4; }
+.op-code-body code { display: flex; flex-direction: column; min-width: max-content; font: inherit; }
+.op-code[data-wrap] .op-code-body code { min-width: 0; }
+.op-code-line { display: flex; white-space: pre; }
+.op-code[data-wrap] .op-code-body { width: auto; }
+.op-code[data-wrap] .op-code-line { white-space: pre-wrap; overflow-wrap: anywhere; }
+.op-code-num { flex: none; width: calc(var(--op-du) * 8); padding-right: var(--op-dim-pad-card); text-align: right; color: var(--op-text-disabled); user-select: none; }
+.op-code-text { flex: 1; min-width: 0; }
+
