@@ -14,6 +14,27 @@ Status: **draft** on web.
 | Line numbers | `8 DU` column in `text_disabled`, end-aligned, not selectable. |
 | Height | Content height, or `max_height` and then scrolling. |
 
+## Syntax Highlighting
+
+The `language` property also selects the highlighter.
+Built-in languages: Rust (`rust`, `rs`), Kotlin (`kotlin`, `kt`, `kts`), TOML, JSON (`json`, `jsonc`), YAML (`yaml`, `yml`), and shell (`bash`, `sh`, `shell`, `zsh`, `console`).
+Any other language is shown without highlighting.
+
+| Token | Color |
+| :--- | :--- |
+| Keywords | `syntax_keyword` |
+| Strings and characters | `syntax_string` |
+| Numbers | `syntax_number` |
+| Comments | `syntax_comment`, italic |
+| Types and capitalized names | `syntax_type` |
+| Functions, macros, shell built-ins | `syntax_function` |
+| `true`, `false`, `null`, `ALL_CAPS` names | `syntax_constant` |
+| Keys of TOML, YAML, and JSON; shell variables | `syntax_property` |
+| Attributes, annotations, lifetimes, TOML tables, YAML anchors | `syntax_meta` |
+| Operators and brackets | `syntax_punctuation` |
+
+The built-in highlighter is a small line scanner, so it does not understand string templates, heredocs, or YAML block scalars.
+
 ## Behavior
 
 * Long lines scroll horizontally; with `wrap` they wrap and break anywhere.
@@ -26,7 +47,7 @@ Status: **draft** on web.
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `code` | string | required | Content. |
-| `language` | string | none | Header label. |
+| `language` | string | none | Header label and highlighter. |
 | `line_numbers` | bool | `false` | Numbers each line. |
 | `wrap` | bool | `false` | Wraps long lines. |
 | `copy` | bool | `true` | Shows the copy button. |

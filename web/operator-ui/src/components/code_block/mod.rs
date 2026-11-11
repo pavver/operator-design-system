@@ -3,16 +3,22 @@
 use crate::components::icon_button::IconButton;
 use crate::components::scrollbar::{ScrollAxis, ScrollView};
 use crate::core::copy_action;
+use crate::core::styled_text::line_view;
 use leptos::prelude::*;
 use operator_ui_tokens::{dim, icons};
+
+mod highlight;
+mod langs;
 
 pub(crate) const CSS: &str = include_str!("code_block.css");
 
 /// Monospaced block of code or logs with a copy button.
+///
+/// Known languages are highlighted: Rust, Kotlin, TOML, JSON, YAML, and shell.
 #[component]
 pub fn CodeBlock(
     #[prop(into)] code: Signal<String>,
-    /// Label in the header, for example `rust` or `toml`.
+    /// Label in the header, for example `rust` or `toml`; also selects the syntax highlighting.
     #[prop(optional, into)]
     language: Option<String>,
     #[prop(optional)] line_numbers: bool,
@@ -24,14 +30,8 @@ pub fn CodeBlock(
     #[prop(optional)]
     max_height: Option<f32>,
 ) -> impl IntoView {
-    let lines = move || {
-        code.with(|c| {
-            c.trim_end_matches('\n')
-                .split('\n')
-                .map(str::to_owned)
-                .collect::<Vec<_>>()
-        })
-    };
+    let lang = language.as_deref().and_then(highlight::find);
+    let lines = move || code.with(|c| highlight::highlight(c, lang));
     let has_head = language.is_some() || copy;
     view! {
         <div class="op-code" data-wrap=wrap.then_some("")>
@@ -66,7 +66,7 @@ pub fn CodeBlock(
                                 view! {
                                     <span class="op-code-line">
                                         {line_numbers.then(|| view! { <span class="op-code-num" aria-hidden="true">{(i + 1).to_string()}</span> })}
-                                        <span class="op-code-text">{line}</span>
+                                        <span class="op-code-text">{line_view(line)}</span>
                                     </span>
                                 }
                             })
