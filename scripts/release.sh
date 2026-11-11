@@ -33,6 +33,7 @@ cargo fmt --all -- --check
 cargo clippy -q -p operator-tokens -p operator-ui-tokens -- -D warnings
 cargo clippy -q --target wasm32-unknown-unknown -p operator-ui -p operator-ui-demo -- -D warnings
 scripts/check-features.sh
+cargo test -q -p operator-ui --lib --features full
 
 git add Cargo.toml Cargo.lock
 git commit -q -m "chore(release): v${version}"
