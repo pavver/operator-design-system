@@ -33,6 +33,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 :where(.op-root button[aria-disabled="true"]) { cursor: default; }
+/* Link mode of buttons: a real anchor that keeps the button look. */
+:where(.op-root a.op-sb) { text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:where(.op-root a.op-sb[aria-disabled="true"]) { cursor: default; }
 .op-root :focus-visible { outline: var(--op-dim-border-thick) solid var(--op-accent); outline-offset: var(--op-dim-gap-micro); }
 
 .op-t-app-title { font-size: var(--op-type-app-title-size); line-height: var(--op-type-app-title-line); font-weight: var(--op-type-app-title-weight); }

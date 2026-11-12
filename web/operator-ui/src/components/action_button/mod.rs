@@ -2,8 +2,8 @@
 
 use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, JobToken, PendingRun, Press, flash_icon, sleep_ms, spawn_ripple,
-    use_pending_indicator, use_state_visual,
+    AsyncAction, ControlState, JobToken, PendingRun, Press, flash_icon, link_state, sleep_ms,
+    spawn_ripple, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
@@ -12,6 +12,8 @@ use operator_ui_tokens::{Icon as IconData, dim, motion};
 pub(crate) const CSS: &str = include_str!("action_button.css");
 
 /// Asynchronous action button with a pending running border and a two-phase result flash.
+///
+/// With `href`, it renders a real link styled as a button and ignores the async props.
 #[component]
 pub fn ActionButton(
     #[prop(into)] text: Signal<String>,
@@ -26,9 +28,54 @@ pub fn ActionButton(
     #[prop(optional)]
     dangerous: bool,
     #[prop(optional, into)] on_click: Option<AsyncAction>,
+    /// Navigation target; switches the button to link mode.
+    #[prop(optional, into)]
+    href: Option<Signal<String>>,
+    /// Opens the link in a new tab (link mode only).
+    #[prop(optional)]
+    new_tab: bool,
     #[prop(optional, into)] class: String,
     #[prop(optional, into)] style: String,
 ) -> impl IntoView {
+    let label = move || {
+        view! {
+            <span class="op-btn-label">
+                {icon.map(|i| view! { <span class="op-btn-icon"><Icon icon=i size=dim::ICON_SMALL/></span> })}
+                <span>{move || text.get()}</span>
+            </span>
+        }
+    };
+
+    if let Some(href) = href {
+        let press = Press::new();
+        let current = link_state(enabled, press);
+        return view! {
+            <a
+                class=format!("op-sb op-sb-bg op-rippled op-btn {class}")
+                class:op-danger=dangerous
+                style=style
+                href=move || enabled.get().then(|| href.get())
+                target=new_tab.then_some("_blank")
+                rel=new_tab.then_some("noopener noreferrer")
+                role="link"
+                data-state=move || current.get().as_str()
+                aria-disabled=move || (!enabled.get()).then_some("true")
+                on:pointerdown=move |ev| {
+                    if enabled.get_untracked() {
+                        press.down();
+                        spawn_ripple(&ev);
+                    }
+                }
+                on:pointerup=move |_| press.up()
+                on:pointerleave=move |_| press.up()
+                on:pointercancel=move |_| press.up()
+            >
+                {label()}
+            </a>
+        }
+        .into_any();
+    }
+
     let local = RwSignal::new(ControlState::Idle);
     let show_flash = RwSignal::new(false);
     let job = JobToken::new();
@@ -105,15 +152,6 @@ pub fn ActionButton(
         });
     };
 
-    let label = move || {
-        view! {
-            <span class="op-btn-label">
-                {icon.map(|i| view! { <span class="op-btn-icon"><Icon icon=i size=dim::ICON_SMALL/></span> })}
-                <span>{move || text.get()}</span>
-            </span>
-        }
-    };
-
     view! {
         <button
             type="button"
@@ -158,4 +196,5 @@ pub fn ActionButton(
             <PendingRun/>
         </button>
     }
+    .into_any()
 }

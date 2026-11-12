@@ -38,6 +38,23 @@ Status: **reviewed** on web.
 * The result then fades out over `500 ms`.
 * `loading = true` forces `Pending` from outside, for example while a parent loads data.
 
+## Link Mode
+
+Setting `href` turns the button into a navigation link with the same look.
+Use it when the press opens a page or an external resource rather than running an action.
+
+* Only `Idle`, `Pressed`, and `Disabled` apply.
+  `state`, `loading`, `on_click`, and `on_async_click` are ignored.
+* `new_tab` opens the target in a new tab or window where the platform has that concept.
+* A disabled link keeps its look but does not navigate.
+
+### Platform Notes
+
+| Platform | Implementation |
+| :--- | :--- |
+| Web | A real `<a href>` element, so search engine crawlers follow it and middle-click, modifier clicks, and the link context menu work. `new_tab` adds `target="_blank"` and `rel="noopener noreferrer"`. A disabled link drops `href` and sets `aria-disabled`. |
+| Native toolkits | A regular button whose press opens the target through the platform URL handler, for example `open_url` in egui. |
+
 ## API
 
 | Property | Type | Default | Description |
@@ -51,3 +68,5 @@ Status: **reviewed** on web.
 | `loading` | bool | `false` | Forces `Pending`. |
 | `on_click` | callback | none | Synchronous action. |
 | `on_async_click` | async `() -> ActionResult` | none | Async action; takes precedence over `on_click`. |
+| `href` | string | none | Navigation target; enables link mode. |
+| `new_tab` | bool | `false` | Opens the link in a new tab (link mode only). |

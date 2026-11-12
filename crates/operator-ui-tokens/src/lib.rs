@@ -547,6 +547,13 @@ pub mod icons {
             "M479.79-192Q450-192 429-213.21t-21-51Q408-294 429.21-315t51-21Q510-336 531-314.79t21 51Q552-234 530.79-213t-51 21Zm0-216Q450-408 429-429.21t-21-51Q408-510 429.21-531t51-21Q510-552 531-530.79t21 51Q552-450 530.79-429t-51 21Zm0-216Q450-624 429-645.21t-21-51Q408-726 429.21-747t51-21Q510-768 531-746.79t21 51Q552-666 530.79-645t-51 21Z",
         ],
     };
+    pub const OPEN_IN_NEW: Icon = Icon {
+        name: "open_in_new",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M144-144v-672h336v72H216v528h528v-264h72v336H144Zm243-192-51-51 357-357H576v-72h240v240h-72v-117L387-336Z",
+        ],
+    };
     pub const REFRESH: Icon = Icon {
         name: "refresh",
         view_box: "0 -960 960 960",
@@ -626,6 +633,7 @@ pub mod icons {
         LIGHT_MODE,
         MENU,
         MORE_VERT,
+        OPEN_IN_NEW,
         REFRESH,
         REMOVE,
         SEARCH,

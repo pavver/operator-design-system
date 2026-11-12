@@ -45,6 +45,23 @@ A **dangerous** button uses `error` content on `error` at 15% when idle, and `er
 With `keep_flash_icon_on_success`, a success keeps the check icon for the whole `800 ms`.
 A dangerous button ignores clicks during its result phase.
 
+## Link Mode
+
+Setting `href` turns the button into a navigation link with the same look.
+Use it when the press opens a page or an external resource rather than running an action.
+
+* Only `Idle`, `Pressed`, and `Disabled` apply.
+  `state`, `on_click`, `show_pending_border`, and `keep_flash_icon_on_success` are ignored.
+* `new_tab` opens the target in a new tab or window where the platform has that concept.
+* A disabled link keeps its look but does not navigate.
+
+### Platform Notes
+
+| Platform | Implementation |
+| :--- | :--- |
+| Web | A real `<a href>` element, so search engine crawlers follow it and middle-click, modifier clicks, and the link context menu work. `new_tab` adds `target="_blank"` and `rel="noopener noreferrer"`. A disabled link drops `href` and sets `aria-disabled`. |
+| Native toolkits | A regular button whose press opens the target through the platform URL handler, for example `open_url` in egui. |
+
 ## API
 
 | Property | Type | Default |
@@ -57,3 +74,5 @@ A dangerous button ignores clicks during its result phase.
 | `keep_flash_icon_on_success` | bool | `false` |
 | `dangerous` | bool | `false` |
 | `on_click` | async `() -> ActionResult` | none |
+| `href` | string | none |
+| `new_tab` | bool | `false` |

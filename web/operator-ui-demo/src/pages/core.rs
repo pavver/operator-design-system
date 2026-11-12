@@ -34,6 +34,11 @@ pub fn action_button() -> AnyView {
                 <ActionButton text="Request a full device configuration export" on_click=b.action("export config") style="width: 100%"/>
             </div>
         </Example>
+        <Example title="Link mode" note="With href the button renders a real link: crawlers follow it, and middle-click, Ctrl+click, and the context menu work. Only Idle, Pressed, and Disabled apply.">
+            <ActionButton text="Open icon button" href="#/components/icon-button"/>
+            <ActionButton text="Source code" icon=icons::OPEN_IN_NEW href="https://github.com/pavver/operator-design-system" new_tab=true/>
+            <ActionButton text="Disabled link" href="#/components/icon-button" enabled=false/>
+        </Example>
     }
     .into_any()
 }
@@ -60,6 +65,11 @@ pub fn icon_button() -> AnyView {
             {STATES.into_iter().map(|(name, s)| view! { <Cell label=name><IconButton icon=icons::SEARCH label="Search" state=s/></Cell> }).collect_view()}
             <Cell label="Disabled"><IconButton icon=icons::SEARCH label="Search" enabled=false/></Cell>
             <Cell label="Loading"><IconButton icon=icons::SEARCH label="Search" loading=true/></Cell>
+        </Example>
+        <Example title="Link mode" note="With href the button renders a real link styled as an icon button.">
+            <IconButton icon=icons::OPEN_IN_NEW label="Source code" href="https://github.com/pavver/operator-design-system" new_tab=true/>
+            <IconButton icon=icons::SETTINGS label="Action button page" href="#/components/action-button"/>
+            <IconButton icon=icons::SETTINGS label="Disabled link" href="#/components/action-button" enabled=false/>
         </Example>
     }
     .into_any()

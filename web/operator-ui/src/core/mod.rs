@@ -267,6 +267,19 @@ impl Default for Press {
     }
 }
 
+/// Control state in link mode, where only `Idle`, `Pressed`, and `Disabled` apply.
+pub fn link_state(enabled: Signal<bool>, press: Press) -> Signal<ControlState> {
+    Signal::derive(move || {
+        if !enabled.get() {
+            ControlState::Disabled
+        } else if press.pressed.get() {
+            ControlState::Pressed
+        } else {
+            ControlState::Idle
+        }
+    })
+}
+
 /// Spawns a bounded ripple inside the event's current target (host must be `.op-rippled`).
 pub fn spawn_ripple(ev: &web_sys::PointerEvent) {
     let Some(host) = ev
