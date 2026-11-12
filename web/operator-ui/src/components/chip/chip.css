@@ -20,3 +20,32 @@
 .op-chip-remove { display: grid; place-items: center; width: var(--op-dim-row-dense); margin-left: calc(var(--op-dim-pad-tight) * -1); color: var(--op-text-secondary); }
 .op-chip-remove:hover { color: var(--op-error); }
 
+/* Colors: tinted background, colored text and outline; tones come from tokens, custom from --chip-c. */
+.op-chip[data-color="accent"] { --chip-c: var(--op-accent); }
+.op-chip[data-color="success"] { --chip-c: var(--op-success); }
+.op-chip[data-color="warning"] { --chip-c: var(--op-warning); }
+.op-chip[data-color="error"] { --chip-c: var(--op-error); }
+.op-chip[data-color="info"] { --chip-c: var(--op-info); }
+.op-chip[data-color] {
+  --chip-fg: var(--chip-c);
+  --sb-base: color-mix(in srgb, var(--chip-c) 55%, var(--op-surface));
+  background-color: color-mix(in srgb, var(--chip-c) 14%, var(--op-surface));
+  color: var(--chip-fg);
+}
+/* A custom color is not tuned per mode, so the text leans toward the primary text color. */
+.op-chip[data-color="custom"] { --chip-fg: color-mix(in oklab, var(--chip-c) 65%, var(--op-text-primary)); }
+.op-chip[data-color][data-state="pressed"] { background-color: color-mix(in srgb, var(--chip-c) 22%, var(--op-pressed)); }
+.op-chip[data-color][data-selected] {
+  --sb-base: var(--chip-fg);
+  --sb-base-w: calc(var(--sb-w) * 1.5);
+  background-color: color-mix(in srgb, var(--chip-c) 28%, var(--op-surface));
+  color: var(--chip-fg);
+}
+.op-chip[data-color] .op-chip-remove { color: var(--chip-fg); }
+.op-chip[data-color] .op-chip-remove:hover { color: var(--op-error); }
+.op-chip[data-color][data-state="disabled"] {
+  --sb-base: var(--op-disabled-border);
+  background-color: var(--op-disabled-surface);
+  color: var(--op-text-disabled);
+}
+

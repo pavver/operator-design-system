@@ -148,6 +148,7 @@ pub fn chip() -> AnyView {
     let online = RwSignal::new(true);
     let alarms = RwSignal::new(false);
     let indoor = RwSignal::new(false);
+    let colored_filter = RwSignal::new(true);
     let tags = RwSignal::new(vec![
         "perimeter".to_string(),
         "night".to_string(),
@@ -179,6 +180,25 @@ pub fn chip() -> AnyView {
                 <Chip text="H.265"/>
                 <Chip text="4K"/>
                 <Chip text="IR"/>
+            </ChipSet>
+        </Example>
+        <Example title="Tones">
+            <ChipSet>
+                <Chip text="Neutral"/>
+                <Chip text="Accent" color=ChipColor::Accent/>
+                <Chip text="Online" icon=icons::CHECK_CIRCLE color=ChipColor::Success/>
+                <Chip text="Degraded" icon=icons::WARNING color=ChipColor::Warning/>
+                <Chip text="Alarm" icon=icons::ERROR color=ChipColor::Error/>
+                <Chip text="Firmware 5.7" icon=icons::INFO color=ChipColor::Info/>
+            </ChipSet>
+        </Example>
+        <Example title="Custom colors" note="User tags with their own colors; the text stays readable in both modes.">
+            <ChipSet>
+                <Chip text="perimeter" color=ChipColor::Custom("#3FA7D6".into()) on_remove=Callback::new(|()| {})/>
+                <Chip text="night" color=ChipColor::Custom("#8E6CDB".into()) on_remove=Callback::new(|()| {})/>
+                <Chip text="parking" color=ChipColor::Custom("#E07AB3".into()) on_remove=Callback::new(|()| {})/>
+                <Chip text="yard" color=ChipColor::Custom("#2BB38A".into()) selected=colored_filter/>
+                <Chip text="archived" color=ChipColor::Custom("#3FA7D6".into()) enabled=false/>
             </ChipSet>
         </Example>
     }

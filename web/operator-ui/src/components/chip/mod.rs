@@ -7,6 +7,50 @@ use operator_ui_tokens::{Icon as IconData, dim, icons};
 
 pub(crate) const CSS: &str = include_str!("chip.css");
 
+/// Color of a [`Chip`].
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum ChipColor {
+    /// Surface background and primary text.
+    #[default]
+    Neutral,
+    Accent,
+    Success,
+    Warning,
+    Error,
+    Info,
+    /// Any CSS color, for user-defined tags, for example `"#3FA7D6"`.
+    /// The chip tints its background and mixes the text toward `text_primary` so it stays readable in both modes.
+    Custom(String),
+}
+
+impl ChipColor {
+    fn attr(&self) -> Option<&'static str> {
+        match self {
+            Self::Neutral => None,
+            Self::Accent => Some("accent"),
+            Self::Success => Some("success"),
+            Self::Warning => Some("warning"),
+            Self::Error => Some("error"),
+            Self::Info => Some("info"),
+            Self::Custom(_) => Some("custom"),
+        }
+    }
+
+    /// Inline style for a custom color; characters that could end the declaration are dropped.
+    fn style(&self) -> Option<String> {
+        match self {
+            Self::Custom(c) => {
+                let clean: String = c
+                    .chars()
+                    .filter(|ch| !matches!(ch, ';' | '{' | '}' | '<' | '>' | '"' | '\\'))
+                    .collect();
+                Some(format!("--chip-c: {clean}"))
+            }
+            _ => None,
+        }
+    }
+}
+
 /// Compact token: a toggleable filter, a removable value, or a static tag.
 #[component]
 pub fn Chip(
@@ -20,6 +64,9 @@ pub fn Chip(
     #[prop(optional, into)]
     on_remove: Option<Callback<()>>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
+    /// Tone or custom color.
+    #[prop(optional, into)]
+    color: Signal<ChipColor>,
 ) -> impl IntoView {
     let press = Press::new();
     let interactive = selected.is_some() || on_click.is_some();
@@ -93,6 +140,8 @@ pub fn Chip(
             data-result=move || visual.result.get()
             data-fading=move || visual.fading.get().then_some("")
             data-selected=move || is_selected().then_some("")
+            data-color=move || color.with(ChipColor::attr)
+            style=move || color.with(ChipColor::style)
         >
             {main}
             {on_remove
@@ -118,4 +167,23 @@ pub fn Chip(
 #[component]
 pub fn ChipSet(children: Children) -> impl IntoView {
     view! { <div class="op-chip-set" style:gap=du(dim::PAD_TIGHT)>{children()}</div> }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ChipColor;
+
+    #[test]
+    fn tones_map_to_attributes() {
+        assert_eq!(ChipColor::Neutral.attr(), None);
+        assert_eq!(ChipColor::Error.attr(), Some("error"));
+        assert_eq!(ChipColor::Custom("#fff".into()).attr(), Some("custom"));
+    }
+
+    #[test]
+    fn custom_style_drops_declaration_breakers() {
+        let style = ChipColor::Custom("red; background: url(x)".into()).style();
+        assert_eq!(style.as_deref(), Some("--chip-c: red background: url(x)"));
+        assert_eq!(ChipColor::Info.style(), None);
+    }
 }

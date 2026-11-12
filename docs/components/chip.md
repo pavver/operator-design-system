@@ -26,9 +26,24 @@ Status: **reviewed** on web.
 | Set | Chips wrap with `1 DU` gaps. |
 | Corners | `0 DU`. |
 
+## Colors
+
+| Color | Use |
+| :--- | :--- |
+| `Neutral` | Default: `surface` background, `text_primary`. |
+| `Accent`, `Success`, `Warning`, `Error`, `Info` | Status of the value, using the matching color token. |
+| `Custom(color)` | User-defined tags with their own CSS color. |
+
+* A colored chip has a background of 14% of the color over `surface`, text and icons in the color, and an outline of 55% of the color over `surface`.
+* A custom color is not tuned per mode, so its text is mixed 65% with `text_primary` to stay readable in dark and light mode.
+* Selected colored chip: 28% background and a `1.5×` outline in the text color.
+* Pressed colored chip: 22% of the color over `pressed`.
+* Disabled chips use the disabled colors whatever their color.
+* Color never carries meaning alone: tone chips also say it in the text or the icon.
+
 ## States
 
-* Selected: `selection` background, `accent` text, and the `Selected` border.
+* Selected: `selection` background, `accent` text, and the `Selected` border; colored chips follow [Colors](#colors).
 * Pressed: `pressed` background.
 * Disabled: disabled colors.
 * The remove button turns `error` on hover.
@@ -43,6 +58,7 @@ Status: **reviewed** on web.
 | `on_click` | callback | none | Makes an action chip. |
 | `on_remove` | callback | none | Adds the remove button. |
 | `enabled` | bool | `true` | Enables interaction. |
+| `color` | `ChipColor` | `Neutral` | Tone or custom color. |
 
 `ChipSet` lays chips out in wrapping rows.
 
