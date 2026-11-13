@@ -16,9 +16,17 @@ Status: **reviewed** on web.
 | Tile height | `row_control` (`12 DU`). |
 | Tile padding | `margin_screen` (`4 DU`) horizontally. |
 | Gap between tiles | `gutter` (`2 DU`). |
-| Icon | Optional, `icon_small` (`4 DU`) before the name, `gutter` (`2 DU`) gap. |
+| Icon | Optional, before the name with a `gutter` (`2 DU`) gap; size set by `icon_size`. |
 | Indicator box | `5 DU` square at the right edge, check `3 DU`. |
 | Corner radius | `0 DU`. |
+
+### Icon Sizes
+
+| Size | Value | Tile leading padding |
+| :--- | :--- | :--- |
+| `Small` | `icon_small` (`4 DU`) | `margin_screen` (`4 DU`) |
+| `Medium` | `icon_large` (`6 DU`) | `margin_screen` (`4 DU`) |
+| `Large` | Tile height minus `pad_tight` on each side (`10 DU`) | `pad_tight` (`1 DU`), so the icon sits at an equal inset on three sides |
 
 ## States
 
@@ -44,3 +52,4 @@ Status: **reviewed** on web.
 | `items` | list of `GroupItem { id, name, icon? }` | The options; `icon` is an optional leading icon. |
 | `selected` | list of ids | The confirmed selection. |
 | `on_change` | async `((id, bool)) -> ActionResult` | Called with the item id and the requested value. |
+| `icon_size` | `Small`, `Medium`, `Large` | Size of the item icons; `Small` by default. |

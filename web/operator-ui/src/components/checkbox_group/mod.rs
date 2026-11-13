@@ -38,10 +38,44 @@ impl GroupItem {
     }
 }
 
+/// Size of the leading item icons in a [`CheckboxGroup`].
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum GroupIconSize {
+    /// `icon_small` (`4 DU`).
+    #[default]
+    Small,
+    /// `icon_large` (`6 DU`).
+    Medium,
+    /// Tile height minus `pad_tight` on each side (`10 DU`).
+    Large,
+}
+
+impl GroupIconSize {
+    /// Icon size in DU.
+    pub fn du(self) -> f32 {
+        match self {
+            Self::Small => dim::ICON_SMALL,
+            Self::Medium => dim::ICON_LARGE,
+            Self::Large => dim::ROW_CONTROL - 2.0 * dim::PAD_TIGHT,
+        }
+    }
+
+    const fn as_str(self) -> &'static str {
+        match self {
+            Self::Small => "small",
+            Self::Medium => "medium",
+            Self::Large => "large",
+        }
+    }
+}
+
 /// Vertical group of full-width checkbox tiles; each tile runs its own async request.
 #[component]
 pub fn CheckboxGroup(
     items: Vec<GroupItem>,
+    /// Size of the leading item icons.
+    #[prop(optional)]
+    icon_size: GroupIconSize,
     #[prop(into)] selected: Signal<Vec<String>>,
     /// Called with `(id, target_checked)`; the parent updates `selected` on success.
     #[prop(into)]
@@ -124,7 +158,7 @@ pub fn CheckboxGroup(
                         }
                     }
                 >
-                    {item.icon.map(|i| view! { <span class="op-group-icon"><Icon icon=i size=dim::ICON_SMALL/></span> })}
+                    {item.icon.map(|i| view! { <span class="op-group-icon"><Icon icon=i size=icon_size.du()/></span> })}
                     <span class="op-group-name">{item.name}</span>
                     <span class="op-group-box" data-checked=move || is_selected.get().then_some("")>
                         <span
@@ -150,5 +184,5 @@ pub fn CheckboxGroup(
         })
         .collect_view();
 
-    view! { <div class="op-group">{tiles}</div> }
+    view! { <div class="op-group" data-icon-size=icon_size.as_str()>{tiles}</div> }
 }

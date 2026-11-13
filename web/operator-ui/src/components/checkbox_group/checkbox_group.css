@@ -19,6 +19,8 @@
 .op-group-tile[data-state="pressed"] { background-color: var(--op-pressed); }
 .op-group-icon { display: inline-flex; flex: none; color: var(--op-icon); transition: color var(--op-motion-state-color) var(--op-ease-standard); }
 .op-group-tile[data-checked] .op-group-icon { color: var(--op-accent); }
+/* A large icon fills the tile height minus pad_tight, so the leading inset matches it. */
+.op-group[data-icon-size="large"] .op-group-tile:has(.op-group-icon) { padding-left: var(--op-dim-pad-tight); }
 .op-group-name { flex: 1; min-width: 0; }
 .op-group-box {
   width: calc(var(--op-du) * 5);
