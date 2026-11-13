@@ -1,15 +1,15 @@
 /* ------------------------------------------------------------------ */
 /* CheckboxGroup                                                       */
 /* ------------------------------------------------------------------ */
-.op-group { display: flex; flex-direction: column; gap: var(--op-dim-gutter); width: 100%; }
+.op-group { display: flex; flex-direction: column; gap: var(--op-dim-pad-tight); width: 100%; }
 .op-group-tile {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--op-dim-gutter);
   width: 100%;
-  height: var(--op-dim-row-control);
-  padding: 0 var(--op-dim-margin-screen);
+  height: var(--op-dim-row-standard);
+  padding: 0 var(--op-dim-pad-card);
   background-color: var(--op-surface);
   color: var(--op-text-primary);
   font-weight: 500;
@@ -23,8 +23,8 @@
 .op-group[data-icon-size="large"] .op-group-tile:has(.op-group-icon) { padding-left: var(--op-dim-pad-tight); }
 .op-group-name { flex: 1; min-width: 0; }
 .op-group-box {
-  width: calc(var(--op-du) * 5);
-  height: calc(var(--op-du) * 5);
+  width: var(--op-dim-icon-small);
+  height: var(--op-dim-icon-small);
   display: grid;
   place-items: center;
   flex: none;
