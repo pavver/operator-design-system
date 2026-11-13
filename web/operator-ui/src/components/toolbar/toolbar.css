@@ -9,14 +9,16 @@
   padding: 0 var(--op-dim-pad-tight);
   background-color: var(--op-surface);
   box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-border);
-  overflow-x: auto;
-  scrollbar-width: none;
+  overflow: hidden;
 }
 .op-toolbar[data-dense] { min-height: var(--op-dim-row-compact); gap: var(--op-dim-gap-micro); }
 .op-toolbar > * { flex: none; }
+/* The command row takes the free space; commands that do not fit move to the overflow menu. */
+.op-toolbar > .op-toolbar-row { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: inherit; overflow: hidden; }
+.op-toolbar-item, .op-toolbar-more { display: flex; align-items: center; flex: none; }
+.op-toolbar-item[hidden], .op-toolbar-more[hidden] { display: none; }
 .op-toolbar-title { padding: 0 var(--op-dim-pad-tight); font-weight: 500; white-space: nowrap; }
 .op-toolbar-sep { align-self: center; width: var(--op-dim-border); height: var(--op-dim-icon-large); margin: 0 var(--op-dim-pad-tight); background-color: var(--op-divider); }
-.op-toolbar-spacer { flex: 1 1 auto; min-width: var(--op-dim-gutter); }
+.op-toolbar-end { display: flex; align-items: center; gap: inherit; }
 .op-toolbar .op-btn { height: var(--op-dim-row-compact); padding: 0 var(--op-dim-pad-card); }
 .op-toolbar .op-field { height: var(--op-dim-row-compact); }
-

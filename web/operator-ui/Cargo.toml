@@ -119,6 +119,6 @@ text-area = ["scrollbar", "tooltip"]
 text-field = ["action-button", "primitives"]
 theme-toggle = []
 toast = ["primitives"]
-toolbar = []
+toolbar = ["icon-button", "menu", "tooltip"]
 tooltip = []
 
