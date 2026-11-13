@@ -8,8 +8,8 @@
   justify-content: space-between;
   gap: var(--op-dim-gutter);
   width: 100%;
-  height: var(--op-dim-row-standard);
-  padding: 0 var(--op-dim-pad-card);
+  height: var(--op-dim-row-control);
+  padding: 0 var(--op-dim-gutter);
   background-color: var(--op-surface);
   color: var(--op-text-primary);
   font-weight: 500;
@@ -23,8 +23,8 @@
 .op-group[data-icon-size="large"] .op-group-tile:has(.op-group-icon) { padding-left: var(--op-dim-pad-tight); }
 .op-group-name { flex: 1; min-width: 0; }
 .op-group-box {
-  width: var(--op-dim-icon-small);
-  height: var(--op-dim-icon-small);
+  width: var(--op-dim-icon-large);
+  height: var(--op-dim-icon-large);
   display: grid;
   place-items: center;
   flex: none;

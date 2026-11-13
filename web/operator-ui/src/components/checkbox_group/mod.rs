@@ -46,7 +46,7 @@ pub enum GroupIconSize {
     Small,
     /// `icon_large` (`6 DU`).
     Medium,
-    /// Tile height minus `pad_tight` on each side (`8 DU`).
+    /// Tile height minus `pad_tight` on each side (`10 DU`).
     Large,
 }
 
@@ -56,7 +56,7 @@ impl GroupIconSize {
         match self {
             Self::Small => dim::ICON_SMALL,
             Self::Medium => dim::ICON_LARGE,
-            Self::Large => dim::ROW_STANDARD - 2.0 * dim::PAD_TIGHT,
+            Self::Large => dim::ROW_CONTROL - 2.0 * dim::PAD_TIGHT,
         }
     }
 
@@ -169,9 +169,9 @@ pub fn CheckboxGroup(
                         >
                             {move || {
                                 if show_spinner.get() {
-                                    view! { <PendingIndicator size=3.0/> }.into_any()
+                                    view! { <PendingIndicator size=dim::ICON_SMALL/> }.into_any()
                                 } else if is_selected.get() {
-                                    view! { <Icon icon=icons::CHECK size=3.0/> }.into_any()
+                                    view! { <Icon icon=icons::CHECK size=dim::ICON_SMALL/> }.into_any()
                                 } else {
                                     ().into_any()
                                 }
