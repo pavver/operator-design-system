@@ -15,7 +15,7 @@ Status: **reviewed** on web.
 | Width | Fills the parent. |
 | Tile height | `row_control` (`12 DU`). |
 | Tile padding | `gutter` (`2 DU`) horizontally. |
-| Gap between tiles | `pad_tight` (`1 DU`). |
+| Gap between tiles | `0.75 DU`. |
 | Icon | Optional, before the name with a `gutter` (`2 DU`) gap; size set by `icon_size`. |
 | Indicator box | `icon_large` (`6 DU`) square at the right edge, check and spinner `icon_small` (`4 DU`). |
 | Corner radius | `0 DU`. |

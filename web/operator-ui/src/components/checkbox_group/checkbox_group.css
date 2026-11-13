@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* CheckboxGroup                                                       */
 /* ------------------------------------------------------------------ */
-.op-group { display: flex; flex-direction: column; gap: var(--op-dim-pad-tight); width: 100%; }
+.op-group { display: flex; flex-direction: column; gap: calc(var(--op-du) * 0.75); width: 100%; }
 .op-group-tile {
   display: flex;
   align-items: center;
