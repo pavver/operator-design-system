@@ -7,7 +7,7 @@ use crate::core::{
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{icons, motion};
+use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
 use std::collections::HashMap;
 
 pub(crate) const CSS: &str = include_str!("checkbox_group.css");
@@ -17,6 +17,8 @@ pub(crate) const CSS: &str = include_str!("checkbox_group.css");
 pub struct GroupItem {
     pub id: String,
     pub name: String,
+    /// Optional leading icon, shown by [`CheckboxGroup`].
+    pub icon: Option<IconData>,
 }
 
 impl GroupItem {
@@ -24,7 +26,15 @@ impl GroupItem {
         Self {
             id: id.into(),
             name: name.into(),
+            icon: None,
         }
+    }
+
+    /// Adds a leading icon.
+    #[must_use]
+    pub fn with_icon(mut self, icon: IconData) -> Self {
+        self.icon = Some(icon);
+        self
     }
 }
 
@@ -114,6 +124,7 @@ pub fn CheckboxGroup(
                         }
                     }
                 >
+                    {item.icon.map(|i| view! { <span class="op-group-icon"><Icon icon=i size=dim::ICON_SMALL/></span> })}
                     <span class="op-group-name">{item.name}</span>
                     <span class="op-group-box" data-checked=move || is_selected.get().then_some("")>
                         <span

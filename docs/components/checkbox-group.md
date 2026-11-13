@@ -16,6 +16,7 @@ Status: **reviewed** on web.
 | Tile height | `row_control` (`12 DU`). |
 | Tile padding | `margin_screen` (`4 DU`) horizontally. |
 | Gap between tiles | `gutter` (`2 DU`). |
+| Icon | Optional, `icon_small` (`4 DU`) before the name, `gutter` (`2 DU`) gap. |
 | Indicator box | `5 DU` square at the right edge, check `3 DU`. |
 | Corner radius | `0 DU`. |
 
@@ -23,8 +24,8 @@ Status: **reviewed** on web.
 
 | Tile | Background | Text | Outline | Indicator |
 | :--- | :--- | :--- | :--- | :--- |
-| Unselected | `surface` | `text_primary`, 500 | `border` | Empty box with `border` outline |
-| Selected | `accent` at 15% | `accent`, 700 | `accent` at 1.5x | `accent` box with `accent` check |
+| Unselected | `surface` | `text_primary`, 500; icon in `icon` | `border` | Empty box with `border` outline |
+| Selected | `accent` at 15% | `accent`, 700; icon in `accent` | `accent` at 1.5x | `accent` box with `accent` check |
 | Pressed | `pressed` | — | `border_strong` | — |
 | `Pending` | — | — | Running segment | the [delayed spinner](../foundations/states.md#delayed-spinner) |
 | `Success` / `Error` | — | — | Pulsing result outline | Check in the result color |
@@ -40,6 +41,6 @@ Status: **reviewed** on web.
 
 | Property | Type | Description |
 | :--- | :--- | :--- |
-| `items` | list of `GroupItem { id, name }` | The options. |
+| `items` | list of `GroupItem { id, name, icon? }` | The options; `icon` is an optional leading icon. |
 | `selected` | list of ids | The confirmed selection. |
 | `on_change` | async `((id, bool)) -> ActionResult` | Called with the item id and the requested value. |

@@ -17,6 +17,8 @@
 }
 .op-group-tile[data-checked] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); color: var(--op-accent); font-weight: 700; }
 .op-group-tile[data-state="pressed"] { background-color: var(--op-pressed); }
+.op-group-icon { display: inline-flex; flex: none; color: var(--op-icon); transition: color var(--op-motion-state-color) var(--op-ease-standard); }
+.op-group-tile[data-checked] .op-group-icon { color: var(--op-accent); }
 .op-group-name { flex: 1; min-width: 0; }
 .op-group-box {
   width: calc(var(--op-du) * 5);
