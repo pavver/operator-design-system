@@ -66,6 +66,7 @@ const NAV: &[(&str, &[&str])] = &[
             "components/search-field",
             "components/dropdown-menu",
             "components/combobox",
+            "components/value-fields",
         ],
     ),
     (

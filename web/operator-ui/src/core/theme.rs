@@ -113,6 +113,14 @@ fn stylesheet() -> &'static str {
             crate::components::popover::CSS,
             #[cfg(feature = "hover-card")]
             crate::components::hover_card::CSS,
+            #[cfg(any(
+                feature = "number-field",
+                feature = "duration-field",
+                feature = "time-field",
+                feature = "date-time-field",
+                feature = "color-field"
+            ))]
+            crate::components::value_field::CSS,
             #[cfg(feature = "virtual-list")]
             crate::components::virtual_list::CSS,
             HOVER_CSS,

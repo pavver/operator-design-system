@@ -1,0 +1,78 @@
+/* ------------------------------------------------------------------ */
+/* Value fields: NumberField, DurationField, TimeField, DateTimeField, */
+/* ColorField, Calendar                                                */
+/* ------------------------------------------------------------------ */
+.op-value-anchor { display: block; width: 100%; }
+.op-value-field .op-field-input { font-variant-numeric: tabular-nums; }
+.op-value-unit {
+  flex: none;
+  padding: 0 var(--op-dim-pad-card) 0 var(--op-dim-pad-tight);
+  color: var(--op-text-secondary);
+  font-size: var(--op-type-body-size);
+}
+.op-value-popup {
+  background-color: var(--op-surface);
+  box-shadow:
+    inset 0 0 0 var(--op-dim-border) var(--op-border-strong),
+    0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
+}
+
+.op-calendar { display: flex; flex-direction: column; padding: var(--op-dim-pad-tight); }
+.op-calendar-head { display: flex; align-items: center; height: var(--op-dim-row-compact); }
+.op-calendar-title { flex: 1; text-align: center; font-weight: 700; color: var(--op-text-primary); }
+.op-calendar-nav, .op-calendar-day {
+  display: grid;
+  place-items: center;
+  width: var(--op-dim-row-compact);
+  height: var(--op-dim-row-compact);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--op-text-primary);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-calendar-nav { color: var(--op-text-secondary); }
+.op-calendar-nav:hover, .op-calendar-day:hover { background-color: var(--op-pressed); }
+.op-calendar-grid { display: grid; grid-template-columns: repeat(7, var(--op-dim-row-compact)); }
+.op-calendar-weekday {
+  display: grid;
+  place-items: center;
+  height: var(--op-dim-row-dense);
+  color: var(--op-text-secondary);
+}
+.op-calendar-day[data-today] { box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-accent); }
+.op-calendar-day[aria-selected="true"] { background-color: var(--op-accent); color: var(--op-on-accent); }
+
+.op-color-trigger { display: flex; gap: var(--op-dim-pad-tight); width: auto; padding: 0 var(--op-dim-pad-tight); }
+.op-color-preview {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border-strong);
+}
+.op-color-popup { display: flex; flex-direction: column; gap: var(--op-dim-pad-tight); padding: var(--op-dim-pad-tight); }
+.op-color-swatches { display: grid; grid-template-columns: repeat(8, var(--op-dim-row-compact)); }
+.op-color-swatches:empty { display: none; }
+.op-color-swatch {
+  width: var(--op-dim-row-compact);
+  height: var(--op-dim-row-compact);
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 var(--op-dim-border) rgb(0 0 0 / 25%);
+}
+.op-color-swatch:hover { box-shadow: inset 0 0 0 var(--op-dim-border-emphasis) var(--op-border-strong); }
+.op-color-swatch[aria-selected="true"] { box-shadow: inset 0 0 0 var(--op-dim-border-emphasis) var(--op-accent); }
+.op-color-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--op-dim-pad-tight);
+  height: var(--op-dim-row-compact);
+  padding: 0 var(--op-dim-pad-tight);
+  color: var(--op-text-primary);
+  cursor: pointer;
+}
+.op-color-custom:hover { background-color: var(--op-pressed); }
+.op-color-custom input { width: calc(var(--op-du) * 5); height: calc(var(--op-du) * 5); padding: 0; border: 0; background: none; cursor: pointer; }

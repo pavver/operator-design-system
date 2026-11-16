@@ -48,6 +48,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/search-field" => (inputs::search_field, false),
         "components/radio-group" => (inputs::radio_group, true),
         "components/combobox" => (inputs::combobox, false),
+        "components/value-fields" => (inputs::value_fields, false),
         "components/chip" => (inputs::chip, false),
         "components/menu" => (navigation::menu, false),
         "components/hover-card" => (feedback::hover_card, false),

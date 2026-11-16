@@ -92,5 +92,13 @@ pub mod toast;
 pub mod toolbar;
 #[cfg(feature = "tooltip")]
 pub mod tooltip;
+#[cfg(any(
+    feature = "number-field",
+    feature = "duration-field",
+    feature = "time-field",
+    feature = "date-time-field",
+    feature = "color-field"
+))]
+pub mod value_field;
 #[cfg(feature = "virtual-list")]
 pub mod virtual_list;

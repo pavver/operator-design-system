@@ -103,6 +103,24 @@ pub mod prelude {
     pub use crate::components::toolbar::*;
     #[cfg(feature = "tooltip")]
     pub use crate::components::tooltip::*;
+    #[cfg(feature = "color-field")]
+    pub use crate::components::value_field::ColorField;
+    #[cfg(feature = "duration-field")]
+    pub use crate::components::value_field::DurationField;
+    #[cfg(feature = "number-field")]
+    pub use crate::components::value_field::NumberField;
+    #[cfg(feature = "time-field")]
+    pub use crate::components::value_field::TimeField;
+    #[cfg(feature = "date-time-field")]
+    pub use crate::components::value_field::{Calendar, DateTimeField};
+    #[cfg(any(
+        feature = "number-field",
+        feature = "duration-field",
+        feature = "time-field",
+        feature = "date-time-field",
+        feature = "color-field"
+    ))]
+    pub use crate::components::value_field::{ParsedField, parse::LocalDateTime};
     #[cfg(feature = "virtual-list")]
     pub use crate::components::virtual_list::*;
     pub use crate::core::theme::{OperatorTheme, Theme, ThemeRoot};

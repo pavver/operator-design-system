@@ -62,6 +62,11 @@ reviewed = [
 ]
 
 draft = [
+    "color-field",
+    "date-time-field",
+    "duration-field",
+    "number-field",
+    "time-field",
     "hover-card",
     "marquee-text",
     "menu",
@@ -87,12 +92,15 @@ checkbox = ["primitives"]
 checkbox-group = ["primitives"]
 chip = ["primitives"]
 code-block = ["icon-button", "scrollbar"]
+color-field = ["popover", "primitives"]
 combobox = ["dropdown-menu", "popover", "primitives", "scrollbar", "virtual-list"]
 confirm-dialog = ["dialog"]
 console-terminal = ["scrollbar"]
 counter = []
 data-table = ["linear-progress", "primitives", "scrollbar"]
 dialog = ["action-button", "icon-button", "scrollbar"]
+date-time-field = ["popover", "primitives"]
+duration-field = []
 dropdown-menu = ["popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
 header = ["avatar", "primitives", "status-badge"]
@@ -103,6 +111,7 @@ linear-progress = []
 list-item = []
 marquee-text = ["tooltip"]
 menu = ["icon-button", "popover", "primitives", "scrollbar"]
+number-field = []
 pagination = ["icon-button"]
 popover = []
 primitives = []
@@ -125,6 +134,7 @@ text-field = ["action-button", "primitives"]
 theme-toggle = []
 toast = ["primitives"]
 toolbar = ["icon-button", "menu", "tooltip"]
+time-field = []
 tooltip = ["popover"]
 virtual-list = ["scrollbar"]
 
