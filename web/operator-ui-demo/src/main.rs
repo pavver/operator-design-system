@@ -118,6 +118,7 @@ const NAV: &[(&str, &[&str])] = &[
             "components/split-pane",
             "components/scroll-area",
             "components/scrollbar",
+            "components/virtual-list",
         ],
     ),
 ];

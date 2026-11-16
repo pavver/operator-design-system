@@ -64,6 +64,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/split-pane" => (layout::split_pane, false),
         "components/scroll-area" => (layout::scroll_area, false),
         "components/scrollbar" => (layout::scrollbar, false),
+        "components/virtual-list" => (layout::virtual_list, false),
         _ => return None,
     };
     Some(entry)

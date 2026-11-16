@@ -99,6 +99,8 @@ pub mod prelude {
     pub use crate::components::toolbar::*;
     #[cfg(feature = "tooltip")]
     pub use crate::components::tooltip::*;
+    #[cfg(feature = "virtual-list")]
+    pub use crate::components::virtual_list::*;
     pub use crate::core::theme::{OperatorTheme, Theme, ThemeRoot};
     pub use crate::core::{
         ActionResult, AsyncAction, ControlState, du, sleep_ms, tu, use_pending_indicator,

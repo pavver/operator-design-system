@@ -121,6 +121,10 @@ pub fn combobox() -> AnyView {
     let camera = RwSignal::new("Gate North".to_string());
     let tag = RwSignal::new(String::new());
     let options: Vec<String> = CAMERAS.iter().map(|s| (*s).to_string()).collect();
+    let entity = RwSignal::new(String::new());
+    let entities: Vec<String> = (1..=20_000)
+        .map(|i| format!("sensor.probe_{i:05}"))
+        .collect();
     view! {
         <Example title="Pick from a list" note="Type to filter, use the arrow keys and Enter. Unknown text reverts on blur." block=true>
             <div class="demo-grid-2">
@@ -139,6 +143,9 @@ pub fn combobox() -> AnyView {
                 />
             </div>
             <span class="op-t-caption demo-muted">{move || format!("Selected camera: {}", camera.get())}</span>
+        </Example>
+        <Example title="Large list" note="20 000 options; the list renders only the visible window." block=true>
+            <Combobox label="Entity" options=entities selected=entity placeholder="sensor.probe_…"/>
         </Example>
     }
     .into_any()

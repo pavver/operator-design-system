@@ -109,6 +109,8 @@ fn stylesheet() -> &'static str {
             crate::components::scroll_area::CSS,
             #[cfg(feature = "scrollbar")]
             crate::components::scrollbar::CSS,
+            #[cfg(feature = "virtual-list")]
+            crate::components::virtual_list::CSS,
             HOVER_CSS,
         ]
         .concat()

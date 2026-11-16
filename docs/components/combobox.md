@@ -3,7 +3,7 @@
 Text input with a filtered list of suggestions.
 It is a [DropdownMenu](dropdown-menu.md) that can be searched by typing.
 
-Status: **reviewed** on web.
+Status: **draft** on web.
 
 ## Use
 
@@ -31,6 +31,7 @@ Status: **reviewed** on web.
 * Leaving the field commits typed text that exactly matches an option.
   Other text is committed only with `allow_custom`; otherwise the field reverts to the committed value.
 * With no matches the list shows "No matches", or "Press Enter to use this value" with `allow_custom`.
+* The suggestion list is a [VirtualList](virtual-list.md): only the visible options are rendered, so lists with thousands of options stay fast.
 
 ## API
 

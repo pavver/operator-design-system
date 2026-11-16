@@ -1,10 +1,11 @@
 //! Text input with suggestions: Combobox.
 
+use crate::components::dropdown_menu::MENU_MAX_HEIGHT;
 use crate::components::primitives::Icon;
-use crate::components::scrollbar::ScrollView;
+use crate::components::virtual_list::{VirtualList, VirtualListHandle};
 use crate::core::{PendingRun, field_state, use_state_visual};
 use leptos::prelude::*;
-use operator_ui_tokens::icons;
+use operator_ui_tokens::{dim, icons};
 
 pub(crate) const CSS: &str = include_str!("combobox.css");
 
@@ -38,7 +39,7 @@ pub fn Combobox(
 
     // The list shows every option when it opens; typing switches it to filtering.
     let filtering = RwSignal::new(false);
-    let list_ref = NodeRef::<leptos::html::Div>::new();
+    let list = VirtualListHandle::new(dim::ROW_CONTROL);
 
     let filtered = Memo::new(move |_| {
         let q = if filtering.get() {
@@ -55,37 +56,7 @@ pub fn Combobox(
     });
 
     // Scrolls the list so the active option is visible; `center` places it in the middle.
-    let reveal_active = move |center: bool| {
-        request_animation_frame(move || {
-            let Some(view) = list_ref.get_untracked() else {
-                return;
-            };
-            let Some(item) = view
-                .query_selector(".op-dropdown-item[data-active]")
-                .ok()
-                .flatten()
-            else {
-                return;
-            };
-            let v = view.get_bounding_client_rect();
-            let r = item.get_bounding_client_rect();
-            let top = r.top() - v.top() + f64::from(view.scroll_top());
-            let bottom = top + r.height();
-            let height = f64::from(view.client_height());
-            let current = f64::from(view.scroll_top());
-            let next = if center {
-                top - (height - r.height()) / 2.0
-            } else if top < current {
-                top
-            } else if bottom > current + height {
-                bottom - height
-            } else {
-                return;
-            };
-            #[allow(clippy::cast_possible_truncation)]
-            view.set_scroll_top(next.max(0.0).round() as i32);
-        });
-    };
+    let reveal_active = move |center: bool| list.reveal(active.get_untracked(), center);
 
     // Opens the full list with the selected option active, or else the first option matching the text.
     let open_list = move || {
@@ -135,121 +106,128 @@ pub fn Combobox(
     };
 
     view! {
-            <div class="op-dropdown op-combobox">
-                {label.clone().map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
-                <div class="op-dropdown-anchor">
-                    <div
-                        class="op-sb op-field"
-                        data-state=move || visual.state.get()
-                        data-result=move || visual.result.get()
-                        data-fading=move || visual.fading.get().then_some("")
-                        data-trailing=""
-                    >
-                        <input
-                            class="op-field-input"
-                            role="combobox"
-                            aria-label=label
-                            aria-expanded=move || open.get().to_string()
-                            aria-autocomplete="list"
-                            placeholder=move || placeholder.get()
-                            prop:value=move || query.get()
-                            disabled=move || !enabled.get()
-                            on:input=move |ev| {
-                                query.set(event_target_value(&ev));
-                                filtering.set(true);
-                                active.set(0);
-                                open.set(true);
-                                reveal_active(false);
-                            }
-                            on:focus=move |_| {
-                                focused.set(true);
-                                open_list();
-                            }
-                            on:click=move |_| open_list()
-                            on:blur=move |_| {
-                                focused.set(false);
-                                settle();
-                            }
-                            on:keydown=move |ev| {
-                                let n = filtered.with_untracked(Vec::len);
-                                match ev.key().as_str() {
-                                    "ArrowDown" => {
-                                        ev.prevent_default();
-                                        if !open.get_untracked() {
-                                            open_list();
-                                        } else if n > 0 {
-                                            active.update(|a| *a = (*a + 1) % n);
-                                            reveal_active(false);
-                                        }
+        <div class="op-dropdown op-combobox">
+            {label.clone().map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
+            <div class="op-dropdown-anchor">
+                <div
+                    class="op-sb op-field"
+                    data-state=move || visual.state.get()
+                    data-result=move || visual.result.get()
+                    data-fading=move || visual.fading.get().then_some("")
+                    data-trailing=""
+                >
+                    <input
+                        class="op-field-input"
+                        role="combobox"
+                        aria-label=label
+                        aria-expanded=move || open.get().to_string()
+                        aria-autocomplete="list"
+                        placeholder=move || placeholder.get()
+                        prop:value=move || query.get()
+                        disabled=move || !enabled.get()
+                        on:input=move |ev| {
+                            query.set(event_target_value(&ev));
+                            filtering.set(true);
+                            active.set(0);
+                            open.set(true);
+                            reveal_active(false);
+                        }
+                        on:focus=move |_| {
+                            focused.set(true);
+                            open_list();
+                        }
+                        on:click=move |_| open_list()
+                        on:blur=move |_| {
+                            focused.set(false);
+                            settle();
+                        }
+                        on:keydown=move |ev| {
+                            let n = filtered.with_untracked(Vec::len);
+                            match ev.key().as_str() {
+                                "ArrowDown" => {
+                                    ev.prevent_default();
+                                    if !open.get_untracked() {
+                                        open_list();
+                                    } else if n > 0 {
+                                        active.update(|a| *a = (*a + 1) % n);
+                                        reveal_active(false);
                                     }
-                                    "ArrowUp" => {
-                                        ev.prevent_default();
-                                        if n > 0 && open.get_untracked() {
-                                            active.update(|a| *a = (*a + n - 1) % n);
-                                            reveal_active(false);
-                                        }
-                                    }
-                                    "Enter" => {
-                                        ev.prevent_default();
-                                        let pick = filtered.with_untracked(|f| f.get(active.get_untracked()).cloned());
-                                        match pick {
-                                            Some(v) if open.get_untracked() => commit(v),
-                                            _ => settle(),
-                                        }
-                                    }
-                                    "Escape" => {
-                                        open.set(false);
-                                        filtering.set(false);
-                                        query.set(selected.get_untracked());
-                                    }
-                                    _ => {}
                                 }
-                            }
-                        />
-                        <span class="op-field-reveal op-combobox-arrow" aria-hidden="true">
-                            <Icon icon=icons::ARROW_DROP_DOWN size=5.0/>
-                        </span>
-                        <PendingRun/>
-                    </div>
-                    <Show when=move || open.get() && enabled.get()>
-                        <div class="op-dropdown-menu" role="listbox" on:mousedown=|ev| ev.prevent_default()>
-                            <ScrollView node_ref=list_ref viewport_class="op-scroll-contain">
-                            {move || {
-                                let list = filtered.get();
-                                if list.is_empty() {
-                                    let text = if allow_custom { "Press Enter to use this value" } else { "No matches" };
-                                    return view! { <div class="op-dropdown-item op-combobox-none">{text}</div> }.into_any();
+                                "ArrowUp" => {
+                                    ev.prevent_default();
+                                    if n > 0 && open.get_untracked() {
+                                        active.update(|a| *a = (*a + n - 1) % n);
+                                        reveal_active(false);
+                                    }
                                 }
-                                let q = if filtering.get() { query.get() } else { String::new() };
-                                list.into_iter()
-                                    .enumerate()
-                                    .map(|(i, option)| {
-                                        let value = option.clone();
-                                        let is_selected = selected.with(|s| *s == option);
-                                        view! {
-                                            <button
-                                                type="button"
-                                                role="option"
-                                                tabindex="-1"
-                                                class="op-dropdown-item"
-                                                aria-selected=is_selected.to_string()
-                                                data-active=move || (active.get() == i).then_some("")
-                                                on:pointerenter=move |_| active.set(i)
-                                                on:click=move |_| commit(value.clone())
-                                            >
-                                                {highlight(&option, &q)}
-                                            </button>
-                                        }
-                                    })
-                                    .collect_view()
-                                    .into_any()
-                            }}
-    </ScrollView>
-                        </div>
-                    </Show>
+                                "Enter" => {
+                                    ev.prevent_default();
+                                    let pick = filtered.with_untracked(|f| f.get(active.get_untracked()).cloned());
+                                    match pick {
+                                        Some(v) if open.get_untracked() => commit(v),
+                                        _ => settle(),
+                                    }
+                                }
+                                "Escape" => {
+                                    open.set(false);
+                                    filtering.set(false);
+                                    query.set(selected.get_untracked());
+                                }
+                                _ => {}
+                            }
+                        }
+                    />
+                    <span class="op-field-reveal op-combobox-arrow" aria-hidden="true">
+                        <Icon icon=icons::ARROW_DROP_DOWN size=5.0/>
+                    </span>
+                    <PendingRun/>
                 </div>
+                <Show when=move || open.get() && enabled.get()>
+                    <div class="op-dropdown-menu" role="listbox" on:mousedown=|ev| ev.prevent_default()>
+                        {move || filtered.with(Vec::is_empty).then(|| {
+                            let text = if allow_custom { "Press Enter to use this value" } else { "No matches" };
+                            view! { <div class="op-dropdown-item op-combobox-none">{text}</div> }
+                        })}
+                        <VirtualList
+                            items=Signal::derive(move || filtered.get())
+                            handle=list
+                            max_height=Some(MENU_MAX_HEIGHT)
+                            class="op-scroll-contain"
+                            key=|option: &String| option.clone()
+                            let:row
+                        >
+                            {
+                                let (i, option) = row;
+                                let value = option.clone();
+                                let is_selected = {
+                                    let option = option.clone();
+                                    move || selected.with(|s| *s == option)
+                                };
+                                let label = option.clone();
+                                view! {
+                                    <button
+                                        type="button"
+                                        role="option"
+                                        tabindex="-1"
+                                        class="op-dropdown-item"
+                                        aria-selected=move || is_selected().to_string()
+                                        data-active=move || (active.get() == i).then_some("")
+                                        on:pointerenter=move |_| active.set(i)
+                                        on:click=move |_| commit(value.clone())
+                                    >
+                                        {move || {
+                                            let q = if filtering.get() { query.get() } else { String::new() };
+                                            highlight(&label, &q)
+                                        }}
+                                    </button>
+                                }
+                            }
+                        </VirtualList>
+                    </div>
+                </Show>
             </div>
-        }
+        </div>
+    }
 }
 
 /// Splits `text` around the first case-insensitive match of `query` and marks it.

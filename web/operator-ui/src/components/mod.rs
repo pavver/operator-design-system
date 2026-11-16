@@ -88,3 +88,5 @@ pub mod toast;
 pub mod toolbar;
 #[cfg(feature = "tooltip")]
 pub mod tooltip;
+#[cfg(feature = "virtual-list")]
+pub mod virtual_list;

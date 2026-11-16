@@ -1,0 +1,6 @@
+/* ------------------------------------------------------------------ */
+/* VirtualList                                                         */
+/* ------------------------------------------------------------------ */
+.op-vlist-space { position: relative; width: 100%; }
+.op-vlist-window { position: absolute; top: 0; left: 0; right: 0; will-change: transform; }
+.op-vlist-window > * { box-sizing: border-box; height: var(--op-vlist-row); min-height: 0; overflow: hidden; }

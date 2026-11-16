@@ -1,7 +1,7 @@
 //! Dropdown menu: DropdownMenu.
 
 use crate::components::primitives::{Icon, PendingIndicator};
-use crate::components::scrollbar::ScrollView;
+use crate::components::virtual_list::{VirtualList, VirtualListHandle};
 use crate::core::{
     ControlState, PendingRun, Press, spawn_ripple, use_pending_indicator, use_state_visual,
 };
@@ -9,6 +9,9 @@ use leptos::prelude::*;
 use operator_ui_tokens::{dim, icons};
 
 pub(crate) const CSS: &str = include_str!("dropdown_menu.css");
+
+/// Height limit of the option list, in DU.
+pub(crate) const MENU_MAX_HEIGHT: f32 = 50.0;
 
 /// Rectangular dropdown with a scrollable option list (max 50 DU).
 #[component]
@@ -53,89 +56,103 @@ pub fn DropdownMenu(
     });
 
     let options = StoredValue::new(options);
+    let list = VirtualListHandle::new(dim::ROW_CONTROL);
+    // Opening scrolls the selected option into the middle of the list.
+    Effect::new(move |_| {
+        if expanded.get()
+            && let Some(index) =
+                options.with_value(|o| o.iter().position(|v| selected.with_untracked(|s| s == v)))
+        {
+            list.reveal(index, true);
+        }
+    });
 
     view! {
-            <div class="op-dropdown">
-                {label.map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
-                <div class="op-dropdown-anchor">
-                    <button
-                        type="button"
-                        class="op-sb op-rippled op-dropdown-trigger"
-                        aria-haspopup="listbox"
-                        aria-expanded=move || expanded.get().to_string()
-                        aria-disabled=move || (!clickable()).then_some("true")
-                        data-state=move || visual.state.get()
-                        data-result=move || visual.result.get()
-                        data-fading=move || visual.fading.get().then_some("")
-                        on:pointerdown=move |ev| {
-                            if clickable() {
-                                press.down();
-                                spawn_ripple(&ev);
-                            }
+        <div class="op-dropdown">
+            {label.map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
+            <div class="op-dropdown-anchor">
+                <button
+                    type="button"
+                    class="op-sb op-rippled op-dropdown-trigger"
+                    aria-haspopup="listbox"
+                    aria-expanded=move || expanded.get().to_string()
+                    aria-disabled=move || (!clickable()).then_some("true")
+                    data-state=move || visual.state.get()
+                    data-result=move || visual.result.get()
+                    data-fading=move || visual.fading.get().then_some("")
+                    on:pointerdown=move |ev| {
+                        if clickable() {
+                            press.down();
+                            spawn_ripple(&ev);
                         }
-                        on:pointerup=move |_| press.up()
-                        on:pointerleave=move |_| press.up()
-                        on:pointercancel=move |_| press.up()
-                        on:click=move |_| {
-                            if clickable() {
-                                expanded.update(|e| *e = !*e);
-                            }
+                    }
+                    on:pointerup=move |_| press.up()
+                    on:pointerleave=move |_| press.up()
+                    on:pointercancel=move |_| press.up()
+                    on:click=move |_| {
+                        if clickable() {
+                            expanded.update(|e| *e = !*e);
                         }
-                        on:keydown=move |ev| {
-                            if ev.key() == "Escape" {
-                                expanded.set(false);
-                            }
+                    }
+                    on:keydown=move |ev| {
+                        if ev.key() == "Escape" {
+                            expanded.set(false);
                         }
-                    >
-                        <span class="op-dropdown-value">{move || selected.get()}</span>
-                        {move || {
-                            if show_spinner.get() {
-                                view! { <PendingIndicator size=dim::ICON_SMALL/> }
-                                    .into_any()
-                            } else {
-                                view! { <span class="op-dropdown-arrow"><Icon icon=icons::ARROW_DROP_DOWN size=5.0/></span> }
-                                    .into_any()
-                            }
-                        }}
-                        <PendingRun/>
-                    </button>
-                    <Show when=move || expanded.get()>
-                        <div class="op-dropdown-scrim" on:click=move |_| expanded.set(false)></div>
-                        <div class="op-dropdown-menu" role="listbox">
-                            <ScrollView viewport_class="op-scroll-contain">
-                            {options
-                                .get_value()
-                                .into_iter()
-                                .map(|option| {
-                                    let value = option.clone();
-                                    let is_selected = {
-                                        let option = option.clone();
-                                        move || selected.with(|s| *s == option)
-                                    };
-                                    view! {
-                                        <button
-                                            type="button"
-                                            role="option"
-                                            class="op-rippled op-dropdown-item"
-                                            aria-selected=move || is_selected().to_string()
-                                            on:pointerdown=move |ev| spawn_ripple(&ev)
-                                            on:click=move |_| {
-                                                selected.set(value.clone());
-                                                if let Some(cb) = on_select {
-                                                    cb.run(value.clone());
-                                                }
-                                                expanded.set(false);
+                    }
+                >
+                    <span class="op-dropdown-value">{move || selected.get()}</span>
+                    {move || {
+                        if show_spinner.get() {
+                            view! { <PendingIndicator size=dim::ICON_SMALL/> }
+                                .into_any()
+                        } else {
+                            view! { <span class="op-dropdown-arrow"><Icon icon=icons::ARROW_DROP_DOWN size=5.0/></span> }
+                                .into_any()
+                        }
+                    }}
+                    <PendingRun/>
+                </button>
+                <Show when=move || expanded.get()>
+                    <div class="op-dropdown-scrim" on:click=move |_| expanded.set(false)></div>
+                    <div class="op-dropdown-menu" role="listbox">
+                        <VirtualList
+                            items=Signal::derive(move || options.get_value())
+                            handle=list
+                            max_height=Some(MENU_MAX_HEIGHT)
+                            class="op-scroll-contain"
+                            key=|option: &String| option.clone()
+                            let:row
+                        >
+                            {
+                                let option = row.1;
+                                let value = option.clone();
+                                let is_selected = {
+                                    let option = option.clone();
+                                    move || selected.with(|s| *s == option)
+                                };
+                                view! {
+                                    <button
+                                        type="button"
+                                        role="option"
+                                        class="op-rippled op-dropdown-item"
+                                        aria-selected=move || is_selected().to_string()
+                                        on:pointerdown=move |ev| spawn_ripple(&ev)
+                                        on:click=move |_| {
+                                            selected.set(value.clone());
+                                            if let Some(cb) = on_select {
+                                                cb.run(value.clone());
                                             }
-                                        >
-                                            {option}
-                                        </button>
-                                    }
-                                })
-                                .collect_view()}
-    </ScrollView>
-                        </div>
-                    </Show>
-                </div>
+                                            expanded.set(false);
+                                        }
+                                    >
+                                        {option}
+                                    </button>
+                                }
+                            }
+                        </VirtualList>
+                    </div>
+                </Show>
             </div>
-        }
+        </div>
+    }
 }

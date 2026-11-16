@@ -2,7 +2,7 @@
 
 Selection field that opens a list of options directly below it.
 
-Status: **reviewed** on web.
+Status: **draft** on web.
 
 ## Geometry
 
@@ -32,6 +32,7 @@ Status: **reviewed** on web.
 * Choosing an option updates the value, calls the callback, and closes the list.
 * While `Pending`, the field ignores input and the arrow is replaced by the [delayed spinner](../foundations/states.md#delayed-spinner).
 * `Disabled` uses the disabled colors and ignores input.
+* The option list is a [VirtualList](virtual-list.md): only the visible options are rendered, so long lists stay fast; opening scrolls the selected option into the middle.
 
 ## API
 
