@@ -1,0 +1,5 @@
+/* ------------------------------------------------------------------ */
+/* Popover                                                             */
+/* ------------------------------------------------------------------ */
+.op-popover { position: fixed; pointer-events: auto; box-sizing: border-box; }
+.op-popover[data-passive] { pointer-events: none; }

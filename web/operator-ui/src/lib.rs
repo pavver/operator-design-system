@@ -57,6 +57,8 @@ pub mod prelude {
     pub use crate::components::menu::*;
     #[cfg(feature = "pagination")]
     pub use crate::components::pagination::*;
+    #[cfg(feature = "popover")]
+    pub use crate::components::popover::*;
     #[cfg(feature = "primitives")]
     pub use crate::components::primitives::*;
     #[cfg(feature = "property-list")]

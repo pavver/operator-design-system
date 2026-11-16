@@ -40,8 +40,6 @@ reviewed = [
     "kbd",
     "linear-progress",
     "list-item",
-    "marquee-text",
-    "menu",
     "pagination",
     "primitives",
     "radio-group",
@@ -61,10 +59,13 @@ reviewed = [
     "text-field",
     "theme-toggle",
     "toast",
-    "tooltip",
 ]
 
 draft = [
+    "marquee-text",
+    "menu",
+    "tooltip",
+    "popover",
     "combobox",
     "dropdown-menu",
     "data-table",
@@ -85,13 +86,13 @@ checkbox = ["primitives"]
 checkbox-group = ["primitives"]
 chip = ["primitives"]
 code-block = ["icon-button", "scrollbar"]
-combobox = ["dropdown-menu", "primitives", "scrollbar", "virtual-list"]
+combobox = ["dropdown-menu", "popover", "primitives", "scrollbar", "virtual-list"]
 confirm-dialog = ["dialog"]
 console-terminal = ["scrollbar"]
 counter = []
 data-table = ["linear-progress", "primitives", "scrollbar"]
 dialog = ["action-button", "icon-button", "scrollbar"]
-dropdown-menu = ["primitives", "scrollbar", "virtual-list"]
+dropdown-menu = ["popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
 header = ["avatar", "primitives", "status-badge"]
 icon-button = ["primitives", "tooltip"]
@@ -99,8 +100,9 @@ kbd = []
 linear-progress = []
 list-item = []
 marquee-text = ["tooltip"]
-menu = ["icon-button", "primitives", "scrollbar"]
+menu = ["icon-button", "popover", "primitives", "scrollbar"]
 pagination = ["icon-button"]
+popover = []
 primitives = []
 property-list = ["icon-button"]
 radio-group = ["checkbox-group", "primitives"]
@@ -121,6 +123,6 @@ text-field = ["action-button", "primitives"]
 theme-toggle = []
 toast = ["primitives"]
 toolbar = ["icon-button", "menu", "tooltip"]
-tooltip = []
+tooltip = ["popover"]
 virtual-list = ["scrollbar"]
 

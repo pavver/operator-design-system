@@ -1,6 +1,7 @@
 //! Text input with suggestions: Combobox.
 
-use crate::components::dropdown_menu::MENU_MAX_HEIGHT;
+use crate::components::dropdown_menu::{MENU_MAX_HEIGHT, anchor_signal};
+use crate::components::popover::{Placement, Popover};
 use crate::components::primitives::Icon;
 use crate::components::virtual_list::{VirtualList, VirtualListHandle};
 use crate::core::{PendingRun, field_state, use_state_visual};
@@ -40,6 +41,14 @@ pub fn Combobox(
     // The list shows every option when it opens; typing switches it to filtering.
     let filtering = RwSignal::new(false);
     let list = VirtualListHandle::new(dim::ROW_CONTROL);
+    let anchor_ref = NodeRef::<leptos::html::Div>::new();
+    let anchor = anchor_signal(anchor_ref);
+    // A disabled field never keeps its list open.
+    Effect::new(move |_| {
+        if !enabled.get() {
+            open.set(false);
+        }
+    });
 
     let filtered = Memo::new(move |_| {
         let q = if filtering.get() {
@@ -108,7 +117,7 @@ pub fn Combobox(
     view! {
         <div class="op-dropdown op-combobox">
             {label.clone().map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
-            <div class="op-dropdown-anchor">
+            <div class="op-dropdown-anchor" node_ref=anchor_ref>
                 <div
                     class="op-sb op-field"
                     data-state=move || visual.state.get()
@@ -182,8 +191,8 @@ pub fn Combobox(
                     </span>
                     <PendingRun/>
                 </div>
-                <Show when=move || open.get() && enabled.get()>
-                    <div class="op-dropdown-menu" role="listbox" on:mousedown=|ev| ev.prevent_default()>
+                <Popover open=open anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox" restore_focus=false>
+                    <div class="op-dropdown-list" on:mousedown=|ev| ev.prevent_default()>
                         {move || filtered.with(Vec::is_empty).then(|| {
                             let text = if allow_custom { "Press Enter to use this value" } else { "No matches" };
                             view! { <div class="op-dropdown-item op-combobox-none">{text}</div> }
@@ -224,7 +233,7 @@ pub fn Combobox(
                             }
                         </VirtualList>
                     </div>
-                </Show>
+                </Popover>
             </div>
         </div>
     }

@@ -33,6 +33,7 @@ Status: **draft** on web.
 * While `Pending`, the field ignores input and the arrow is replaced by the [delayed spinner](../foundations/states.md#delayed-spinner).
 * `Disabled` uses the disabled colors and ignores input.
 * The option list is a [VirtualList](virtual-list.md): only the visible options are rendered, so long lists stay fast; opening scrolls the selected option into the middle.
+* The list is a [Popover](popover.md) layer as wide as the field, so it is not clipped by scrolling containers.
 
 ## API
 

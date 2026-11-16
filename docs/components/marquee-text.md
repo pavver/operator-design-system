@@ -3,7 +3,7 @@
 Single-line text for bounded containers.
 Text that does not fit scrolls slowly instead of being cut, and the full text is available in a tooltip.
 
-Status: **reviewed** on web.
+Status: **draft** on web.
 
 ## Use
 
@@ -47,6 +47,7 @@ With the reduced-motion preference, the text does not scroll and ends with an el
 ### Click
 
 A click calls `on_click`, unless it ends a long press or closes the tooltip.
+* The full-text tooltip is a passive [Popover](popover.md) layer in the overlay host.
 
 ## API
 

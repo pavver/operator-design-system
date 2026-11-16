@@ -3,7 +3,7 @@
 Floating list of commands.
 It opens from an overflow button (⋮) or as a context menu at the pointer.
 
-Status: **reviewed** on web.
+Status: **draft** on web.
 
 ## Use
 
@@ -45,6 +45,7 @@ Status: **reviewed** on web.
 * The overflow button shows the `Selected` border while its menu is open; pressing it again closes the menu.
 * Commands run synchronously from the menu's point of view.
   An async command shows its result elsewhere, for example in a [Toast](toast.md) or on the affected row.
+* The menu is a [Popover](popover.md) layer: it mounts in the overlay host, so clipping or transformed ancestors never cut it.
 
 ## API
 

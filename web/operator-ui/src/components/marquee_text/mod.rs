@@ -1,6 +1,6 @@
 //! MarqueeText: single-line text that scrolls when it overflows and shows the full text in a tooltip.
 
-use crate::core::overlay::place_above;
+use crate::components::popover::{Placement, Popover, PopoverAnchor};
 use crate::core::{JobToken, du};
 use leptos::ev;
 use leptos::prelude::*;
@@ -32,12 +32,6 @@ pub mod marquee {
     pub const TOOLTIP_MAX_WIDTH_DU: f32 = crate::components::tooltip::tooltip::MAX_WIDTH_DU;
 }
 
-#[derive(Clone, Copy)]
-struct TooltipPos {
-    left: f64,
-    top: f64,
-}
-
 /// Single-line text for bounded containers.
 ///
 /// When the text overflows, it stays still for `initial_delay_ms`, scrolls right to left at
@@ -67,7 +61,6 @@ pub fn MarqueeText(
 ) -> impl IntoView {
     let host = NodeRef::<leptos::html::Span>::new();
     let probe = NodeRef::<leptos::html::Span>::new();
-    let tip = NodeRef::<leptos::html::Div>::new();
     let overflow = RwSignal::new(false);
     let distance = RwSignal::new(0.0f64);
     let run = RwSignal::new(0u32);
@@ -75,7 +68,7 @@ pub fn MarqueeText(
     let job = JobToken::new();
 
     let tip_open = RwSignal::new(false);
-    let tip_pos = RwSignal::new(None::<TooltipPos>);
+    let tip_anchor = RwSignal::new(PopoverAnchor::Point { x: 0.0, y: 0.0 });
     let hovered = RwSignal::new(false);
     let pressed = RwSignal::new(false);
     let dismiss_job = JobToken::new();
@@ -153,34 +146,15 @@ pub fn MarqueeText(
         );
     };
 
-    // Tooltip placement: above the anchor, flipped below near the top, clamped to the viewport.
-    let place_tooltip = move || {
-        let (Some(h), Some(t)) = (
-            host.try_get_untracked().flatten(),
-            tip.try_get_untracked().flatten(),
-        ) else {
-            return;
-        };
-        let p = place_above(
-            &h.get_bounding_client_rect(),
-            f64::from(t.offset_width()),
-            f64::from(t.offset_height()),
-            marquee::TOOLTIP_GAP_DU,
-        );
-        tip_pos.set(Some(TooltipPos {
-            left: p.left,
-            top: p.top,
-        }));
-    };
-
     let open_tip = move || {
         if !tooltip {
             return;
         }
         dismiss_job.next();
-        tip_pos.set(None);
+        if let Some(h) = host.try_get_untracked().flatten() {
+            tip_anchor.set(PopoverAnchor::of(&h));
+        }
         tip_open.set(true);
-        request_animation_frame(place_tooltip);
     };
     let close_tip = move || {
         dismiss_job.next();
@@ -312,19 +286,19 @@ pub fn MarqueeText(
                     <span class="op-marquee-text" aria-hidden="true">{content}</span>
                 </Show>
             </span>
-            <Show when=move || tip_open.get()>
-                <div
-                    node_ref=tip
-                    class="op-tooltip op-t-caption"
-                    role="tooltip"
-                    style:max-width=du(marquee::TOOLTIP_MAX_WIDTH_DU)
-                    style:visibility=move || if tip_pos.get().is_some() { "visible" } else { "hidden" }
-                    style:left=move || tip_pos.get().map(|p| format!("{}px", p.left))
-                    style:top=move || tip_pos.get().map(|p| format!("{}px", p.top))
-                >
-                    {move || tooltip_text.get()}
-                </div>
-            </Show>
+            <Popover
+                open=tip_open
+                anchor=tip_anchor
+                placement=Placement::Above
+                gap=marquee::TOOLTIP_GAP_DU
+                passive=true
+                dismiss_on_outside=false
+                restore_focus=false
+                class="op-tooltip op-t-caption"
+                role="tooltip"
+            >
+                <div style:max-width=du(marquee::TOOLTIP_MAX_WIDTH_DU)>{move || tooltip_text.get()}</div>
+            </Popover>
         </span>
     }
 }

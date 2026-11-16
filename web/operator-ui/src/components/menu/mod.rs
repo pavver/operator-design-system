@@ -1,9 +1,8 @@
 use crate::components::icon_button::IconButton;
+use crate::components::popover::{Placement, Popover, PopoverAnchor};
 use crate::components::primitives::Icon;
 use crate::components::scrollbar::ScrollView;
-use crate::core::overlay::{FloatPos, event_inside, place_at, place_below_end};
 use crate::core::{ControlState, spawn_ripple};
-use leptos::ev;
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, dim, icons};
 use wasm_bindgen::JsCast;
@@ -85,59 +84,36 @@ pub fn Menu(
     #[prop(default = "Menu".into(), into)] label: String,
 ) -> impl IntoView {
     let menu = NodeRef::<leptos::html::Div>::new();
-    let pos = RwSignal::new(None::<FloatPos>);
     let items = StoredValue::new(items);
-
-    let place = move || {
-        let Some(el) = menu.try_get_untracked().flatten() else {
-            return;
-        };
-        let (w, h) = (f64::from(el.offset_width()), f64::from(el.offset_height()));
-        let p = match anchor.get_untracked() {
-            MenuAnchor::Point(x, y) => place_at(x, y, w, h),
-            MenuAnchor::Below(left, top, width, height) => {
-                let rect = web_sys::DomRect::new_with_x_and_y_and_width_and_height(
-                    left, top, width, height,
-                );
-                match rect {
-                    Ok(r) => place_below_end(&r, w, h),
-                    Err(_) => place_at(left, top + height, w, h),
-                }
-            }
-        };
-        pos.set(Some(p));
-        if let Some(first) = el
-            .query_selector("[role=menuitem]:not([aria-disabled])")
-            .ok()
+    let placement = Signal::derive(move || match anchor.get() {
+        MenuAnchor::Point(..) => Placement::AtPoint,
+        MenuAnchor::Below(..) => Placement::BelowEnd,
+    });
+    let popover_anchor = Signal::derive(move || match anchor.get() {
+        MenuAnchor::Point(x, y) => PopoverAnchor::Point { x, y },
+        MenuAnchor::Below(left, top, width, height) => PopoverAnchor::Rect {
+            left,
+            top,
+            width,
+            height,
+        },
+    });
+    // The first enabled item takes focus once the menu is placed.
+    let focus_first = Callback::new(move |()| {
+        if let Some(first) = menu
+            .try_get_untracked()
             .flatten()
+            .and_then(|el| {
+                el.query_selector("[role=menuitem]:not([aria-disabled])")
+                    .ok()
+                    .flatten()
+            })
             .and_then(|e| e.dyn_into::<web_sys::HtmlElement>().ok())
         {
             let _ = first.focus();
         }
-    };
-    Effect::new(move |_| {
-        if open.get() {
-            pos.set(None);
-            request_animation_frame(place);
-        }
     });
-
     let close = move || open.set(false);
-    let down = window_event_listener(ev::pointerdown, move |e| {
-        if open.get_untracked()
-            && !menu
-                .try_get_untracked()
-                .flatten()
-                .is_some_and(|m| event_inside(&e, &m))
-        {
-            close();
-        }
-    });
-    let resize = window_event_listener(ev::resize, move |_| close());
-    on_cleanup(move || {
-        down.remove();
-        resize.remove();
-    });
 
     let focus_step = move |delta: i32| {
         let Some(el) = menu.try_get_untracked().flatten() else {
@@ -176,72 +152,77 @@ pub fn Menu(
         }
     };
 
+    let label = StoredValue::new(label);
     view! {
-        <Show when=move || open.get()>
-            <div
-                node_ref=menu
-                class="op-menu"
-                role="menu"
-                aria-label=label.clone()
-                style:visibility=move || if pos.get().is_some() { "visible" } else { "hidden" }
-                style:left=move || pos.get().map(|p| format!("{}px", p.left))
-                style:top=move || pos.get().map(|p| format!("{}px", p.top))
-                on:keydown=move |e| match e.key().as_str() {
-                    "Escape" | "Tab" => {
-                        e.prevent_default();
-                        close();
-                    }
-                    "ArrowDown" => {
-                        e.prevent_default();
-                        focus_step(1);
-                    }
-                    "ArrowUp" => {
-                        e.prevent_default();
-                        focus_step(-1);
-                    }
-                    _ => {}
-                }
-                on:contextmenu=|e| e.prevent_default()
-            >
-                <ScrollView viewport_class="op-menu-list op-scroll-contain">
-                {items
-                    .get_value()
-                    .into_iter()
-                    .map(|item| {
-                        let id = item.id.clone();
-                        let enabled = item.enabled;
-                        view! {
-                            {item.separator.then(|| view! { <div class="op-menu-sep" role="separator"></div> })}
-                            <button
-                                type="button"
-                                role="menuitem"
-                                class="op-rippled op-menu-item"
-                                data-danger=item.danger.then_some("")
-                                aria-disabled=(!enabled).then_some("true")
-                                on:pointerdown=move |ev| {
-                                    if enabled {
-                                        spawn_ripple(&ev);
-                                    }
-                                }
-                                on:click=move |_| {
-                                    if enabled {
-                                        close();
-                                        on_select.run(id.clone());
-                                    }
-                                }
-                            >
-                                <span class="op-menu-icon">
-                                    {item.icon.map(|i| view! { <Icon icon=i size=dim::ICON_SMALL/> })}
-                                </span>
-                                <span class="op-menu-label">{item.label}</span>
-                                {item.shortcut.map(|s| view! { <span class="op-menu-shortcut">{s}</span> })}
-                            </button>
+                <Popover
+                    open=open
+                    anchor=popover_anchor
+                    placement=placement
+                    dismiss_on_resize=true
+                    class="op-menu"
+                    role="menu"
+                    label=label.get_value()
+                    node_ref=menu
+                    on_placed=focus_first
+                >
+                    <div
+                        class="op-menu-body"
+                        on:keydown=move |e| match e.key().as_str() {
+                            "Escape" | "Tab" => {
+                                e.prevent_default();
+                                close();
+                            }
+                            "ArrowDown" => {
+                                e.prevent_default();
+                                focus_step(1);
+                            }
+                            "ArrowUp" => {
+                                e.prevent_default();
+                                focus_step(-1);
+                            }
+                            _ => {}
                         }
-                    })
-                    .collect_view()}
-                </ScrollView>
-            </div>
-        </Show>
+                        on:contextmenu=|e| e.prevent_default()
+                    >
+                        <ScrollView viewport_class="op-menu-list op-scroll-contain">
+                        {items
+                            .get_value()
+                            .into_iter()
+                            .map(|item| {
+                                let id = item.id.clone();
+                                let enabled = item.enabled;
+                                view! {
+                                    {item.separator.then(|| view! { <div class="op-menu-sep" role="separator"></div> })}
+                                    <button
+                                        type="button"
+                                        role="menuitem"
+                                        class="op-rippled op-menu-item"
+                                        data-danger=item.danger.then_some("")
+                                        aria-disabled=(!enabled).then_some("true")
+                                        on:pointerdown=move |ev| {
+                                            if enabled {
+                                                spawn_ripple(&ev);
+                                            }
+                                        }
+                                        on:click=move |_| {
+                                            if enabled {
+                                                close();
+                                                on_select.run(id.clone());
+                                            }
+                                        }
+                                    >
+                                        <span class="op-menu-icon">
+                                            {item.icon.map(|i| view! { <Icon icon=i size=dim::ICON_SMALL/> })}
+                                        </span>
+                                        <span class="op-menu-label">{item.label}</span>
+                                        {item.shortcut.map(|s| view! { <span class="op-menu-shortcut">{s}</span> })}
+                                    </button>
+                                }
+                            })
+                            .collect_view()}
+                        </ScrollView>
+                    </div>
+                </Popover>
     }
 }
 

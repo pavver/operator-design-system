@@ -3,7 +3,7 @@
 Short hint attached to a control or a piece of text.
 It names an icon-only button or explains an abbreviation; it never holds interactive content.
 
-Status: **reviewed** on web.
+Status: **draft** on web.
 
 ## Use
 
@@ -42,6 +42,7 @@ Status: **reviewed** on web.
 3. Clamped horizontally to the viewport.
 
 The same placement and look are used by the tooltip of [MarqueeText](marquee-text.md).
+* The tooltip is a passive [Popover](popover.md) layer in the overlay host.
 
 ## API
 

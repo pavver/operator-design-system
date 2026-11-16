@@ -1,5 +1,6 @@
 //! Dropdown menu: DropdownMenu.
 
+use crate::components::popover::{Placement, Popover, PopoverAnchor};
 use crate::components::primitives::{Icon, PendingIndicator};
 use crate::components::virtual_list::{VirtualList, VirtualListHandle};
 use crate::core::{
@@ -57,6 +58,8 @@ pub fn DropdownMenu(
 
     let options = StoredValue::new(options);
     let list = VirtualListHandle::new(dim::ROW_CONTROL);
+    let anchor_ref = NodeRef::<leptos::html::Div>::new();
+    let anchor = anchor_signal(anchor_ref);
     // Opening scrolls the selected option into the middle of the list.
     Effect::new(move |_| {
         if expanded.get()
@@ -70,7 +73,7 @@ pub fn DropdownMenu(
     view! {
         <div class="op-dropdown">
             {label.map(|l| view! { <div class="op-dropdown-label">{l}</div> })}
-            <div class="op-dropdown-anchor">
+            <div class="op-dropdown-anchor" node_ref=anchor_ref>
                 <button
                     type="button"
                     class="op-sb op-rippled op-dropdown-trigger"
@@ -112,9 +115,8 @@ pub fn DropdownMenu(
                     }}
                     <PendingRun/>
                 </button>
-                <Show when=move || expanded.get()>
-                    <div class="op-dropdown-scrim" on:click=move |_| expanded.set(false)></div>
-                    <div class="op-dropdown-menu" role="listbox">
+                <Popover open=expanded anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox">
+                    <div class="op-dropdown-list">
                         <VirtualList
                             items=Signal::derive(move || options.get_value())
                             handle=list
@@ -151,8 +153,18 @@ pub fn DropdownMenu(
                             }
                         </VirtualList>
                     </div>
-                </Show>
+                </Popover>
             </div>
         </div>
     }
+}
+
+/// The current box of a field anchor, for a list that opens under it.
+pub(crate) fn anchor_signal(anchor: NodeRef<leptos::html::Div>) -> Signal<PopoverAnchor> {
+    Signal::derive(move || {
+        anchor
+            .get()
+            .map(|el| PopoverAnchor::of(&el))
+            .unwrap_or(PopoverAnchor::Point { x: 0.0, y: 0.0 })
+    })
 }

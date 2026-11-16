@@ -32,6 +32,7 @@ Status: **draft** on web.
   Other text is committed only with `allow_custom`; otherwise the field reverts to the committed value.
 * With no matches the list shows "No matches", or "Press Enter to use this value" with `allow_custom`.
 * The suggestion list is a [VirtualList](virtual-list.md): only the visible options are rendered, so lists with thousands of options stay fast.
+* The list is a [Popover](popover.md) layer as wide as the field, so it is not clipped by scrolling containers.
 
 ## API
 

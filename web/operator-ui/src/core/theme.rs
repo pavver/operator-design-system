@@ -109,6 +109,8 @@ fn stylesheet() -> &'static str {
             crate::components::scroll_area::CSS,
             #[cfg(feature = "scrollbar")]
             crate::components::scrollbar::CSS,
+            #[cfg(feature = "popover")]
+            crate::components::popover::CSS,
             #[cfg(feature = "virtual-list")]
             crate::components::virtual_list::CSS,
             HOVER_CSS,
@@ -160,6 +162,8 @@ pub fn ThemeRoot(
         }),
     };
     provide_context(ctx);
+    let host = NodeRef::<leptos::html::Div>::new();
+    provide_context(crate::core::overlay::OverlayHost(host));
     let inject = parent.is_none();
     view! {
         <div
@@ -169,6 +173,7 @@ pub fn ThemeRoot(
         >
             {inject.then(|| view! { <style>{stylesheet()}</style> })}
             {children()}
+            <div node_ref=host class="op-overlay-host"></div>
         </div>
     }
 }

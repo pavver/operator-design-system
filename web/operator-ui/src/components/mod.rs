@@ -46,6 +46,8 @@ pub mod marquee_text;
 pub mod menu;
 #[cfg(feature = "pagination")]
 pub mod pagination;
+#[cfg(feature = "popover")]
+pub mod popover;
 #[cfg(feature = "primitives")]
 pub mod primitives;
 #[cfg(feature = "property-list")]

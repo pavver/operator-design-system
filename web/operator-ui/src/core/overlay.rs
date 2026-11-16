@@ -60,3 +60,24 @@ pub fn event_inside(e: &web_sys::Event, el: &web_sys::Element) -> bool {
         .and_then(|t| t.dyn_into::<web_sys::Node>().ok())
         .is_some_and(|n| el.contains(Some(&n)))
 }
+
+/// Below the anchor aligned to its start edge, flipped above when there is no room, clamped to the viewport.
+pub fn place_below_start(anchor: &web_sys::DomRect, w: f64, h: f64, gap_du: f32) -> FloatPos {
+    let (vw, vh) = viewport();
+    let gap = f64::from(gap_du * DU_POINTS);
+    let left = anchor.left().clamp(0.0, (vw - w).max(0.0));
+    let below = anchor.bottom() + gap;
+    let top = if below + h <= vh || anchor.top() - gap < h {
+        below.min((vh - h).max(0.0))
+    } else {
+        anchor.top() - gap - h
+    };
+    FloatPos { left, top }
+}
+
+/// Root host of floating layers inside a [`ThemeRoot`](crate::core::ThemeRoot).
+///
+/// Layers are mounted here instead of next to their anchor, so ancestors with transforms,
+/// clipping or their own stacking context never move or cut them, and the theme still applies.
+#[derive(Clone, Copy)]
+pub struct OverlayHost(pub leptos::prelude::NodeRef<leptos::html::Div>);

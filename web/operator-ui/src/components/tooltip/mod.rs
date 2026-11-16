@@ -1,6 +1,7 @@
 //! Hint for an element: Tooltip and InsideTooltip.
 
-use crate::core::overlay::{FloatPos, event_inside, place_above};
+use crate::components::popover::{Placement, Popover, PopoverAnchor};
+use crate::core::overlay::event_inside;
 use crate::core::{JobToken, du};
 use leptos::ev;
 use leptos::prelude::*;
@@ -43,36 +44,21 @@ pub fn Tooltip(
     children: Children,
 ) -> impl IntoView {
     let host = NodeRef::<leptos::html::Span>::new();
-    let tip = NodeRef::<leptos::html::Div>::new();
     let open = RwSignal::new(false);
-    let pos = RwSignal::new(None::<FloatPos>);
+    let anchor = RwSignal::new(PopoverAnchor::Point { x: 0.0, y: 0.0 });
     let show_job = JobToken::new();
     let pressed = RwSignal::new(false);
     let long_pressed = StoredValue::new(false);
 
-    let place = move || {
-        let (Some(h), Some(t)) = (
-            host.try_get_untracked().flatten(),
-            tip.try_get_untracked().flatten(),
-        ) else {
-            return;
-        };
-        let rect = h.get_bounding_client_rect();
-        pos.set(Some(place_above(
-            &rect,
-            f64::from(t.offset_width()),
-            f64::from(t.offset_height()),
-            tooltip::GAP_DU,
-        )));
-    };
     let show = move || {
         if !enabled.get_untracked() || text.with_untracked(String::is_empty) {
             return;
         }
         show_job.next();
-        pos.set(None);
+        if let Some(h) = host.try_get_untracked().flatten() {
+            anchor.set(PopoverAnchor::of(&h));
+        }
         open.set(true);
-        request_animation_frame(place);
     };
     let hide = move || {
         show_job.next();
@@ -172,19 +158,19 @@ pub fn Tooltip(
             }
         >
             {children()}
-            <Show when=move || open.get()>
-                <div
-                    node_ref=tip
-                    class="op-tooltip op-t-caption"
-                    role="tooltip"
-                    style:max-width=du(tooltip::MAX_WIDTH_DU)
-                    style:visibility=move || if pos.get().is_some() { "visible" } else { "hidden" }
-                    style:left=move || pos.get().map(|p| format!("{}px", p.left))
-                    style:top=move || pos.get().map(|p| format!("{}px", p.top))
-                >
-                    {move || text.get()}
-                </div>
-            </Show>
+            <Popover
+                open=open
+                anchor=anchor
+                placement=Placement::Above
+                gap=tooltip::GAP_DU
+                passive=true
+                dismiss_on_outside=false
+                restore_focus=false
+                class="op-tooltip op-t-caption"
+                role="tooltip"
+            >
+                <div style:max-width=du(tooltip::MAX_WIDTH_DU)>{move || text.get()}</div>
+            </Popover>
         </span>
     }
 }

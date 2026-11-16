@@ -86,6 +86,7 @@ const NAV: &[(&str, &[&str])] = &[
             "components/dialog",
             "components/confirm-dialog",
             "components/sheet",
+            "components/popover",
         ],
     ),
     (

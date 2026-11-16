@@ -37,4 +37,5 @@
 .op-menu-shortcut { flex: none; color: var(--op-text-secondary); font-size: var(--op-type-caption-size); }
 .op-menu-sep { height: var(--op-dim-border); margin: var(--op-dim-pad-tight) 0; background-color: var(--op-divider); }
 
+.op-menu-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 .op-menu-list { padding: var(--op-dim-pad-tight) 0; }
