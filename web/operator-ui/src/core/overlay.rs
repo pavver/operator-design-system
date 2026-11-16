@@ -81,3 +81,42 @@ pub fn place_below_start(anchor: &web_sys::DomRect, w: f64, h: f64, gap_du: f32)
 /// clipping or their own stacking context never move or cut them, and the theme still applies.
 #[derive(Clone, Copy)]
 pub struct OverlayHost(pub leptos::prelude::NodeRef<leptos::html::Div>);
+
+/// Beside the anchor, top edges aligned (submenus): to the right, or to the left without room.
+pub fn place_side_start(anchor: &web_sys::DomRect, w: f64, h: f64) -> FloatPos {
+    let (vw, vh) = viewport();
+    let left = if anchor.right() + w <= vw {
+        anchor.right()
+    } else {
+        (anchor.left() - w).max(0.0)
+    };
+    let top = anchor.top().clamp(0.0, (vh - h).max(0.0));
+    FloatPos { left, top }
+}
+
+/// True when the event target is inside the layer `own` or inside a layer opened from it.
+///
+/// Layers carry `data-op-layer` (their id) and `data-op-parent` (the id of the layer they belong to).
+pub fn event_in_layer_tree(e: &web_sys::Event, own: u64) -> bool {
+    let mut el = e
+        .target()
+        .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
+        .and_then(|el| el.closest("[data-op-layer]").ok().flatten());
+    let doc = web_sys::window().and_then(|w| w.document());
+    // Bounded walk: layer chains are short, and a cycle must never hang the page.
+    for _ in 0..16 {
+        let Some(layer) = el else { return false };
+        if layer.get_attribute("data-op-layer").as_deref() == Some(own.to_string().as_str()) {
+            return true;
+        }
+        let Some(parent) = layer.get_attribute("data-op-parent") else {
+            return false;
+        };
+        el = doc.as_ref().and_then(|d| {
+            d.query_selector(&format!("[data-op-layer=\"{parent}\"]"))
+                .ok()
+                .flatten()
+        });
+    }
+    false
+}

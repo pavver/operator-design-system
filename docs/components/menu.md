@@ -23,6 +23,7 @@ Status: **draft** on web.
 | Icon slot | `4 DU`, kept empty for items without an icon so labels align. |
 | Shortcut | `caption` style, `text_secondary`, at the end. |
 | Separator | `0.25 DU` `divider` with `1 DU` above and below. |
+| Submenu arrow | `chevron_right`, `4 DU`, `text_secondary`, at the end of an item with a submenu. |
 
 ## Items
 
@@ -30,6 +31,15 @@ Status: **draft** on web.
 * Danger: label and icon in `error`; place it last, after a separator.
 * Disabled: `text_disabled`, cannot be chosen or focused.
 * Hover and keyboard focus: `pressed` background; keyboard focus also shows a `0.5 DU` `accent` start bar.
+
+## Submenus
+
+* An item with children (`MenuItem::submenu`) opens a submenu beside itself instead of running a command.
+* The submenu opens on hover, a click or Arrow Right, top-aligned to the item, to the right or, without room, to the left.
+* The item stays highlighted while its submenu is open; hovering another item closes it.
+* Arrow Left closes the submenu and returns focus to its item.
+* Picking a command at any level closes the whole menu chain; a press inside any submenu does not close its parents.
+* Submenus nest; keep them at most two levels deep.
 
 ## Placement
 
@@ -53,7 +63,8 @@ Status: **draft** on web.
 
 | Component | Properties |
 | :--- | :--- |
-| `Menu` | `open`, `anchor` (below an element or at a point), `items`, `on_select(id)`, `label`. |
+| `Menu` | `open`, `anchor` (below an element, at a point or beside an element), `items`, `on_select(id)`, `label`, `parent_layer` (set for submenus). |
+| `MenuItem` | `new(id, label)`, `icon`, `shortcut`, `danger`, `disabled`, `separated`, `submenu(items)`. |
 | `MenuButton` | `items`, `on_select(id)`, `icon` (`more_vert`), `label` (`"More actions"`), `size` (`8 DU`). |
 | `ContextMenu` | `items`, `on_select(id)`, `children`: the area that opens the menu. |
 

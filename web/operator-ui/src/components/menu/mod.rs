@@ -1,5 +1,5 @@
 use crate::components::icon_button::IconButton;
-use crate::components::popover::{Placement, Popover, PopoverAnchor};
+use crate::components::popover::{Placement, Popover, PopoverAnchor, new_layer_id};
 use crate::components::primitives::Icon;
 use crate::components::scrollbar::ScrollView;
 use crate::core::{ControlState, spawn_ripple};
@@ -22,6 +22,8 @@ pub struct MenuItem {
     pub enabled: bool,
     /// Draws a divider above the item.
     pub separator: bool,
+    /// Commands of a submenu; an item with children opens it instead of being selected.
+    pub children: Vec<MenuItem>,
 }
 
 impl MenuItem {
@@ -34,7 +36,14 @@ impl MenuItem {
             danger: false,
             enabled: true,
             separator: false,
+            children: Vec::new(),
         }
+    }
+
+    /// Makes the item open a submenu with `items`.
+    pub fn submenu(mut self, items: Vec<MenuItem>) -> Self {
+        self.children = items;
+        self
     }
 
     pub fn icon(mut self, icon: IconData) -> Self {
@@ -70,6 +79,8 @@ pub enum MenuAnchor {
     Below(f64, f64, f64, f64),
     /// At a pointer position.
     Point(f64, f64),
+    /// Beside an element (a submenu next to its item).
+    Side(f64, f64, f64, f64),
 }
 
 /// Floating list of commands.
@@ -82,16 +93,29 @@ pub fn Menu(
     items: Vec<MenuItem>,
     on_select: Callback<String>,
     #[prop(default = "Menu".into(), into)] label: String,
+    /// Layer of the menu this one is a submenu of.
+    #[prop(optional)]
+    parent_layer: Option<u64>,
 ) -> impl IntoView {
     let menu = NodeRef::<leptos::html::Div>::new();
+    let layer_id = new_layer_id();
+    // Id of the item whose submenu is open.
+    let open_sub = RwSignal::new(None::<String>);
+    Effect::new(move |_| {
+        if !open.get() {
+            open_sub.set(None);
+        }
+    });
     let items = StoredValue::new(items);
     let placement = Signal::derive(move || match anchor.get() {
         MenuAnchor::Point(..) => Placement::AtPoint,
         MenuAnchor::Below(..) => Placement::BelowEnd,
+        MenuAnchor::Side(..) => Placement::SideStart,
     });
     let popover_anchor = Signal::derive(move || match anchor.get() {
         MenuAnchor::Point(x, y) => PopoverAnchor::Point { x, y },
-        MenuAnchor::Below(left, top, width, height) => PopoverAnchor::Rect {
+        MenuAnchor::Below(left, top, width, height)
+        | MenuAnchor::Side(left, top, width, height) => PopoverAnchor::Rect {
             left,
             top,
             width,
@@ -164,6 +188,8 @@ pub fn Menu(
                     label=label.get_value()
                     node_ref=menu
                     on_placed=focus_first
+                    layer_id=Some(layer_id)
+                    parent_layer=parent_layer
                 >
                     <div
                         class="op-menu-body"
@@ -180,6 +206,10 @@ pub fn Menu(
                                 e.prevent_default();
                                 focus_step(-1);
                             }
+                            "ArrowLeft" if parent_layer.is_some() => {
+                                e.prevent_default();
+                                close();
+                            }
                             _ => {}
                         }
                         on:contextmenu=|e| e.prevent_default()
@@ -188,42 +218,130 @@ pub fn Menu(
                         {items
                             .get_value()
                             .into_iter()
-                            .map(|item| {
-                                let id = item.id.clone();
-                                let enabled = item.enabled;
-                                view! {
-                                    {item.separator.then(|| view! { <div class="op-menu-sep" role="separator"></div> })}
-                                    <button
-                                        type="button"
-                                        role="menuitem"
-                                        class="op-rippled op-menu-item"
-                                        data-danger=item.danger.then_some("")
-                                        aria-disabled=(!enabled).then_some("true")
-                                        on:pointerdown=move |ev| {
-                                            if enabled {
-                                                spawn_ripple(&ev);
-                                            }
-                                        }
-                                        on:click=move |_| {
-                                            if enabled {
-                                                close();
-                                                on_select.run(id.clone());
-                                            }
-                                        }
-                                    >
-                                        <span class="op-menu-icon">
-                                            {item.icon.map(|i| view! { <Icon icon=i size=dim::ICON_SMALL/> })}
-                                        </span>
-                                        <span class="op-menu-label">{item.label}</span>
-                                        {item.shortcut.map(|s| view! { <span class="op-menu-shortcut">{s}</span> })}
-                                    </button>
-                                }
-                            })
+                            .map(|item| menu_row(item, open, open_sub, layer_id, on_select))
                             .collect_view()}
                         </ScrollView>
                     </div>
                 </Popover>
     }
+}
+
+/// One row of a [`Menu`]: a command, or an item that opens a submenu beside itself.
+fn menu_row(
+    item: MenuItem,
+    open: RwSignal<bool>,
+    open_sub: RwSignal<Option<String>>,
+    layer_id: u64,
+    on_select: Callback<String>,
+) -> AnyView {
+    let id = item.id.clone();
+    let enabled = item.enabled;
+    let has_sub = !item.children.is_empty();
+    let row = NodeRef::<leptos::html::Button>::new();
+    let sub_anchor = RwSignal::new(MenuAnchor::Point(0.0, 0.0));
+    let sub_open = RwSignal::new(false);
+    let show_sub = {
+        let id = id.clone();
+        move || {
+            if let Some(r) = row.get_untracked() {
+                let b = r.get_bounding_client_rect();
+                sub_anchor.set(MenuAnchor::Side(b.left(), b.top(), b.width(), b.height()));
+            }
+            open_sub.set(Some(id.clone()));
+        }
+    };
+    {
+        let id = id.clone();
+        Effect::new(move |_| sub_open.set(open_sub.with(|s| s.as_deref() == Some(id.as_str()))));
+    }
+    // Closing a submenu by itself (ArrowLeft) clears the open entry.
+    {
+        let id = id.clone();
+        Effect::new(move |_| {
+            if !sub_open.get() && open_sub.with_untracked(|s| s.as_deref() == Some(id.as_str())) {
+                open_sub.set(None);
+            }
+        });
+    }
+    // Picking in the submenu closes this menu too.
+    let pick_sub = Callback::new(move |picked: String| {
+        open.set(false);
+        on_select.run(picked);
+    });
+    let children = item.children;
+    let label = item.label.clone();
+    view! {
+        {item.separator.then(|| view! { <div class="op-menu-sep" role="separator"></div> })}
+        <button
+            node_ref=row
+            type="button"
+            role="menuitem"
+            class="op-rippled op-menu-item"
+            data-danger=item.danger.then_some("")
+            data-open=move || sub_open.get().then_some("")
+            aria-disabled=(!enabled).then_some("true")
+            aria-haspopup=has_sub.then_some("menu")
+            aria-expanded=move || has_sub.then(|| sub_open.get().to_string())
+            on:pointerdown=move |ev| {
+                if enabled {
+                    spawn_ripple(&ev);
+                }
+            }
+            on:pointerenter={
+                let show_sub = show_sub.clone();
+                move |_| {
+                    if has_sub && enabled {
+                        show_sub();
+                    } else {
+                        open_sub.set(None);
+                    }
+                }
+            }
+            on:keydown={
+                let show_sub = show_sub.clone();
+                move |e| {
+                    if has_sub && enabled && e.key() == "ArrowRight" {
+                        e.prevent_default();
+                        e.stop_propagation();
+                        show_sub();
+                    }
+                }
+            }
+            on:click=move |_| {
+                if !enabled {
+                    return;
+                }
+                if has_sub {
+                    show_sub();
+                } else {
+                    open.set(false);
+                    on_select.run(id.clone());
+                }
+            }
+        >
+            <span class="op-menu-icon">
+                {item.icon.map(|i| view! { <Icon icon=i size=dim::ICON_SMALL/> })}
+            </span>
+            <span class="op-menu-label">{item.label}</span>
+            {item.shortcut.map(|s| view! { <span class="op-menu-shortcut">{s}</span> })}
+            {has_sub.then(|| view! { <span class="op-menu-chevron"><Icon icon=icons::CHEVRON_RIGHT size=dim::ICON_SMALL/></span> })}
+        </button>
+        {has_sub.then(|| submenu(sub_open, sub_anchor, children, pick_sub, label, layer_id))}
+    }
+    .into_any()
+}
+
+/// A nested [`Menu`]; boxed so the component can contain itself.
+fn submenu(
+    open: RwSignal<bool>,
+    anchor: RwSignal<MenuAnchor>,
+    items: Vec<MenuItem>,
+    on_select: Callback<String>,
+    label: String,
+    parent: u64,
+) -> AnyView {
+    view! { <Menu open=open anchor=anchor.into() items=items on_select=on_select label=label parent_layer=parent/> }
+        .into_any()
 }
 
 /// Icon button that opens a [`Menu`] under itself; the overflow (⋮) menu.

@@ -1,12 +1,14 @@
 //! Floating layer: Popover, the shared base of menus, lists, tooltips and hover cards.
 
 use crate::core::overlay::{
-    FloatPos, OverlayHost, event_inside, place_above, place_at, place_below_end, place_below_start,
+    FloatPos, OverlayHost, event_in_layer_tree, place_above, place_at, place_below_end,
+    place_below_start, place_side_start,
 };
 use leptos::ev;
 use leptos::portal::Portal;
 use leptos::prelude::*;
 use send_wrapper::SendWrapper;
+use std::sync::atomic::{AtomicU64, Ordering};
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::Closure;
 
@@ -79,6 +81,14 @@ pub enum Placement {
     Above,
     /// At the anchor point (context menus); shifted inside the viewport.
     AtPoint,
+    /// Beside the anchor, top edges aligned, to the right or else to the left (submenus).
+    SideStart,
+}
+
+/// A new unique layer id, for linking a layer to the layer it opens from (`parent_layer`).
+pub fn new_layer_id() -> u64 {
+    static NEXT: AtomicU64 = AtomicU64::new(1);
+    NEXT.fetch_add(1, Ordering::Relaxed)
 }
 
 /// The overlay host of the nearest theme root, or the document body outside one.
@@ -112,6 +122,7 @@ pub fn place(anchor: PopoverAnchor, placement: Placement, w: f64, h: f64, gap: f
         Placement::BelowEnd => place_below_end(&rect, w, h),
         Placement::Above => place_above(&rect, w, h, gap),
         Placement::AtPoint => place_at(rect.left(), rect.top(), w, h),
+        Placement::SideStart => place_side_start(&rect, w, h),
     }
 }
 
@@ -151,12 +162,19 @@ pub fn Popover(
     /// Reference to the layer element.
     #[prop(optional)]
     node_ref: Option<NodeRef<leptos::html::Div>>,
+    /// Id of this layer (from [`new_layer_id`]); a fresh one when not given.
+    #[prop(default = None)]
+    layer_id: Option<u64>,
+    /// The layer this one opens from: presses inside this layer do not close the parent.
+    #[prop(default = None)]
+    parent_layer: Option<u64>,
     /// Called once per opening, after the first placement, with the layer visible.
     #[prop(optional)]
     on_placed: Option<Callback<()>>,
     children: ChildrenFn,
 ) -> impl IntoView {
     let layer = node_ref.unwrap_or_default();
+    let layer_id = layer_id.unwrap_or_else(new_layer_id);
     let pos = RwSignal::new(None::<FloatPos>);
     let width = RwSignal::new(None::<f64>);
     let previous_focus = StoredValue::new(None::<SendWrapper<web_sys::HtmlElement>>);
@@ -227,10 +245,7 @@ pub fn Popover(
         if !dismiss_on_outside || !open.get_untracked() {
             return;
         }
-        let in_layer = layer
-            .try_get_untracked()
-            .flatten()
-            .is_some_and(|el| event_inside(&e, &el));
+        let in_layer = event_in_layer_tree(&e, layer_id);
         let in_anchor = anchor
             .get_untracked()
             .contains(f64::from(e.client_x()), f64::from(e.client_y()));
@@ -291,6 +306,8 @@ pub fn Popover(
                     node_ref=layer
                     class=format!("op-popover {}", class.get_value())
                     data-passive=passive.then_some("")
+                    data-op-layer=layer_id.to_string()
+                    data-op-parent=parent_layer.map(|p| p.to_string())
                     role=role.get_value()
                     aria-label=label.get_value()
                     style:visibility=move || if pos.get().is_some() { "visible" } else { "hidden" }

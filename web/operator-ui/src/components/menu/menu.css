@@ -39,3 +39,5 @@
 
 .op-menu-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 .op-menu-list { padding: var(--op-dim-pad-tight) 0; }
+.op-menu-chevron { display: inline-flex; flex: none; margin-left: auto; color: var(--op-text-secondary); }
+.op-menu-item[data-open] { background-color: var(--op-pressed); }

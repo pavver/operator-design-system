@@ -13,6 +13,14 @@ fn camera_menu() -> Vec<MenuItem> {
             .icon(icons::EDIT)
             .shortcut("F2"),
         MenuItem::new("export", "Export clip").icon(icons::DOWNLOAD),
+        MenuItem::new("move", "Move to zone").submenu(vec![
+            MenuItem::new("zone-north", "North"),
+            MenuItem::new("zone-south", "South"),
+            MenuItem::new("zone-more", "Parking").submenu(vec![
+                MenuItem::new("zone-p1", "Level 1"),
+                MenuItem::new("zone-p2", "Level 2"),
+            ]),
+        ]),
         MenuItem::new("reboot", "Reboot")
             .icon(icons::REFRESH)
             .disabled(),

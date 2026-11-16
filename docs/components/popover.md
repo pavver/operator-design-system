@@ -21,6 +21,7 @@ Status: **draft** on web.
 | `BelowStretch` | Under the anchor with the anchor's width, for lists of a field. |
 | `Above` | Centered above the anchor, `gap` DU away; flips below near the top edge. |
 | `AtPoint` | At a pointer position, shifted to stay inside the viewport (context menus). |
+| `SideStart` | Beside the anchor, top edges aligned, to the right or else to the left (submenus). |
 
 The layer is always clamped to the viewport.
 It is measured hidden in the first frame and shown placed in the next one, so it never flashes at a wrong position.
@@ -29,6 +30,7 @@ It is measured hidden in the first frame and shown placed in the next one, so it
 
 * Scrolling of any ancestor and resizing the window re-place an open layer; `dismiss_on_resize` closes it instead (menus).
 * A press outside the layer and the anchor closes it (`dismiss_on_outside`, default on).
+  A layer opened from another one (`parent_layer`) counts as inside its parent, so a press in a submenu keeps the menu open.
 * Escape closes it (`dismiss_on_escape`, default on).
 * When the layer closes while focus is inside it, focus returns to the element that had it before opening (`restore_focus`, default on).
 * A `passive` layer lets pointer events pass through (tooltips).
@@ -48,5 +50,6 @@ It is measured hidden in the first frame and shown placed in the next one, so it
 | `passive` | bool | `false` | Pointer events pass through. |
 | `class`, `role`, `label` | string | none | Layer element classes, ARIA role and label. |
 | `node_ref` | element reference | none | The layer element. |
+| `layer_id`, `parent_layer` | layer id | new id, none | Link a layer to the layer it opens from (`new_layer_id()`). |
 | `on_placed` | callback | none | Runs after each placement, for example to focus the first item. |
 | `children` | view | required | Layer content. |
