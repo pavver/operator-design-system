@@ -151,7 +151,7 @@ pub fn Popover(
     /// Reference to the layer element.
     #[prop(optional)]
     node_ref: Option<NodeRef<leptos::html::Div>>,
-    /// Called after every placement, with the layer visible.
+    /// Called once per opening, after the first placement, with the layer visible.
     #[prop(optional)]
     on_placed: Option<Callback<()>>,
     children: ChildrenFn,
@@ -174,9 +174,11 @@ pub fn Popover(
             width.set(Some(w));
         }
         let (w, h) = (f64::from(el.offset_width()), f64::from(el.offset_height()));
+        let first = pos.get_untracked().is_none();
         pos.set(Some(place(a, placement, w, h, gap)));
-        if let Some(cb) = on_placed {
-            cb.run(());
+        // The layer becomes visible on the next render; focusing a hidden element fails.
+        if first && let Some(cb) = on_placed {
+            request_animation_frame(move || cb.run(()));
         }
     };
 

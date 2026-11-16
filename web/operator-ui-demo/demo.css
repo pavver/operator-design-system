@@ -222,3 +222,4 @@ body { background: #181818; }
 .demo-vlist-row { display: flex; align-items: center; gap: calc(var(--op-du) * 2); padding: 0 calc(var(--op-du) * 2); border-bottom: var(--op-dim-border) solid var(--op-divider); }
 .demo-clip-box { overflow: hidden; transform: translateZ(0); height: calc(var(--op-du) * 30); padding: var(--op-dim-gutter); display: flex; flex-direction: column; gap: var(--op-dim-gutter); border: var(--op-dim-border) dashed var(--op-border-strong); }
 .demo-popover { padding: var(--op-dim-gutter); background-color: var(--op-surface); border: var(--op-dim-border) solid var(--op-border-strong); }
+.demo-popup-area { height: calc(var(--op-du) * 25); display: flex; align-items: center; justify-content: center; border: var(--op-dim-border) dashed var(--op-border-strong); }
