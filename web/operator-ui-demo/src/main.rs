@@ -97,12 +97,15 @@ const NAV: &[(&str, &[&str])] = &[
             "components/header",
             "components/tabs",
             "components/pagination",
+            "components/navigation-rail",
+            "components/side-panel",
         ],
     ),
     (
         "Data display",
         &[
             "components/list-item",
+            "components/tree",
             "components/data-table",
             "components/property-list",
             "components/accordion",

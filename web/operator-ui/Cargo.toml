@@ -62,6 +62,9 @@ reviewed = [
 ]
 
 draft = [
+    "navigation-rail",
+    "side-panel",
+    "tree",
     "color-field",
     "date-time-field",
     "duration-field",
@@ -111,6 +114,7 @@ linear-progress = []
 list-item = []
 marquee-text = ["tooltip"]
 menu = ["icon-button", "popover", "primitives", "scrollbar"]
+navigation-rail = ["primitives"]
 number-field = []
 pagination = ["icon-button"]
 popover = []
@@ -122,6 +126,7 @@ scrollbar = []
 search-field = ["primitives"]
 segmented-control = ["primitives"]
 sheet = ["icon-button", "scrollbar"]
+side-panel = ["icon-button"]
 skeleton = []
 slider = ["primitives"]
 split-pane = ["scrollbar"]
@@ -135,6 +140,7 @@ theme-toggle = []
 toast = ["primitives"]
 toolbar = ["icon-button", "menu", "tooltip"]
 time-field = []
+tree = ["primitives", "virtual-list"]
 tooltip = ["popover"]
 virtual-list = ["scrollbar"]
 

@@ -57,6 +57,8 @@ pub mod prelude {
     pub use crate::components::marquee_text::*;
     #[cfg(feature = "menu")]
     pub use crate::components::menu::*;
+    #[cfg(feature = "navigation-rail")]
+    pub use crate::components::navigation_rail::*;
     #[cfg(feature = "pagination")]
     pub use crate::components::pagination::*;
     #[cfg(feature = "popover")]
@@ -77,6 +79,8 @@ pub mod prelude {
     pub use crate::components::segmented_control::*;
     #[cfg(feature = "sheet")]
     pub use crate::components::sheet::*;
+    #[cfg(feature = "side-panel")]
+    pub use crate::components::side_panel::*;
     #[cfg(feature = "skeleton")]
     pub use crate::components::skeleton::*;
     #[cfg(feature = "slider")]
@@ -103,6 +107,8 @@ pub mod prelude {
     pub use crate::components::toolbar::*;
     #[cfg(feature = "tooltip")]
     pub use crate::components::tooltip::*;
+    #[cfg(feature = "tree")]
+    pub use crate::components::tree::*;
     #[cfg(feature = "color-field")]
     pub use crate::components::value_field::ColorField;
     #[cfg(feature = "duration-field")]

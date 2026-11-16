@@ -46,6 +46,8 @@ pub mod list_item;
 pub mod marquee_text;
 #[cfg(feature = "menu")]
 pub mod menu;
+#[cfg(feature = "navigation-rail")]
+pub mod navigation_rail;
 #[cfg(feature = "pagination")]
 pub mod pagination;
 #[cfg(feature = "popover")]
@@ -66,6 +68,8 @@ pub mod search_field;
 pub mod segmented_control;
 #[cfg(feature = "sheet")]
 pub mod sheet;
+#[cfg(feature = "side-panel")]
+pub mod side_panel;
 #[cfg(feature = "skeleton")]
 pub mod skeleton;
 #[cfg(feature = "slider")]
@@ -92,6 +96,8 @@ pub mod toast;
 pub mod toolbar;
 #[cfg(feature = "tooltip")]
 pub mod tooltip;
+#[cfg(feature = "tree")]
+pub mod tree;
 #[cfg(any(
     feature = "number-field",
     feature = "duration-field",
