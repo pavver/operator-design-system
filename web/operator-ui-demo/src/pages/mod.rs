@@ -50,6 +50,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/combobox" => (inputs::combobox, false),
         "components/chip" => (inputs::chip, false),
         "components/menu" => (navigation::menu, false),
+        "components/hover-card" => (feedback::hover_card, false),
         "components/popover" => (navigation::popover, false),
         "components/dialog" => (navigation::dialog, true),
         "components/tabs" => (navigation::tabs, false),

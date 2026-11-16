@@ -111,6 +111,8 @@ fn stylesheet() -> &'static str {
             crate::components::scrollbar::CSS,
             #[cfg(feature = "popover")]
             crate::components::popover::CSS,
+            #[cfg(feature = "hover-card")]
+            crate::components::hover_card::CSS,
             #[cfg(feature = "virtual-list")]
             crate::components::virtual_list::CSS,
             HOVER_CSS,

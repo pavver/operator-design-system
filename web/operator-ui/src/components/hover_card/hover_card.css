@@ -1,0 +1,22 @@
+/* ------------------------------------------------------------------ */
+/* HoverCard                                                           */
+/* ------------------------------------------------------------------ */
+.op-hover-card-anchor { display: inline-flex; }
+.op-hover-card {
+  /* Raised layer, like Menu and Tooltip. */
+  background-color: var(--op-surface-alt);
+  box-shadow:
+    inset 0 0 0 var(--op-dim-border) var(--op-border-strong),
+    0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
+  color: var(--op-text-primary);
+  animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
+}
+.op-hover-card-body {
+  max-width: calc(100vw - var(--op-dim-margin-screen) * 2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--op-dim-pad-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--op-dim-pad-tight);
+}

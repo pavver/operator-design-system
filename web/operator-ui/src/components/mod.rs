@@ -32,6 +32,8 @@ pub mod dropdown_menu;
 pub mod empty_state;
 #[cfg(feature = "header")]
 pub mod header;
+#[cfg(feature = "hover-card")]
+pub mod hover_card;
 #[cfg(feature = "icon-button")]
 pub mod icon_button;
 #[cfg(feature = "kbd")]

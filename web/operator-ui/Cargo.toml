@@ -62,6 +62,7 @@ reviewed = [
 ]
 
 draft = [
+    "hover-card",
     "marquee-text",
     "menu",
     "tooltip",
@@ -95,6 +96,7 @@ dialog = ["action-button", "icon-button", "scrollbar"]
 dropdown-menu = ["popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
 header = ["avatar", "primitives", "status-badge"]
+hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
 kbd = []
 linear-progress = []

@@ -43,6 +43,8 @@ pub mod prelude {
     pub use crate::components::empty_state::*;
     #[cfg(feature = "header")]
     pub use crate::components::header::*;
+    #[cfg(feature = "hover-card")]
+    pub use crate::components::hover_card::*;
     #[cfg(feature = "icon-button")]
     pub use crate::components::icon_button::*;
     #[cfg(feature = "kbd")]
