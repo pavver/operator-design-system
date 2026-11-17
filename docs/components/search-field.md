@@ -35,6 +35,7 @@ The field has the shape of [TextField](text-field.md) with a leading slot:
 | `pending` | bool | `false` | Shows the spinner. |
 | `enabled` | bool | `true` | Enables input. |
 | `label` | string | `"Search"` | Accessible name. |
+| `clear_label` | signal string | `"Clear search"` | Accessible name of the clear button (pass a translated text). |
 
 ## Accessibility
 

@@ -22,6 +22,9 @@ pub fn SearchField(
     pending: Signal<bool>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(default = "Search".into(), into)] label: String,
+    /// Accessible label of the clear button.
+    #[prop(default = "Clear search".into(), into)]
+    clear_label: Signal<String>,
 ) -> impl IntoView {
     let input = NodeRef::<leptos::html::Input>::new();
     let focused = RwSignal::new(false);
@@ -99,7 +102,7 @@ pub fn SearchField(
                 <button
                     type="button"
                     class="op-rippled op-field-reveal"
-                    aria-label="Clear search"
+                    aria-label=move || clear_label.get()
                     disabled=move || !enabled.get()
                     on:mousedown=|ev| ev.prevent_default()
                     on:pointerdown=move |ev| spawn_ripple(&ev)
