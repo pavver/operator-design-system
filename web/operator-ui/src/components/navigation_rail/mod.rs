@@ -42,6 +42,9 @@ pub fn NavigationRail(
     selected: RwSignal<String>,
     #[prop(optional)] on_select: Option<Callback<String>>,
     #[prop(default = "Navigation".into(), into)] label: String,
+    /// Lays the destinations out in a row of top tabs (narrow layouts).
+    #[prop(optional, into)]
+    horizontal: Signal<bool>,
 ) -> impl IntoView {
     let pick = move |id: String| {
         selected.set(id.clone());
@@ -64,17 +67,17 @@ pub fn NavigationRail(
         }
     };
     view! {
-        <nav class="op-rail" aria-label=label>
+        <nav class="op-rail" aria-label=label data-horizontal=move || horizontal.get().then_some("")>
             <div
                 class="op-rail-list"
                 role="tablist"
-                aria-orientation="vertical"
-                on:keydown=move |e| match e.key().as_str() {
-                    "ArrowDown" => {
+                aria-orientation=move || if horizontal.get() { "horizontal" } else { "vertical" }
+                on:keydown=move |e| match (e.key().as_str(), horizontal.get_untracked()) {
+                    ("ArrowDown", false) | ("ArrowRight", true) => {
                         e.prevent_default();
                         step(1);
                     }
-                    "ArrowUp" => {
+                    ("ArrowUp", false) | ("ArrowLeft", true) => {
                         e.prevent_default();
                         step(-1);
                     }

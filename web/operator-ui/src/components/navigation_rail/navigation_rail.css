@@ -46,3 +46,18 @@
 }
 .op-rail-item[aria-selected="true"] .op-rail-icon { color: var(--op-rail-color, var(--op-accent)); }
 .op-rail-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Horizontal: a row of top tabs under the app bar; the indicator moves to the bottom edge. */
+.op-rail[data-horizontal] {
+  width: 100%;
+  height: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider);
+}
+.op-rail[data-horizontal] .op-rail-list { flex-direction: row; }
+.op-rail[data-horizontal] .op-rail-item { flex: 1 0 auto; min-width: calc(var(--op-du) * 16); }
+.op-rail[data-horizontal] .op-rail-item[aria-selected="true"]::before {
+  inset: auto 0 0 0;
+  width: auto;
+  height: var(--op-dim-border-emphasis);
+}
