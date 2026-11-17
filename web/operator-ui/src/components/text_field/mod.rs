@@ -96,6 +96,20 @@ pub fn TextField(
         })
     });
 
+    // Enter runs the save action while SAVE is shown.
+    let enter_action = save_action.clone();
+    let on_enter = move |ev: leptos::ev::KeyboardEvent| {
+        if ev.key() != "Enter" || !save_visible.get_untracked() {
+            return;
+        }
+        if let Some(action) = enter_action.clone() {
+            ev.prevent_default();
+            spawn_local(async move {
+                let _ = action.call(()).await;
+            });
+        }
+    };
+
     view! {
         <div
             class="op-sb op-field"
@@ -114,6 +128,7 @@ pub fn TextField(
                 on:input=move |ev| value.set(event_target_value(&ev))
                 on:focus=move |_| focused.set(true)
                 on:blur=move |_| focused.set(false)
+                on:keydown=on_enter
             />
             {has_reveal
                 .then(|| {

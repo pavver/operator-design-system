@@ -2,7 +2,7 @@
 
 Single-line text input with an integrated async SAVE button and an optional password reveal toggle.
 
-Status: **reviewed** on web.
+Status: **draft** on web (Enter-to-save added 2026-11-17, waiting for review).
 
 ## Use
 
@@ -58,6 +58,7 @@ The save button keeps its own left edge as a separator.
 * The save button appears when the value differs from the baseline (`initial_value`) and a save handler exists.
 * It disappears when the value returns to the baseline, unless a save cycle is running.
 * Pressing the save button does not move focus away from the input, so the field keeps its `Focused` outline.
+* Enter in the input runs the save handler while the save button is shown.
 * The save button does not draw its own pending segment; the field outline shows it instead.
 * On success the save button keeps the check icon for the whole result phase instead of returning to its label.
 * While the save request is pending, the save button ignores clicks.
