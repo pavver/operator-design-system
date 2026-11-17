@@ -4,6 +4,7 @@ pub mod core;
 pub mod data;
 pub mod feedback;
 pub mod foundations;
+pub mod graph;
 pub mod inputs;
 pub mod layout;
 pub mod navigation;
@@ -68,6 +69,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/scroll-area" => (layout::scroll_area, false),
         "components/scrollbar" => (layout::scrollbar, false),
         "components/virtual-list" => (layout::virtual_list, false),
+        "components/graph" => (graph::graph, true),
         "components/navigation-rail" => (layout::navigation_shell, false),
         "components/side-panel" => (layout::navigation_shell, false),
         "components/tree" => (layout::navigation_shell, false),

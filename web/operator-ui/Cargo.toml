@@ -85,6 +85,9 @@ draft = [
 
 full = ["reviewed", "draft"]
 
+# Project-specific components (node-graph editing, code fields): not part of `full`.
+extensions = ["graph"]
+
 # Component features
 accordion = ["primitives"]
 action-button = ["primitives"]
@@ -107,6 +110,7 @@ duration-field = []
 dropdown-menu = ["popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
 header = ["avatar", "primitives", "status-badge"]
+graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
 kbd = []

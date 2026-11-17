@@ -30,6 +30,8 @@ pub mod dialog;
 pub mod dropdown_menu;
 #[cfg(feature = "empty-state")]
 pub mod empty_state;
+#[cfg(feature = "graph")]
+pub mod graph;
 #[cfg(feature = "header")]
 pub mod header;
 #[cfg(feature = "hover-card")]

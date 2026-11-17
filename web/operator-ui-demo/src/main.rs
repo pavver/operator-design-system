@@ -127,6 +127,7 @@ const NAV: &[(&str, &[&str])] = &[
             "components/virtual-list",
         ],
     ),
+    ("Project extensions", &["components/graph"]),
 ];
 
 fn group_of(slug: &str) -> Option<&'static str> {

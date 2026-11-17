@@ -41,6 +41,8 @@ pub mod prelude {
     pub use crate::components::dropdown_menu::*;
     #[cfg(feature = "empty-state")]
     pub use crate::components::empty_state::*;
+    #[cfg(feature = "graph")]
+    pub use crate::components::graph::*;
     #[cfg(feature = "header")]
     pub use crate::components::header::*;
     #[cfg(feature = "hover-card")]
