@@ -16,7 +16,7 @@ use crate::components::primitives::Icon;
 use crate::components::virtual_list::VirtualListHandle;
 use crate::core::{PendingRun, field_state, use_state_visual};
 use leptos::prelude::*;
-use list::ComboList;
+pub(crate) use list::ComboList;
 use operator_ui_tokens::{dim, icons};
 
 pub(crate) const CSS: &str = include_str!("combobox.css");

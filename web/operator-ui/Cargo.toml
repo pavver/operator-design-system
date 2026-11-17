@@ -14,7 +14,7 @@ js-sys.workspace = true
 wasm-bindgen-futures.workspace = true
 send_wrapper = "0.6"
 gloo-timers = { version = "0.4.0", features = ["futures"] }
-web-sys = { workspace = true, features = ["HtmlElement", "HtmlInputElement", "DomRect", "Element", "EventTarget", "PointerEvent", "KeyboardEvent", "CssStyleDeclaration", "Window", "Document", "Node", "ResizeObserver", "Navigator", "Clipboard", "NodeList", "HtmlTextAreaElement", "WheelEvent", "TouchEvent", "TouchList", "Touch", "MediaQueryList", "MutationObserver", "MutationObserverInit", "HtmlCollection"] }
+web-sys = { workspace = true, features = ["HtmlElement", "HtmlInputElement", "DomRect", "Element", "EventTarget", "PointerEvent", "KeyboardEvent", "CssStyleDeclaration", "Window", "Document", "Node", "ResizeObserver", "Navigator", "Clipboard", "NodeList", "HtmlTextAreaElement", "WheelEvent", "TouchEvent", "TouchList", "Touch", "MediaQueryList", "MutationObserver", "MutationObserverInit", "HtmlCollection", "HtmlDocument"] }
 arborium = { version = "2.18.2", optional = true, default-features = false }
 
 [features]
@@ -86,7 +86,7 @@ draft = [
 full = ["reviewed", "draft"]
 
 # Project-specific components (node-graph editing, code fields): not part of `full`.
-extensions = ["graph"]
+extensions = ["code-field", "graph"]
 
 # Component features
 accordion = ["primitives"]
@@ -98,6 +98,7 @@ checkbox = ["primitives"]
 checkbox-group = ["primitives"]
 chip = ["primitives"]
 code-block = ["icon-button", "scrollbar"]
+code-field = ["combobox", "popover", "virtual-list"]
 color-field = ["popover", "primitives"]
 combobox = ["dropdown-menu", "popover", "primitives", "scrollbar", "virtual-list"]
 confirm-dialog = ["dialog"]

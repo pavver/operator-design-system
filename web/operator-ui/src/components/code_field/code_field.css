@@ -1,0 +1,50 @@
+/* ------------------------------------------------------------------ */
+/* CodeField                                                           */
+/* ------------------------------------------------------------------ */
+.op-code-field { display: flex; flex-direction: column; width: 100%; background-color: var(--op-surface); }
+.op-code-field[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-code-stack { display: grid; position: relative; }
+.op-code-layer, .op-code-input {
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(var(--op-type-console-line) * var(--op-code-min-lines, 2) + var(--op-dim-pad-tight) * 2);
+  margin: 0;
+  padding: var(--op-dim-pad-tight) var(--op-dim-pad-card);
+  border: 0;
+  font-family: var(--op-font);
+  font-size: var(--op-type-console-size);
+  line-height: var(--op-type-console-line);
+  letter-spacing: normal;
+  tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.op-code-layer { color: var(--op-text-primary); pointer-events: none; overflow: hidden; }
+.op-code-input {
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--op-accent);
+  outline: none;
+}
+.op-code-field .op-code-input:focus, .op-code-field .op-code-input:focus-visible { outline: none; }
+.op-code-input::placeholder { color: var(--op-text-disabled); }
+.op-code-input::selection { background-color: color-mix(in srgb, var(--op-accent) 30%, transparent); color: transparent; }
+.op-code-keyword { color: var(--op-syntax-keyword); }
+.op-code-string { color: var(--op-syntax-string); }
+.op-code-number { color: var(--op-syntax-number); }
+.op-code-comment { color: var(--op-syntax-comment); }
+.op-code-type { color: var(--op-syntax-type); }
+.op-code-function { color: var(--op-syntax-function); }
+.op-code-constant { color: var(--op-syntax-constant); }
+.op-code-property { color: var(--op-syntax-property); }
+.op-code-meta { color: var(--op-syntax-meta); }
+.op-code-punctuation { color: var(--op-syntax-punctuation); }
+.op-code-error { text-decoration: underline wavy var(--op-error); text-decoration-skip-ink: none; }
+.op-code-warning { text-decoration: underline wavy var(--op-warning); text-decoration-skip-ink: none; }
+.op-code-message { padding: 0 var(--op-dim-pad-card) var(--op-dim-pad-tight); }
+.op-code-message[data-kind="error"] { color: var(--op-error); }
+.op-code-message[data-kind="warning"] { color: var(--op-warning); }
+.op-code-completion { min-width: calc(var(--op-du) * 50); max-width: calc(var(--op-du) * 90); }

@@ -25,6 +25,8 @@ pub mod prelude {
     pub use crate::components::chip::*;
     #[cfg(feature = "code-block")]
     pub use crate::components::code_block::*;
+    #[cfg(feature = "code-field")]
+    pub use crate::components::code_field::{CodeCompletion, CodeField, CodeSpan, CodeToken};
     #[cfg(feature = "combobox")]
     pub use crate::components::combobox::*;
     #[cfg(feature = "confirm-dialog")]

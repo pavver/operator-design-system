@@ -14,6 +14,8 @@ pub mod checkbox_group;
 pub mod chip;
 #[cfg(feature = "code-block")]
 pub mod code_block;
+#[cfg(feature = "code-field")]
+pub mod code_field;
 #[cfg(feature = "combobox")]
 pub mod combobox;
 #[cfg(feature = "confirm-dialog")]

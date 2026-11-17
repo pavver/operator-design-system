@@ -115,6 +115,8 @@ fn stylesheet() -> &'static str {
             crate::components::hover_card::CSS,
             #[cfg(feature = "graph")]
             crate::components::graph::CSS,
+            #[cfg(feature = "code-field")]
+            crate::components::code_field::CSS,
             #[cfg(feature = "navigation-rail")]
             crate::components::navigation_rail::CSS,
             #[cfg(feature = "side-panel")]

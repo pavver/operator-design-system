@@ -70,6 +70,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/scrollbar" => (layout::scrollbar, false),
         "components/virtual-list" => (layout::virtual_list, false),
         "components/graph" => (graph::graph, true),
+        "components/code-field" => (graph::code_field, false),
         "components/navigation-rail" => (layout::navigation_shell, false),
         "components/side-panel" => (layout::navigation_shell, false),
         "components/tree" => (layout::navigation_shell, false),
