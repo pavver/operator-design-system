@@ -1,16 +1,14 @@
 //! Floating layer: Popover, the shared base of menus, lists, tooltips and hover cards.
 
 use crate::core::overlay::{
-    FloatPos, OverlayHost, event_in_layer_tree, place_above, place_at, place_below_end,
-    place_below_start, place_side_start,
+    FloatPos, OverlayHost, place_above, place_at, place_below_end, place_below_start,
+    place_side_start,
 };
-use leptos::ev;
 use leptos::portal::Portal;
 use leptos::prelude::*;
 use send_wrapper::SendWrapper;
 use std::sync::atomic::{AtomicU64, Ordering};
 use wasm_bindgen::JsCast;
-use wasm_bindgen::prelude::Closure;
 
 pub(crate) const CSS: &str = include_str!("popover.css");
 
@@ -241,59 +239,73 @@ pub fn Popover(
         }
     });
 
-    let down = window_event_listener(ev::pointerdown, move |e| {
-        if !dismiss_on_outside || !open.get_untracked() {
-            return;
-        }
-        let in_layer = event_in_layer_tree(&e, layer_id);
-        let in_anchor = anchor
-            .get_untracked()
-            .contains(f64::from(e.client_x()), f64::from(e.client_y()));
-        if !in_layer && !in_anchor {
-            open.set(false);
-        }
-    });
-    let key = window_event_listener(ev::keydown, move |e| {
-        if dismiss_on_escape && open.get_untracked() && e.key() == "Escape" {
-            open.set(false);
-        }
-    });
-    let resize = window_event_listener(ev::resize, move |_| {
-        if !open.get_untracked() {
-            return;
-        }
-        if dismiss_on_resize {
-            open.set(false);
-        } else {
-            measure();
-        }
-    });
-    // Scrolling of any ancestor moves the anchor; capture catches scrolls of inner containers.
-    let on_scroll = Closure::<dyn FnMut()>::new(move || {
-        if open.get_untracked() {
-            measure();
-        }
-    });
-    if let Some(w) = web_sys::window() {
-        let _ = w.add_event_listener_with_callback_and_bool(
-            "scroll",
-            on_scroll.as_ref().unchecked_ref(),
-            true,
-        );
-    }
-    let scroll = SendWrapper::new(on_scroll);
-    on_cleanup(move || {
-        down.remove();
-        key.remove();
-        resize.remove();
+    // Window listeners exist only in a browser: rendering on a server has no window.
+    #[cfg(target_arch = "wasm32")]
+    {
+        use crate::core::overlay::event_in_layer_tree;
+        use leptos::ev;
+        let down = window_event_listener(ev::pointerdown, move |e| {
+            if !dismiss_on_outside || !open.get_untracked() {
+                return;
+            }
+            let in_layer = event_in_layer_tree(&e, layer_id);
+            let in_anchor = anchor
+                .get_untracked()
+                .contains(f64::from(e.client_x()), f64::from(e.client_y()));
+            if !in_layer && !in_anchor {
+                open.set(false);
+            }
+        });
+        let key = window_event_listener(ev::keydown, move |e| {
+            if dismiss_on_escape && open.get_untracked() && e.key() == "Escape" {
+                open.set(false);
+            }
+        });
+        let resize = window_event_listener(ev::resize, move |_| {
+            if !open.get_untracked() {
+                return;
+            }
+            if dismiss_on_resize {
+                open.set(false);
+            } else {
+                measure();
+            }
+        });
+        // Scrolling of any ancestor moves the anchor; capture catches scrolls of inner containers.
+        let on_scroll = wasm_bindgen::prelude::Closure::<dyn FnMut()>::new(move || {
+            if open.get_untracked() {
+                measure();
+            }
+        });
         if let Some(w) = web_sys::window() {
-            let _ = w.remove_event_listener_with_callback_and_bool(
+            let _ = w.add_event_listener_with_callback_and_bool(
                 "scroll",
-                scroll.as_ref().unchecked_ref(),
+                on_scroll.as_ref().unchecked_ref(),
                 true,
             );
         }
-    });
+        let scroll = SendWrapper::new(on_scroll);
+        on_cleanup(move || {
+            down.remove();
+            key.remove();
+            resize.remove();
+            if let Some(w) = web_sys::window() {
+                let _ = w.remove_event_listener_with_callback_and_bool(
+                    "scroll",
+                    scroll.as_ref().unchecked_ref(),
+                    true,
+                );
+            }
+        });
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    let _ = (
+        measure,
+        dismiss_on_outside,
+        dismiss_on_escape,
+        dismiss_on_resize,
+        layer_id,
+    );
 
     let children = StoredValue::new(children);
     let class = StoredValue::new(class);
