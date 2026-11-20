@@ -15,6 +15,7 @@ check = { material = "check" }
 close = { material = "close" }
 visibility = { material = "visibility" }
 visibility_off = { material = "visibility_off" }
+lock = { material = "lock" }
 dark_mode = { material = "dark_mode" }
 light_mode = { material = "light_mode" }
 videocam = { material = "videocam" }
