@@ -2,7 +2,8 @@
 
 use super::parse::{format_number, parse_number, step_number};
 use super::parsed::ParsedField;
-use crate::core::ControlState;
+use crate::components::field::FieldVariant;
+use crate::core::{ControlState, Metric, Slot, root_style, ui_text};
 use leptos::prelude::*;
 
 /// Number input with a unit after the value; arrows step it within the bounds.
@@ -25,12 +26,41 @@ pub fn NumberField(
     /// Accepts an empty field as no value.
     #[prop(optional)]
     allow_empty: bool,
-    #[prop(optional, into)] placeholder: Signal<String>,
-    #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] placeholder: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional, into)] hint: MaybeProp<String>,
+    #[prop(optional, into)] error: MaybeProp<String>,
+    #[prop(optional, into)] variant: Signal<FieldVariant>,
+    #[prop(optional, into)] aria_label: MaybeProp<String>,
+    #[prop(optional, into)] prepend: Slot,
+    #[prop(optional, into)] append: Slot,
+    #[prop(optional, into)] before: Slot,
+    #[prop(optional, into)] after: Slot,
+    #[prop(optional, into)] label_slot: Slot,
+    #[prop(optional, into)] hint_slot: Slot,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] slot_size: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] unit_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] unit_gap: MaybeProp<f32>,
+
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     #[prop(optional)] on_commit: Option<Callback<Option<f64>>>,
 ) -> impl IntoView {
+    let placeholder = ui_text(placeholder, "number-field.placeholder", "");
+    let aria_label = ui_text(aria_label, "number-field.label", "Number");
+    let custom_style = Signal::derive(root_style(
+        vec![
+            Metric::du("--op-field-unit-padding-x", unit_padding_x),
+            Metric::du("--op-field-unit-gap", unit_gap),
+        ],
+        style,
+    ));
     let format = Callback::new(move |v: Option<f64>| {
         v.map(|v| format_number(v, decimals)).unwrap_or_default()
     });
@@ -64,10 +94,26 @@ pub fn NumberField(
             on_step=Some(on_step)
             placeholder=placeholder
             label=label
+            hint=hint
+            error=error
+            variant=variant
+            aria_label=aria_label
+            prepend=prepend
+            append=append
+            before=before
+            after=after
+            label_slot=label_slot
+            hint_slot=hint_slot
+            height=height
+            padding_x=padding_x
+            slot_size=slot_size
+            gap=gap
+            font_size=font_size
+            class=class
+            style=custom_style
             enabled=enabled
             state=state
             input_mode="decimal"
-            class="op-number-field"
             on_commit=on_commit
             trailing=trailing
         />

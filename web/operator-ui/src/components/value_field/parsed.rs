@@ -1,6 +1,7 @@
 //! ParsedField: a text field that commits a typed value.
 
-use crate::core::{ControlState, PendingRun, sleep_ms, use_state_visual};
+use crate::components::field::{Field, FieldMetrics, FieldVariant};
+use crate::core::{ControlState, Slot, sleep_ms, ui_text};
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 
@@ -16,8 +17,8 @@ pub fn ParsedField<T>(
     format: Callback<T, String>,
     /// Value for a text, or `None` when the text is invalid.
     parse: Callback<String, Option<T>>,
-    #[prop(optional, into)] placeholder: Signal<String>,
-    #[prop(default = None)] label: Option<String>,
+    #[prop(optional, into)] placeholder: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     /// Called after every committed change.
@@ -29,7 +30,24 @@ pub fn ParsedField<T>(
     /// `inputmode` hint for virtual keyboards, for example `decimal` or `numeric`.
     #[prop(optional, into)]
     input_mode: Option<&'static str>,
-    #[prop(optional, into)] class: String,
+    #[prop(optional, into)] hint: MaybeProp<String>,
+    #[prop(optional, into)] error: MaybeProp<String>,
+    #[prop(optional, into)] variant: Signal<FieldVariant>,
+    #[prop(optional, into)] aria_label: MaybeProp<String>,
+    #[prop(optional, into)] prepend: Slot,
+    #[prop(optional, into)] append: Slot,
+    #[prop(optional, into)] before: Slot,
+    #[prop(optional, into)] after: Slot,
+    #[prop(optional, into)] label_slot: Slot,
+    #[prop(optional, into)] hint_slot: Slot,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] slot_size: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+
     /// Views after the input inside the field (a unit, a button).
     #[prop(default = None)]
     trailing: Option<ChildrenFn>,
@@ -51,7 +69,15 @@ where
             ControlState::Idle
         }
     });
-    let visual = use_state_visual(current);
+    let placeholder = ui_text(placeholder, "parsed-field.placeholder", "");
+    let name = ui_text(aria_label, "parsed-field.label", "Value");
+    let accessible_name = Signal::derive(move || label.get().unwrap_or_else(|| name.get()));
+    let blocked = move || {
+        matches!(
+            current.get(),
+            ControlState::Disabled | ControlState::Pending
+        )
+    };
 
     // External changes of the value show up unless the user is typing.
     Effect::new(move |_| {
@@ -79,6 +105,9 @@ where
         }
     };
     let commit = move || {
+        if blocked() {
+            return;
+        }
         let t = text.get_untracked();
         if t == format.run(value.get_untracked()) {
             return;
@@ -96,31 +125,32 @@ where
         set(step.run((base, delta)));
     };
     let has_trailing = trailing.is_some();
+    let append = Slot::from(move || view! { {append.run()} {trailing.as_ref().map(|t| t())} });
 
     view! {
-        <div
-            class=format!("op-sb op-field op-value-field {class}")
-            data-state=move || visual.state.get()
-            data-result=move || visual.result.get()
-            data-fading=move || visual.fading.get().then_some("")
-            data-trailing=has_trailing.then_some("")
+        <Field state=current append=append trailing=has_trailing pending_run=true box_class="op-value-field"
+            label=label hint=hint error=error variant=variant
+            prepend=prepend before=before after=after label_slot=label_slot hint_slot=hint_slot
+            metrics=FieldMetrics { height, padding_x, slot_size, gap, font_size }
+            class=class style=style
         >
             <input
                 class="op-field-input"
                 type="text"
                 inputmode=input_mode
-                aria-label=label
-                aria-invalid=move || (flash.get() == Some(ControlState::Error)).then_some("true")
+                aria-label=move || accessible_name.get()
+                aria-invalid=move || (error.get().is_some() || flash.get() == Some(ControlState::Error)).then_some("true")
                 placeholder=move || placeholder.get()
                 prop:value=move || text.get()
-                disabled=move || !enabled.get()
+                disabled=move || current.get() == ControlState::Disabled
+                readonly=move || current.get() == ControlState::Pending
                 on:input=move |ev| text.set(event_target_value(&ev))
                 on:focus=move |_| focused.set(true)
                 on:blur=move |_| {
                     focused.set(false);
                     commit();
                 }
-                on:keydown=move |ev| match ev.key().as_str() {
+                on:keydown=move |ev| { if blocked() { return; } match ev.key().as_str() {
                     "Enter" => {
                         ev.prevent_default();
                         commit();
@@ -135,10 +165,8 @@ where
                         step(-1);
                     }
                     _ => {}
-                }
+                }}
             />
-            {trailing.map(|t| t())}
-            <PendingRun/>
-        </div>
+        </Field>
     }
 }

@@ -99,10 +99,96 @@ The save button hides `100 ms` before the field leaves its result state, so its 
 | `on_save` | async `(String) -> ActionResult` | none | Save handler; enables the save button. |
 | `password` | bool | `false` | Masks the input. |
 | `show_reveal` | bool | `true` | Shows the reveal toggle on password fields. |
-| `label` | string | none | Accessible name of the input. |
+| `label` | string | none | Visible label above the box and accessible name. |
+
+### Customization API
+
+Every text-like input uses the public [Field](field.md) shell.
+Labels are visible above the box; use `aria_label` for an accessible name alone.
+
+| Property | Type | Default | Components | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `placeholder` | `string signal` | string key | TextField | Translatable text; see Strings. |
+| `state` | `Signal<Option<ControlState>>` | none | TextField | External control-state override. |
+| `save_text` | `string signal` | string key | TextField | Translatable text; see Strings. |
+| `save_icon` | `Option<IconData>` | icon key | TextField | Built-in icon override; see Icons. |
+| `label` | `string signal` | none | TextField | Visible label and accessible name. |
+| `hint` | `string signal` | none | TextField | Helper text below the box. |
+| `error` | `string signal` | none | TextField | Error text replaces hint and draws the error outline. |
+| `variant` | `FieldVariant signal` | outlined | TextField | Field appearance. |
+| `aria_label` | `string signal` | string key | TextField | Accessible name when label is unset. |
+| `prepend` | `slot` | none | TextField | Inside the box before the control. |
+| `append` | `slot` | none | TextField | Inside the box before built-in reveal, save or picker controls. |
+| `before` | `slot` | none | TextField | Outside the box before it. |
+| `after` | `slot` | none | TextField | Outside the box after it. |
+| `label_slot` | `slot` | none | TextField | Replaces the visible label. |
+| `hint_slot` | `slot` | none | TextField | Replaces the hint and error line. |
+| `height` | `number` | unset | TextField | Metric override; see below. |
+| `padding_x` | `number` | unset | TextField | Metric override; see below. |
+| `slot_size` | `number` | unset | TextField | Metric override; see below. |
+| `gap` | `number` | unset | TextField | Metric override; see below. |
+| `font_size` | `number` | unset | TextField | Metric override; see below. |
+| `class` | `string signal` | none | TextField | Additional root class. |
+| `style` | `string signal` | none | TextField | Additional root style. |
+| `show_password_label` | `string signal` | string key | TextField | Translatable text; see Strings. |
+| `hide_password_label` | `string signal` | string key | TextField | Translatable text; see Strings. |
+| `reveal_icon` | `Option<IconData>` | icon key | TextField | Built-in icon override; see Icons. |
+| `conceal_icon` | `Option<IconData>` | icon key | TextField | Built-in icon override; see Icons. |
+| `icon_size` | `number` | unset | TextField | Metric override; see below. |
+| `save_min_width` | `number` | unset | TextField | Metric override; see below. |
+| `save_max_width` | `number` | unset | TextField | Metric override; see below. |
 
 ## Accessibility
 
 * The input carries `label` as its accessible name.
 * The reveal toggle is a button with the name "Show password" or "Hide password" and a pressed state.
 * The save button reports busy while pending.
+
+## Customization
+
+`class` and `style` apply to the root; explicit `style` declarations follow metric props and win.
+Unset metric props preserve token fallbacks.
+All text-like inputs provide the same six field slots.
+
+| Metric prop | Unit | Variable | Default | Components |
+| :--- | :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-field-height` | `row_standard` | TextField |
+| `padding_x` | DU | `--op-field-padding-x` | `pad_card` | TextField |
+| `slot_size` | DU | `--op-field-slot-size` | `row_standard` | TextField |
+| `gap` | DU | `--op-field-gap` | `gap_micro` | TextField |
+| `font_size` | TU | `--op-field-font-size` | `type_body_size` | TextField |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small; 5 DU for picker arrows` | TextField |
+| `save_min_width` | DU | `--op-field-save-min-width` | `12 DU` | TextField |
+| `save_max_width` | DU | `--op-field-save-max-width` | `30 DU` | TextField |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-field-background` | `surface` |
+| `--op-field-text` | `text_primary` |
+
+| Slot | Place |
+| :--- | :--- |
+| `prepend` | Inside the box before the control. |
+| `append` | Inside the box before built-in reveal, save or picker controls. |
+| `before` | Outside the box before it. |
+| `after` | Outside the box after it. |
+| `label_slot` | Replaces the visible label. |
+| `hint_slot` | Replaces the hint and error line. |
+
+### Strings
+
+| Key | Prop | Default |
+| :--- | :--- | :--- |
+| `text-field.placeholder` | `placeholder` | `(empty)` |
+| `text-field.label` | `aria_label` | `Text` |
+| `text-field.save` | `save_text` | `SAVE` |
+| `text-field.show-password` | `show_password_label` | `Show password` |
+| `text-field.hide-password` | `hide_password_label` | `Hide password` |
+
+### Icons
+
+| Key | Prop | Default |
+| :--- | :--- | :--- |
+| `text-field.save` | `save_icon` | `check` |
+| `text-field.reveal` | `reveal_icon` | `visibility` |
+| `text-field.conceal` | `conceal_icon` | `visibility_off` |

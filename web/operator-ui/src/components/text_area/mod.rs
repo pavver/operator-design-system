@@ -1,8 +1,9 @@
 //! Multi-line text input: TextArea.
 
+use crate::components::field::{Field, FieldMetrics, FieldVariant};
 use crate::components::scrollbar::{ScrollAxis, Scrollbar};
 use crate::components::tooltip::Tooltip;
-use crate::core::{ControlState, PendingRun, field_state, use_state_visual};
+use crate::core::{ControlState, Metric, Slot, field_state, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
 
@@ -15,8 +16,35 @@ pub(crate) const CSS: &str = include_str!("text_area.css");
 #[component]
 pub fn TextArea(
     value: RwSignal<String>,
-    #[prop(optional, into)] placeholder: Signal<String>,
-    #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] placeholder: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional, into)] hint: MaybeProp<String>,
+    #[prop(optional, into)] error: MaybeProp<String>,
+    #[prop(optional, into)] variant: Signal<FieldVariant>,
+    #[prop(optional, into)] aria_label: MaybeProp<String>,
+    #[prop(optional, into)] prepend: Slot,
+    #[prop(optional, into)] append: Slot,
+    #[prop(optional, into)] before: Slot,
+    #[prop(optional, into)] after: Slot,
+    #[prop(optional, into)] label_slot: Slot,
+    #[prop(optional, into)] hint_slot: Slot,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] slot_size: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] grip_size: MaybeProp<f32>,
+    #[prop(optional, into)] caption_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] caption_line_height: MaybeProp<f32>,
+    #[prop(optional, into)] counter_gap: MaybeProp<f32>,
+    #[prop(optional, into)] resize_label: MaybeProp<String>,
+    /// Counter template; `{count}` and `{max}` are replaced with the character counts.
+    #[prop(optional, into)]
+    counter_text: MaybeProp<String>,
     #[prop(default = 3)] min_rows: u32,
     #[prop(default = 8)] max_rows: u32,
     /// Shows the corner grip for manual resizing.
@@ -33,7 +61,22 @@ pub fn TextArea(
 ) -> impl IntoView {
     let area = NodeRef::<leptos::html::Textarea>::new();
     let focused = RwSignal::new(false);
-    let visual = use_state_visual(field_state(enabled, state, focused));
+    let current = field_state(enabled, state, focused);
+    let blocked = move || {
+        matches!(
+            current.get(),
+            ControlState::Pending | ControlState::Disabled
+        )
+    };
+    let placeholder = ui_text(placeholder, "text-area.placeholder", "");
+    let name = ui_text(aria_label, "text-area.label", "Text");
+    let accessible_name = Signal::derive(move || label.get().unwrap_or_else(|| name.get()));
+    let resize_label = ui_text(
+        resize_label,
+        "text-area.resize",
+        "Drag to resize, double-click to fit the text",
+    );
+    let counter_text = ui_text(counter_text, "text-area.counter", "{count} / {max}");
     let max_rows = max_rows.max(min_rows);
     let resize_max_rows = resize_max_rows.max(max_rows);
     // Height set by the grip in CSS pixels; `None` means content-driven height.
@@ -79,7 +122,7 @@ pub fn TextArea(
         ))
     };
     let on_grip_down = move |ev: web_sys::PointerEvent| {
-        if ev.button() != 0 || !enabled.get_untracked() {
+        if ev.button() != 0 || blocked() {
             return;
         }
         ev.prevent_default();
@@ -99,7 +142,7 @@ pub fn TextArea(
         resizing.set(true);
     };
     let on_grip_move = move |ev: web_sys::PointerEvent| {
-        if !resizing.get_untracked() {
+        if blocked() || !resizing.get_untracked() {
             return;
         }
         let Some((min, max)) = limits() else {
@@ -124,28 +167,44 @@ pub fn TextArea(
         })
     };
 
+    let mut metrics = FieldMetrics {
+        height,
+        padding_x,
+        slot_size,
+        gap,
+        font_size,
+    }
+    .vars();
+    metrics.extend([
+        Metric::du("--op-field-padding-y", padding_y),
+        Metric::tu("--op-field-line-height", line_height),
+        Metric::du("--op-field-grip-size", grip_size),
+        Metric::du("--op-field-counter-gap", counter_gap),
+        Metric::tu("--op-field-caption-font-size", caption_font_size),
+        Metric::tu("--op-field-caption-line-height", caption_line_height),
+    ]);
+    let custom_style = root_style(metrics, style);
     view! {
-        <div class="op-textarea-wrap">
-            <div
-                class="op-sb op-textarea"
-                data-state=move || visual.state.get()
-                data-result=move || visual.result.get()
-                data-fading=move || visual.fading.get().then_some("")
-                style:--ta-min-rows=min_rows.to_string()
-                style:--ta-max-rows=max_rows.to_string()
-                style:--ta-resize-max-rows=resize_max_rows.to_string()
-                data-manual=move || manual.get().is_some().then_some("")
-                data-resizing=move || resizing.get().then_some("")
+        <div class=root_class("op-textarea-wrap", class)
+            style=move || format!("--ta-min-rows:{min_rows};--ta-max-rows:{max_rows};--ta-resize-max-rows:{resize_max_rows};{}", custom_style().unwrap_or_default())
+            data-resizing=move || resizing.get().then_some("")
+        >
+            <Field state=current label=label hint=hint error=error variant=variant
+                prepend=prepend append=append before=before after=after label_slot=label_slot hint_slot=hint_slot
+                box_class="op-textarea" pending_run=true
             >
                 <textarea
                     node_ref=area
                     class="op-textarea-input op-scroll-native-off"
                     rows=min_rows
-                    aria-label=label
+                    data-manual=move || manual.get().is_some().then_some("")
+                    aria-invalid=move || error.get().is_some().then_some("true")
+                    aria-label=move || accessible_name.get()
                     placeholder=move || placeholder.get()
                     maxlength=max_length.map(|m| m.to_string())
                     prop:value=move || value.get()
-                    disabled=move || !enabled.get()
+                    disabled=move || current.get() == ControlState::Disabled
+                    readonly=move || current.get() == ControlState::Pending
                     on:input=move |ev| value.set(event_target_value(&ev))
                     on:focus=move |_| focused.set(true)
                     on:blur=move |_| focused.set(false)
@@ -155,7 +214,7 @@ pub fn TextArea(
                     .then(|| {
                         view! {
                             <span class="op-textarea-grip-slot">
-                            <Tooltip text="Drag to resize, double-click to fit the text">
+                            <Tooltip text=resize_label>
                             <span
                                 class="op-textarea-grip"
                                 aria-hidden="true"
@@ -164,19 +223,18 @@ pub fn TextArea(
                                 on:pointerup=on_grip_up
                                 on:pointercancel=on_grip_up
                                 on:lostpointercapture=on_grip_up
-                                on:dblclick=move |_| manual.set(None)
+                                on:dblclick=move |_| { if !blocked() { manual.set(None); } }
                             ></span>
                             </Tooltip>
                             </span>
                         }
                     })}
-                <PendingRun/>
-            </div>
+            </Field>
             {max_length
                 .map(|max| {
                     view! {
                         <div class="op-textarea-counter op-t-caption" data-tone=counter_tone>
-                            {move || format!("{} / {max}", count())}
+                            {move || counter_text.get().replace("{count}", &count().to_string()).replace("{max}", &max.to_string())}
                         </div>
                     }
                 })}
