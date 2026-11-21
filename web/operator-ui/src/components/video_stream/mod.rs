@@ -141,7 +141,12 @@ pub fn VideoStream(
                 let html_video: &web_sys::HtmlVideoElement = &video;
                 if let Some(ms) = stream_opt {
                     html_video.set_src_object(Some(&ms));
-                    let _ = html_video.play();
+                    // A clip that cannot play rejects the promise; the poster stays visible.
+                    if let Ok(promise) = html_video.play() {
+                        leptos::task::spawn_local(async move {
+                            let _ = wasm_bindgen_futures::JsFuture::from(promise).await;
+                        });
+                    }
                     internal_state.set(VideoStreamState::Playing);
                 } else {
                     html_video.set_src_object(None);

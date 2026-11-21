@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T00:52:00+02:00"
+status = "draft"
+en = "Rename GalleryLayout::Telegram to GalleryLayout::Compact for generic chat-attachment mosaic support."
+uk = "Перейменовано GalleryLayout::Telegram на GalleryLayout::Compact для універсальної мозаїчної розкладки вкладень чату."
+
+[[change]]
 date = "2026-11-21T23:50:00+02:00"
 status = "draft"
 en = "Unify media item model with GalleryViewer into MediaItem, and open GalleryViewer on tile click by default."
@@ -11,5 +17,5 @@ uk = "Об'єднано модель медіаелементів із GalleryVi
 [[change]]
 date = "2026-11-21T21:02:31+02:00"
 status = "draft"
-en = "Initial implementation of the Gallery component with responsive grid and Telegram-style layout, selection, and viewport lazy loading."
-uk = "Початкова реалізація компонента Gallery з адаптивною сіткою та розкладкою у стилі Telegram, вибором елементів та лінивим завантаженням."
+en = "Initial implementation of the Gallery component with responsive grid and compact mosaic layout, selection, and viewport lazy loading."
+uk = "Початкова реалізація компонента Gallery з адаптивною сіткою та компактною мозаїчною розкладкою, вибором елементів та лінивим завантаженням."

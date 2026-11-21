@@ -99,14 +99,14 @@ pub fn gallery() -> AnyView {
         </Example>
 
         <Example
-            title="Telegram-Style Compact Layout"
-            note="Edge-to-edge multi-image grid ported from chat message attachments."
+            title="Compact Attachment Layout"
+            note="Edge-to-edge multi-image grid for chat message attachments."
             block=true
         >
             <div style="max-width:calc(var(--op-du)*70);">
                 <Gallery
                     items=items
-                    layout=GalleryLayout::Telegram
+                    layout=GalleryLayout::Compact
                 />
             </div>
         </Example>

@@ -64,6 +64,7 @@ draft = [
     "aspect-ratio",
     "breadcrumbs",
     "button-group",
+    "chat-input",
     "chat-message",
     "circular-progress",
     "color-field",
@@ -73,12 +74,14 @@ draft = [
     "dropdown-menu",
     "duration-field",
     "editor",
+    "emoji-picker",
     "fab",
     "field",
     "file-field",
     "form",
     "gallery",
     "gallery-viewer",
+    "gif-picker",
     "hover-card",
     "image",
     "knob",
@@ -87,18 +90,23 @@ draft = [
     "loading-bar",
     "loading-overlay",
     "marquee-text",
+    "media-keyboard",
+    "media-record-button",
     "menu",
     "navigation-rail",
     "number-field",
     "popover",
     "popup-edit",
     "property-list",
+    "ptt-button",
     "ptz-pad",
     "range-slider",
     "rating",
+    "reaction-picker",
     "side-panel",
     "space",
     "split-button",
+    "sticker-picker",
     "text-field",
     "time-field",
     "timeline",
@@ -128,6 +136,7 @@ avatar = ["primitives", "status-badge"]
 banner = ["primitives", "toast"]
 breadcrumbs = ["icon-button", "menu", "primitives"]
 button-group = []
+chat-input = ["chat-message", "media-record-button", "primitives"]
 chat-message = ["primitives"]
 checkbox = ["primitives"]
 checkbox-group = ["primitives"]
@@ -146,10 +155,12 @@ date-time-field = ["field", "popover", "primitives"]
 duration-field = ["field"]
 dropdown-menu = ["field", "popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
+emoji-picker = ["chat-message", "primitives"]
 file-field = ["field", "chip", "primitives", "web-sys/File", "web-sys/Blob", "web-sys/FileList", "web-sys/DragEvent", "web-sys/DataTransfer"]
 form = ["action-button", "primitives", "web-sys/FocusEvent"]
 gallery = ["aspect-ratio", "checkbox", "gallery-viewer", "image", "primitives", "web-sys/IntersectionObserver", "web-sys/IntersectionObserverEntry", "web-sys/IntersectionObserverInit"]
 gallery-viewer = ["icon-button", "primitives", "web-sys/HtmlVideoElement"]
+gif-picker = ["primitives", "web-sys/HtmlVideoElement", "web-sys/IntersectionObserver", "web-sys/IntersectionObserverEntry", "web-sys/IntersectionObserverInit"]
 header = ["avatar", "primitives", "status-badge"]
 graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
@@ -164,6 +175,8 @@ list-item = []
 loading-bar = []
 loading-overlay = ["primitives"]
 marquee-text = ["tooltip"]
+media-keyboard = ["chat-message", "emoji-picker", "gif-picker", "popover", "primitives", "sticker-picker"]
+media-record-button = ["primitives"]
 menu = ["icon-button", "popover", "primitives", "scrollbar"]
 navigation-rail = ["primitives"]
 number-field = ["field"]
@@ -172,10 +185,12 @@ popover = []
 popup-edit = ["action-button", "popover", "text-field"]
 primitives = []
 property-list = ["icon-button"]
+ptt-button = ["primitives"]
 ptz-pad = ["icon-button", "primitives"]
 radio-group = ["checkbox-group", "primitives"]
 range-slider = ["slider", "primitives"]
 rating = ["primitives"]
+reaction-picker = ["primitives"]
 scroll-area = ["scrollbar"]
 scrollbar = []
 search-field = ["field", "primitives"]
@@ -189,6 +204,7 @@ split-button = ["action-button", "menu", "primitives"]
 split-pane = ["scrollbar"]
 status-badge = ["primitives"]
 stepper = ["primitives"]
+sticker-picker = ["chat-message", "primitives"]
 switch = ["primitives"]
 tabs = ["primitives"]
 text-area = ["field", "scrollbar", "tooltip"]

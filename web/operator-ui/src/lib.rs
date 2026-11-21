@@ -23,6 +23,8 @@ pub mod prelude {
     pub use crate::components::breadcrumbs::*;
     #[cfg(feature = "button-group")]
     pub use crate::components::button_group::*;
+    #[cfg(feature = "chat-input")]
+    pub use crate::components::chat_input::*;
     #[cfg(feature = "chat-message")]
     pub use crate::components::chat_message::*;
     #[cfg(feature = "checkbox")]
@@ -53,6 +55,8 @@ pub mod prelude {
     pub use crate::components::dropdown_menu::*;
     #[cfg(feature = "editor")]
     pub use crate::components::editor::*;
+    #[cfg(feature = "emoji-picker")]
+    pub use crate::components::emoji_picker::*;
     #[cfg(feature = "empty-state")]
     pub use crate::components::empty_state::*;
     #[cfg(feature = "fab")]
@@ -67,6 +71,8 @@ pub mod prelude {
     pub use crate::components::gallery::*;
     #[cfg(feature = "gallery-viewer")]
     pub use crate::components::gallery_viewer::*;
+    #[cfg(feature = "gif-picker")]
+    pub use crate::components::gif_picker::*;
     #[cfg(feature = "graph")]
     pub use crate::components::graph::*;
     #[cfg(feature = "header")]
@@ -95,6 +101,10 @@ pub mod prelude {
     pub use crate::components::loading_overlay::*;
     #[cfg(feature = "marquee-text")]
     pub use crate::components::marquee_text::*;
+    #[cfg(feature = "media-keyboard")]
+    pub use crate::components::media_keyboard::*;
+    #[cfg(feature = "media-record-button")]
+    pub use crate::components::media_record_button::*;
     #[cfg(feature = "menu")]
     pub use crate::components::menu::*;
     #[cfg(feature = "navigation-rail")]
@@ -109,6 +119,8 @@ pub mod prelude {
     pub use crate::components::primitives::*;
     #[cfg(feature = "property-list")]
     pub use crate::components::property_list::*;
+    #[cfg(feature = "ptt-button")]
+    pub use crate::components::ptt_button::*;
     #[cfg(feature = "ptz-pad")]
     pub use crate::components::ptz_pad::*;
     #[cfg(feature = "radio-group")]
@@ -117,6 +129,8 @@ pub mod prelude {
     pub use crate::components::range_slider::*;
     #[cfg(feature = "rating")]
     pub use crate::components::rating::*;
+    #[cfg(feature = "reaction-picker")]
+    pub use crate::components::reaction_picker::*;
     #[cfg(feature = "scroll-area")]
     pub use crate::components::scroll_area::*;
     #[cfg(feature = "scrollbar")]
@@ -143,6 +157,8 @@ pub mod prelude {
     pub use crate::components::status_badge::*;
     #[cfg(feature = "stepper")]
     pub use crate::components::stepper::*;
+    #[cfg(feature = "sticker-picker")]
+    pub use crate::components::sticker_picker::*;
     #[cfg(feature = "switch")]
     pub use crate::components::switch::*;
     #[cfg(feature = "tabs")]

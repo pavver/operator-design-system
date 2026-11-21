@@ -1,0 +1,186 @@
+/* Operator ChatInput Styles */
+
+:where(.op-chat-input-container) {
+  font-size: var(--op-chat-input-font-size, inherit);
+  color: var(--op-chat-input-text, inherit);
+}
+
+.op-chat-input-container {
+  --op-chat-input-min-height: calc(var(--op-du) * 9);
+  --op-chat-input-max-height: calc(var(--op-du) * 29);
+  --op-chat-input-font-size: calc(var(--op-tu) * 13);
+  --op-chat-input-border-width: calc(var(--op-du) * 0.25);
+  --op-chat-input-bg: var(--op-surface);
+  --op-chat-input-border: var(--op-border);
+  --op-chat-input-text: var(--op-text-primary);
+  --op-chat-input-placeholder: var(--op-text-secondary);
+  --op-chat-input-accent: var(--op-accent);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.op-chat-input__reply-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--op-du) * 2);
+  padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
+  background: var(--op-surface-raised, var(--op-surface));
+  border-left: calc(var(--op-du) * 0.75) solid var(--op-chat-input-accent);
+  border-top: var(--op-chat-input-border-width) solid var(--op-chat-input-border);
+  border-right: var(--op-chat-input-border-width) solid var(--op-chat-input-border);
+  box-sizing: border-box;
+}
+
+.op-chat-input__reply-content {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--op-du) * 0.25);
+  flex: 1;
+  overflow: hidden;
+}
+
+.op-chat-input__reply-title {
+  font-size: calc(var(--op-tu) * 11);
+  font-weight: 700;
+  color: var(--op-chat-input-accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.op-chat-input__reply-text {
+  font-size: calc(var(--op-tu) * 11);
+  color: var(--op-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.op-chat-input__reply-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 6);
+  height: calc(var(--op-du) * 6);
+  background: transparent;
+  border: none;
+  color: var(--op-text-secondary);
+  cursor: pointer;
+}
+
+.op-chat-input__reply-cancel:hover {
+  color: var(--op-error);
+}
+
+.op-chat-input__reply-cancel svg {
+  width: calc(var(--op-du) * 4);
+  height: calc(var(--op-du) * 4);
+  fill: currentColor;
+}
+
+.op-chat-input {
+  display: flex;
+  align-items: flex-end;
+  gap: calc(var(--op-du) * 1);
+  padding: calc(var(--op-du) * 1);
+  background: var(--op-chat-input-bg);
+  border: var(--op-chat-input-border-width) solid var(--op-chat-input-border);
+  box-sizing: border-box;
+  position: relative;
+  transition: border-color var(--op-motion-expressive, 150ms ease);
+}
+
+.op-chat-input:focus-within {
+  border-color: var(--op-chat-input-accent);
+}
+
+.op-chat-input__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 9);
+  height: calc(var(--op-du) * 9);
+  background: transparent;
+  border: var(--op-chat-input-border-width) solid transparent;
+  color: var(--op-text-secondary);
+  cursor: pointer;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.op-chat-input__btn:hover {
+  color: var(--op-chat-input-accent);
+}
+
+.op-chat-input__btn svg {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  fill: currentColor;
+}
+
+.op-chat-input__textarea {
+  flex: 1;
+  min-height: calc(var(--op-chat-input-min-height) - calc(var(--op-du) * 2));
+  max-height: calc(var(--op-chat-input-max-height) - calc(var(--op-du) * 2));
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: var(--op-chat-input-text);
+  font-family: inherit;
+  font-size: var(--op-chat-input-font-size);
+  line-height: calc(var(--op-tu) * 18);
+  padding: calc(var(--op-du) * 1) calc(var(--op-du) * 1);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.op-chat-input__textarea::placeholder {
+  color: var(--op-chat-input-placeholder);
+  opacity: 0.7;
+}
+
+.op-chat-input__send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 9);
+  height: calc(var(--op-du) * 9);
+  background: var(--op-chat-input-accent);
+  border: var(--op-chat-input-border-width) solid var(--op-chat-input-accent);
+  color: var(--op-text-inverse, var(--op-surface));
+  cursor: pointer;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: transform var(--op-motion-expressive, 100ms ease),
+              background var(--op-motion-expressive, 100ms ease);
+}
+
+.op-chat-input__send-btn:hover {
+  transform: scale(1.05);
+}
+
+.op-chat-input__send-btn svg {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  fill: currentColor;
+}
+
+.op-chat-input__send-btn[data-state="pending"] {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.op-chat-input__send-btn[data-state="success"] {
+  background: var(--op-success);
+  border-color: var(--op-success);
+}
+
+.op-chat-input__send-btn[data-state="error"] {
+  background: var(--op-error);
+  border-color: var(--op-error);
+}

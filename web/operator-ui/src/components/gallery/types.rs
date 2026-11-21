@@ -8,6 +8,6 @@ pub enum GalleryLayout {
     /// Responsive column grid adapting to container width.
     #[default]
     Grid,
-    /// Compact chat-attachment bubble layout from Telegram media sections.
-    Telegram,
+    /// Compact chat-attachment mosaic layout for message attachments.
+    Compact,
 }

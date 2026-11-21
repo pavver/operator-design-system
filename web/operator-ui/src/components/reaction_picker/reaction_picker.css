@@ -1,0 +1,192 @@
+/* Operator ReactionPicker Styles */
+
+:where(.op-reaction-picker-root) {
+  color: var(--op-reaction-picker-text, inherit);
+}
+
+.op-reaction-picker-root {
+  --op-reaction-picker-width: calc(var(--op-du) * 85);
+  --op-reaction-picker-max-height: calc(var(--op-du) * 110);
+  --op-reaction-picker-cell-size: calc(var(--op-du) * 9);
+  --op-reaction-picker-bg: var(--op-surface);
+  --op-reaction-picker-border: var(--op-border);
+  --op-reaction-picker-accent: var(--op-accent);
+  --op-reaction-picker-text: var(--op-text-primary);
+
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.op-quick-reactions-row {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 1);
+  padding: calc(var(--op-du) * 1);
+  background: var(--op-surface);
+  border: calc(var(--op-du) * 0.25) solid var(--op-border);
+  box-sizing: border-box;
+}
+
+.op-quick-reaction-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 8);
+  height: calc(var(--op-du) * 8);
+  background: transparent;
+  border: calc(var(--op-du) * 0.25) solid transparent;
+  font-size: calc(var(--op-tu) * 18);
+  cursor: pointer;
+  user-select: none;
+  transition: transform var(--op-motion-expressive, 120ms ease),
+              background var(--op-motion-expressive, 120ms ease);
+}
+
+.op-quick-reaction-btn:hover {
+  background: color-mix(in srgb, var(--op-accent) 15%, transparent);
+  border-color: var(--op-accent);
+  transform: scale(1.15);
+}
+
+.op-quick-reaction-expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 8);
+  height: calc(var(--op-du) * 8);
+  background: var(--op-surface-raised, var(--op-surface));
+  border: calc(var(--op-du) * 0.25) solid var(--op-border);
+  color: var(--op-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.op-quick-reaction-expand:hover {
+  border-color: var(--op-accent);
+  color: var(--op-accent);
+}
+
+.op-quick-reaction-expand svg {
+  width: calc(var(--op-du) * 4);
+  height: calc(var(--op-du) * 4);
+  fill: currentColor;
+}
+
+.op-reaction-picker-dialog {
+  display: flex;
+  flex-direction: column;
+  width: var(--op-reaction-picker-width);
+  max-height: var(--op-reaction-picker-max-height);
+  background: var(--op-reaction-picker-bg);
+  border: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-accent);
+  box-sizing: border-box;
+  box-shadow: 0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+}
+
+.op-reaction-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--op-du) * 2) calc(var(--op-du) * 3);
+  border-bottom: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-border);
+}
+
+.op-reaction-picker__title {
+  font-size: calc(var(--op-tu) * 12);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--op-reaction-picker-accent);
+}
+
+.op-reaction-picker__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 6);
+  height: calc(var(--op-du) * 6);
+  background: transparent;
+  border: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-border);
+  color: var(--op-text-secondary);
+  cursor: pointer;
+}
+
+.op-reaction-picker__close:hover {
+  border-color: var(--op-error);
+  color: var(--op-error);
+}
+
+.op-reaction-picker__close svg {
+  width: calc(var(--op-du) * 4);
+  height: calc(var(--op-du) * 4);
+  fill: currentColor;
+}
+
+.op-reaction-picker__tabs {
+  display: flex;
+  gap: calc(var(--op-du) * 1);
+  padding: calc(var(--op-du) * 1.5) calc(var(--op-du) * 2);
+  border-bottom: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-border);
+  overflow-x: auto;
+}
+
+.op-reaction-picker__tab {
+  flex: 1;
+  padding: calc(var(--op-du) * 1) calc(var(--op-du) * 1.5);
+  background: var(--op-surface);
+  border: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-border);
+  color: var(--op-text-secondary);
+  font-size: calc(var(--op-tu) * 9);
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.op-reaction-picker__tab[data-selected="true"] {
+  background: color-mix(in srgb, var(--op-reaction-picker-accent) 20%, transparent);
+  border-color: var(--op-reaction-picker-accent);
+  color: var(--op-reaction-picker-accent);
+}
+
+.op-reaction-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: calc(var(--op-du) * 1);
+  padding: calc(var(--op-du) * 2);
+  overflow-y: auto;
+  max-height: calc(var(--op-du) * 80);
+}
+
+.op-reaction-picker__empty {
+  grid-column: 1 / -1;
+  padding: calc(var(--op-du) * 4);
+  text-align: center;
+  font-size: calc(var(--op-tu) * 12);
+  color: var(--op-text-secondary);
+}
+
+.op-reaction-picker__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--op-reaction-picker-cell-size);
+  height: var(--op-reaction-picker-cell-size);
+  background: color-mix(in srgb, var(--op-surface) 50%, transparent);
+  border: calc(var(--op-du) * 0.25) solid color-mix(in srgb, var(--op-reaction-picker-border) 40%, transparent);
+  font-size: calc(var(--op-tu) * 20);
+  cursor: pointer;
+  user-select: none;
+  transition: transform var(--op-motion-expressive, 100ms ease),
+              background var(--op-motion-expressive, 100ms ease),
+              border-color var(--op-motion-expressive, 100ms ease);
+}
+
+.op-reaction-picker__cell:hover {
+  background: color-mix(in srgb, var(--op-reaction-picker-accent) 20%, transparent);
+  border-color: var(--op-reaction-picker-accent);
+  transform: scale(1.2);
+}

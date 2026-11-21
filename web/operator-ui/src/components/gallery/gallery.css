@@ -19,20 +19,20 @@
     gap: var(--op-gallery-gap, calc(var(--op-du) * 0.5));
 }
 
-/* Telegram layout mode */
-.op-gallery-telegram-single {
+/* Compact layout mode */
+.op-gallery-compact-single {
     width: 100%;
     min-height: calc(var(--op-du) * 35);
     max-height: calc(var(--op-du) * 55);
 }
 
-.op-gallery-telegram-multi {
+.op-gallery-compact-multi {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--op-gallery-gap, calc(var(--op-du) * 0.25));
 }
 
-.op-gallery-telegram-multi .op-gallery-item {
+.op-gallery-compact-multi .op-gallery-item {
     height: calc(var(--op-du) * 27.5);
 }
 

@@ -12,6 +12,8 @@ pub mod banner;
 pub mod breadcrumbs;
 #[cfg(feature = "button-group")]
 pub mod button_group;
+#[cfg(feature = "chat-input")]
+pub mod chat_input;
 #[cfg(feature = "chat-message")]
 pub mod chat_message;
 #[cfg(feature = "checkbox")]
@@ -42,6 +44,8 @@ pub mod dialog;
 pub mod dropdown_menu;
 #[cfg(feature = "editor")]
 pub mod editor;
+#[cfg(feature = "emoji-picker")]
+pub mod emoji_picker;
 #[cfg(feature = "empty-state")]
 pub mod empty_state;
 #[cfg(feature = "fab")]
@@ -56,6 +60,8 @@ pub mod form;
 pub mod gallery;
 #[cfg(feature = "gallery-viewer")]
 pub mod gallery_viewer;
+#[cfg(feature = "gif-picker")]
+pub mod gif_picker;
 #[cfg(feature = "graph")]
 pub mod graph;
 #[cfg(feature = "header")]
@@ -84,6 +90,10 @@ pub mod loading_bar;
 pub mod loading_overlay;
 #[cfg(feature = "marquee-text")]
 pub mod marquee_text;
+#[cfg(feature = "media-keyboard")]
+pub mod media_keyboard;
+#[cfg(feature = "media-record-button")]
+pub mod media_record_button;
 #[cfg(feature = "menu")]
 pub mod menu;
 #[cfg(feature = "navigation-rail")]
@@ -98,6 +108,8 @@ pub mod popup_edit;
 pub mod primitives;
 #[cfg(feature = "property-list")]
 pub mod property_list;
+#[cfg(feature = "ptt-button")]
+pub mod ptt_button;
 #[cfg(feature = "ptz-pad")]
 pub mod ptz_pad;
 #[cfg(feature = "radio-group")]
@@ -106,6 +118,8 @@ pub mod radio_group;
 pub mod range_slider;
 #[cfg(feature = "rating")]
 pub mod rating;
+#[cfg(feature = "reaction-picker")]
+pub mod reaction_picker;
 #[cfg(feature = "scroll-area")]
 pub mod scroll_area;
 #[cfg(feature = "scrollbar")]
@@ -132,6 +146,8 @@ pub mod split_pane;
 pub mod status_badge;
 #[cfg(feature = "stepper")]
 pub mod stepper;
+#[cfg(feature = "sticker-picker")]
+pub mod sticker_picker;
 #[cfg(feature = "switch")]
 pub mod switch;
 #[cfg(feature = "tabs")]
