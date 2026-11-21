@@ -15,6 +15,11 @@ pub fn chip() -> AnyView {
         "critical".to_string(),
     ]);
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <Chip text=crate::i18n::t("Selection") height=8.0 padding_x=3.0 gap=2.0
+                leading=|| view! { <Icon icon=icons::SETTINGS size=4.0/> }
+                selected=RwSignal::new(false)/>
+        </Example>
         <Example title="Filter chips">
             <ChipSet>
                 <Chip text="Online" selected=online/>

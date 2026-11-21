@@ -28,6 +28,44 @@ Status: **reviewed** on web.
 | Property | Type | Description |
 | :--- | :--- | :--- |
 | `keys` | string | Key or shortcut, for example `Esc` or `Ctrl+K`. |
+| `height` | DU | Key height; defaults to `6.5 DU`. |
+| `wide_min_width` | DU | Minimum width of wide keys; defaults to `11 DU`. |
+| `space_min_width` | DU | Minimum width of space bar; defaults to `26 DU`. |
+| `padding_x` | DU | Horizontal key padding; defaults to `1 DU`. |
+| `gap` | DU | Gap between keys; defaults to `0.5 DU`. |
+| `font_size` | TU | Key font size; defaults to `caption` size. |
+| `separator` | slot | Custom separator between keys. |
+| `aria_label` | string | Accessible label; defaults to `keys`. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-kbd-height` | `6.5 DU` |
+| `wide_min_width` | DU | `--op-kbd-wide-min-width` | `11 DU` |
+| `space_min_width` | DU | `--op-kbd-space-min-width` | `26 DU` |
+| `padding_x` | DU | `--op-kbd-padding-x` | `pad_tight` (`1 DU`) |
+| `gap` | DU | `--op-kbd-gap` | `gap_micro` (`0.5 DU`) |
+| `font_size` | TU | `--op-kbd-font-size` | `type_caption_size` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-kbd-face` | `color-mix(in srgb, var(--op-text-primary) 10%, var(--op-surface))` |
+| `--op-kbd-body` | `color-mix(in srgb, var(--op-background) 55%, var(--op-border-strong))` |
+| `--op-kbd-text` | `text_primary` |
+| `--op-kbd-separator` | `text_secondary` |
+
+| Slot | Place |
+| :--- | :--- |
+| `separator` | Content between shortcut keys, replacing the default plus separator. |
+
+`class` and `style` apply to the root.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `kbd.plus` | `+` |
 
 ## Accessibility
 

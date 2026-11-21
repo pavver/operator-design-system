@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`width`, `height`, `gap`, `text_height`, `text_line_height`), color variables (`--op-skeleton-*`), and translatable string `skeleton.loading`."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`width`, `height`, `gap`, `text_height`, `text_line_height`), змінні кольорів (`--op-skeleton-*`) та перекладний текст `skeleton.loading`."
+
+[[change]]
 date = "2026-11-11T21:50:57+02:00"
 status = "approved"
 commit = "3e95ba4"

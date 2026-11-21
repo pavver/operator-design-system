@@ -7,6 +7,10 @@ use operator_ui::prelude::*;
 pub fn slider() -> AnyView {
     let b = backend();
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <Slider value=RwSignal::new(0.5f32) label=crate::i18n::t("Selection") height=12.0 thumb_size=8.0 rail_inset=4.0
+                thumb=|| view! { <span aria-hidden="true">"+"</span> }/>
+        </Example>
         <Example title="Interactive" note="Drag or click the track; arrow keys work when focused. The commit after release runs async; on error the value rolls back." block=true>
             <div class="demo-stack demo-narrow">
                 <div class="demo-labelled">

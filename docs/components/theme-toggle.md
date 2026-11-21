@@ -60,8 +60,60 @@ The illustration uses dedicated tokens that are identical in both modes:
 | `on_toggle` | callback `(bool)` | none | Called with the new value; without it the toggle is static. |
 | `width` | DU | `17` | Width. |
 | `height` | DU | `7.5` | Height. |
-| `label` | string | `"Dark mode"` | Accessible name. |
+| `label` | string | `theme-toggle.label` | Accessible name. |
+| `thumb_inset` | reactive DU | unset | Overrides `--op-theme-toggle-thumb-inset`; see Customization. |
+| `star_scale` | reactive DU | unset | Overrides `--op-theme-toggle-star-scale`; see Customization. |
+| `class` | reactive string | none | Applied to the root element. |
+| `style` | reactive string | none | Applied to the root element. |
+| `content` | slot | none | Replaces the decorative scene; the switch retains its accessible name. |
 
 ## Accessibility
 
 The control has the `switch` role and is checked in night mode.
+
+## Customization
+
+`class` and `style` apply to the root element.
+Metric props accept reactive DU or TU values; unset props keep the CSS variable or its exact design-system fallback.
+Caller `style` is appended after metric declarations and takes precedence.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `width` | DU | `--op-theme-toggle-width` | `calc(var(--op-du) * 17)` |
+| `height` | DU | `--op-theme-toggle-height` | `calc(var(--op-du) * 7.5)` |
+| `thumb_inset` | DU | `--op-theme-toggle-thumb-inset` | `calc(var(--op-du) * 0.625)` |
+| `star_scale` | DU | `--op-theme-toggle-star-scale` | `calc(var(--op-du) * 1)` |
+
+The existing numeric size props keep their names and DU meaning and now also accept reactive values.
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-theme-toggle-accent` | `var(--op-accent)` |
+| `--op-theme-toggle-border` | `var(--op-border)` |
+| `--op-theme-toggle-emphasis-border` | `var(--op-border-strong)` |
+| `--op-theme-toggle-cloud` | `var(--op-toggle-cloud)` |
+| `--op-theme-toggle-cloud-back` | `var(--op-toggle-cloud-back)` |
+| `--op-theme-toggle-crater` | `var(--op-toggle-crater)` |
+| `--op-theme-toggle-day-sky` | `var(--op-toggle-day-sky)` |
+| `--op-theme-toggle-disabled-border` | `var(--op-disabled-border)` |
+| `--op-theme-toggle-moon` | `var(--op-toggle-moon)` |
+| `--op-theme-toggle-night-sky` | `var(--op-toggle-night-sky)` |
+| `--op-theme-toggle-ripple` | `var(--op-ripple)` |
+| `--op-theme-toggle-star` | `var(--op-toggle-star)` |
+| `--op-theme-toggle-sun` | `var(--op-toggle-sun)` |
+| Slot | Place |
+| :--- | :--- |
+| `content` | Replaces the decorative scene; the switch retains its accessible name. |
+
+The decorative scene follows the resolved root dimensions, thumb inset and star scale, including values inherited through CSS.
+`star_scale` is the DU scale of the star artwork; its default is `1 DU`.
+
+### Strings
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `label` | `theme-toggle.label` | `Dark mode` |
+
+### Icons
+
+No built-in semantic icons.

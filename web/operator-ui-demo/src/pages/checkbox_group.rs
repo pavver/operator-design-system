@@ -12,7 +12,16 @@ pub fn checkbox_group() -> AnyView {
         GroupItem::new("south", "South gate"),
         GroupItem::new("yard", "Yard perimeter"),
     ];
+    let custom_values = RwSignal::new(Vec::<String>::new());
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <CheckboxGroup items=vec![GroupItem::new("custom", "Custom option")] selected=custom_values
+                label=crate::i18n::t("Selection") height=14.0 gap=1.5 padding_x=3.0
+                option=Callback::new(|item: GroupItem| view! { <strong>{item.name}</strong> }.into_any())
+                on_change=AsyncAction::new(move |(id, checked): (String, bool)| async move {
+                    custom_values.set(if checked { vec![id] } else { Vec::new() }); ActionResult::Success
+                })/>
+        </Example>
         <Example title="Armed zones" note="Each tile runs its own request; several can be pending at once.">
             <div class="demo-narrow">
                 <CheckboxGroup

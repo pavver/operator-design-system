@@ -1,5 +1,6 @@
 //! Keyboard shortcuts: Kbd, split_keys, and key_cap.
 
+use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 
 pub(crate) const CSS: &str = include_str!("kbd.css");
@@ -53,11 +54,60 @@ pub fn key_cap(key: &str) -> (String, KeyWidth) {
 
 /// Keyboard key or shortcut, for example `Ctrl+K`.
 #[component]
-pub fn Kbd(#[prop(into)] keys: String) -> impl IntoView {
+pub fn Kbd(
+    #[prop(into)] keys: String,
+    /// Key height in DU (`--op-kbd-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Minimum width of wide keys in DU (`--op-kbd-wide-min-width`).
+    #[prop(optional, into)]
+    wide_min_width: MaybeProp<f32>,
+    /// Minimum width of the space bar in DU (`--op-kbd-space-min-width`).
+    #[prop(optional, into)]
+    space_min_width: MaybeProp<f32>,
+    /// Horizontal key face padding in DU (`--op-kbd-padding-x`).
+    #[prop(optional, into)]
+    padding_x: MaybeProp<f32>,
+    /// Gap between keys and separators in DU (`--op-kbd-gap`).
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
+    /// Font size in TU (`--op-kbd-font-size`).
+    #[prop(optional, into)]
+    font_size: MaybeProp<f32>,
+    /// Custom separator slot between keys.
+    #[prop(optional, into)]
+    separator: Slot,
+    /// Accessible label override; defaults to `keys`.
+    #[prop(optional, into)]
+    aria_label: MaybeProp<String>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+) -> impl IntoView {
     let parts = split_keys(&keys);
     let n = parts.len();
+    let label = Signal::derive(move || aria_label.get().unwrap_or_else(|| keys.clone()));
+    let plus_text = ui_text(None::<String>.into(), "kbd.plus", "+");
+    let sep = separator.or(move || {
+        let p = plus_text;
+        view! { <span class="op-kbd-plus" aria-hidden="true">{move || p.get()}</span> }
+    });
+
     view! {
-        <span class="op-kbd-group" aria-label=keys.clone()>
+        <span
+            class=root_class("op-kbd-group", class)
+            style=root_style(
+                vec![
+                    Metric::du("--op-kbd-height", height),
+                    Metric::du("--op-kbd-wide-min-width", wide_min_width),
+                    Metric::du("--op-kbd-space-min-width", space_min_width),
+                    Metric::du("--op-kbd-padding-x", padding_x),
+                    Metric::du("--op-kbd-gap", gap),
+                    Metric::tu("--op-kbd-font-size", font_size),
+                ],
+                style,
+            )
+            aria-label=move || label.get()
+        >
             {parts
                 .into_iter()
                 .enumerate()
@@ -68,11 +118,12 @@ pub fn Kbd(#[prop(into)] keys: String) -> impl IntoView {
                         KeyWidth::Wide => Some("wide"),
                         KeyWidth::Space => Some("space"),
                     };
+                    let sep = sep.clone();
                     view! {
                         <kbd class="op-kbd" data-size=size>
                             <span class="op-kbd-cap">{cap}</span>
                         </kbd>
-                        {(i + 1 < n).then(|| view! { <span class="op-kbd-plus" aria-hidden="true">"+"</span> })}
+                        {(i + 1 < n).then(move || sep.run())}
                     }
                 })
                 .collect_view()}

@@ -1,15 +1,19 @@
 //! Radio group: RadioGroup.
 
 use crate::components::checkbox_group::GroupItem;
-use crate::components::primitives::PendingIndicator;
 use crate::core::{
-    AsyncAction, ControlState, PendingRun, Press, sleep_ms, spawn_ripple, use_pending_indicator,
-    use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, ScopedSlot, Slot, root_class,
+    root_style, sleep_ms, spawn_ripple, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::motion;
 use wasm_bindgen::JsCast;
+
+mod visuals;
+use visuals::pending;
+
+const SPINNER_SIZE: &str = "var(--op-radio-group-spinner-size, calc(var(--op-du) * 3))";
 
 pub(crate) const CSS: &str = include_str!("radio_group.css");
 
@@ -22,14 +26,47 @@ pub fn RadioGroup(
     #[prop(optional, into)]
     on_change: Option<AsyncAction<String>>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
-    #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
     /// Lays the options out in a row.
     #[prop(optional)]
     horizontal: bool,
+    #[prop(optional, into)] column_gap: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] size: MaybeProp<f32>,
+    #[prop(optional, into)] dot_size: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional)] option: Option<ScopedSlot<GroupItem>>,
+    #[prop(optional, into)] before_options: Slot,
+    #[prop(optional, into)] after_options: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "radio-group.loading", "Loading");
+    let label = ui_text(label, "radio-group.label", "Options");
+
+    let root_metrics = vec![
+        Metric::du("--op-radio-group-spinner-stroke", spinner_stroke),
+        Metric::du("--op-radio-group-column-gap", column_gap),
+        Metric::du("--op-radio-group-gap", gap),
+        Metric::du("--op-radio-group-height", height),
+        Metric::du("--op-radio-group-padding-x", padding_x),
+        Metric::du("--op-radio-group-size", size),
+        Metric::du("--op-radio-group-dot-size", dot_size),
+        Metric::du("--op-radio-group-spinner-size", spinner_size),
+        Metric::tu("--op-radio-group-font-size", font_size),
+        Metric::tu("--op-radio-group-line-height", line_height),
+    ];
+
     let target = RwSignal::new(None::<String>);
     let result = RwSignal::new(ControlState::Idle);
-    let busy = move || target.with(Option::is_some);
+    let busy = move || result.get() == ControlState::Pending;
+    let job = JobToken::new();
     let on_change = StoredValue::new(on_change);
     let ids: Vec<String> = items.iter().map(|i| i.id.clone()).collect();
     let ids = StoredValue::new(ids);
@@ -42,16 +79,23 @@ pub fn RadioGroup(
             selected.set(id);
             return;
         };
+        let request = job.next();
         target.set(Some(id.clone()));
         result.set(ControlState::Pending);
         spawn_local(async move {
             let r = action.call(id.clone()).await;
+            if !job.is_current(request) {
+                return;
+            }
             let ok = r.is_success();
             if ok {
                 selected.set(id);
             }
             result.set(r.into());
             sleep_ms(motion::RESULT_HOLD_MS).await;
+            if !job.is_current(request) {
+                return;
+            }
             result.set(ControlState::Idle);
             target.set(None);
         });
@@ -147,14 +191,14 @@ pub fn RadioGroup(
                     >
                         {move || {
                             if show_spinner.get() {
-                                view! { <PendingIndicator size=3.0/> }.into_any()
+                                pending(SPINNER_SIZE, loading_label)
                             } else {
                                 view! { <span class="op-radio-dot"></span> }.into_any()
                             }
                         }}
                         <PendingRun/>
                     </span>
-                    <span class="op-radio-label">{item.name}</span>
+                    <span class="op-radio-label">{option.map(|slot| slot.run(item.clone())).unwrap_or_else(|| item.name.clone().into_any())}</span>
                 </button>
             }
         })
@@ -162,12 +206,15 @@ pub fn RadioGroup(
 
     view! {
         <div
-            class="op-radio-group"
+            class=root_class("op-radio-group", class)
+            style=root_style(root_metrics, style)
             role="radiogroup"
-            aria-label=label
+            aria-label=move || label.get()
             data-horizontal=horizontal.then_some("")
         >
+            {before_options.run()}
             {rows}
+            {after_options.run()}
         </div>
     }
 }

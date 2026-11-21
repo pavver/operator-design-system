@@ -44,6 +44,11 @@ pub fn skeleton() -> AnyView {
                 />
             </div>
         </Example>
+        <Example title="Customization" note="Custom width, height, gap and label.">
+            <div style:width=du(50.0)>
+                <Skeleton lines=3 gap=2.0 text_height=15.0 text_line_height=22.0 label="Loading custom content"/>
+            </div>
+        </Example>
     }
     .into_any()
 }

@@ -1,9 +1,16 @@
 //! Compact token: Chip and ChipSet.
 
-use crate::components::primitives::Icon;
-use crate::core::{ControlState, Press, du, spawn_ripple, use_state_visual};
+use crate::core::{
+    ControlState, Metric, Press, Slot, root_class, root_style, spawn_ripple, ui_icon, ui_text,
+    use_state_visual,
+};
 use leptos::prelude::*;
-use operator_ui_tokens::{Icon as IconData, dim, icons};
+use operator_ui_tokens::{Icon as IconData, icons};
+
+mod visuals;
+use visuals::symbol;
+
+const ICON_SIZE: &str = "var(--op-chip-icon-size, calc(var(--op-du) * 3.5))";
 
 pub(crate) const CSS: &str = include_str!("chip.css");
 
@@ -54,7 +61,7 @@ impl ChipColor {
 /// Compact token: a toggleable filter, a removable value, or a static tag.
 #[component]
 pub fn Chip(
-    #[prop(into)] text: Signal<String>,
+    #[prop(optional, into)] text: MaybeProp<String>,
     #[prop(optional)] icon: Option<IconData>,
     /// Makes the chip a toggle (filter chip).
     #[prop(optional, into)]
@@ -67,7 +74,47 @@ pub fn Chip(
     /// Tone or custom color.
     #[prop(optional, into)]
     color: Signal<ChipColor>,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] remove_size: MaybeProp<f32>,
+    #[prop(optional, into)] remove_overlap: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] leading: Slot,
+    #[prop(optional, into)] trailing: Slot,
+    #[prop(optional, into)] content: Slot,
+    #[prop(optional, into)] remove_label: MaybeProp<String>,
+    #[prop(optional)] checked_icon: Option<IconData>,
+    #[prop(optional)] remove_icon: Option<IconData>,
 ) -> impl IntoView {
+    let text = ui_text(text, "chip.text", "");
+    let remove_label = ui_text(remove_label, "chip.remove", "Remove {text}");
+    let checked_icon = ui_icon(checked_icon, "chip.checked", icons::CHECK);
+    let remove_icon = ui_icon(remove_icon, "chip.remove", icons::CLOSE);
+
+    let root_metrics = vec![
+        Metric::du("--op-chip-height", height),
+        Metric::du("--op-chip-gap", gap),
+        Metric::du("--op-chip-padding-x", padding_x),
+        Metric::du("--op-chip-remove-size", remove_size),
+        Metric::du("--op-chip-remove-overlap", remove_overlap),
+        Metric::du("--op-chip-icon-size", icon_size),
+        Metric::tu("--op-chip-font-size", font_size),
+        Metric::tu("--op-chip-line-height", line_height),
+    ];
+
+    let custom_style = Signal::derive(move || {
+        let mut value = color.with(ChipColor::style).unwrap_or_default();
+        value.push(';');
+        if let Some(extra) = style.get() {
+            value.push_str(&extra);
+        }
+        value
+    });
     let press = Press::new();
     let interactive = selected.is_some() || on_click.is_some();
     let is_selected = move || selected.is_some_and(|s| s.get());
@@ -83,18 +130,20 @@ pub fn Chip(
         }
     });
     let visual = use_state_visual(state);
-    let content = move || {
+    let main_content = move || {
         view! {
             {(selected.is_some())
                 .then(|| {
                     view! {
                         <Show when=is_selected>
-                            <span class="op-chip-check"><Icon icon=icons::CHECK size=3.5/></span>
+                            <span class="op-chip-check">{symbol(checked_icon, ICON_SIZE, None)}</span>
                         </Show>
                     }
                 })}
-            {icon.map(|i| view! { <Icon icon=i size=3.5/> })}
-            <span class="op-chip-text">{move || text.get()}</span>
+            {icon.map(|i| view! { {symbol(Signal::stored(i), ICON_SIZE, None)} })}
+            {leading.run()}
+            {if content.is_set() { content.run() } else { Some(view! { <span class="op-chip-text">{move || text.get()}</span> }.into_any()) }}
+            {trailing.run()}
         }
     };
     let main = if interactive {
@@ -126,22 +175,23 @@ pub fn Chip(
                     }
                 }
             >
-                {content()}
+                {main_content()}
             </button>
         }
         .into_any()
     } else {
-        view! { <span class="op-chip-main">{content()}</span> }.into_any()
+        view! { <span class="op-chip-main">{main_content()}</span> }.into_any()
     };
     view! {
         <span
-            class="op-sb op-chip"
+            class=root_class("op-sb op-chip", class)
+            style=root_style(root_metrics, custom_style.into())
             data-state=move || visual.state.get()
             data-result=move || visual.result.get()
             data-fading=move || visual.fading.get().then_some("")
             data-selected=move || is_selected().then_some("")
             data-color=move || color.with(ChipColor::attr)
-            style=move || color.with(ChipColor::style)
+
         >
             {main}
             {on_remove
@@ -150,12 +200,12 @@ pub fn Chip(
                         <button
                             type="button"
                             class="op-rippled op-chip-remove"
-                            aria-label=move || format!("Remove {}", text.get())
+                            aria-label=move || remove_label.get().replace("{text}", &text.get())
                             disabled=move || !enabled.get()
                             on:pointerdown=move |ev| spawn_ripple(&ev)
                             on:click=move |_| cb.run(())
                         >
-                            <Icon icon=icons::CLOSE size=3.5/>
+                            {symbol(remove_icon, ICON_SIZE, None)}
                         </button>
                     }
                 })}
@@ -165,8 +215,13 @@ pub fn Chip(
 
 /// Row of chips that wraps onto new lines.
 #[component]
-pub fn ChipSet(children: Children) -> impl IntoView {
-    view! { <div class="op-chip-set" style:gap=du(dim::PAD_TIGHT)>{children()}</div> }
+pub fn ChipSet(
+    children: Children,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+) -> impl IntoView {
+    view! { <div class=root_class("op-chip-set", class) style=root_style(vec![Metric::du("--op-chip-set-gap", gap)], style)>{children()}</div> }
 }
 
 #[cfg(test)]

@@ -1,28 +1,55 @@
 /* ------------------------------------------------------------------ */
 /* StatusBadge                                                         */
 /* ------------------------------------------------------------------ */
-.op-badge { display: inline-flex; align-items: center; gap: var(--op-dim-pad-small); flex: none; min-width: 0; }
+.op-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--op-status-badge-gap, var(--op-dim-pad-small));
+  flex: none;
+  min-width: 0;
+}
 .op-badge-text {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--op-text-primary);
-  font-size: var(--op-type-caption-size);
-  line-height: var(--op-type-caption-line);
+  color: var(--op-status-badge-text, var(--op-text-primary));
+  font-size: var(--op-status-badge-font-size, var(--op-type-caption-size));
+  line-height: var(--op-status-badge-line-height, var(--op-type-caption-line));
 }
-.op-badge-led { display: block; flex: none; border-radius: 50%; box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-status-border); }
-.op-badge-led[data-kind="online"] { background-color: var(--op-status-online); }
-.op-badge-led[data-kind="offline"] { background-color: var(--op-status-offline); }
-.op-badge-led[data-kind="error"] { background-color: var(--op-status-error); }
-.op-badge-led[data-kind="fallback"] { background-color: var(--op-status-fallback); }
+.op-badge-led {
+  display: block;
+  flex: none;
+  width: var(--op-status-badge-size, calc(var(--op-du) * 3));
+  height: var(--op-status-badge-size, calc(var(--op-du) * 3));
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-status-badge-border, var(--op-status-border));
+}
+.op-badge-led[data-kind="online"] { background-color: var(--op-status-badge-online, var(--op-status-online)); }
+.op-badge-led[data-kind="offline"] { background-color: var(--op-status-badge-offline, var(--op-status-offline)); }
+.op-badge-led[data-kind="error"] { background-color: var(--op-status-badge-error, var(--op-status-error)); }
+.op-badge-led[data-kind="fallback"] { background-color: var(--op-status-badge-fallback, var(--op-status-fallback)); }
 .op-badge-led[data-kind="alarm"] { animation: op-alarm var(--op-motion-alarm-flash-half) linear infinite alternate; }
 @keyframes op-alarm {
-  from { background-color: color-mix(in srgb, var(--op-status-alarm) 20%, transparent); }
-  to { background-color: var(--op-status-alarm); }
+  from { background-color: color-mix(in srgb, var(--op-status-badge-alarm, var(--op-status-alarm)) 20%, transparent); }
+  to { background-color: var(--op-status-badge-alarm, var(--op-status-alarm)); }
 }
-.op-badge-typing { display: flex; justify-content: space-between; align-items: flex-end; flex: none; }
-.op-badge-typing i { display: block; width: calc(100% / 4.5); aspect-ratio: 1; border-radius: 50%; background: var(--op-status-activity); animation: op-typing 800ms linear infinite; }
+.op-badge-typing {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex: none;
+  width: var(--op-status-badge-size, calc(var(--op-du) * 3));
+  height: var(--op-status-badge-size, calc(var(--op-du) * 3));
+}
+.op-badge-typing i {
+  display: block;
+  width: calc(100% / 4.5);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--op-status-badge-activity, var(--op-status-activity));
+  animation: op-typing 800ms linear infinite;
+}
 .op-badge-typing i:nth-child(2) { animation-delay: 200ms; }
 .op-badge-typing i:nth-child(3) { animation-delay: 400ms; }
 @keyframes op-typing {
@@ -30,11 +57,22 @@
   25% { transform: translateY(-3px); }
   50%, 100% { transform: translateY(0); }
 }
-.op-badge-voice, .op-badge-file { display: block; flex: none; overflow: visible; }
-.op-wave-src { fill: var(--op-status-activity); transform-box: view-box; transform-origin: 18px 50px; animation: op-wave-src 900ms ease-in-out infinite; }
+.op-badge-voice, .op-badge-file {
+  display: block;
+  flex: none;
+  overflow: visible;
+  width: var(--op-status-badge-size, calc(var(--op-du) * 3));
+  height: var(--op-status-badge-size, calc(var(--op-du) * 3));
+}
+.op-wave-src {
+  fill: var(--op-status-badge-activity, var(--op-status-activity));
+  transform-box: view-box;
+  transform-origin: 18px 50px;
+  animation: op-wave-src 900ms ease-in-out infinite;
+}
 .op-wave {
   fill: none;
-  stroke: var(--op-status-activity);
+  stroke: var(--op-status-badge-activity, var(--op-status-activity));
   stroke-width: 9;
   stroke-linecap: round;
   transform-box: view-box;
@@ -54,7 +92,7 @@
 }
 .op-chev {
   fill: none;
-  stroke: var(--op-status-activity);
+  stroke: var(--op-status-badge-activity, var(--op-status-activity));
   stroke-width: 9;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -68,4 +106,3 @@
   16.67%, 83.33% { opacity: 0.28; }
   100% { opacity: 1; }
 }
-

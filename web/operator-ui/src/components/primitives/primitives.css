@@ -1,11 +1,27 @@
 /* ------------------------------------------------------------------ */
 /* Primitives                                                          */
 /* ------------------------------------------------------------------ */
-.op-icon { display: block; flex: none; fill: currentColor; }
-.op-spinner { display: block; flex: none; animation: op-spin var(--op-motion-spinner-lap) linear infinite; }
+.op-icon {
+  display: block;
+  flex: none;
+  fill: currentColor;
+  width: var(--op-icon-size, calc(var(--op-du) * 6));
+  height: var(--op-icon-size, calc(var(--op-du) * 6));
+}
+.op-spinner {
+  display: block;
+  flex: none;
+  animation: op-spin var(--op-motion-spinner-lap) linear infinite;
+  color: var(--op-progress-indicator-color, var(--op-accent));
+}
 .op-spinner circle { fill: none; stroke-linecap: round; stroke-dasharray: 75 25; }
 @keyframes op-spin { to { transform: rotate(360deg); } }
-.op-pending-indicator { display: inline-flex; flex: none; animation: op-fade-in var(--op-motion-pending-indicator-fade) linear both; }
+.op-pending-indicator {
+  display: inline-flex;
+  flex: none;
+  animation: op-fade-in var(--op-motion-pending-indicator-fade) linear both;
+  color: var(--op-pending-indicator-color, var(--op-pending));
+}
 
 .op-c-success { color: var(--op-success); display: inline-flex; }
 .op-c-error { color: var(--op-error); display: inline-flex; }
@@ -14,10 +30,44 @@
 .op-stack > * { grid-area: 1 / 1; }
 .op-ghost { visibility: hidden; }
 
-.op-divider { width: 100%; height: var(--op-dim-border); background: var(--op-divider); flex: none; }
+.op-divider {
+  width: 100%;
+  height: var(--op-divider-thickness, var(--op-dim-border));
+  background: var(--op-divider-color, var(--op-divider));
+  flex: none;
+}
 
-.op-card { background: var(--op-surface); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); padding: var(--op-dim-pad-card); }
-.op-card-alt { background: var(--op-surface-alt); }
+.op-card {
+  background: var(--op-card-background, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-card-border-width, var(--op-dim-border)) var(--op-card-border, var(--op-border));
+  padding: var(--op-card-padding, var(--op-dim-pad-card));
+}
+.op-card-alt { background: var(--op-card-alt-background, var(--op-surface-alt)); }
+.op-card-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--op-card-gap, var(--op-dim-gutter));
+}
+.op-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--op-dim-gutter);
+  font-weight: 600;
+}
+.op-card-body { flex: 1; min-width: 0; }
+.op-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--op-dim-gutter);
+}
+.op-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--op-dim-gutter);
+}
 
 /* State-colored content (icons, marks): base color from --tone-base, result colors snap in and fade out. */
 .op-tone {
@@ -28,4 +78,3 @@
 .op-tone[data-state="success"] { color: var(--op-success); transition-duration: 0s; }
 .op-tone[data-state="error"] { color: var(--op-error); transition-duration: 0s; }
 .op-tone[data-fading] { transition-duration: var(--op-motion-result-fade); transition-timing-function: var(--op-ease-smooth); }
-

@@ -4,22 +4,42 @@
 .op-checkbox {
   display: inline-flex;
   align-items: center;
-  gap: var(--op-dim-gutter);
-  padding: var(--op-dim-pad-small) var(--op-dim-pad-tight);
-  color: var(--op-text-primary);
+  gap: var(--op-checkbox-gap, var(--op-dim-gutter));
+  padding: var(--op-checkbox-padding-y, var(--op-dim-pad-small)) var(--op-checkbox-padding-x, var(--op-dim-pad-tight));
+  color: var(--op-checkbox-text, var(--op-text-primary));
   font-weight: 500;
 }
-.op-checkbox[data-disabled] { color: var(--op-text-disabled); }
+.op-checkbox[data-disabled] { color: var(--op-checkbox-disabled-text, var(--op-text-disabled)); }
 .op-checkbox-box {
-  width: calc(var(--op-du) * 5);
-  height: calc(var(--op-du) * 5);
+  width: var(--op-checkbox-size, calc(var(--op-du) * 5));
+  height: var(--op-checkbox-size, calc(var(--op-du) * 5));
   display: grid;
   place-items: center;
   flex: none;
-  background-color: var(--op-surface);
+  background-color: var(--op-checkbox-background, var(--op-surface));
 }
-.op-checkbox-box[data-state="selected"] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); }
-.op-checkbox-box[data-state="disabled"] { background-color: var(--op-disabled-surface); }
-.op-checkbox-mark { --tone-base: var(--op-accent); }
-.op-checkbox[data-disabled] .op-checkbox-mark { --tone-base: var(--op-icon-disabled); }
+.op-checkbox-box[data-state="selected"] { background-color: color-mix(in srgb, var(--op-checkbox-accent, var(--op-accent)) 15%, transparent); }
+.op-checkbox-box[data-state="disabled"] { background-color: var(--op-checkbox-disabled-background, var(--op-disabled-surface)); }
+.op-checkbox-mark { --tone-base: var(--op-checkbox-accent, var(--op-accent)); }
+.op-checkbox[data-disabled] .op-checkbox-mark { --tone-base: var(--op-checkbox-disabled-icon, var(--op-icon-disabled)); }
 
+
+.op-checkbox { font-size: var(--op-checkbox-font-size, var(--op-type-body-size)); line-height: var(--op-checkbox-line-height, var(--op-type-body-line)); }
+
+/* Family hooks for shared state visuals. */
+.op-checkbox .op-checkbox-box { --sb-base: var(--op-checkbox-border, var(--op-border)); }
+.op-checkbox .op-checkbox-box[data-state="pressed"] { --sb-base: var(--op-checkbox-emphasis-border, var(--op-border-strong)); }
+.op-checkbox .op-checkbox-box[data-state="disabled"] { --sb-base: var(--op-checkbox-disabled-border, var(--op-disabled-border)); }
+.op-checkbox .op-checkbox-box[data-state="selected"], .op-checkbox .op-checkbox-box[data-state="focused"] { --sb-base: var(--op-checkbox-accent, var(--op-accent)); }
+.op-checkbox .op-checkbox-box[data-result="success"] { --sb-status: var(--op-checkbox-success, var(--op-success)); }
+.op-checkbox .op-checkbox-box[data-result="error"] { --sb-status: var(--op-checkbox-error, var(--op-error)); }
+.op-checkbox .op-checkbox-box > .op-run rect { stroke: var(--op-checkbox-pending, var(--op-pending)); }
+.op-checkbox .op-tone[data-state="success"] { color: var(--op-checkbox-success, var(--op-success)); }
+.op-checkbox .op-tone[data-state="error"] { color: var(--op-checkbox-error, var(--op-error)); }
+.op-checkbox .op-ripple { background: color-mix(in srgb, var(--op-checkbox-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-checkbox:focus-visible { outline-color: var(--op-checkbox-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-checkbox .op-checkbox-box[data-state="idle"]:hover { --sb-base: var(--op-checkbox-emphasis-border, var(--op-border-strong)); } }
+
+@media (hover: hover) {
+.op-root .op-checkbox:hover > .op-checkbox-box[data-state="idle"] { --sb-base: var(--op-checkbox-emphasis-border, var(--op-border-strong)); background-color: var(--op-checkbox-hover, var(--op-hover)); }
+}

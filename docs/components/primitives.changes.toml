@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style` and metric props across primitives; container slots `header`, `actions`, `footer` and metrics (`padding`, `gap`, `border_width`) on `Card`; translatable string `progress-indicator.loading`."
+uk = "Точки кастомізації: `class`/`style` та пропи розмірів для примітивів; слоти контейнера `header`, `actions`, `footer` і пропи розмірів (`padding`, `gap`, `border_width`) для `Card`; перекладний рядок `progress-indicator.loading`."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`size`, `gap`, `font_size`, `line_height`), color variables (`--op-status-badge-*`), slot `text_slot`, `aria_label`, and translatable status names."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`size`, `gap`, `font_size`, `line_height`), змінні кольорів (`--op-status-badge-*`), слот `text_slot`, `aria_label` та перекладні назви статусів."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

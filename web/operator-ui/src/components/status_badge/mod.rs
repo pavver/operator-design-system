@@ -1,7 +1,7 @@
 //! Status badge: PresenceStatus and StatusBadge.
 
 use crate::components::primitives::ProgressIndicator;
-use crate::core::du;
+use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use operator_ui_tokens::dim;
 
@@ -61,20 +61,73 @@ fn arc_path(cx: f32, cy: f32, r: f32, from_deg: f32, to_deg: f32) -> String {
 #[component]
 pub fn StatusBadge(
     #[prop(into)] status: Signal<PresenceStatus>,
-    /// Size in DU.
-    #[prop(default = dim::PAD_CARD)]
-    size: f32,
+    /// Size in DU (`--op-status-badge-size`).
+    #[prop(optional, into)]
+    size: MaybeProp<f32>,
     /// Optional caption rendered to the right of the badge.
     #[prop(optional, into)]
-    text: Option<Signal<String>>,
+    text: MaybeProp<String>,
+    /// Caption slot next to the badge.
+    #[prop(optional, into)]
+    text_slot: Slot,
+    /// Gap between badge and caption in DU (`--op-status-badge-gap`).
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
+    /// Caption font size in TU (`--op-status-badge-font-size`).
+    #[prop(optional, into)]
+    font_size: MaybeProp<f32>,
+    /// Caption line height in TU (`--op-status-badge-line-height`).
+    #[prop(optional, into)]
+    line_height: MaybeProp<f32>,
+    /// Accessible name override.
+    #[prop(optional, into)]
+    aria_label: MaybeProp<String>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
-    let badge = move || match status.get() {
+    let size_val = move || size.get().unwrap_or(dim::PAD_CARD);
+    let online_str = ui_text(None::<String>.into(), "status-badge.online", "Online");
+    let offline_str = ui_text(None::<String>.into(), "status-badge.offline", "Offline");
+    let alarm_str = ui_text(None::<String>.into(), "status-badge.alarm", "Alarm");
+    let pending_str = ui_text(None::<String>.into(), "status-badge.pending", "Pending");
+    let error_str = ui_text(None::<String>.into(), "status-badge.error", "Error");
+    let typing_str = ui_text(None::<String>.into(), "status-badge.typing", "Typing");
+    let rec_str = ui_text(
+        None::<String>.into(),
+        "status-badge.recording-audio",
+        "Recording audio",
+    );
+    let send_str = ui_text(
+        None::<String>.into(),
+        "status-badge.sending-file",
+        "Sending file",
+    );
+
+    let accessible_name = Signal::derive(move || {
+        if let Some(name) = aria_label.get() {
+            name
+        } else {
+            match status.get() {
+                PresenceStatus::Online => online_str.get(),
+                PresenceStatus::Offline => offline_str.get(),
+                PresenceStatus::Alarm => alarm_str.get(),
+                PresenceStatus::Pending => pending_str.get(),
+                PresenceStatus::Error => error_str.get(),
+                PresenceStatus::Typing => typing_str.get(),
+                PresenceStatus::RecordingAudio => rec_str.get(),
+                PresenceStatus::SendingFile => send_str.get(),
+            }
+        }
+    });
+
+    let badge = move || {
+        match status.get() {
         PresenceStatus::Pending => view! {
-            <ProgressIndicator size=size stroke=0.3 color="var(--op-status-activity)"/>
+            <ProgressIndicator size=size_val() stroke=0.3 color="var(--op-status-badge-activity, var(--op-status-activity))"/>
         }
         .into_any(),
         PresenceStatus::Typing => view! {
-            <span class="op-badge-typing" style:width=du(size) style:height=du(size)>
+            <span class="op-badge-typing">
                 <i></i>
                 <i></i>
                 <i></i>
@@ -89,7 +142,7 @@ pub fn StatusBadge(
                 })
                 .collect_view();
             view! {
-                <svg class="op-badge-voice" viewBox="0 0 100 100" style:width=du(size) style:height=du(size)>
+                <svg class="op-badge-voice" viewBox="0 0 100 100">
                     <circle class="op-wave-src" cx="18" cy="50" r="11"></circle>
                     {arcs}
                 </svg>
@@ -110,7 +163,7 @@ pub fn StatusBadge(
                 })
                 .collect_view();
             view! {
-                <svg class="op-badge-file" viewBox="0 0 100 100" style:width=du(size) style:height=du(size)>
+                <svg class="op-badge-file" viewBox="0 0 100 100">
                     {chevrons}
                 </svg>
             }
@@ -124,14 +177,38 @@ pub fn StatusBadge(
                 PresenceStatus::Error => "error",
                 _ => "fallback",
             };
-            view! { <span class="op-badge-led" data-kind=kind style:width=du(size) style:height=du(size)></span> }
-                .into_any()
+            view! { <span class="op-badge-led" data-kind=kind></span> }.into_any()
+        }
+    }
+    };
+
+    let text_content = move || {
+        if text_slot.is_set() {
+            view! { <span class="op-badge-text">{text_slot.run()}</span> }.into_any()
+        } else if let Some(t) = text.get() {
+            view! { <span class="op-badge-text">{t}</span> }.into_any()
+        } else {
+            ().into_any()
         }
     };
+
     view! {
-        <span class="op-badge" role="status" aria-label=move || status.get().name()>
+        <span
+            class=root_class("op-badge", class)
+            role="status"
+            aria-label=move || accessible_name.get()
+            style=root_style(
+                vec![
+                    Metric::du("--op-status-badge-size", size),
+                    Metric::du("--op-status-badge-gap", gap),
+                    Metric::tu("--op-status-badge-font-size", font_size),
+                    Metric::tu("--op-status-badge-line-height", line_height),
+                ],
+                style,
+            )
+        >
             {badge}
-            {text.map(|t| view! { <span class="op-badge-text">{move || t.get()}</span> })}
+            {text_content}
         </span>
     }
 }

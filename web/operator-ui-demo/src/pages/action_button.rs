@@ -8,6 +8,11 @@ pub fn action_button() -> AnyView {
     let b = backend();
     let enabled = RwSignal::new(true);
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <ActionButton text=crate::i18n::t("Actions") height=12.0 padding_x=5.0 gap=3.0
+                leading=|| view! { <Icon icon=icons::SETTINGS size=4.0/> }
+                on_click=b.action("custom action")/>
+        </Example>
         <Example title="Interactive" note="Async action with a pending running border, a 500 ms result icon flash and a 300 ms tail. Clicks are blocked while pending.">
             <ActionButton text="Restart stream" on_click=b.action("restart stream") enabled=enabled/>
             <ActionButton text="Sync" icon=icons::REFRESH on_click=b.action("sync presets") enabled=enabled/>

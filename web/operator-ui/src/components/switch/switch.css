@@ -2,35 +2,49 @@
 /* AsyncSwitch                                                         */
 /* ------------------------------------------------------------------ */
 .op-switch {
-  --sb-w: var(--op-dim-spinner-stroke);
-  --sb-rx: calc(var(--op-dim-row-compact) / 2);
+  --sb-w: var(--op-switch-spinner-stroke, var(--op-dim-spinner-stroke));
+  --sb-rx: calc(var(--op-switch-height, var(--op-dim-row-compact)) / 2);
   display: block;
   flex: none;
-  width: calc(var(--op-du) * 13);
-  height: var(--op-dim-row-compact);
-  border-radius: 999px;
+  width: var(--op-switch-width, calc(var(--op-du) * 13));
+  height: var(--op-switch-height, var(--op-dim-row-compact));
+  border-radius: calc(var(--op-switch-height, var(--op-dim-row-compact)) / 2);
   background-color: var(--op-switch-unchecked-track);
 }
 .op-switch[data-checked] { background-color: var(--op-switch-checked-track); }
-.op-switch[data-state="pending"] { background-color: var(--op-surface-alt); }
-.op-switch[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-switch[data-state="pending"] { background-color: var(--op-switch-background-alt, var(--op-surface-alt)); }
+.op-switch[data-state="disabled"] { background-color: var(--op-switch-disabled-background, var(--op-disabled-surface)); }
 .op-switch-thumb {
   position: absolute;
   z-index: 2;
-  top: var(--op-dim-pad-tight);
-  left: var(--op-dim-pad-tight);
-  width: var(--op-dim-row-dense);
-  height: var(--op-dim-row-dense);
+  top: var(--op-switch-thumb-inset, var(--op-dim-pad-tight));
+  left: var(--op-switch-thumb-inset, var(--op-dim-pad-tight));
+  width: var(--op-switch-thumb-size, var(--op-dim-row-dense));
+  height: var(--op-switch-thumb-size, var(--op-dim-row-dense));
   border-radius: 50%;
   display: grid;
   place-items: center;
-  color: #FFFFFF;
+  color: var(--op-switch-icon, var(--op-toggle-cloud));
   background-color: var(--op-switch-unchecked-thumb);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border-strong);
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-switch-emphasis-border, var(--op-border-strong));
   transition: transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1), background-color var(--op-motion-state-color);
 }
-.op-switch[data-checked] .op-switch-thumb { transform: translateX(calc(var(--op-du) * 5)); background-color: var(--op-switch-checked-thumb); }
-.op-switch[data-state="pending"] .op-switch-thumb { transform: translateX(calc(var(--op-du) * 2.5)); }
+.op-switch[data-checked] .op-switch-thumb { transform: translateX(calc(var(--op-switch-width, calc(var(--op-du) * 13)) - var(--op-switch-thumb-size, var(--op-dim-row-dense)) - 2 * var(--op-switch-thumb-inset, var(--op-dim-pad-tight)))); background-color: var(--op-switch-checked-thumb); }
+.op-switch[data-state="pending"] .op-switch-thumb { transform: translateX(calc((var(--op-switch-width, calc(var(--op-du) * 13)) - var(--op-switch-thumb-size, var(--op-dim-row-dense))) / 2 - var(--op-switch-thumb-inset, var(--op-dim-pad-tight)))); }
 .op-switch[data-state="pending"][data-spinner] .op-switch-thumb { background-color: transparent; box-shadow: none; }
-.op-switch[data-state="disabled"] .op-switch-thumb { background-color: var(--op-text-disabled); }
+.op-switch[data-state="disabled"] .op-switch-thumb { background-color: var(--op-switch-disabled-text, var(--op-text-disabled)); }
 
+
+/* Family hooks for shared state visuals. */
+.op-switch { --sb-base: var(--op-switch-border, var(--op-border)); }
+.op-switch[data-state="pressed"] { --sb-base: var(--op-switch-emphasis-border, var(--op-border-strong)); }
+.op-switch[data-state="disabled"] { --sb-base: var(--op-switch-disabled-border, var(--op-disabled-border)); }
+.op-switch[data-state="selected"], .op-switch[data-state="focused"] { --sb-base: var(--op-switch-accent, var(--op-accent)); }
+.op-switch[data-result="success"] { --sb-status: var(--op-switch-success, var(--op-success)); }
+.op-switch[data-result="error"] { --sb-status: var(--op-switch-error, var(--op-error)); }
+.op-switch > .op-run rect { stroke: var(--op-switch-pending, var(--op-pending)); }
+.op-switch .op-tone[data-state="success"] { color: var(--op-switch-success, var(--op-success)); }
+.op-switch .op-tone[data-state="error"] { color: var(--op-switch-error, var(--op-error)); }
+.op-switch .op-ripple { background: color-mix(in srgb, var(--op-switch-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-switch:focus-visible { outline-color: var(--op-switch-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-switch[data-state="idle"]:hover { --sb-base: var(--op-switch-emphasis-border, var(--op-border-strong)); } }

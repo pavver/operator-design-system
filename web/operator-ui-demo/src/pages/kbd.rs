@@ -24,6 +24,16 @@ pub fn kbd() -> AnyView {
         <Example title="In text">
             <span>"Press " <Kbd keys="F2"/> " to rename the selected camera."</span>
         </Example>
+        <Example title="Customization" note="Metric props and custom separator slot.">
+            <Kbd
+                keys="Ctrl+Alt+Del"
+                height=8.0
+                padding_x=2.0
+                font_size=13.0
+                separator=Slot::from(|| view! { <span style="color:var(--op-accent);margin:0 4px;">"•"</span> })
+                aria_label="Control Alt Delete shortcut"
+            />
+        </Example>
     }
     .into_any()
 }

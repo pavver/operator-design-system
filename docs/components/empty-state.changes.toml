@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`icon_size`, `padding_x`, `padding_y`, `gap`, `icon_gap`, `title_size`, `max_width`), color variables (`--op-empty-state-*`), slots (`actions`, `icon_slot`, `title_slot`), translatable string `empty-state.title`, and replaceable icon `empty-state.icon`."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`icon_size`, `padding_x`, `padding_y`, `gap`, `icon_gap`, `title_size`, `max_width`), змінні кольорів (`--op-empty-state-*`), слоти (`actions`, `icon_slot`, `title_slot`), перекладний рядок `empty-state.title` та замінна іконка `empty-state.icon`."
+
+[[change]]
 date = "2026-11-11T21:50:57+02:00"
 status = "approved"
 commit = "3e95ba4"

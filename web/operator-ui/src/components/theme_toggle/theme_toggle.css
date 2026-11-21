@@ -2,19 +2,19 @@
 /* ThemeToggle (after the Day/Night Toggle by Jhey Tompkins, MIT)      */
 /* ------------------------------------------------------------------ */
 .op-theme-toggle {
-  --sb-base: color-mix(in srgb, var(--op-border) 50%, transparent);
+  --sb-base: color-mix(in srgb, var(--op-theme-toggle-border, var(--op-border)) 50%, transparent);
   --tt-ease: cubic-bezier(0.4, -0.2, 0.4, 1.2);
   --tt-time: 450ms;
   display: block;
   flex: none;
   padding: 0;
-  border-radius: 999px;
+  border-radius: calc(var(--op-theme-toggle-height, calc(var(--op-du) * 7.5)) / 2);
 }
 .op-tt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.op-tt-sky { fill: var(--op-toggle-day-sky); transition: fill 400ms var(--op-ease-standard); }
-.op-theme-toggle[data-dark] .op-tt-sky { fill: var(--op-toggle-night-sky); }
+.op-tt-sky { fill: var(--op-theme-toggle-day-sky, var(--op-toggle-day-sky)); transition: fill 400ms var(--op-ease-standard); }
+.op-theme-toggle[data-dark] .op-tt-sky { fill: var(--op-theme-toggle-night-sky, var(--op-toggle-night-sky)); }
 .op-tt-star {
-  fill: var(--op-toggle-star);
+  fill: var(--op-theme-toggle-star, var(--op-toggle-star));
   transform-box: fill-box;
   transform-origin: center;
   opacity: 0;
@@ -24,18 +24,33 @@
 .op-theme-toggle[data-dark] .op-tt-star { opacity: 0.95; transform: scale(1); }
 .op-tt-clouds { transition: transform var(--tt-time) var(--tt-ease), opacity var(--tt-time) var(--tt-ease); }
 .op-theme-toggle[data-dark] .op-tt-clouds { transform: translateY(var(--tt-cloud-drop)); opacity: 0; }
-.op-tt-cloud { fill: var(--op-toggle-cloud); opacity: 0.95; }
-.op-tt-cloud-back { fill: var(--op-toggle-cloud-back); opacity: 0.45; }
+.op-tt-cloud { fill: var(--op-theme-toggle-cloud, var(--op-toggle-cloud)); opacity: 0.95; }
+.op-tt-cloud-back { fill: var(--op-theme-toggle-cloud-back, var(--op-toggle-cloud-back)); opacity: 0.45; }
 .op-tt-thumb { transition: transform var(--tt-time) var(--tt-ease); }
 .op-theme-toggle[data-dark] .op-tt-thumb { transform: translateX(var(--tt-travel)); }
-.op-tt-halo { fill: var(--op-toggle-star); transition: opacity var(--tt-time) var(--tt-ease); }
+.op-tt-halo { fill: var(--op-theme-toggle-star, var(--op-toggle-star)); transition: opacity var(--tt-time) var(--tt-ease); }
 .op-theme-toggle[data-dark] .op-tt-halo { opacity: 0; }
 /* One body: the sun turns into the moon while it moves; craters fade in. */
-.op-tt-orb { fill: var(--op-toggle-sun); transition: fill var(--tt-time) var(--op-ease-smooth); }
-.op-theme-toggle[data-dark] .op-tt-orb { fill: var(--op-toggle-moon); }
-.op-tt-craters { fill: var(--op-toggle-crater); opacity: 0; transition: opacity var(--tt-time) var(--op-ease-smooth); }
+.op-tt-orb { fill: var(--op-theme-toggle-sun, var(--op-toggle-sun)); transition: fill var(--tt-time) var(--op-ease-smooth); }
+.op-theme-toggle[data-dark] .op-tt-orb { fill: var(--op-theme-toggle-moon, var(--op-toggle-moon)); }
+.op-tt-craters { fill: var(--op-theme-toggle-crater, var(--op-toggle-crater)); opacity: 0; transition: opacity var(--tt-time) var(--op-ease-smooth); }
 .op-theme-toggle[data-dark] .op-tt-craters { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .op-theme-toggle * { transition-duration: 0s !important; }
 }
 
+
+.op-theme-toggle { width: var(--op-theme-toggle-width, calc(var(--op-du) * 17)); height: var(--op-theme-toggle-height, calc(var(--op-du) * 7.5)); }
+
+.op-theme-toggle { --sb-rx: calc(var(--op-theme-toggle-height, calc(var(--op-du) * 7.5)) / 2); }
+.op-tt-probe { position: absolute; pointer-events: none; visibility: hidden; width: var(--op-theme-toggle-thumb-inset, calc(var(--op-du) * 0.625)); height: var(--op-theme-toggle-star-scale, var(--op-du)); }
+.op-tt-thumb, .op-tt-clouds { transform-box: view-box; }
+
+/* Family hooks for shared state visuals. */
+.op-theme-toggle { --sb-base: color-mix(in srgb, var(--op-theme-toggle-border, var(--op-border)) 50%, transparent); }
+.op-theme-toggle[data-state="pressed"] { --sb-base: var(--op-theme-toggle-emphasis-border, var(--op-border-strong)); }
+.op-theme-toggle[data-state="disabled"] { --sb-base: var(--op-theme-toggle-disabled-border, var(--op-disabled-border)); }
+.op-theme-toggle[data-state="selected"], .op-theme-toggle[data-state="focused"] { --sb-base: var(--op-theme-toggle-accent, var(--op-accent)); }
+.op-theme-toggle .op-ripple { background: color-mix(in srgb, var(--op-theme-toggle-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-theme-toggle:focus-visible { outline-color: var(--op-theme-toggle-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-theme-toggle[data-state="idle"]:hover { --sb-base: var(--op-theme-toggle-emphasis-border, var(--op-border-strong)); } }

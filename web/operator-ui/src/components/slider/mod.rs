@@ -1,15 +1,20 @@
 //! Track-and-thumb slider: Slider.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, JobToken, PendingRun, sleep_ms, use_pending_indicator,
-    use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Slot, root_class, root_style,
+    sleep_ms, ui_icon, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{icons, motion};
+use operator_ui_tokens::{Icon as IconData, icons, motion};
 use std::time::Duration;
 use wasm_bindgen::JsCast;
+
+mod visuals;
+use visuals::{pending, symbol};
+
+const ICON_SIZE: &str = "var(--op-slider-icon-size, calc(var(--op-du) * 3.5))";
+const SPINNER_SIZE: &str = "var(--op-slider-spinner-size, calc(var(--op-du) * 3))";
 
 pub(crate) const CSS: &str = include_str!("slider.css");
 
@@ -51,8 +56,60 @@ pub fn Slider(
     /// Async commit after release; on error the value rolls back to the last committed one.
     #[prop(optional, into)]
     on_commit: Option<AsyncAction<f32>>,
-    #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] rail_inset: MaybeProp<f32>,
+    #[prop(optional, into)] track_height: MaybeProp<f32>,
+    #[prop(optional, into)] thumb_size: MaybeProp<f32>,
+    #[prop(optional, into)] tick_size: MaybeProp<f32>,
+    #[prop(optional, into)] dot_size: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_size: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_offset: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] focus_width: MaybeProp<f32>,
+    #[prop(optional, into)] focus_offset: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] width: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] thumb: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] success_label: MaybeProp<String>,
+    #[prop(optional)] success_icon: Option<IconData>,
+    #[prop(optional, into)] error_label: MaybeProp<String>,
+    #[prop(optional)] error_icon: Option<IconData>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "slider.loading", "Loading");
+    let success_label = ui_text(success_label, "slider.success", "Success");
+    let success_icon = ui_icon(success_icon, "slider.success", icons::CHECK);
+    let error_label = ui_text(error_label, "slider.error", "Error");
+    let error_icon = ui_icon(error_icon, "slider.error", icons::CLOSE);
+    let label = ui_text(label, "slider.label", "Value");
+
+    let root_metrics = vec![
+        Metric::du("--op-slider-width", width),
+        Metric::du("--op-slider-spinner-stroke", spinner_stroke),
+        Metric::du("--op-slider-height", height),
+        Metric::du("--op-slider-rail-inset", rail_inset),
+        Metric::du("--op-slider-track-height", track_height),
+        Metric::du("--op-slider-thumb-size", thumb_size),
+        Metric::du("--op-slider-tick-size", tick_size),
+        Metric::du("--op-slider-dot-size", dot_size),
+        Metric::du("--op-slider-icon-size", icon_size),
+        Metric::du("--op-slider-spinner-size", spinner_size),
+        Metric::du("--op-slider-tooltip-offset", tooltip_offset),
+        Metric::du("--op-slider-tooltip-padding-x", tooltip_padding_x),
+        Metric::du("--op-slider-tooltip-padding-y", tooltip_padding_y),
+        Metric::tu("--op-slider-font-size", font_size),
+        Metric::tu("--op-slider-line-height", line_height),
+        Metric::du("--op-slider-focus-width", focus_width),
+        Metric::du("--op-slider-focus-offset", focus_offset),
+    ];
+
     let dragging = RwSignal::new(false);
     let local = RwSignal::new(ControlState::Idle);
     let committed = StoredValue::new(value.get_untracked());
@@ -186,10 +243,11 @@ pub fn Slider(
 
     view! {
         <div
-            class="op-slider"
+            class=root_class("op-slider", class)
+            style=root_style(root_metrics, style)
             role="slider"
             tabindex=move || if interactive() { "0" } else { "-1" }
-            aria-label=label
+            aria-label=move || label.get()
             aria-valuemin=min
             aria-valuemax=max
             aria-valuenow=move || value.get()
@@ -287,12 +345,11 @@ pub fn Slider(
                         >
                             {move || match current.get() {
                                 ControlState::Pending if show_spinner.get() => {
-                                    view! { <PendingIndicator size=3.0/> }
-                                        .into_any()
+                                    pending(SPINNER_SIZE, loading_label)
                                 }
-                                ControlState::Success => view! { <Icon icon=icons::CHECK size=3.5/> }.into_any(),
-                                ControlState::Error => view! { <Icon icon=icons::CLOSE size=3.5/> }.into_any(),
-                                _ => view! { <span class="op-slider-dot"></span> }.into_any(),
+                                ControlState::Success => symbol(success_icon, ICON_SIZE, Some(success_label)),
+                                ControlState::Error => symbol(error_icon, ICON_SIZE, Some(error_label)),
+                                _ => if thumb.is_set() { thumb.run().into_any() } else { view! { <span class="op-slider-dot"></span> }.into_any() },
                             }}
                         </span>
                     </div>

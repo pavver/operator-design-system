@@ -1,14 +1,19 @@
 //! Square icon button with state border feedback; supports sync and async clicks.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::components::tooltip::{InsideTooltip, Tooltip};
 use crate::core::{
-    ActionResult, AsyncAction, ControlState, JobToken, PendingRun, Press, du, flash_icon,
-    link_state, sleep_ms, spawn_ripple, use_pending_indicator, use_state_visual,
+    ActionResult, AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, link_state,
+    root_class, root_style, sleep_ms, spawn_ripple, ui_icon, ui_text, use_pending_indicator,
+    use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{Icon as IconData, dim, motion};
+use operator_ui_tokens::{Icon as IconData, icons, motion};
+
+mod visuals;
+use visuals::{pending, symbol};
+
+const ICON_SIZE: &str = "var(--op-button-icon-size, var(--op-dim-icon-small))";
 
 pub(crate) const CSS: &str = include_str!("icon_button.css");
 
@@ -18,13 +23,7 @@ pub(crate) const CSS: &str = include_str!("icon_button.css");
 #[component]
 pub fn IconButton(
     icon: IconData,
-    #[prop(optional, into)] label: Option<String>,
-    /// Button size in DU.
-    #[prop(default = dim::ROW_COMPACT)]
-    size: f32,
-    /// Icon size in DU.
-    #[prop(default = dim::ICON_SMALL)]
-    icon_size: f32,
+    #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] loading: Signal<bool>,
@@ -36,14 +35,52 @@ pub fn IconButton(
     /// Opens the link in a new tab (link mode only).
     #[prop(optional)]
     new_tab: bool,
+    #[prop(optional, into)] size: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] leading: Slot,
+    #[prop(optional, into)] trailing: Slot,
+    #[prop(optional, into)] content: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] success_label: MaybeProp<String>,
+    #[prop(optional)] success_icon: Option<IconData>,
+    #[prop(optional, into)] error_label: MaybeProp<String>,
+    #[prop(optional)] error_icon: Option<IconData>,
 ) -> impl IntoView {
+    let has_label = label.get_untracked().is_some();
+    let loading_label = ui_text(loading_label, "icon-button.loading", "Loading");
+    let success_label = ui_text(success_label, "icon-button.success", "Success");
+    let success_icon = ui_icon(success_icon, "icon-button.success", icons::CHECK);
+    let error_label = ui_text(error_label, "icon-button.error", "Error");
+    let error_icon = ui_icon(error_icon, "icon-button.error", icons::CLOSE);
+    let label = ui_text(label, "icon-button.label", "Action");
+
+    let root_metrics = vec![
+        Metric::du("--op-button-spinner-stroke", spinner_stroke),
+        Metric::du("--op-button-size", size),
+        Metric::du("--op-button-icon-size", icon_size),
+        Metric::du("--op-button-gap", gap),
+    ];
+
     // The label doubles as the tooltip; an explicit parent Tooltip takes over instead.
-    let tooltip_text = label
-        .clone()
-        .filter(|_| use_context::<InsideTooltip>().is_none());
-    let with_tooltip = move |control: AnyView| match tooltip_text {
-        Some(text) => view! { <Tooltip text=text>{control}</Tooltip> }.into_any(),
-        None => control,
+    let with_tooltip = move |control: AnyView| {
+        if has_label && use_context::<InsideTooltip>().is_none() {
+            view! { <Tooltip text=label>{control}</Tooltip> }.into_any()
+        } else {
+            control
+        }
+    };
+    let label_content = move || {
+        view! {
+            <span class="op-icon-btn-content">
+                {leading.run()}
+                {if content.is_set() { content.run() } else { Some(symbol(Signal::stored(icon), ICON_SIZE, None)) }}
+                {trailing.run()}
+            </span>
+        }
     };
 
     if let Some(href) = href {
@@ -51,10 +88,9 @@ pub fn IconButton(
         let current = link_state(enabled, press);
         let link = view! {
             <a
-                class="op-sb op-sb-bg op-rippled op-icon-btn"
-                aria-label=label
-                style:width=du(size)
-                style:height=du(size)
+                class=root_class("op-sb op-sb-bg op-rippled op-icon-btn", class)
+            style=root_style(root_metrics, style)
+                aria-label=move || label.get()
                 href=move || enabled.get().then(|| href.get())
                 target=new_tab.then_some("_blank")
                 rel=new_tab.then_some("noopener noreferrer")
@@ -71,7 +107,7 @@ pub fn IconButton(
                 on:pointerleave=move |_| press.up()
                 on:pointercancel=move |_| press.up()
             >
-                <Icon icon=icon size=icon_size/>
+                {label_content()}
             </a>
         };
         return with_tooltip(link.into_any());
@@ -129,10 +165,9 @@ pub fn IconButton(
     let button = view! {
         <button
             type="button"
-            class="op-sb op-sb-bg op-rippled op-icon-btn"
-            aria-label=label
-            style:width=du(size)
-            style:height=du(size)
+            class=root_class("op-sb op-sb-bg op-rippled op-icon-btn", class)
+            style=root_style(root_metrics, style)
+            aria-label=move || label.get()
             data-state=move || visual.state.get()
             data-result=move || visual.result.get()
             data-fading=move || visual.fading.get().then_some("")
@@ -156,11 +191,11 @@ pub fn IconButton(
             {move || {
                 let s = current.get();
                 if show_spinner.get() {
-                    view! { <PendingIndicator size=icon_size/> }.into_any()
+                    pending(ICON_SIZE, loading_label)
                 } else if s.is_result() && show_flash.get() {
-                    flash_icon(s, icon_size)
+                    if s == ControlState::Success { symbol(success_icon, ICON_SIZE, Some(success_label)) } else { symbol(error_icon, ICON_SIZE, Some(error_label)) }
                 } else {
-                    view! { <Icon icon=icon size=icon_size/> }.into_any()
+                    label_content().into_any()
                 }
             }}
             <PendingRun/>
