@@ -52,6 +52,10 @@ pub mod field;
 pub mod file_field;
 #[cfg(feature = "form")]
 pub mod form;
+#[cfg(feature = "gallery")]
+pub mod gallery;
+#[cfg(feature = "gallery-viewer")]
+pub mod gallery_viewer;
 #[cfg(feature = "graph")]
 pub mod graph;
 #[cfg(feature = "header")]
@@ -68,6 +72,8 @@ pub mod kbd;
 pub mod knob;
 #[cfg(feature = "language-picker")]
 pub mod language_picker;
+#[cfg(feature = "launcher-tile")]
+pub mod launcher_tile;
 #[cfg(feature = "linear-progress")]
 pub mod linear_progress;
 #[cfg(feature = "list-item")]
@@ -92,6 +98,8 @@ pub mod popup_edit;
 pub mod primitives;
 #[cfg(feature = "property-list")]
 pub mod property_list;
+#[cfg(feature = "ptz-pad")]
+pub mod ptz_pad;
 #[cfg(feature = "radio-group")]
 pub mod radio_group;
 #[cfg(feature = "range-slider")]
@@ -156,5 +164,7 @@ pub mod uploader;
 pub mod value_field;
 #[cfg(feature = "video")]
 pub mod video;
+#[cfg(feature = "video-stream")]
+pub mod video_stream;
 #[cfg(feature = "virtual-list")]
 pub mod virtual_list;

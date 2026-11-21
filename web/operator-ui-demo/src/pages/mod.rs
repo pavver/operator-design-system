@@ -29,6 +29,8 @@ mod field;
 mod file_field;
 mod form;
 mod foundations;
+mod gallery;
+mod gallery_viewer;
 mod graph;
 mod header;
 mod hover_card;
@@ -37,6 +39,7 @@ mod image;
 mod kbd;
 mod knob;
 mod language_picker;
+mod launcher_tile;
 mod linear_progress;
 mod list_item;
 mod loading_bar;
@@ -49,6 +52,7 @@ mod popover;
 mod popup_edit;
 mod primitives;
 mod property_list;
+mod ptz_pad;
 mod radio_group;
 mod range_slider;
 mod rating;
@@ -76,6 +80,7 @@ mod tooltip;
 mod uploader;
 mod value_fields;
 mod video;
+mod video_stream;
 mod virtual_list;
 
 use leptos::prelude::AnyView;
@@ -166,6 +171,11 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/rating" => (rating::rating, true),
         "components/split-button" => (split_button::split_button, true),
         "components/uploader" => (uploader::uploader, true),
+        "components/gallery" => (gallery::gallery, false),
+        "components/gallery-viewer" => (gallery_viewer::gallery_viewer, false),
+        "components/launcher-tile" => (launcher_tile::launcher_tile, true),
+        "components/ptz-pad" => (ptz_pad::ptz_pad, true),
+        "components/video-stream" => (video_stream::video_stream, false),
         _ => return None,
     };
     Some(entry)

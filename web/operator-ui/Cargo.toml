@@ -77,10 +77,13 @@ draft = [
     "field",
     "file-field",
     "form",
+    "gallery",
+    "gallery-viewer",
     "hover-card",
     "image",
     "knob",
     "language-picker",
+    "launcher-tile",
     "loading-bar",
     "loading-overlay",
     "marquee-text",
@@ -90,6 +93,7 @@ draft = [
     "popover",
     "popup-edit",
     "property-list",
+    "ptz-pad",
     "range-slider",
     "rating",
     "side-panel",
@@ -103,6 +107,7 @@ draft = [
     "tree",
     "uploader",
     "video",
+    "video-stream",
     "virtual-list",
 ]
 
@@ -143,6 +148,8 @@ dropdown-menu = ["field", "popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
 file-field = ["field", "chip", "primitives", "web-sys/File", "web-sys/Blob", "web-sys/FileList", "web-sys/DragEvent", "web-sys/DataTransfer"]
 form = ["action-button", "primitives", "web-sys/FocusEvent"]
+gallery = ["aspect-ratio", "checkbox", "image", "primitives", "web-sys/IntersectionObserver", "web-sys/IntersectionObserverEntry", "web-sys/IntersectionObserverInit"]
+gallery-viewer = ["icon-button", "primitives", "web-sys/HtmlVideoElement"]
 header = ["avatar", "primitives", "status-badge"]
 graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
@@ -151,6 +158,7 @@ image = ["primitives", "skeleton"]
 kbd = []
 knob = ["primitives"]
 language-picker = ["combobox"]
+launcher-tile = ["primitives"]
 linear-progress = []
 list-item = []
 loading-bar = []
@@ -164,6 +172,7 @@ popover = []
 popup-edit = ["action-button", "popover", "text-field"]
 primitives = []
 property-list = ["icon-button"]
+ptz-pad = ["icon-button", "primitives"]
 radio-group = ["checkbox-group", "primitives"]
 range-slider = ["slider", "primitives"]
 rating = ["primitives"]
@@ -192,6 +201,7 @@ timeline = ["primitives"]
 tree = ["primitives", "virtual-list"]
 tooltip = ["popover"]
 video = ["primitives"]
+video-stream = ["action-button", "aspect-ratio", "icon-button", "primitives", "web-sys/HtmlVideoElement", "web-sys/MediaStream"]
 uploader = ["action-button", "file-field", "linear-progress", "primitives"]
 virtual-list = ["scrollbar"]
 

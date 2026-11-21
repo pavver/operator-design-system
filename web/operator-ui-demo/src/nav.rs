@@ -29,6 +29,8 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/menu",
             "components/toolbar",
             "components/button-group",
+            "components/launcher-tile",
+            "components/ptz-pad",
         ],
     ),
     (
@@ -89,6 +91,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/popover",
             "components/popup-edit",
             "components/hover-card",
+            "components/gallery-viewer",
         ],
     ),
     (
@@ -121,6 +124,8 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/chat-message",
             "components/image",
             "components/video",
+            "components/gallery",
+            "components/video-stream",
         ],
     ),
     (

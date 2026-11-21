@@ -63,6 +63,10 @@ pub mod prelude {
     pub use crate::components::file_field::*;
     #[cfg(feature = "form")]
     pub use crate::components::form::*;
+    #[cfg(feature = "gallery")]
+    pub use crate::components::gallery::*;
+    #[cfg(feature = "gallery-viewer")]
+    pub use crate::components::gallery_viewer::*;
     #[cfg(feature = "graph")]
     pub use crate::components::graph::*;
     #[cfg(feature = "header")]
@@ -79,6 +83,8 @@ pub mod prelude {
     pub use crate::components::knob::*;
     #[cfg(feature = "language-picker")]
     pub use crate::components::language_picker::*;
+    #[cfg(feature = "launcher-tile")]
+    pub use crate::components::launcher_tile::*;
     #[cfg(feature = "linear-progress")]
     pub use crate::components::linear_progress::*;
     #[cfg(feature = "list-item")]
@@ -103,6 +109,8 @@ pub mod prelude {
     pub use crate::components::primitives::*;
     #[cfg(feature = "property-list")]
     pub use crate::components::property_list::*;
+    #[cfg(feature = "ptz-pad")]
+    pub use crate::components::ptz_pad::*;
     #[cfg(feature = "radio-group")]
     pub use crate::components::radio_group::*;
     #[cfg(feature = "range-slider")]
@@ -177,6 +185,8 @@ pub mod prelude {
     pub use crate::components::value_field::{ParsedField, parse::LocalDateTime};
     #[cfg(feature = "video")]
     pub use crate::components::video::*;
+    #[cfg(feature = "video-stream")]
+    pub use crate::components::video_stream::*;
     #[cfg(feature = "virtual-list")]
     pub use crate::components::virtual_list::*;
     pub use crate::core::theme::{OperatorTheme, Theme, ThemeRoot};

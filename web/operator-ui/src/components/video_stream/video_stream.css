@@ -1,0 +1,157 @@
+/* Operator VideoStream: generic live camera and video stream shell */
+
+.op-video-stream {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: var(--op-video-stream-max-width, 100%);
+    max-height: var(--op-video-stream-max-height, 100%);
+    background: var(--op-video-stream-bg, #000000);
+    border: var(--op-video-stream-border-width, var(--op-border-width)) solid var(--op-video-stream-border, var(--op-border));
+    border-radius: 0;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    outline: none;
+}
+
+.op-video-stream:focus-visible {
+    outline: calc(var(--op-du) * 0.5) solid var(--op-focus-ring, var(--op-accent));
+    outline-offset: calc(var(--op-du) * 0.5);
+}
+
+.op-video-stream-element {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: transparent;
+    display: block;
+}
+
+/* Status overlays */
+.op-video-stream-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    color: var(--op-text-primary);
+    padding: calc(var(--op-du) * 4);
+    text-align: center;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.op-video-stream-spinner {
+    width: calc(var(--op-du) * 8);
+    height: calc(var(--op-du) * 8);
+    animation: op-spin 1s linear infinite;
+    color: var(--op-accent);
+    margin-bottom: calc(var(--op-du) * 2);
+}
+
+@keyframes op-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.op-video-stream-status-text {
+    font-size: calc(var(--op-tu) * 12);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--op-text-secondary);
+}
+
+.op-video-stream-error-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--op-du) * 1.5);
+    color: var(--op-error);
+}
+
+.op-video-stream-error-msg {
+    font-size: calc(var(--op-tu) * 11);
+    color: var(--op-text-secondary);
+    max-width: calc(var(--op-du) * 60);
+    word-break: break-word;
+}
+
+/* Controls overlay */
+.op-video-stream-chrome {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: calc(var(--op-du) * 2);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease);
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.op-video-stream:hover .op-video-stream-chrome,
+.op-video-stream:focus-within .op-video-stream-chrome,
+.op-video-stream[data-controls-visible="true"] .op-video-stream-chrome {
+    opacity: 1;
+}
+
+.op-video-stream-top-bar,
+.op-video-stream-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    pointer-events: auto;
+    gap: calc(var(--op-du) * 2);
+}
+
+.op-video-stream-title {
+    font-size: calc(var(--op-tu) * 13);
+    font-weight: 600;
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.op-video-stream-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--op-du) * 1.5);
+    padding: calc(var(--op-du) * 0.5) calc(var(--op-du) * 1.5);
+    background: rgba(220, 38, 38, 0.85);
+    color: #ffffff;
+    font-size: calc(var(--op-tu) * 10);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+
+.op-video-stream-live-dot {
+    width: calc(var(--op-du) * 1.5);
+    height: calc(var(--op-du) * 1.5);
+    border-radius: 50%;
+    background: #ffffff;
+    animation: op-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes op-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.op-video-stream-actions {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--op-du) * 1);
+}
