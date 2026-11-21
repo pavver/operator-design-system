@@ -52,7 +52,7 @@ pub fn navigation_shell() -> AnyView {
                 </div>
             </div>
         </Example>
-        <Example title="Customization" note="Metric props, header/footer slots and custom labels customize NavigationRail and SidePanel." block=true>
+        <Example title="Customization: rail and panel" note="Metric props, header/footer slots and custom labels customize NavigationRail and SidePanel." block=true>
             <div class="demo-shell">
                 <NavigationRail
                     items=vec![
@@ -82,7 +82,7 @@ pub fn navigation_shell() -> AnyView {
             </div>
         </Example>
 
-        <Example title="Customization" note="Tree row metrics, a scoped node label and an application accessible name." block=true>
+        <Example title="Customization: tree" note="Tree row metrics, a scoped node label and an application accessible name." block=true>
             <ThemeRoot strings=Callback::new(|key| (key == "tree.label").then(|| "Browse devices".to_string()))>
                 <Tree nodes=vec![TreeNode::new("custom", "Devices").children(vec![TreeNode::new("camera", "Camera")])]
                     expanded=RwSignal::new(std::collections::HashSet::from(["custom".to_string()]))
