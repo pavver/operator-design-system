@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:45:10+02:00"
+status = "draft"
+en = "Field shell for the closed trigger; class/style; height, padding_x, slot_size, gap, font_size, icon_size, row_height, max_height, option_padding_x, trigger_gap, spinner_size and spinner_stroke; prepend, append, before, after, label_slot, hint_slot, option, empty, before_options, after_options, header and footer; dropdown-menu.label, dropdown-menu.loading and dropdown-menu.expand; field color variables and measured virtual geometry."
+uk = "Оболонка Field для закритого тригера; class/style; height, padding_x, slot_size, gap, font_size, icon_size, row_height, max_height, option_padding_x, trigger_gap, spinner_size і spinner_stroke; слоти prepend, append, before, after, label_slot, hint_slot, option, empty, before_options, after_options, header і footer; dropdown-menu.label, dropdown-menu.loading та dropdown-menu.expand; змінні кольорів поля й вимірювана геометрія віртуального списку."
+
+[[change]]
 date = "2026-11-17T01:31:40+02:00"
 status = "draft"
 commit = "203c562"

@@ -1,5 +1,6 @@
 //! Live examples for value fields.
 
+use crate::i18n::l;
 use crate::kit::Example;
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -51,6 +52,29 @@ pub fn value_fields() -> AnyView {
                 temp.get(), limit.get(), delay.get(), offset.get(), alarm.get(), when.get(), color.get()
             )}
         </span>
+        <Example title="Customization" block=true>
+            <div class="demo-grid-2">
+                <NumberField value=RwSignal::new(Some(12.0)) label=l("Amount", "Кількість")
+                    height=12.0 padding_x=4.0 unit_gap=2.0 unit=Signal::stored("kg".to_string())
+                    prepend=|| view! { <Icon icon=icons::INFO/> }/>
+                <DurationField value=RwSignal::new(90_000_i64) label=l("Duration", "Тривалість")
+                    height=12.0 gap=2.0 minute_unit=l("m", "хв") second_unit=l("s", "с")
+                    after=|| view! { <span>{l("elapsed", "минуло")}</span> }/>
+                <TimeField value=RwSignal::new(27_000_u32) label=l("Time", "Час") height=12.0 font_size=16.0
+                    before=|| view! { <Icon icon=icons::INFO/> }/>
+                <DateTimeField value=when label=l("Start date", "Дата початку") height=12.0 icon_size=6.0 calendar_cell_size=10.0
+                    picker_label=l("Open calendar", "Відкрити календар") append=|| view! { <span>"local"</span> }/>
+                <ColorField value=color label=l("Colour", "Колір") height=12.0 preview_size=6.0 swatch_size=10.0
+                    custom_label=l("Custom…", "Інший…") before=|| view! { <Icon icon=icons::INFO/> }/>
+                <ParsedField value=RwSignal::new(42_i32) format=Callback::new(|v: i32| v.to_string())
+                    parse=Callback::new(|text: String| text.parse::<i32>().ok())
+                    label=l("Custom parser", "Власний парсер") height=12.0 padding_x=4.0
+                    append=|| view! { <span>{l("items", "елементів")}</span> }/>
+                <Calendar selected=Signal::stored(Some((2026, 11, 17))) on_pick=Callback::new(|_| {})
+                    cell_size=10.0 padding=3.0 next_label=l("Next month", "Наступний місяць")
+                    footer=|| view! { <span>{l("Choose a day", "Виберіть день")}</span> }/>
+            </div>
+        </Example>
     }
     .into_any()
 }

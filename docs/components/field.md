@@ -26,6 +26,7 @@ Status: **draft** on web.
 ## Behavior
 
 * The box shows the state of the control as described in [states.md](../foundations/states.md): focused, disabled, pending (run segment), success and error.
+* An explicit `error` retains its outline in the borderless variant, including while idle or disabled.
 * `error` replaces `hint`; both are announced (`role="alert"` for the error).
 * The field never owns the value; the wrapped control does.
 
@@ -73,3 +74,7 @@ Status: **draft** on web.
 
 * The wrapped control carries the accessible name; components built on Field use the visible `label` when it is set.
 * The error line has `role="alert"`.
+
+## Live examples
+
+The Field demo shows label and hint, an error, borderless styling, all four surrounding slots, and a custom native slider control.

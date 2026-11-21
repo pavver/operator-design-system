@@ -18,6 +18,7 @@ mod data_table;
 mod dialog;
 mod dropdown_menu;
 mod empty_state;
+mod field;
 mod foundations;
 mod graph;
 mod header;
@@ -71,6 +72,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/switch" => (switch::switch, true),
         "components/checkbox" => (checkbox::checkbox, true),
         "components/checkbox-group" => (checkbox_group::checkbox_group, true),
+        "components/field" => (field::field, false),
         "components/text-field" => (text_field::text_field, true),
         "components/slider" => (slider::slider, true),
         "components/stepper" => (stepper::stepper, true),

@@ -2,7 +2,8 @@
 
 use super::parse::{format_duration, parse_duration};
 use super::parsed::ParsedField;
-use crate::core::ControlState;
+use crate::components::field::FieldVariant;
+use crate::core::{ControlState, Slot, ui_text};
 use leptos::prelude::*;
 
 /// Duration input: `1h 30m`, `90s`, `1:30`, `-5m`; the value is in milliseconds.
@@ -18,15 +19,48 @@ pub fn DurationField(
     /// Arrow Up/Down step in milliseconds.
     #[prop(default = 1_000)]
     step_ms: i64,
-    #[prop(optional, into)] placeholder: Signal<String>,
-    #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] placeholder: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional, into)] hint: MaybeProp<String>,
+    #[prop(optional, into)] error: MaybeProp<String>,
+    #[prop(optional, into)] variant: Signal<FieldVariant>,
+    #[prop(optional, into)] aria_label: MaybeProp<String>,
+    #[prop(optional, into)] prepend: Slot,
+    #[prop(optional, into)] append: Slot,
+    #[prop(optional, into)] before: Slot,
+    #[prop(optional, into)] after: Slot,
+    #[prop(optional, into)] label_slot: Slot,
+    #[prop(optional, into)] hint_slot: Slot,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] slot_size: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] day_unit: MaybeProp<String>,
+    #[prop(optional, into)] hour_unit: MaybeProp<String>,
+    #[prop(optional, into)] minute_unit: MaybeProp<String>,
+    #[prop(optional, into)] second_unit: MaybeProp<String>,
+    #[prop(optional, into)] millisecond_unit: MaybeProp<String>,
+
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     #[prop(optional)] on_commit: Option<Callback<i64>>,
 ) -> impl IntoView {
-    let format = Callback::new(format_duration);
+    let placeholder = ui_text(placeholder, "duration-field.placeholder", "");
+    let aria_label = ui_text(aria_label, "duration-field.label", "Duration");
+    let units = [
+        ui_text(day_unit, "duration-field.day-unit", "d"),
+        ui_text(hour_unit, "duration-field.hour-unit", "h"),
+        ui_text(minute_unit, "duration-field.minute-unit", "m"),
+        ui_text(second_unit, "duration-field.second-unit", "s"),
+        ui_text(millisecond_unit, "duration-field.millisecond-unit", "ms"),
+    ];
+    let format = Callback::new(move |v| localize_duration(v, &units.map(|unit| unit.get())));
     let parse = Callback::new(move |t: String| {
-        parse_duration(&t, default_unit_ms).filter(|v| signed || *v >= 0)
+        parse_localized_duration(&t, default_unit_ms, &units.map(|unit| unit.get()))
+            .filter(|v| signed || *v >= 0)
     });
     let on_step = Callback::new(move |(v, delta): (i64, i32)| {
         let next = v.saturating_add(step_ms.saturating_mul(i64::from(delta)));
@@ -40,10 +74,90 @@ pub fn DurationField(
             on_step=Some(on_step)
             placeholder=placeholder
             label=label
+            hint=hint
+            error=error
+            variant=variant
+            aria_label=aria_label
+            prepend=prepend
+            append=append
+            before=before
+            after=after
+            label_slot=label_slot
+            hint_slot=hint_slot
+            height=height
+            padding_x=padding_x
+            slot_size=slot_size
+            gap=gap
+            font_size=font_size
+            class=class
+            style=style
             enabled=enabled
             state=state
-            class="op-duration-field"
             on_commit=on_commit
         />
+    }
+}
+
+const UNITS: [&str; 5] = ["d", "h", "m", "s", "ms"];
+
+fn localize_duration(value: i64, units: &[String; 5]) -> String {
+    format_duration(value)
+        .split_whitespace()
+        .map(|part| {
+            // Milliseconds must precede seconds when matching suffixes.
+            for i in [4, 0, 1, 2, 3] {
+                if let Some(number) = part.strip_suffix(UNITS[i]) {
+                    return format!("{number}{}", units[i]);
+                }
+            }
+            part.to_string()
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+fn parse_localized_duration(text: &str, default_unit_ms: i64, units: &[String; 5]) -> Option<i64> {
+    if let Some(value) = parse_duration(text, default_unit_ms) {
+        return Some(value);
+    }
+    let mut aliases: Vec<_> = units
+        .iter()
+        .enumerate()
+        .filter(|(_, unit)| !unit.is_empty())
+        .collect();
+    aliases.sort_by_key(|(_, unit)| std::cmp::Reverse(unit.len()));
+    let mut rest = text.trim();
+    let mut normalized = String::new();
+    while !rest.is_empty() {
+        let number_end =
+            rest.find(|c: char| !(c.is_ascii_digit() || matches!(c, '+' | '-' | '.' | ',' | ' ')))?;
+        normalized.push_str(&rest[..number_end]);
+        rest = &rest[number_end..];
+        let (i, unit) = aliases
+            .iter()
+            .find(|(_, unit)| rest.starts_with(unit.as_str()))?;
+        normalized.push_str(UNITS[*i]);
+        normalized.push(' ');
+        rest = rest[unit.len()..].trim_start();
+    }
+    parse_duration(&normalized, default_unit_ms)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{localize_duration, parse_localized_duration};
+
+    #[test]
+    fn translated_duration_units_round_trip() {
+        let units = ["д", "год", "хв", "с", "мс"].map(str::to_string);
+        for value in [0, -90_000, 86_403_250, 9_000_000_000] {
+            let text = localize_duration(value, &units);
+            assert_eq!(parse_localized_duration(&text, 1_000, &units), Some(value));
+        }
+        assert_eq!(localize_duration(90_000, &units), "1хв 30с");
+        assert_eq!(
+            parse_localized_duration("1:30", 1_000, &units),
+            Some(90_000)
+        );
     }
 }

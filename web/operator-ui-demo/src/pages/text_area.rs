@@ -1,5 +1,6 @@
 //! Live examples for text area.
 
+use crate::i18n::l;
 use crate::kit::Example;
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -25,6 +26,12 @@ pub fn text_area() -> AnyView {
                 <TextArea value=RwSignal::new("Sending…".to_string()) state=ControlState::Pending min_rows=2/>
                 <TextArea value=RwSignal::new("Read only".to_string()) enabled=false min_rows=2/>
             </div>
+        </Example>
+        <Example title="Customization" block=true>
+            <TextArea value=RwSignal::new(String::new()) label=l("Notes", "Нотатки")
+                placeholder=l("Write a note", "Напишіть нотатку") padding_x=4.0 padding_y=3.0 line_height=24.0
+                min_rows=2 max_length=240 resize_label=l("Drag to resize", "Потягніть, щоб змінити розмір")
+                before=|| view! { <Icon icon=icons::INFO/> }/>
         </Example>
     }
     .into_any()
