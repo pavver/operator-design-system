@@ -1,8 +1,10 @@
 //! Discrete rating with pointer preview and roving keyboard focus.
 
 use crate::components::primitives::Icon;
-use crate::core::{AsyncAction, ControlState, JobToken, PendingRun, sleep_ms, use_state_visual};
-use crate::core::{Metric, Slot, root_class, root_style, spawn_ripple, ui_icon, ui_text};
+use crate::core::{
+    AsyncAction, ControlState, JobToken, Metric, Slot, root_class, root_style, sleep_ms,
+    spawn_ripple, ui_icon, ui_text, use_state_visual,
+};
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::motion;
@@ -40,24 +42,13 @@ pub fn Rating(
     let icon_selected = ui_icon(icon_selected, "rating.icon-selected", icons::CHECK_CIRCLE);
     let preview = RwSignal::new(None::<u32>);
     let local = RwSignal::new(ControlState::Idle);
-    let focused = RwSignal::new(false);
+    let chosen_star = RwSignal::new(None::<u32>);
     let pressed = RwSignal::new(false);
     let current = Signal::derive(move || {
         if !enabled.get() {
             ControlState::Disabled
         } else {
-            state.get().unwrap_or_else(|| {
-                let s = local.get();
-                if s != ControlState::Idle {
-                    s
-                } else if pressed.get() {
-                    ControlState::Pressed
-                } else if focused.get() {
-                    ControlState::Focused
-                } else {
-                    ControlState::Idle
-                }
-            })
+            state.get().unwrap_or_else(|| local.get())
         }
     });
     let available = move || {
@@ -70,10 +61,16 @@ pub fn Rating(
     let visual = use_state_visual(current);
     let job = JobToken::new();
     let action = StoredValue::new(on_commit);
-    let commit = Callback::new(move |(next, previous): (u32, u32)| {
+    let active_star = move || {
+        chosen_star
+            .get()
+            .unwrap_or_else(|| value.get().clamp(1, max))
+    };
+    let commit = Callback::new(move |(next, previous, chosen): (u32, u32, u32)| {
         if !available() || next == previous {
             return;
         }
+        chosen_star.set(Some(chosen));
         value.set(next);
         if let Some(cb) = on_change {
             cb.run(next);
@@ -101,7 +98,7 @@ pub fn Rating(
 
     view! {
         <div
-            class=root_class("op-rating op-sb", class)
+            class=root_class("op-rating", class)
             style=root_style(
                 vec![
                     Metric::du("--op-rating-size", size),
@@ -114,9 +111,7 @@ pub fn Rating(
             aria-readonly=readonly.to_string()
             aria-disabled=move || (!enabled.get()).to_string()
             aria-busy=move || (current.get() == ControlState::Pending).to_string()
-            data-state=move || visual.state.get()
-            data-result=move || visual.result.get()
-            data-fading=move || visual.fading.get().then_some("")
+            data-disabled=move || (!enabled.get()).then_some("")
             on:pointerleave=move |_| {
                 preview.set(None);
                 pressed.set(false);
@@ -127,6 +122,8 @@ pub fn Rating(
             {(1..=max)
                 .map(|n| {
                     let button = NodeRef::<leptos::html::Button>::new();
+                    let is_chosen = move || active_star() == n;
+                    let is_pending = move || is_chosen() && current.get() == ControlState::Pending;
                     view! {
                         <button
                             type="button"
@@ -142,11 +139,28 @@ pub fn Rating(
                             }
                             tabindex=move || if n == value.get().clamp(1, max) { 0 } else { -1 }
                             disabled=move || !enabled.get()
+                            data-rating-value=n
                             data-selected=move || {
                                 (n <= preview.get().unwrap_or_else(|| value.get())).then_some("")
                             }
-                            on:focus=move |_| focused.set(true)
-                            on:blur=move |_| focused.set(false)
+                            data-state=move || {
+                                if !enabled.get() {
+                                    "disabled"
+                                } else if is_chosen() {
+                                    visual.state.get()
+                                } else {
+                                    "idle"
+                                }
+                            }
+                            data-result=move || {
+                                if is_chosen() {
+                                    visual.result.get()
+                                } else {
+                                    "none"
+                                }
+                            }
+                            data-fading=move || (is_chosen() && visual.fading.get()).then_some("")
+                            data-pending=move || is_pending().then_some("")
                             on:pointerenter=move |_| {
                                 if available() {
                                     preview.set(Some(n));
@@ -163,11 +177,8 @@ pub fn Rating(
                             on:click=move |_| {
                                 if available() {
                                     let old = value.get_untracked();
-                                    commit
-                                        .run((
-                                            if old == n && !no_reset { 0 } else { n },
-                                            old,
-                                        ));
+                                    let next = if old == n && !no_reset { 0 } else { n };
+                                    commit.run((next, old, n));
                                     preview.set(None);
                                 }
                             }
@@ -186,33 +197,48 @@ pub fn Rating(
                                     _ => return,
                                 };
                                 ev.prevent_default();
-                                commit.run((next, old));
+                                let chosen = if next == 0 { old.max(1) } else { next };
+                                commit.run((next, old, chosen));
                                 if let Some(el) = button.get_untracked().and_then(|b| b.parent_element())
-                                    && let Ok(Some(target)) = el.query_selector(&format!("button:nth-of-type({})", next.max(1)))
+                                    && let Ok(Some(target)) = el.query_selector(&format!("[data-rating-value=\"{}\"]", next.max(1)))
                                     && let Ok(el) = target.dyn_into::<web_sys::HtmlElement>()
                                 {
                                     let _ = el.focus();
                                 }
                             }
                         >
-                            {move || {
-                                view! {
-                                    <Icon
-                                        icon=if n <= preview.get().unwrap_or_else(|| value.get()) {
-                                            icon_selected.get()
-                                        } else {
-                                            icon.get()
+                            <span class="op-rating-star">
+                                <Icon
+                                    icon=if n <= preview.get().unwrap_or_else(|| value.get()) {
+                                        icon_selected.get()
+                                    } else {
+                                        icon.get()
+                                    }
+                                />
+                                {move || {
+                                    is_pending().then(|| {
+                                        view! {
+                                            <svg
+                                                class="op-spinner op-rating-spinner"
+                                                viewBox="0 0 24 24"
+                                                aria-hidden="true"
+                                            >
+                                                <circle
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="9"
+                                                    pathLength="100"
+                                                ></circle>
+                                            </svg>
                                         }
-                                        size=5.0
-                                    />
-                                }
-                            }}
+                                    })
+                                }}
+                            </span>
                         </button>
                     }
                 })
                 .collect_view()}
             {trailing.run()}
-            <PendingRun/>
         </div>
     }
 }

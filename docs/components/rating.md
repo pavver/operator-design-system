@@ -2,6 +2,7 @@
 
 Discrete rating with pointer preview and roving keyboard focus.
 Enables quick visual selection of a discrete numeric score.
+Sitting directly on the page surface as an inline control without its own background or frame.
 
 Status: **draft** on web.
 
@@ -20,10 +21,15 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Sits directly on the page surface without an enclosing frame or background.
 * Hovering over items shows a real-time rating preview.
 * Clicking an item selects the score and triggers the commit handler.
 * Clicking the currently selected score resets the value to zero unless `no_reset` is active.
+* Keyboard focus produces a focus ring around the focused star only.
 * Arrow keys increment or decrement the rating with roving focus.
+* When pending during an async save, a small spinner runs inside the chosen star.
+* Success and failure feedback plays the Operator result flash on the chosen star.
+* A failed async save rolls back to the previous value with the same animation as the forward change.
 
 ## API
 
@@ -57,10 +63,14 @@ Status: **draft** on web.
 
 | Color variable | Default |
 | :--- | :--- |
-| `--op-rating-background` | `surface` |
+| `--op-rating-background` | `transparent` |
 | `--op-rating-text` | `text_secondary` |
 | `--op-rating-accent` | `accent` |
 | `--op-rating-hover` | `hover` |
+| `--op-rating-focus` | `accent` |
+| `--op-rating-pending` | `pending` |
+| `--op-rating-success` | `success` |
+| `--op-rating-error` | `error` |
 | `--op-rating-disabled-text` | `text_disabled` |
 
 | Slot | Place |
@@ -89,3 +99,4 @@ Status: **draft** on web.
 
 Rating acts as an accessible `radiogroup` with radio items.
 Arrow keys cycle through items and roving `tabindex` ensures predictable keyboard navigation.
+Keyboard focus indicator is displayed around the focused star only.

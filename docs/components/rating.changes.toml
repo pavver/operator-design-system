@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T20:50:00+02:00"
+status = "draft"
+en = "Rework as inline control on page surface without background or outer frame; pending spinner, result flash, and error rollback on chosen star; focus ring on focused star."
+uk = "Перероблено як інлайн-елемент на поверхні сторінки без фону та зовнішньої рамки; індикатор очікування, спалах результату та відкіт при помилці на обраній зірці; кільце фокусу на сфокусованій зірці."
+
+[[change]]
 date = "2026-11-21T20:30:00+02:00"
 status = "draft"
 en = "Support icon and icon_selected props with rating.icon and rating.icon-selected keys."
