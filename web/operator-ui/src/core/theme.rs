@@ -79,6 +79,8 @@ fn stylesheet() -> &'static str {
             crate::components::radio_group::CSS,
             #[cfg(feature = "combobox")]
             crate::components::combobox::CSS,
+            #[cfg(feature = "language-picker")]
+            crate::components::language_picker::CSS,
             #[cfg(feature = "chip")]
             crate::components::chip::CSS,
             #[cfg(feature = "menu")]

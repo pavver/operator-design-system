@@ -72,6 +72,7 @@ draft = [
     "number-field",
     "time-field",
     "hover-card",
+    "language-picker",
     "marquee-text",
     "menu",
     "tooltip",
@@ -117,6 +118,7 @@ graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
 kbd = []
+language-picker = ["combobox"]
 linear-progress = []
 list-item = []
 marquee-text = ["tooltip"]

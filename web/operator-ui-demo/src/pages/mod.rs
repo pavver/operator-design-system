@@ -25,6 +25,7 @@ mod header;
 mod hover_card;
 mod icon_button;
 mod kbd;
+mod language_picker;
 mod linear_progress;
 mod list_item;
 mod marquee_text;
@@ -97,6 +98,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/search-field" => (search_field::search_field, false),
         "components/radio-group" => (radio_group::radio_group, true),
         "components/combobox" => (combobox::combobox, false),
+        "components/language-picker" => (language_picker::language_picker, false),
         "components/value-fields" => (value_fields::value_fields, false),
         "components/chip" => (chip::chip, false),
         "components/menu" => (menu::menu, false),

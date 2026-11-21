@@ -55,6 +55,8 @@ pub mod prelude {
     pub use crate::components::icon_button::*;
     #[cfg(feature = "kbd")]
     pub use crate::components::kbd::*;
+    #[cfg(feature = "language-picker")]
+    pub use crate::components::language_picker::*;
     #[cfg(feature = "linear-progress")]
     pub use crate::components::linear_progress::*;
     #[cfg(feature = "list-item")]

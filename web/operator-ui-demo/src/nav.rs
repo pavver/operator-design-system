@@ -51,6 +51,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/field",
             "components/dropdown-menu",
             "components/combobox",
+            "components/language-picker",
             "components/value-fields",
         ],
     ),

@@ -44,6 +44,8 @@ pub mod hover_card;
 pub mod icon_button;
 #[cfg(feature = "kbd")]
 pub mod kbd;
+#[cfg(feature = "language-picker")]
+pub mod language_picker;
 #[cfg(feature = "linear-progress")]
 pub mod linear_progress;
 #[cfg(feature = "list-item")]
