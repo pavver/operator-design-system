@@ -15,7 +15,7 @@
     width: 100%;
     height: 100%;
     object-position: var(--op-image-position, center);
-    transition: opacity var(--op-motion-fade, 150ms) ease;
+    transition: opacity var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-image[data-loading] .op-image-img,

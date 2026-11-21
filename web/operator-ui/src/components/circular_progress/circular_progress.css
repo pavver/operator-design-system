@@ -29,7 +29,7 @@
 .op-circular-progress-circle {
     fill: none;
     stroke: currentColor;
-    transition: stroke-dashoffset var(--op-motion-fade, 150ms) ease;
+    transition: stroke-dashoffset var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-circular-progress[data-tone="pending"] {
