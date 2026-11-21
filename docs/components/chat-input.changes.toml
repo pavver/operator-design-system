@@ -1,0 +1,9 @@
+# Change history of ChatInput. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+en = "New component: multi-line auto-growing chat input bar with reply/edit preview, attachments, and record button switch."
+uk = "Новий компонент: поле введення чату з автоматичним розширенням, переглядом цитат/редагування, додатками та записом медіа."

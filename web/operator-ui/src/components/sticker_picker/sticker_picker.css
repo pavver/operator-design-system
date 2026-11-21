@@ -1,0 +1,166 @@
+.op-sticker-picker {
+  --op-sticker-picker-height: calc(var(--op-du) * 60);
+  --op-sticker-picker-cell-size: calc(var(--op-du) * 18);
+  --op-sticker-picker-bg: var(--op-color-surface);
+  --op-sticker-picker-border: var(--op-color-border);
+  --op-sticker-picker-accent: var(--op-color-accent);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: var(--op-sticker-picker-height);
+  background: var(--op-sticker-picker-bg);
+  border: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-border);
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+.op-sticker-picker__search {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 1);
+  padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
+  background: var(--op-color-surface-raised, var(--op-color-surface));
+  border-bottom: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-border);
+}
+
+.op-sticker-picker__search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 4);
+  height: calc(var(--op-du) * 4);
+  color: var(--op-color-text-secondary);
+}
+
+.op-sticker-picker__search-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.op-sticker-picker__search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--op-color-text);
+  font-family: inherit;
+  font-size: calc(var(--op-tu) * 12);
+}
+
+.op-sticker-picker__search-input::placeholder {
+  color: var(--op-color-text-secondary);
+  opacity: 0.7;
+}
+
+.op-sticker-picker__packs {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 0.5);
+  padding: calc(var(--op-du) * 1);
+  background: var(--op-color-surface-alt, var(--op-color-surface));
+  border-bottom: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-border);
+  overflow-x: auto;
+}
+
+.op-sticker-picker__pack-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-du) * 8);
+  height: calc(var(--op-du) * 8);
+  background: transparent;
+  border: calc(var(--op-du) * 0.25) solid transparent;
+  cursor: pointer;
+  padding: calc(var(--op-du) * 0.5);
+  box-sizing: border-box;
+}
+
+.op-sticker-picker__pack-btn[data-selected="true"] {
+  border-color: var(--op-sticker-picker-accent);
+  background: color-mix(in srgb, var(--op-sticker-picker-accent) 15%, transparent);
+}
+
+.op-sticker-picker__pack-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.op-sticker-picker__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: calc(var(--op-du) * 1);
+}
+
+.op-sticker-picker__section-title {
+  padding: calc(var(--op-du) * 1.5) calc(var(--op-du) * 1);
+  font-size: calc(var(--op-tu) * 11);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--op-color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.op-sticker-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: calc(var(--op-du) * 1);
+}
+
+.op-sticker-picker__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: var(--op-sticker-picker-cell-size);
+  background: transparent;
+  border: calc(var(--op-du) * 0.25) solid transparent;
+  cursor: pointer;
+  padding: calc(var(--op-du) * 1);
+  box-sizing: border-box;
+  transition: transform var(--op-motion-expressive, 100ms ease),
+              background var(--op-motion-expressive, 100ms ease);
+}
+
+.op-sticker-picker__cell:hover {
+  background: color-mix(in srgb, var(--op-sticker-picker-accent) 15%, transparent);
+  border-color: var(--op-sticker-picker-accent);
+  transform: scale(1.08);
+}
+
+.op-sticker-picker__img {
+  width: calc(var(--op-sticker-picker-cell-size) * 0.8);
+  height: calc(var(--op-sticker-picker-cell-size) * 0.8);
+  object-fit: contain;
+}
+
+.op-sticker-preview-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.85);
+  border: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-accent);
+  padding: calc(var(--op-du) * 4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--op-du) * 2);
+  z-index: 100;
+  pointer-events: none;
+}
+
+.op-sticker-preview-img {
+  width: calc(var(--op-du) * 35);
+  height: calc(var(--op-du) * 35);
+  object-fit: contain;
+}
+
+.op-sticker-preview-name {
+  color: #fff;
+  font-size: calc(var(--op-tu) * 12);
+  font-weight: 600;
+}

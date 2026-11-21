@@ -189,6 +189,22 @@ fn stylesheet() -> &'static str {
             crate::components::ptz_pad::CSS,
             #[cfg(feature = "video-stream")]
             crate::components::video_stream::CSS,
+            #[cfg(feature = "chat-input")]
+            crate::components::chat_input::CSS,
+            #[cfg(feature = "emoji-picker")]
+            crate::components::emoji_picker::CSS,
+            #[cfg(feature = "gif-picker")]
+            crate::components::gif_picker::CSS,
+            #[cfg(feature = "media-keyboard")]
+            crate::components::media_keyboard::CSS,
+            #[cfg(feature = "media-record-button")]
+            crate::components::media_record_button::CSS,
+            #[cfg(feature = "ptt-button")]
+            crate::components::ptt_button::CSS,
+            #[cfg(feature = "reaction-picker")]
+            crate::components::reaction_picker::CSS,
+            #[cfg(feature = "sticker-picker")]
+            crate::components::sticker_picker::CSS,
             HOVER_CSS,
         ];
         // One cascade layer: unlayered application CSS always wins over component styles,

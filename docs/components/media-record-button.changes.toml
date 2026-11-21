@@ -1,0 +1,9 @@
+# Change history of MediaRecordButton. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+en = "New component: media recording button with voice/video mode toggle, hold-to-record, slide-to-cancel, and lock gestures."
+uk = "Новий компонент: кнопка запису медіа з перемиканням режимів голос/відео, утриманням для запису, жестами скасування та фіксації."

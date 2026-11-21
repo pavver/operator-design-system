@@ -1,0 +1,9 @@
+# Change history of ReactionPicker. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+en = "New component: tactical reaction picker with quick reactions row and expandable category dialog."
+uk = "Новий компонент: тактичний вибір реакцій зі швидкою панеллю та розгортуваним діалогом категорій."

@@ -31,6 +31,8 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/button-group",
             "components/launcher-tile",
             "components/ptz-pad",
+            "components/media-record-button",
+            "components/ptt-button",
         ],
     ),
     (
@@ -48,6 +50,10 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/stepper",
             "components/chip",
             "components/theme-toggle",
+            "components/emoji-picker",
+            "components/sticker-picker",
+            "components/gif-picker",
+            "components/reaction-picker",
         ],
     ),
     (
@@ -65,6 +71,8 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/combobox",
             "components/language-picker",
             "components/value-fields",
+            "components/chat-input",
+            "components/media-keyboard",
         ],
     ),
     (

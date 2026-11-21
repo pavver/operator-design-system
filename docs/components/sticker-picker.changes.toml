@@ -1,0 +1,9 @@
+# Change history of StickerPicker. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+en = "New component: pluggable sticker picker with pack navigation, vector/animated formats, and hover preview."
+uk = "Новий компонент: вибір стікерів з навігацією за паками, векторними/анімованими форматами та переглядом при наведенні."

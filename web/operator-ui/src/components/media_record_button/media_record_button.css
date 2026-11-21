@@ -1,0 +1,120 @@
+.op-media-record-button {
+  --op-media-record-button-size: calc(var(--op-du) * 12);
+  --op-media-record-button-border-width: calc(var(--op-du) * 0.25);
+  --op-media-record-button-bg: var(--op-color-surface);
+  --op-media-record-button-border: var(--op-color-border);
+  --op-media-record-button-color: var(--op-color-text);
+  --op-media-record-button-active-bg: color-mix(in srgb, var(--op-color-accent) 20%, var(--op-color-surface));
+  --op-media-record-button-active-border: var(--op-color-accent);
+  --op-media-record-button-active-color: var(--op-color-accent);
+  --op-media-record-button-locked-bg: color-mix(in srgb, var(--op-color-success) 20%, var(--op-color-surface));
+  --op-media-record-button-locked-border: var(--op-color-success);
+  --op-media-record-button-locked-color: var(--op-color-success);
+  --op-media-record-button-canceling-bg: color-mix(in srgb, var(--op-color-error) 20%, var(--op-color-surface));
+  --op-media-record-button-canceling-border: var(--op-color-error);
+  --op-media-record-button-canceling-color: var(--op-color-error);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--op-media-record-button-size);
+  height: var(--op-media-record-button-size);
+  background: var(--op-media-record-button-bg);
+  border: var(--op-media-record-button-border-width) solid var(--op-media-record-button-border);
+  color: var(--op-media-record-button-color);
+  border-radius: 0;
+  box-sizing: border-box;
+  user-select: none;
+  touch-action: none;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: transform var(--op-motion-expressive, 150ms ease),
+              background var(--op-motion-expressive, 150ms ease),
+              border-color var(--op-motion-expressive, 150ms ease),
+              color var(--op-motion-expressive, 150ms ease);
+}
+
+.op-media-record-button[data-circular="true"] {
+  border-radius: 50%;
+}
+
+.op-media-record-button:focus-visible {
+  outline: calc(var(--op-du) * 0.5) solid var(--op-color-focus);
+  outline-offset: calc(var(--op-du) * 0.5);
+}
+
+.op-media-record-button[data-recording="true"] {
+  background: var(--op-media-record-button-active-bg);
+  border: calc(var(--op-du) * 0.5) solid var(--op-media-record-button-active-border);
+  color: var(--op-media-record-button-active-color);
+  transform: scale(1.12);
+}
+
+.op-media-record-button[data-locked="true"] {
+  background: var(--op-media-record-button-locked-bg);
+  border: calc(var(--op-du) * 0.5) solid var(--op-media-record-button-locked-border);
+  color: var(--op-media-record-button-locked-color);
+  transform: scale(1.06);
+}
+
+.op-media-record-button[data-canceling="true"] {
+  background: var(--op-media-record-button-canceling-bg);
+  border: calc(var(--op-du) * 0.5) solid var(--op-media-record-button-canceling-border);
+  color: var(--op-media-record-button-canceling-color);
+}
+
+.op-media-record-button[data-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.op-media-record-button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-media-record-button-size) * 0.5);
+  height: calc(var(--op-media-record-button-size) * 0.5);
+}
+
+.op-media-record-button__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.op-media-record-container {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 2);
+  position: relative;
+}
+
+.op-media-record-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 1);
+  font-family: var(--op-font-mono, monospace);
+  font-size: calc(var(--op-tu) * 12);
+  font-weight: 600;
+  color: var(--op-color-accent);
+}
+
+.op-media-record-timer__dot {
+  width: calc(var(--op-du) * 1.5);
+  height: calc(var(--op-du) * 1.5);
+  background: var(--op-color-error);
+  border-radius: 50%;
+  animation: op-media-record-blink 1s ease-in-out infinite;
+}
+
+.op-media-record-hint {
+  font-size: calc(var(--op-tu) * 11);
+  color: var(--op-color-text-secondary);
+}
+
+@keyframes op-media-record-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}

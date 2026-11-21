@@ -1,0 +1,9 @@
+# Change history of MediaKeyboard. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+en = "New component: unified media keyboard with tabs for Emoji, Stickers, and GIFs, desktop popover, and mobile docked panel."
+uk = "Новий компонент: уніфікована медіа-клавіатура з вкладками Емодзі, Стікери та GIF, десктопним поповером та мобільною панеллю."

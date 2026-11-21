@@ -7,6 +7,7 @@ mod avatar;
 mod banner;
 mod breadcrumbs;
 mod button_group;
+mod chat_input;
 mod chat_message;
 mod checkbox;
 mod checkbox_group;
@@ -24,6 +25,7 @@ pub mod demo_video;
 mod dialog;
 mod dropdown_menu;
 mod editor;
+mod emoji_picker;
 mod empty_state;
 mod fab;
 mod field;
@@ -32,6 +34,7 @@ mod form;
 mod foundations;
 mod gallery;
 mod gallery_viewer;
+mod gif_picker;
 mod graph;
 mod header;
 mod hover_card;
@@ -46,6 +49,8 @@ mod list_item;
 mod loading_bar;
 mod loading_overlay;
 mod marquee_text;
+mod media_keyboard;
+mod media_record_button;
 mod menu;
 mod navigation_shell;
 mod pagination;
@@ -53,10 +58,12 @@ mod popover;
 mod popup_edit;
 mod primitives;
 mod property_list;
+mod ptt_button;
 mod ptz_pad;
 mod radio_group;
 mod range_slider;
 mod rating;
+mod reaction_picker;
 mod scroll_area;
 mod scrollbar;
 mod search_field;
@@ -69,6 +76,7 @@ mod split_button;
 mod split_pane;
 mod status_badge;
 mod stepper;
+mod sticker_picker;
 mod switch;
 mod tabs;
 mod text_area;
@@ -177,6 +185,14 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/launcher-tile" => (launcher_tile::launcher_tile, true),
         "components/ptz-pad" => (ptz_pad::ptz_pad, true),
         "components/video-stream" => (video_stream::video_stream, false),
+        "components/chat-input" => (chat_input::chat_input, false),
+        "components/emoji-picker" => (emoji_picker::emoji_picker, false),
+        "components/gif-picker" => (gif_picker::gif_picker, false),
+        "components/media-keyboard" => (media_keyboard::media_keyboard, false),
+        "components/media-record-button" => (media_record_button::media_record_button, false),
+        "components/ptt-button" => (ptt_button::ptt_button, false),
+        "components/reaction-picker" => (reaction_picker::reaction_picker, false),
+        "components/sticker-picker" => (sticker_picker::sticker_picker, false),
         _ => return None,
     };
     Some(entry)

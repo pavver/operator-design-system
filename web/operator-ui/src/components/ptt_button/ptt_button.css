@@ -1,0 +1,103 @@
+.op-ptt-button {
+  --op-ptt-button-size: calc(var(--op-du) * 22.5);
+  --op-ptt-button-border-width: calc(var(--op-du) * 0.5);
+  --op-ptt-button-bg: var(--op-color-surface);
+  --op-ptt-button-border: var(--op-color-border);
+  --op-ptt-button-color: var(--op-color-text);
+  --op-ptt-button-active-bg: color-mix(in srgb, var(--op-color-accent) 15%, var(--op-color-surface));
+  --op-ptt-button-active-border: var(--op-color-accent);
+  --op-ptt-button-active-color: var(--op-color-accent);
+  --op-ptt-button-locked-bg: color-mix(in srgb, var(--op-color-success) 15%, var(--op-color-surface));
+  --op-ptt-button-locked-border: var(--op-color-success);
+  --op-ptt-button-locked-color: var(--op-color-success);
+  --op-ptt-button-error-bg: color-mix(in srgb, var(--op-color-error) 15%, var(--op-color-surface));
+  --op-ptt-button-error-border: var(--op-color-error);
+  --op-ptt-button-error-color: var(--op-color-error);
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--op-du) * 1.5);
+  width: var(--op-ptt-button-size);
+  height: var(--op-ptt-button-size);
+  background: var(--op-ptt-button-bg);
+  border: var(--op-ptt-button-border-width) solid var(--op-ptt-button-border);
+  color: var(--op-ptt-button-color);
+  border-radius: 0;
+  box-sizing: border-box;
+  user-select: none;
+  touch-action: none;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: transform var(--op-motion-expressive, 150ms ease),
+              background var(--op-motion-expressive, 150ms ease),
+              border-color var(--op-motion-expressive, 150ms ease),
+              color var(--op-motion-expressive, 150ms ease);
+}
+
+.op-ptt-button[data-circular="true"] {
+  border-radius: 50%;
+}
+
+.op-ptt-button:focus-visible {
+  outline: calc(var(--op-du) * 0.5) solid var(--op-color-focus);
+  outline-offset: calc(var(--op-du) * 0.5);
+}
+
+.op-ptt-button[data-talking="true"] {
+  background: var(--op-ptt-button-active-bg);
+  border-color: var(--op-ptt-button-active-border);
+  color: var(--op-ptt-button-active-color);
+  transform: scale(1.05);
+}
+
+.op-ptt-button[data-locked="true"] {
+  background: var(--op-ptt-button-locked-bg);
+  border-color: var(--op-ptt-button-locked-border);
+  color: var(--op-ptt-button-locked-color);
+  transform: scale(1.03);
+}
+
+.op-ptt-button[data-state="error"] {
+  background: var(--op-ptt-button-error-bg);
+  border-color: var(--op-ptt-button-error-border);
+  color: var(--op-ptt-button-error-color);
+}
+
+.op-ptt-button[data-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.op-ptt-button__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--op-ptt-button-size) * 0.42);
+  height: calc(var(--op-ptt-button-size) * 0.42);
+}
+
+.op-ptt-button__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.op-ptt-button__label {
+  font-size: calc(var(--op-tu) * 11);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.op-ptt-button__hint {
+  font-size: calc(var(--op-tu) * 9);
+  color: var(--op-color-text-secondary);
+  text-align: center;
+  line-height: 1.1;
+}
