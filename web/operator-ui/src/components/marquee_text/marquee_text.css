@@ -15,7 +15,8 @@
   .op-marquee[data-overflow] .op-marquee-track { display: block; overflow: hidden; text-overflow: ellipsis; }
 }
 
-.op-marquee { font-size: var(--op-marquee-text-font-size, inherit); line-height: var(--op-marquee-text-line-height, inherit); color: var(--op-marquee-text-text, inherit); }
+/* Zero specificity: typography classes on the root (op-t-*) keep working. */
+:where(.op-marquee) { font-size: var(--op-marquee-text-font-size, inherit); line-height: var(--op-marquee-text-line-height, inherit); color: var(--op-marquee-text-text, inherit); }
 .op-marquee-gap, .op-marquee-measure { width: var(--op-marquee-text-spacing, calc(var(--op-du) * 6)); }
 .op-marquee-measure { position: absolute; visibility: hidden; pointer-events: none; height: 0; }
 .op-marquee-tip-measure { position: absolute; visibility: hidden; pointer-events: none; height: 0; width: var(--op-marquee-text-tooltip-gap, calc(var(--op-du) * 1.5)); }

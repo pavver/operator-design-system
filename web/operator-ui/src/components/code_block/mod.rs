@@ -118,7 +118,7 @@ pub fn CodeBlock(
                     }
                 })}
             {if content.is_set() { content.run().into_any() } else { view! {
-            <ScrollView axis=ScrollAxis::Both class="op-code-scroll">
+            <ScrollView axis=ScrollAxis::Both class="op-code-scroll" style="--op-scrollbar-max-height: var(--op-code-block-max-height, 100%);">
             <pre class="op-code-body">
                 <code>
                     {move || {

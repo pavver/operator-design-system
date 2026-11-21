@@ -27,7 +27,7 @@
 .op-tree-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .op-tree-detail { flex: none; color: var(--op-tree-secondary-text, var(--op-text-secondary)); }
 
-.op-tree { font-size: var(--op-tree-font-size, inherit); line-height: var(--op-tree-line-height, inherit); }
+:where(.op-tree) { font-size: var(--op-tree-font-size, inherit); line-height: var(--op-tree-line-height, inherit); }
 .op-tree-measure-clip { position: absolute; visibility: hidden; pointer-events: none; width: 0; height: 0; overflow: hidden; }
 .op-tree-measure { width: 0; height: var(--op-tree-row-height, var(--op-dim-row-compact)); }
 .op-tree > .op-vlist { height: var(--op-tree-height, auto); max-height: var(--op-tree-max-height, 100%); }

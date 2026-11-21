@@ -24,4 +24,3 @@
 .op-code .op-syn-meta { color: var(--op-code-block-syntax-meta, var(--op-syntax-meta)); }
 .op-code .op-syn-punctuation { color: var(--op-code-block-syntax-punctuation, var(--op-syntax-punctuation)); }
 
-.op-code-scroll { max-height: var(--op-code-block-max-height, 100%); }

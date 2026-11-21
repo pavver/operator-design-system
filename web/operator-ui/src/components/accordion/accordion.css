@@ -17,4 +17,4 @@
 .op-collapse-clip { min-height: 0; overflow: hidden; }
 .op-collapse-content { padding: var(--op-accordion-content-padding-top, var(--op-dim-pad-tight)) var(--op-accordion-content-padding-end, var(--op-dim-pad-card)) var(--op-accordion-content-padding-bottom, var(--op-dim-pad-card)) var(--op-accordion-content-padding-start, calc(var(--op-accordion-padding-start, var(--op-dim-gutter)) + var(--op-accordion-gap, var(--op-dim-gutter)) + var(--op-accordion-icon-size, var(--op-dim-icon-small)))); }
 
-.op-collapse { font-size: var(--op-accordion-font-size, inherit); line-height: var(--op-accordion-line-height, inherit); }
+:where(.op-collapse) { font-size: var(--op-accordion-font-size, inherit); line-height: var(--op-accordion-line-height, inherit); }
