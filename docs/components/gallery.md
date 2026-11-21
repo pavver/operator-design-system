@@ -24,17 +24,19 @@ Do not use `Gallery` for a single isolated photograph; use [Image](image.md) ins
 * Supports both fluid responsive CSS grid mode and compact chat-bubble Telegram layout.
 * Videos display a play badge indicator over the thumbnail.
 * Optional selection mode adds checkboxes to each item and emits selection change events.
+* Tapping an item opens the full-screen [GalleryViewer](gallery-viewer.md) at that item by default (`viewer = true`), while selection mode selects instead.
 * Clicking an item invokes `on_item_click` with the item index.
 
 ## API
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `items` | signal Vec GalleryMediaItem | required | Collection of media items to display. |
+| `items` | signal Vec MediaItem | required | Collection of media items to display. |
 | `layout` | GalleryLayout | `Grid` | Layout mode (`Grid` or `Telegram`). |
 | `column_min_width` | DU | `30.0` | Minimum column width in DU for responsive grid. |
 | `gap` | DU | `0.5` | Spacing between items in DU. |
 | `selectable` | bool | `false` | Enables multi-item selection mode. |
+| `viewer` | bool | `true` | Automatically opens `GalleryViewer` on item click when not in selection mode. |
 | `selected_ids` | HashSet string | empty | Set of currently selected media IDs. |
 | `on_selection_change` | callback HashSet | none | Invoked when selection changes. |
 | `on_item_click` | callback usize | none | Invoked when a media item is clicked. |

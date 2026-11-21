@@ -27,6 +27,7 @@ Do not use `GalleryViewer` for standard confirmation prompts; use [ConfirmDialog
 * Dragging pans the media across the viewport when zoomed.
 * Arrow keys (`ArrowLeft`, `ArrowRight`) and edge clicks switch between gallery items when not zoomed.
 * Center clicking toggles the visibility of the top header, counter, and bottom description.
+* Video playback handles load failures by displaying an error state overlay over the poster instead of a black box.
 * Closes on `Escape` key press or close button click.
 * Traps keyboard focus within the dialog.
 
@@ -35,13 +36,14 @@ Do not use `GalleryViewer` for standard confirmation prompts; use [ConfirmDialog
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `open` | RwSignal bool | required | Visibility state. |
-| `items` | signal Vec GalleryViewerItem | required | Collection of media items to display. |
+| `items` | signal Vec MediaItem | required | Collection of media items to display. |
 | `current_index` | RwSignal usize | `0` | Active media item index. |
 | `label` | string | `"Media gallery viewer"` | Accessible dialog label. |
 | `close_label` | string | `"Close"` | Close button label. |
 | `prev_label` | string | `"Previous item"` | Previous button label. |
 | `next_label` | string | `"Next item"` | Next button label. |
 | `empty_label` | string | `"Media not found"` | Translatable empty media message. |
+| `video_error_label` | string | `"Video unavailable"` | Translatable video playback error message. |
 | `download_slot` | Slot | none | Custom download action slot. |
 | `share_slot` | Slot | none | Custom share action slot. |
 | `actions_slot` | Slot | none | Extra header action buttons. |
@@ -71,6 +73,7 @@ Do not use `GalleryViewer` for standard confirmation prompts; use [ConfirmDialog
 | `gallery-viewer.prev` | `"Previous item"` |
 | `gallery-viewer.next` | `"Next item"` |
 | `gallery-viewer.empty` | `"Media not found"` |
+| `gallery-viewer.video-error` | `"Video unavailable"` |
 | `gallery-viewer.thumbnails` | `"Media thumbnails"` |
 
 ### Icons
@@ -80,6 +83,7 @@ Do not use `GalleryViewer` for standard confirmation prompts; use [ConfirmDialog
 | Close icon | `icons::CLOSE` |
 | Previous arrow | `icons::CHEVRON_LEFT` |
 | Next arrow | `icons::CHEVRON_RIGHT` |
+| Video error | `icons::ERROR` |
 
 ## Accessibility
 

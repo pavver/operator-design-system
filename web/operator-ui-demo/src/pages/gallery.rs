@@ -1,48 +1,60 @@
 //! Live examples for Gallery.
 
+use super::demo_video;
 use crate::kit::Example;
 use leptos::prelude::*;
 use operator_ui::prelude::*;
 use std::collections::HashSet;
 
-fn demo_gallery_items() -> Vec<GalleryMediaItem> {
+fn demo_gallery_items() -> Vec<MediaItem> {
     vec![
-        GalleryMediaItem::image(
+        MediaItem::image(
             "item-1",
             "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%231e3a8a'/><circle cx='300' cy='180' r='80' fill='%233b82f6'/><text x='300' y='320' font-family='sans-serif' font-size='24' fill='%23ffffff' text-anchor='middle'>Telemetry Cam 01</text></svg>",
         )
         .with_title("Telemetry Cam 01")
         .with_caption("North quadrant optical sweep"),
 
-        GalleryMediaItem::image(
+        MediaItem::image(
             "item-2",
             "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%23064e3b'/><rect x='200' y='100' width='200' height='160' fill='%2310b981'/><text x='300' y='320' font-family='sans-serif' font-size='24' fill='%23ffffff' text-anchor='middle'>Sector B Patrol</text></svg>",
         )
         .with_title("Sector B Patrol")
         .with_caption("Infrared border surveillance"),
 
-        GalleryMediaItem::image(
+        MediaItem::image(
             "item-3",
             "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%2378350f'/><polygon points='300,80 420,240 180,240' fill='%23f59e0b'/><text x='300' y='320' font-family='sans-serif' font-size='24' fill='%23ffffff' text-anchor='middle'>Thermal Sensor 04</text></svg>",
         )
         .with_title("Thermal Sensor 04")
         .with_caption("Thermal anomalies logged"),
 
-        GalleryMediaItem::video(
+        MediaItem::video(
             "item-4",
-            "data:video/mp4;base64,",
+            "blob:offline-drone-video",
             Some("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'><rect width='600' height='400' fill='%23311042'/><polygon points='260,150 360,200 260,250' fill='%23c084fc'/><text x='300' y='320' font-family='sans-serif' font-size='24' fill='%23ffffff' text-anchor='middle'>Live Drone Feed</text></svg>".to_string()),
         )
         .with_title("Recon Flight 12")
-        .with_caption("Automated drone patrol sequence"),
+        .with_caption("Automated drone patrol sequence recorded offline"),
     ]
 }
 
 pub fn gallery() -> AnyView {
-    let items = Signal::stored(demo_gallery_items());
+    let items = RwSignal::new(demo_gallery_items());
     let selectable = RwSignal::new(false);
     let selected_ids = RwSignal::new(HashSet::new());
     let last_clicked = RwSignal::new(None::<usize>);
+
+    // Record an offline video clip from canvas and assign its blob URL
+    demo_video::record_canvas_clip(move |blob_url: String| {
+        items.update(|list| {
+            for item in list.iter_mut() {
+                if item.is_video {
+                    item.src = blob_url.clone();
+                }
+            }
+        });
+    });
 
     let on_selection_change = Callback::new(move |set: HashSet<String>| {
         selected_ids.set(set);
@@ -55,7 +67,7 @@ pub fn gallery() -> AnyView {
     view! {
         <Example
             title="Responsive Media Gallery Grid"
-            note="Photos and videos with play indicators, captions, and viewport-lazy loading."
+            note="Clicking any tile opens the full-screen viewer at that item. Selection mode toggles selection instead."
             block=true
         >
             <div style="margin-bottom:calc(var(--op-du)*2);display:flex;align-items:center;gap:calc(var(--op-du)*3);">

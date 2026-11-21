@@ -1,7 +1,7 @@
 //! Individual media cell component for Gallery.
 
 use super::observer::use_intersection_observer;
-use super::types::GalleryMediaItem;
+use super::types::MediaItem;
 use crate::components::checkbox::AsyncCheckbox;
 use crate::components::image::Image;
 use crate::components::primitives::Icon;
@@ -12,7 +12,7 @@ use operator_ui_tokens::icons;
 /// Single media tile inside a Gallery.
 #[component]
 pub fn GalleryItemView(
-    item: GalleryMediaItem,
+    item: MediaItem,
     index: usize,
     selectable: Signal<bool>,
     is_selected: Signal<bool>,

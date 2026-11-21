@@ -1,5 +1,9 @@
 /* Operator GalleryViewer: full-screen viewer for photos and videos */
 
+:where(.op-gallery-viewer) {
+    color: var(--op-gallery-viewer-text, inherit);
+}
+
 .op-gallery-viewer {
     position: fixed;
     inset: 0;
@@ -25,7 +29,7 @@
     justify-content: space-between;
     pointer-events: none;
     z-index: 10;
-    transition: opacity var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease);
+    transition: opacity var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-gallery-viewer-chrome[data-visible="false"] {
@@ -102,7 +106,7 @@
     max-width: 100vw;
     max-height: 100vh;
     will-change: transform;
-    transition: transform 50ms linear;
+    transition: transform var(--op-motion-state-color) linear;
 }
 
 .op-gallery-viewer-image {
@@ -113,11 +117,58 @@
     -webkit-user-drag: none;
 }
 
+.op-gallery-viewer-video-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 90vw;
+    max-height: 85vh;
+}
+
 .op-gallery-viewer-video {
     max-width: 90vw;
     max-height: 85vh;
     object-fit: contain;
     outline: none;
+}
+
+.op-gallery-viewer-video-error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+.op-gallery-viewer-video-error-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0.4);
+}
+
+.op-gallery-viewer-video-error-overlay {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--op-du) * 1.5);
+    color: var(--op-error);
+    text-align: center;
+    padding: calc(var(--op-du) * 2);
+}
+
+.op-gallery-viewer-video-error-text {
+    font-size: calc(var(--op-tu) * 13);
+    font-weight: 600;
+    color: #ffffff;
+    max-width: calc(var(--op-du) * 40);
 }
 
 /* Nav arrows on edges */
@@ -159,8 +210,8 @@
     cursor: pointer;
     flex-shrink: 0;
     opacity: 0.6;
-    transition: opacity var(--op-motion-duration-fast, 150ms) ease,
-                border-color var(--op-motion-duration-fast, 150ms) ease;
+    transition: opacity var(--op-motion-state-color) var(--op-ease-standard),
+                border-color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-gallery-viewer-thumb:hover {

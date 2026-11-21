@@ -1,5 +1,11 @@
 /* Operator LauncherTile: square launcher tile for dashboards and app grids. */
 
+:where(.op-launcher-tile) {
+    font-size: var(--op-launcher-tile-font-size, inherit);
+    line-height: var(--op-launcher-tile-line-height, inherit);
+    color: var(--op-launcher-tile-color, inherit);
+}
+
 .op-launcher-tile {
     display: inline-flex;
     flex-direction: column;
@@ -20,9 +26,9 @@
     text-decoration: none;
     outline: none;
     overflow: hidden;
-    transition: background var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease),
-                border-color var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease),
-                color var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease);
+    transition: background var(--op-motion-state-color) var(--op-ease-standard),
+                border-color var(--op-motion-state-color) var(--op-ease-standard),
+                color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-launcher-tile:hover:not([data-state="disabled"]):not([aria-disabled="true"]) {

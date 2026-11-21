@@ -1,13 +1,13 @@
 //! Thumbnail carousel strip rendered at the bottom of the GalleryViewer.
 
-use super::types::GalleryViewerItem;
+use super::types::MediaItem;
 use crate::core::ui_text;
 use leptos::prelude::*;
 
 /// Thumbnail strip for quick navigation across gallery items.
 #[component]
 pub fn GalleryThumbnailCarousel(
-    items: Signal<Vec<GalleryViewerItem>>,
+    items: Signal<Vec<MediaItem>>,
     current: RwSignal<usize>,
 ) -> impl IntoView {
     let resolved_label = ui_text(

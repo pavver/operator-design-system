@@ -1,5 +1,9 @@
 /* Operator Gallery: responsive media photo and video grid */
 
+:where(.op-gallery) {
+    color: var(--op-gallery-text, inherit);
+}
+
 .op-gallery {
     display: block;
     box-sizing: border-box;
@@ -41,7 +45,7 @@
     background: var(--op-gallery-item-bg, var(--op-surface));
     border: var(--op-gallery-border-width, var(--op-border-width)) solid var(--op-gallery-border, var(--op-border));
     border-radius: 0;
-    transition: border-color var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease);
+    transition: border-color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-gallery-item:hover {
@@ -75,7 +79,7 @@
     justify-content: center;
     pointer-events: none;
     z-index: 2;
-    transition: transform var(--op-motion-duration-fast, 150ms) ease;
+    transition: transform var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-gallery-item:hover .op-gallery-play-badge {

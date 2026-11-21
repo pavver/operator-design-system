@@ -20,6 +20,7 @@ mod confirm_dialog;
 mod console_terminal;
 mod counter;
 mod data_table;
+pub mod demo_video;
 mod dialog;
 mod dropdown_menu;
 mod editor;

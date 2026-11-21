@@ -141,6 +141,7 @@ pub fn VideoStream(
                 let html_video: &web_sys::HtmlVideoElement = &video;
                 if let Some(ms) = stream_opt {
                     html_video.set_src_object(Some(&ms));
+                    let _ = html_video.play();
                     internal_state.set(VideoStreamState::Playing);
                 } else {
                     html_video.set_src_object(None);

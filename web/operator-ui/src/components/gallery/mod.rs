@@ -6,6 +6,7 @@ mod types;
 
 pub use types::*;
 
+use crate::components::gallery_viewer::GalleryViewer;
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use item::GalleryItemView;
 use leptos::prelude::*;
@@ -19,7 +20,7 @@ pub(crate) const CSS: &str = include_str!("gallery.css");
 pub fn Gallery(
     /// Collection of media items to display.
     #[prop(into)]
-    items: Signal<Vec<GalleryMediaItem>>,
+    items: Signal<Vec<MediaItem>>,
     /// Layout arrangement mode: `Grid` (default) or `Telegram`.
     #[prop(default = GalleryLayout::Grid)]
     layout: GalleryLayout,
@@ -32,6 +33,9 @@ pub fn Gallery(
     /// Enables multi-item selection mode with checkboxes.
     #[prop(default = false.into(), into)]
     selectable: Signal<bool>,
+    /// Automatically opens the full-screen `GalleryViewer` on item click when not in selection mode.
+    #[prop(default = true.into(), into)]
+    viewer: Signal<bool>,
     /// Currently selected item IDs.
     #[prop(optional, into)]
     selected_ids: Signal<HashSet<String>>,
@@ -52,6 +56,9 @@ pub fn Gallery(
 ) -> impl IntoView {
     let resolved_empty = ui_text(empty_label, "gallery.empty", "No media items");
 
+    let viewer_open = RwSignal::new(false);
+    let viewer_index = RwSignal::new(0usize);
+
     let root_metrics = vec![
         Metric::du("--op-gallery-column-min-width", column_min_width),
         Metric::du("--op-gallery-gap", gap),
@@ -67,6 +74,16 @@ pub fn Gallery(
         }
         if let Some(cb) = on_selection_change {
             cb.run(set);
+        }
+    });
+
+    let handle_item_click = Callback::new(move |idx: usize| {
+        if viewer.get_untracked() {
+            viewer_index.set(idx);
+            viewer_open.set(true);
+        }
+        if let Some(cb) = on_item_click {
+            cb.run(idx);
         }
     });
 
@@ -112,7 +129,7 @@ pub fn Gallery(
                                         selectable=selectable
                                         is_selected=is_sel
                                         on_toggle_select=toggle_select
-                                        on_click=on_item_click
+                                        on_click=Some(handle_item_click)
                                     />
                                 }
                             }).collect_view()}
@@ -120,6 +137,14 @@ pub fn Gallery(
                     }.into_any()
                 }
             }}
+
+            <Show when=move || viewer.get()>
+                <GalleryViewer
+                    open=viewer_open
+                    items=items
+                    current_index=viewer_index
+                />
+            </Show>
         </div>
     }
 }

@@ -1,5 +1,9 @@
 /* Operator VideoStream: generic live camera and video stream shell */
 
+:where(.op-video-stream) {
+    color: var(--op-video-stream-text, inherit);
+}
+
 .op-video-stream {
     position: relative;
     box-sizing: border-box;
@@ -93,7 +97,7 @@
     padding: calc(var(--op-du) * 2);
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--op-motion-duration-fast, 150ms) var(--op-motion-easing-standard, ease);
+    transition: opacity var(--op-motion-state-color) var(--op-ease-standard);
     z-index: 3;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.7) 100%);
 }

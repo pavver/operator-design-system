@@ -8,6 +8,7 @@ pub use types::*;
 pub use zoom::ViewerZoomState;
 
 use crate::components::icon_button::IconButton;
+use crate::components::primitives::Icon;
 use crate::core::{Metric, Slot, root_class, root_style, ui_text, use_page_scroll_lock};
 use leptos::prelude::*;
 use operator_ui_tokens::icons;
@@ -32,7 +33,7 @@ pub fn GalleryViewer(
     open: RwSignal<bool>,
     /// Collection of media items to view.
     #[prop(into)]
-    items: Signal<Vec<GalleryViewerItem>>,
+    items: Signal<Vec<MediaItem>>,
     /// Active item index.
     #[prop(optional, into)]
     current_index: Option<RwSignal<usize>>,
@@ -51,6 +52,9 @@ pub fn GalleryViewer(
     /// Translatable empty media message.
     #[prop(optional, into)]
     empty_label: MaybeProp<String>,
+    /// Translatable video playback error message.
+    #[prop(optional, into)]
+    video_error_label: MaybeProp<String>,
     /// Slot for top-right download button or custom download action.
     #[prop(optional, into)]
     download_slot: Slot,
@@ -74,11 +78,17 @@ pub fn GalleryViewer(
     let resolved_prev = ui_text(prev_label, "gallery-viewer.prev", "Previous item");
     let resolved_next = ui_text(next_label, "gallery-viewer.next", "Next item");
     let resolved_empty = ui_text(empty_label, "gallery-viewer.empty", "Media not found");
+    let resolved_video_error = ui_text(
+        video_error_label,
+        "gallery-viewer.video-error",
+        "Video unavailable",
+    );
 
     let current = current_index.unwrap_or_else(|| RwSignal::new(0));
     let zoom = ViewerZoomState::new();
     let is_ui_visible = RwSignal::new(true);
     let is_description_expanded = RwSignal::new(false);
+    let video_error = RwSignal::new(false);
     let is_pointer_down = RwSignal::new(false);
     let last_pointer_x = RwSignal::new(0.0f32);
     let last_pointer_y = RwSignal::new(0.0f32);
@@ -88,11 +98,12 @@ pub fn GalleryViewer(
 
     use_page_scroll_lock(open);
 
-    // Reset zoom and description on page change
+    // Reset zoom, description, and video error on page change
     Effect::new(move |_| {
         let idx = current.get();
         zoom.reset();
         is_description_expanded.set(false);
+        video_error.set(false);
         if let Some(cb) = on_change {
             cb.run(idx);
         }
@@ -276,15 +287,37 @@ pub fn GalleryViewer(
                         let media = items.with(|list| list.get(curr_idx).cloned());
                         if let Some(item) = media {
                             if item.is_video {
+                                let video_src = item.src.clone();
+                                let video_poster = item.thumbnail.clone();
                                 view! {
-                                    <video
-                                        class="op-gallery-viewer-video"
-                                        src=item.src
-                                        poster=item.thumbnail
-                                        controls=true
-                                        autoplay=true
-                                        playsinline=true
-                                    ></video>
+                                    <div class="op-gallery-viewer-video-container">
+                                        <video
+                                            class="op-gallery-viewer-video"
+                                            src=video_src
+                                            poster=video_poster.clone()
+                                            controls=move || !video_error.get()
+                                            autoplay=true
+                                            playsinline=true
+                                            on:error=move |_| {
+                                                video_error.set(true);
+                                            }
+                                        ></video>
+                                        {move || video_error.get().then(|| {
+                                            view! {
+                                                <div class="op-gallery-viewer-video-error">
+                                                    {video_poster.as_ref().map(|p| view! {
+                                                        <img class="op-gallery-viewer-video-error-poster" src=p.clone() alt="" />
+                                                    })}
+                                                    <div class="op-gallery-viewer-video-error-overlay">
+                                                        <Icon icon=icons::ERROR size=8.0 />
+                                                        <span class="op-gallery-viewer-video-error-text">
+                                                            {move || resolved_video_error.get()}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        })}
+                                    </div>
                                 }.into_any()
                             } else {
                                 view! {
