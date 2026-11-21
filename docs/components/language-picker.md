@@ -13,6 +13,7 @@ Status: **draft** on web.
 ## Geometry
 
 * The input shell is a [Field](field.md) with an `arrow_drop_down` trailing icon.
+* The selected language's flag is displayed at the start of the field in the leading prepend slot when `show_flags` is true.
 * Each option in the list displays a flag icon followed by the language label.
 * The flag is rendered in a square container of `6 DU` width and `4 DU` height by default.
 * The flag container has square corners with `0 DU` corner radius.
@@ -64,6 +65,7 @@ Flag colors use the authentic colors of each national flag as content graphics r
 | `format` | `Option<Callback<LanguageOption, String>>` | `None` | Custom label formatter. |
 | `label` | `MaybeProp<String>` | `language-picker.label` | Visible label above the field. |
 | `aria_label` | `MaybeProp<String>` | `language-picker.label` | Accessible name for screen readers. |
+| `width` | optional number (DU) | `100%` | Root width override. |
 | `placeholder` | `MaybeProp<String>` | empty | Placeholder text inside the input. |
 | `hint` | `MaybeProp<String>` | `None` | Help text below the field. |
 | `error` | `MaybeProp<String>` | `None` | Error message below the field. |
@@ -113,6 +115,7 @@ Metric props declare CSS custom properties with token fallbacks.
 
 | Metric prop | Unit | Variable | Default |
 | :--- | :--- | :--- | :--- |
+| `width` | DU | `--op-language-picker-width` | `100%` |
 | `flag_width` | DU | `--op-language-picker-flag-width` | `6 DU` |
 | `flag_height` | DU | `--op-language-picker-flag-height` | `4 DU` |
 

@@ -1,6 +1,16 @@
 /* ------------------------------------------------------------------ */
 /* LanguagePicker                                                     */
 /* ------------------------------------------------------------------ */
+.op-language-picker {
+  width: var(--op-language-picker-width, 100%);
+}
+
+.op-language-picker .op-field-prepend:empty,
+.op-language-picker .op-field-prepend:not(:has(*)) {
+  display: none;
+  margin: 0;
+}
+
 .op-language-picker-flag {
   position: relative;
   display: inline-flex;

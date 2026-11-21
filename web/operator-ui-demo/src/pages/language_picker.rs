@@ -52,7 +52,7 @@ pub fn language_picker() -> AnyView {
 
         <Example
             title="Without flags"
-            note="Setting show_flags=false hides flags in the suggestion list."
+            note="Setting show_flags=false hides flags in the field and the suggestion list."
             block=true
         >
             <div class="demo-grid-2">

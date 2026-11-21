@@ -57,6 +57,9 @@ pub fn LanguagePicker(
     #[prop(optional, into)] after: Slot,
     #[prop(optional, into)] label_slot: Slot,
     #[prop(optional, into)] hint_slot: Slot,
+    /// Fixed width in DU (`--op-language-picker-width`).
+    #[prop(optional, into)]
+    width: MaybeProp<f32>,
     #[prop(optional, into)] height: MaybeProp<f32>,
     #[prop(optional, into)] padding_x: MaybeProp<f32>,
     #[prop(optional, into)] slot_size: MaybeProp<f32>,
@@ -117,6 +120,7 @@ pub fn LanguagePicker(
     let picker_empty_text = MaybeProp::derive(move || Some(empty_text.get()));
 
     let metrics = vec![
+        Metric::du("--op-language-picker-width", width),
         Metric::du("--op-language-picker-flag-width", flag_width),
         Metric::du("--op-language-picker-flag-height", flag_height),
     ];
@@ -130,6 +134,27 @@ pub fn LanguagePicker(
     });
 
     let format_cb = format;
+    let picker_prepend = Slot::from(move || {
+        let flag_view = move || {
+            if show_flags.get() {
+                let cur = value.get();
+                let current_flag = languages.with(|langs| {
+                    langs
+                        .iter()
+                        .find(|l| l.code == cur)
+                        .and_then(|l| l.flag.clone())
+                });
+                current_flag.as_ref().map(render_flag)
+            } else {
+                None
+            }
+        };
+        view! {
+            {prepend.run()}
+            {flag_view}
+        }
+    });
+
     let combo_options = Memo::new(move |_| {
         languages.with(|langs| {
             langs
@@ -192,7 +217,7 @@ pub fn LanguagePicker(
             hint=hint
             error=error
             variant=variant
-            prepend=prepend
+            prepend=picker_prepend
             append=append
             before=before
             after=after

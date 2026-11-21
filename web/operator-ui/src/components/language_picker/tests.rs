@@ -64,3 +64,10 @@ fn test_flags_builtin() {
     }
     assert!(builtin_flag_view("XX").is_none());
 }
+
+#[test]
+fn test_render_flag() {
+    let ua = render_flag(&Flag::Builtin("UA"));
+    let none = render_flag(&Flag::None);
+    let _ = (ua, none);
+}
