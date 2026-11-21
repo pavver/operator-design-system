@@ -1,6 +1,6 @@
 //! Linear progress bar: LinearProgress and ProgressFormat.
 
-use crate::core::{ControlState, du};
+use crate::core::{ControlState, Metric, Slot, du, root_class, root_style, ui_text};
 use leptos::prelude::*;
 
 pub(crate) const CSS: &str = include_str!("linear_progress.css");
@@ -45,11 +45,26 @@ pub fn LinearProgress(
     /// Percent or `value / max`.
     #[prop(optional)]
     format: ProgressFormat,
-    /// Bar thickness in DU.
-    #[prop(default = 1.0)]
-    thickness: f32,
-    #[prop(default = "Progress".into(), into)] label: String,
+    /// Bar thickness in DU (`--op-linear-progress-thickness`).
+    #[prop(optional, into)]
+    thickness: MaybeProp<f32>,
+    /// Accessible name; defaults to `linear-progress.label` ("Progress").
+    #[prop(optional, into)]
+    label: MaybeProp<String>,
+    /// Gap between track and value label in DU (`--op-linear-progress-gap`).
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
+    /// Minimum width of the value label in DU (`--op-linear-progress-value-min-width`).
+    #[prop(optional, into)]
+    value_min_width: MaybeProp<f32>,
+    /// Custom value label slot replacing the formatted text.
+    #[prop(optional, into)]
+    value_slot: Slot,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
+    let resolved_label = ui_text(label, "linear-progress.label", "Progress");
+    let thickness_val = move || thickness.get().unwrap_or(1.0);
     let max_value = move || {
         let m = max.get();
         if m > 0.0 { m } else { 1.0 }
@@ -73,41 +88,62 @@ pub fn LinearProgress(
         Some(ControlState::Error) => "error",
         _ => "pending",
     };
-    let labelled = show_value && value.is_some();
-    let inside = labelled && thickness >= PROGRESS_INSIDE_MIN_DU;
+    let labelled = show_value && (value.is_some() || value_slot.is_set());
+    let inside = labelled && thickness_val() >= PROGRESS_INSIDE_MIN_DU;
     let percent = move || ratio().map(|r| format!("{}%", r * 100.0));
+
+    let render_val = Callback::new(move |()| {
+        if value_slot.is_set() {
+            value_slot.run()
+        } else {
+            text().map(|t| t.into_any())
+        }
+    });
+
     view! {
-        <div class="op-progress">
+        <div
+            class=root_class("op-progress", class)
+            style=root_style(
+                vec![
+                    Metric::du("--op-linear-progress-thickness", thickness),
+                    Metric::du("--op-linear-progress-gap", gap),
+                    Metric::du("--op-linear-progress-value-min-width", value_min_width),
+                ],
+                style,
+            )
+        >
             <div
                 class="op-progress-track"
                 role="progressbar"
-                aria-label=label
+                aria-label=move || resolved_label.get()
                 aria-valuemin="0"
                 aria-valuemax=move || count_text(max_value())
                 aria-valuenow=move || value.map(|v| count_text(v.get()))
                 aria-valuetext=text
                 data-tone=tone
                 data-indeterminate=value.is_none().then_some("")
-                style:height=du(thickness)
+                style:height=move || du(thickness_val())
             >
                 <div class="op-progress-fill" style:width=percent></div>
-                {inside
-                    .then(|| {
-                        // Two copies of the label: one over the track, one over the fill,
-                        // clipped to the filled part so the text keeps contrast on both.
+                {move || {
+                    inside.then(|| {
                         let clip = move || {
                             ratio().map(|r| format!("inset(0 {}% 0 0)", (1.0 - r) * 100.0))
                         };
                         view! {
-                            <span class="op-progress-inner op-t-caption" aria-hidden="true">{text}</span>
+                            <span class="op-progress-inner op-t-caption" aria-hidden="true">{render_val.run(())}</span>
                             <span class="op-progress-inner op-progress-inner-on op-t-caption" aria-hidden="true" style:clip-path=clip>
-                                {text}
+                                {render_val.run(())}
                             </span>
                         }
-                    })}
+                    })
+                }}
             </div>
-            {(labelled && !inside)
-                .then(|| view! { <span class="op-progress-value op-t-caption">{text}</span> })}
+            {move || {
+                (labelled && !inside).then(|| {
+                    view! { <span class="op-progress-value op-t-caption">{render_val.run(())}</span> }
+                })
+            }}
         </div>
     }
 }

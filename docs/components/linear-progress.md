@@ -50,7 +50,40 @@ Status: **reviewed** on web.
 | `show_value` | bool | `false` | Shows the value, inside the bar from `5 DU` thickness. |
 | `format` | `Percent` or `Count` | `Percent` | How the value is written. |
 | `thickness` | DU | `1.0` | Bar thickness. |
-| `label` | string | `"Progress"` | Accessible name. |
+| `label` | string | `linear-progress.label` | Accessible name. |
+| `gap` | DU | `2.0` | Gap between track and value label. |
+| `value_min_width` | DU | `9.0` | Minimum width of the value label. |
+| `value_slot` | slot | none | Custom value label slot. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `thickness` | DU | `--op-linear-progress-thickness` | `1 DU` |
+| `gap` | DU | `--op-linear-progress-gap` | `gutter` (`2 DU`) |
+| `value_min_width` | DU | `--op-linear-progress-value-min-width` | `9 DU` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-linear-progress-bar` | `pending` |
+| `--op-linear-progress-track` | `color-mix(in srgb, var(--bar) 20%, surface_alt)` |
+| `--op-linear-progress-success` | `success` |
+| `--op-linear-progress-error` | `error` |
+| `--op-linear-progress-value-color` | `text_secondary` |
+| `--op-linear-progress-inner-track-text` | `text_primary` |
+| `--op-linear-progress-inner-fill-text` | `on_accent` |
+
+| Slot | Place |
+| :--- | :--- |
+| `value_slot` | Custom value label replacing the formatted progress text. |
+
+`class` and `style` apply to the root.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `linear-progress.label` | `Progress` |
 
 ## Accessibility
 

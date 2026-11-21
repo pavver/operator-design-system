@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`min_width`, `height`, `padding_x`, `font_size`, `offset`), color variables (`--op-counter-*`), `aria_label`, and translatable unit string `counter.items`."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`min_width`, `height`, `padding_x`, `font_size`, `offset`), змінні кольорів (`--op-counter-*`), `aria_label` та перекладний текст `counter.items`."
+
+[[change]]
 date = "2026-11-11T20:46:54+02:00"
 status = "approved"
 commit = "c00559d"

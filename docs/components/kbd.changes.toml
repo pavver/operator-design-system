@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`height`, `wide_min_width`, `space_min_width`, `padding_x`, `gap`, `font_size`), color variables (`--op-kbd-*`), slot `separator`, `aria_label`, and translatable separator string `kbd.plus`."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `wide_min_width`, `space_min_width`, `padding_x`, `gap`, `font_size`), змінні кольорів (`--op-kbd-*`), слот `separator`, `aria_label` та перекладний роздільник `kbd.plus`."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

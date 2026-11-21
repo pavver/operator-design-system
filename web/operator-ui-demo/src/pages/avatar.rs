@@ -19,6 +19,19 @@ pub fn avatar() -> AnyView {
             <Cell label="14 DU"><Avatar id="a4" name="Zoia" size=14.0 status=PresenceStatus::SendingFile/></Cell>
             <Cell label="Loading"><Avatar id="a5" name="Bot" size=10.0 image_url="debug_loading"/></Cell>
         </Example>
+        <Example title="Customization" note="Custom badge slot, metric props and aria-label.">
+            <Cell label="Custom badge slot">
+                <Avatar
+                    id="custom-1"
+                    name="Security Team"
+                    size=12.0
+                    font_size=20.0
+                    border_width=0.5
+                    badge=Slot::from(|| view! { <span style="background:var(--op-accent);color:var(--op-on-accent);padding:0 4px;font-size:10px;font-weight:700;">"ADMIN"</span> })
+                    aria_label="Security administrator avatar"
+                />
+            </Cell>
+        </Example>
     }
     .into_any()
 }

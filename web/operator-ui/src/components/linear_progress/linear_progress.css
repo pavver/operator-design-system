@@ -1,17 +1,22 @@
 /* ------------------------------------------------------------------ */
 /* LinearProgress                                                      */
 /* ------------------------------------------------------------------ */
-.op-progress { display: flex; align-items: center; gap: var(--op-dim-gutter); width: 100%; }
+.op-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--op-linear-progress-gap, var(--op-dim-gutter));
+  width: 100%;
+}
 .op-progress-track {
-  --bar: var(--op-pending);
+  --bar: var(--op-linear-progress-bar, var(--op-pending));
   position: relative;
   flex: 1;
-  height: var(--op-dim-pad-tight);
+  height: var(--op-linear-progress-thickness, calc(var(--op-du) * 1));
   overflow: hidden;
-  background-color: color-mix(in srgb, var(--bar) 20%, var(--op-surface-alt));
+  background-color: var(--op-linear-progress-track, color-mix(in srgb, var(--bar) 20%, var(--op-surface-alt)));
 }
-.op-progress-track[data-tone="success"] { --bar: var(--op-success); }
-.op-progress-track[data-tone="error"] { --bar: var(--op-error); }
+.op-progress-track[data-tone="success"] { --bar: var(--op-linear-progress-success, var(--op-success)); }
+.op-progress-track[data-tone="error"] { --bar: var(--op-linear-progress-error, var(--op-error)); }
 .op-progress-fill {
   height: 100%;
   background-color: var(--bar);
@@ -24,7 +29,13 @@
   animation: op-indeterminate var(--op-motion-pending-lap) var(--op-ease-smooth) infinite;
 }
 @keyframes op-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
-.op-progress-value { flex: none; min-width: calc(var(--op-du) * 9); text-align: right; color: var(--op-text-secondary); font-variant-numeric: tabular-nums; }
+.op-progress-value {
+  flex: none;
+  min-width: var(--op-linear-progress-value-min-width, calc(var(--op-du) * 9));
+  text-align: right;
+  color: var(--op-linear-progress-value-color, var(--op-text-secondary));
+  font-variant-numeric: tabular-nums;
+}
 .op-progress-inner {
   position: absolute;
   inset: 0;
@@ -33,10 +44,12 @@
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
-  color: var(--op-text-primary);
+  color: var(--op-linear-progress-inner-track-text, var(--op-text-primary));
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
-.op-progress-inner-on { color: var(--op-on-accent); transition: clip-path var(--op-motion-state-color) var(--op-ease-standard); }
-
+.op-progress-inner-on {
+  color: var(--op-linear-progress-inner-fill-text, var(--op-on-accent));
+  transition: clip-path var(--op-motion-state-color) var(--op-ease-standard);
+}

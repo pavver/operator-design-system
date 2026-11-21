@@ -34,6 +34,33 @@ Corners are `0 DU` except for the circle.
 | `height` | DU | one text line | Height. |
 | `lines` | integer | `1` | Number of text lines. |
 | `circle` | bool | `false` | Round shape. |
+| `gap` | DU | `1` | Gap between lines. |
+| `text_height` | TU | `type_body_size` | Height of text placeholder bar. |
+| `text_line_height` | TU | `type_body_line` | Spacing of text placeholder bar. |
+| `label` | string | `skeleton.loading` | Accessible name. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `width` | DU | `--op-skeleton-width` | `100%` |
+| `height` | DU | `--op-skeleton-height` | `auto` |
+| `gap` | DU | `--op-skeleton-gap` | `pad_tight` (`1 DU`) |
+| `text_height` | TU | `--op-skeleton-text-height` | `type_body_size` |
+| `text_line_height` | TU | `--op-skeleton-text-line-height` | `type_body_line` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-skeleton-background` | `surface_alt` |
+| `--op-skeleton-shimmer` | `pressed` |
+
+`class` and `style` apply to the root.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `skeleton.loading` | `Loading` |
 
 ## Accessibility
 

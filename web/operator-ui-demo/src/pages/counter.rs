@@ -21,6 +21,11 @@ pub fn counter() -> AnyView {
             </WithCounter>
             <Stepper value=unread min=0 max=150/>
         </Example>
+        <Example title="Customization" note="Metric props (min_width, height, font_size) and custom label.">
+            <Cell label="Custom size">
+                <Counter count=7u32 min_width=6.0 height=6.0 font_size=14.0 aria_label="7 unread notifications"/>
+            </Cell>
+        </Example>
     }
     .into_any()
 }

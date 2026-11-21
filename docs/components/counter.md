@@ -31,8 +31,36 @@ Status: **reviewed** on web.
 
 | Component | Properties |
 | :--- | :--- |
-| `Counter` | `count`, `max` (`99`), `tone` (Accent), `show_zero` (`false`). |
-| `WithCounter` | `count`, `max`, `tone`, `children`: the control that carries the counter. |
+| `Counter` | `count`, `max` (`99`), `tone` (Accent), `show_zero` (`false`), `aria_label` (optional). |
+| `WithCounter` | `count`, `max`, `tone`, `show_zero`, `aria_label`, `offset`, `children`: the control that carries the counter. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `min_width` | DU | `--op-counter-min-width` | `icon_medium` (`4.5 DU`) |
+| `height` | DU | `--op-counter-height` | `icon_medium` (`4.5 DU`) |
+| `padding_x` | DU | `--op-counter-padding-x` | `pad_tight` (`1 DU`) |
+| `font_size` | TU | `--op-counter-font-size` | `type_caption_size` |
+| `offset` | DU | `--op-counter-offset` | `pad_tight` (`1 DU`); on WithCounter |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-counter-background` | `accent` |
+| `--op-counter-text` | `on_accent` |
+| `--op-counter-neutral-background` | `surface_alt` |
+| `--op-counter-neutral-text` | `text_secondary` |
+| `--op-counter-neutral-border` | `border` |
+| `--op-counter-error-background` | `error` |
+| `--op-counter-error-text` | `on_accent` |
+
+`class` and `style` apply to the root.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `counter.items` | `items` |
 
 ## Accessibility
 

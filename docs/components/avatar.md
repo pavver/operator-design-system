@@ -51,3 +51,30 @@ The initial uses this color; the background is the same color at 15%.
 | `size` | DU | `10` |
 | `status` | `PresenceStatus` | none |
 | `image_url` | string | none |
+| `badge` | slot | none |
+| `font_size` | TU | computed from size |
+| `border_width` | DU | `0.25` |
+| `badge_offset` | DU | `0.25` |
+| `badge_size` | DU | computed from size |
+| `aria_label` | string | `name` |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `size` | DU | `--op-avatar-size` | `avatar_header` (`10 DU`) |
+| `font_size` | TU | `--op-avatar-font-size` | `18 TU` at 10 DU (`size * 1.8`) |
+| `border_width` | DU | `--op-avatar-border-width` | `border` (`0.25 DU`) |
+| `badge_offset` | DU | `--op-avatar-badge-offset` | `border` (`0.25 DU`) |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-avatar-background` | `color-mix(in srgb, var(--op-avatar-color) 15%, transparent)` |
+| `--op-avatar-text` | `var(--op-avatar-color)` |
+| `--op-avatar-border` | `border` |
+
+| Slot | Place |
+| :--- | :--- |
+| `badge` | Replaces the built-in status badge at the bottom end corner. |
+
+`class` and `style` apply to the root.

@@ -23,6 +23,17 @@ pub fn empty_state() -> AnyView {
                 <EmptyState icon=icons::SEARCH title="No matches" description="Try a shorter query." compact=true/>
             </div>
         </Example>
+        <Example title="Customization" note="Metric props, title and action slots." block=true>
+            <div class="demo-list">
+                <EmptyState
+                    title_slot=Slot::from(|| view! { <span style="color:var(--op-accent);font-weight:700;">"Custom Empty View"</span> })
+                    description="Customized spacing, icon size, and action slot."
+                    icon_size=10.0
+                    padding_y=6.0
+                    actions=Slot::from(|| view! { <ActionButton text="Add new filter"/> })
+                />
+            </div>
+        </Example>
     }
     .into_any()
 }

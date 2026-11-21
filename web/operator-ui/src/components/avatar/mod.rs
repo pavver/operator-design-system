@@ -3,7 +3,7 @@
 use crate::components::primitives::ProgressIndicator;
 use crate::components::status_badge::{PresenceStatus, StatusBadge};
 use crate::core::theme::OperatorTheme;
-use crate::core::{du, tu};
+use crate::core::{Metric, Slot, root_class, root_style};
 use leptos::prelude::*;
 use operator_ui_tokens::dim;
 
@@ -73,13 +73,33 @@ pub fn Avatar(
     #[prop(into)] id: String,
     #[prop(into)] name: String,
     #[prop(optional)] kind: AvatarKind,
-    /// Size in DU.
-    #[prop(default = dim::AVATAR_HEADER)]
-    size: f32,
+    /// Size in DU (`--op-avatar-size`).
+    #[prop(optional, into)]
+    size: MaybeProp<f32>,
     #[prop(optional, into)] status: Option<Signal<PresenceStatus>>,
     /// Image URL; the special value `debug_loading` shows a persistent loading spinner.
     #[prop(optional, into)]
     image_url: Option<String>,
+    /// Custom status badge slot replacing the built-in badge.
+    #[prop(optional, into)]
+    badge: Slot,
+    /// Font size in TU (`--op-avatar-font-size`).
+    #[prop(optional, into)]
+    font_size: MaybeProp<f32>,
+    /// Outline border width in DU (`--op-avatar-border-width`).
+    #[prop(optional, into)]
+    border_width: MaybeProp<f32>,
+    /// Badge offset in DU (`--op-avatar-badge-offset`).
+    #[prop(optional, into)]
+    badge_offset: MaybeProp<f32>,
+    /// Badge size in DU.
+    #[prop(optional, into)]
+    badge_size: MaybeProp<f32>,
+    /// Accessible name; defaults to `name`.
+    #[prop(optional, into)]
+    aria_label: MaybeProp<String>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let theme = OperatorTheme::current();
     let letter = name
@@ -92,12 +112,14 @@ pub fn Avatar(
         format!("rgb({r} {g} {b})")
     };
     let loaded = RwSignal::new(false);
-    let badge_size = (size * 0.32).max(2.5);
+    let size_val = move || size.get().unwrap_or(dim::AVATAR_HEADER);
+    let accessible_name = Signal::derive(move || aria_label.get().unwrap_or_else(|| name.clone()));
+
     let image = image_url.map(|url| {
         if url == "debug_loading" {
             view! {
                 <span class="op-avatar-layer op-avatar-center">
-                    <ProgressIndicator size=size * 0.8 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
+                    {move || view! { <ProgressIndicator size=size_val() * 0.8 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }}
                 </span>
             }
             .into_any()
@@ -105,7 +127,7 @@ pub fn Avatar(
             view! {
                 <Show when=move || !loaded.get()>
                     <span class="op-avatar-layer op-avatar-center">
-                        <ProgressIndicator size=size * 0.8 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/>
+                        {move || view! { <ProgressIndicator size=size_val() * 0.8 stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }}
                     </span>
                 </Show>
                 <img class="op-avatar-layer op-avatar-img" src=url alt="" on:load=move |_| loaded.set(true)/>
@@ -113,29 +135,50 @@ pub fn Avatar(
             .into_any()
         }
     });
+
+    let rendered_badge = move || {
+        if badge.is_set() {
+            view! { <span class="op-avatar-badge">{badge.run()}</span> }.into_any()
+        } else if let Some(s) = status {
+            let b_size = Signal::derive(move || {
+                badge_size
+                    .get()
+                    .unwrap_or_else(|| (size_val() * 0.32).max(2.5))
+            });
+            view! {
+                <span class="op-avatar-badge">
+                    <StatusBadge status=s size=b_size/>
+                </span>
+            }
+            .into_any()
+        } else {
+            ().into_any()
+        }
+    };
+
     view! {
         <span
-            class="op-avatar"
+            class=root_class("op-avatar", class)
             role="img"
-            aria-label=name.clone()
-            style:width=du(size)
-            style:height=du(size)
+            aria-label=move || accessible_name.get()
+            style=root_style(
+                vec![
+                    Metric::du("--op-avatar-size", size),
+                    Metric::tu("--op-avatar-font-size", font_size),
+                    Metric::du("--op-avatar-border-width", border_width),
+                    Metric::du("--op-avatar-badge-offset", badge_offset),
+                ],
+                style,
+            )
             style=("--op-avatar-radius", kind.radius())
             style=("--op-avatar-color", color)
         >
-            <span class="op-avatar-layer op-avatar-letter" style:font-size=tu(size * operator_ui_tokens::DU_POINTS * 0.45)>
+            <span class="op-avatar-layer op-avatar-letter">
                 {letter}
             </span>
             {image}
             <span class="op-avatar-layer op-avatar-outline"></span>
-            {status
-                .map(|s| {
-                    view! {
-                        <span class="op-avatar-badge">
-                            <StatusBadge status=s size=badge_size/>
-                        </span>
-                    }
-                })}
+            {rendered_badge}
         </span>
     }
 }

@@ -55,6 +55,18 @@ pub fn linear_progress() -> AnyView {
                 <LinearProgress value=543.0 max=1000.0 format=ProgressFormat::Count thickness=6.0 show_value=true label="Files"/>
             </div>
         </Example>
+        <Example title="Customization" note="Custom thickness, gap, and value slot." block=true>
+            <div class="demo-stack demo-narrow">
+                <LinearProgress
+                    value=0.75
+                    thickness=4.0
+                    gap=4.0
+                    show_value=true
+                    label="Custom progress bar"
+                    value_slot=Slot::from(|| view! { <span style="color:var(--op-accent);font-weight:bold;">"3/4 Complete"</span> })
+                />
+            </div>
+        </Example>
     }
     .into_any()
 }

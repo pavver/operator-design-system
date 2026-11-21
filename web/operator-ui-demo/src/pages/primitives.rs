@@ -25,6 +25,17 @@ pub fn primitives() -> AnyView {
             </div>
             <Divider/>
         </Example>
+        <Example title="Card Sections and Customization" block=true>
+            <Card
+                padding=4.0
+                gap=3.0
+                header=Slot::from(|| view! { <div class="op-t-row-title">"Card Header"</div> })
+                actions=Slot::from(|| view! { <ActionButton text="Confirm"/> })
+                footer=Slot::from(|| view! { <span class="op-t-caption demo-muted">"Last updated 5m ago"</span> })
+            >
+                <div class="op-t-body-small">"This card uses Quasar-style container sections: header, body (default children), actions, and footer."</div>
+            </Card>
+        </Example>
     }
     .into_any()
 }
