@@ -42,7 +42,7 @@ It is measured hidden in the first frame and shown placed in the next one, so it
 | `open` | bool signal | required | Shows the layer. |
 | `anchor` | `PopoverAnchor` signal | required | Element box (`PopoverAnchor::of(el)`) or pointer point. |
 | `placement` | `Placement` signal | `BelowStart` | See *Placement*. |
-| `gap` | DU | `0` | Distance to the anchor. |
+| `gap` | reactive DU metric | `0` | Distance to the anchor. |
 | `dismiss_on_outside` | bool | `true` | Close on a press outside. |
 | `dismiss_on_escape` | bool | `true` | Close on Escape. |
 | `dismiss_on_resize` | bool | `false` | Close instead of following on resize. |
@@ -53,3 +53,53 @@ It is measured hidden in the first frame and shown placed in the next one, so it
 | `layer_id`, `parent_layer` | layer id | new id, none | Link a layer to the layer it opens from (`new_layer_id()`). |
 | `on_placed` | callback | none | Runs after each placement, for example to focus the first item. |
 | `children` | view | required | Layer content. |
+
+The customization properties are optional and accept reactive values where indicated.
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `class`, `style` | reactive string | none | Root hooks. |
+| `offset_x` | reactive DU metric | design-system value | Sets `--op-popover-offset-x`. |
+| `offset_y` | reactive DU metric | design-system value | Sets `--op-popover-offset-y`. |
+| `header` | `Slot` | none | Content before the default children. |
+| `actions` | `Slot` | none | Content after the default children, before the footer. |
+| `footer` | `Slot` | none | Content after the body and actions. |
+| `aria_label` | reactive string | `popover.label` | Accessible name; takes precedence over the compatible `label` prop. |
+
+## Customization
+
+`class` and `style` apply to the floating layer.
+Metric props write the corresponding variables; an explicit `style` declaration wins.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `offset_x` | DU | `--op-popover-offset-x` | `0 DU` |
+| `offset_y` | DU | `--op-popover-offset-y` | `0 DU` |
+| `gap` | DU | `--op-popover-gap` | `0 DU` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-popover-background` | `transparent` |
+| `--op-popover-text` | `inherit` |
+
+| Slot | Place |
+| :--- | :--- |
+| `header` | Content before the default children. |
+| `actions` | Content after the default children, before the footer. |
+| `footer` | Content after the body and actions. |
+
+`placement` keeps its existing enum and signal API.
+`gap` controls separation from the anchor in DU for below, above, and side placements.
+`offset_x` and `offset_y` translate the placed layer in viewport axes after clamping.
+The optional `label` prop remains compatible; `aria_label` adds a reactive override.
+A private size observer re-places the layer when metrics, slots, or translated content resize it.
+
+### Strings
+
+| Key | Default | Prop |
+| :--- | :--- | :--- |
+| `popover.label` | `empty` | `aria_label / label` |
+
+### Icons
+
+This component has no built-in icons.

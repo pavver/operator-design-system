@@ -7,22 +7,35 @@
   z-index: 50;
   display: grid;
   place-items: center;
-  padding: var(--op-dim-margin-screen);
-  background: rgb(0 0 0 / 55%);
+  padding: var(--op-dialog-padding, var(--op-dim-margin-screen));
+  background: var(--op-dialog-scrim, rgb(0 0 0 / 55%));
   animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
 }
 .op-dialog {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - var(--op-dim-margin-screen) * 2);
-  background-color: var(--op-surface);
+  max-height: var(--op-dialog-max-height, calc(100vh - var(--op-dialog-padding, var(--op-dim-margin-screen)) * 2));
+  background-color: var(--op-dialog-background, var(--op-surface));
   animation: op-dialog-in var(--op-motion-dialog-enter) var(--op-ease-standard);
 }
 @keyframes op-dialog-in { from { opacity: 0; transform: scale(0.95); } }
 .op-root .op-dialog:focus-visible { outline: none; }
-.op-dialog-head { display: flex; align-items: center; gap: var(--op-dim-gutter); padding: var(--op-dim-gutter) var(--op-dim-gutter) var(--op-dim-gutter) var(--op-dim-margin-screen); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
-.op-dialog-title { flex: 1; min-width: 0; color: var(--op-text-primary); font-size: var(--op-type-screen-title-size); line-height: var(--op-type-screen-title-line); font-weight: 700; }
+.op-dialog-head { display: flex; align-items: center; gap: var(--op-dialog-header-padding, var(--op-dim-gutter)); padding: var(--op-dialog-header-padding, var(--op-dim-gutter)) var(--op-dialog-header-padding, var(--op-dim-gutter)) var(--op-dialog-header-padding, var(--op-dim-gutter)) var(--op-dialog-padding, var(--op-dim-margin-screen)); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-dialog-divider, var(--op-divider)); }
+.op-dialog-title { flex: 1; min-width: 0; color: var(--op-dialog-text, var(--op-text-primary)); font-size: var(--op-dialog-title-font-size, var(--op-type-screen-title-size)); line-height: var(--op-dialog-title-line-height, var(--op-type-screen-title-line)); font-weight: 700; }
 .op-dialog-body { flex: 1; }
-.op-dialog-content { padding: var(--op-dim-margin-screen); display: flex; flex-direction: column; gap: var(--op-dim-pad-card); }
-.op-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--op-dim-pad-card); padding: var(--op-dim-pad-card) var(--op-dim-margin-screen); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-divider); }
-.op-dialog-btn { height: var(--op-dim-row-compact); }
+.op-dialog-content { padding: var(--op-dialog-padding, var(--op-dim-margin-screen)); display: flex; flex-direction: column; gap: var(--op-dialog-gap, var(--op-dim-pad-card)); }
+.op-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--op-dialog-gap, var(--op-dim-pad-card)); padding: var(--op-dialog-gap, var(--op-dim-pad-card)) var(--op-dialog-padding, var(--op-dim-margin-screen)); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-dialog-divider, var(--op-divider)); }
+.op-dialog-btn { height: var(--op-dialog-button-height, var(--op-dim-row-compact)); }
+
+.op-dialog { width: clamp(min(var(--op-dialog-min-width, calc(var(--op-du) * 75)), 100%), 90vw, var(--op-dialog-max-width, calc(var(--op-du) * 140))); }
+.op-dialog-content { font-size: var(--op-dialog-font-size, var(--op-type-body-size)); line-height: var(--op-dialog-line-height, var(--op-type-body-line)); }
+.op-dialog-head .op-icon-btn { --op-button-size: var(--op-dialog-close-size, var(--op-dim-row-compact)); }
+.op-dialog-footer { padding: var(--op-dialog-gap, var(--op-dim-pad-card)) var(--op-dialog-padding, var(--op-dim-margin-screen)); }
+.op-dialog-head .op-icon-btn { --op-button-icon-size: var(--op-dialog-close-icon-size, var(--op-dim-icon-small)); }
+
+.op-dialog { --sb-base: var(--op-dialog-border, var(--op-border)); }
+.op-dialog[data-result="success"] { --sb-status: var(--op-dialog-success, var(--op-success)); }
+.op-dialog[data-result="error"] { --sb-status: var(--op-dialog-error, var(--op-error)); }
+.op-dialog > .op-run rect { stroke: var(--op-dialog-pending, var(--op-pending)); }
+
+.op-dialog { color: var(--op-dialog-text, var(--op-text-primary)); }

@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`height`, `padding_x`, `gap`, `font_size`, `count_min_width`, `count_padding_x`, `indicator_thickness`), color variables (`--op-tabs-text`, `--op-tabs-text-hover`, `--op-tabs-text-active`, `--op-tabs-count-background`, `--op-tabs-count-text`, `--op-tabs-count-active-background`, `--op-tabs-count-active-text`, `--op-tabs-divider`, `--op-tabs-indicator-color`, `--op-tabs-dock-background`, `--op-tabs-dock-border`, `--op-tabs-active-background`), slots (`option`, `before_options`, `after_options`), and translatable `label` string."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `padding_x`, `gap`, `font_size`, `count_min_width`, `count_padding_x`, `indicator_thickness`), змінні кольорів (`--op-tabs-text`, `--op-tabs-text-hover`, `--op-tabs-text-active`, `--op-tabs-count-background`, `--op-tabs-count-text`, `--op-tabs-count-active-background`, `--op-tabs-count-active-text`, `--op-tabs-divider`, `--op-tabs-indicator-color`, `--op-tabs-dock-background`, `--op-tabs-dock-border`, `--op-tabs-active-background`), слоти (`option`, `before_options`, `after_options`) та перекладний рядок `label`."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

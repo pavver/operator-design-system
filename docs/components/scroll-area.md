@@ -38,9 +38,41 @@ Pulling beyond an edge stretches the content instead of stopping hard or showing
 | :--- | :--- | :--- | :--- |
 | `height` | DU | none | Fixed height. |
 | `max_height` | DU | none | Maximum height. |
+| `focus_outline_width` | DU | `border` | Width of the focus outline. |
 | `stretch` | bool | `true` | Enables stretch overscroll. |
-| `label` | string | none | Makes the area a named region. |
+| `label` | string | `scroll-area.label` | Makes the area a named region. |
+| `header` | slot | none | Content rendered before the scrollable viewport. |
+| `footer` | slot | none | Content rendered after the scrollable viewport. |
 | `children` | view | required | Content. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-scroll-area-height` | none (fills parent) |
+| `max_height` | DU | `--op-scroll-area-max-height` | `100%` |
+| `focus_outline_width` | DU | `--op-scroll-area-focus-outline-width` | `border` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-scroll-area-focus-outline-color` | `accent` |
+
+| Slot | Place |
+| :--- | :--- |
+| `header` | Fixed content above the scrollable viewport. |
+| `footer` | Fixed content below the scrollable viewport. |
+
+`class` and `style` apply to the root scrollview element.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `scroll-area.label` | `""` |
+
+### Icons
+
+ScrollArea has no built-in semantic icons.
 
 ## Accessibility
 

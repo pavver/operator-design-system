@@ -2,9 +2,11 @@ use crate::components::icon_button::IconButton;
 use crate::components::popover::{Placement, Popover, PopoverAnchor, new_layer_id};
 use crate::components::primitives::Icon;
 use crate::components::scrollbar::ScrollView;
-use crate::core::{ControlState, spawn_ripple};
+use crate::core::{
+    ControlState, Metric, ScopedSlot, Slot, root_class, root_style, spawn_ripple, ui_icon, ui_text,
+};
 use leptos::prelude::*;
-use operator_ui_tokens::{Icon as IconData, dim, icons};
+use operator_ui_tokens::{Icon as IconData, icons};
 use wasm_bindgen::JsCast;
 
 pub(crate) const CSS: &str = include_str!("menu.css");
@@ -92,11 +94,71 @@ pub fn Menu(
     anchor: Signal<MenuAnchor>,
     items: Vec<MenuItem>,
     on_select: Callback<String>,
-    #[prop(default = "Menu".into(), into)] label: String,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional, into)] min_width: MaybeProp<f32>,
+    #[prop(optional, into)] max_width: MaybeProp<f32>,
+    #[prop(optional, into)] viewport_margin: MaybeProp<f32>,
+    #[prop(optional, into)] shadow_y: MaybeProp<f32>,
+    #[prop(optional, into)] shadow_blur: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] item_height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_end: MaybeProp<f32>,
+    #[prop(optional, into)] padding_start: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] shortcut_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] max_height: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional_no_strip, into)] option: Option<ScopedSlot<MenuItem>>,
+    #[prop(optional, into)] empty: Slot,
+    #[prop(optional, into)] before_options: Slot,
+    #[prop(optional, into)] after_options: Slot,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] footer: Slot,
+    #[prop(optional_no_strip, into)] submenu_icon: Option<IconData>,
     /// Layer of the menu this one is a submenu of.
     #[prop(optional)]
     parent_layer: Option<u64>,
 ) -> impl IntoView {
+    let label = ui_text(label, "menu.label", "Menu");
+    let submenu_icon_prop = submenu_icon;
+    let submenu_icon = ui_icon(submenu_icon, "menu.submenu", icons::CHEVRON_RIGHT);
+    let layer_class = Signal::derive(root_class("op-menu", class));
+    let layer_style = Signal::derive(root_style(
+        vec![
+            Metric::du("--op-menu-max-height", max_height),
+            Metric::du("--op-menu-min-width", min_width),
+            Metric::du("--op-menu-max-width", max_width),
+            Metric::du("--op-menu-viewport-margin", viewport_margin),
+            Metric::du("--op-menu-shadow-y", shadow_y),
+            Metric::du("--op-menu-shadow-blur", shadow_blur),
+            Metric::du("--op-menu-gap", gap),
+            Metric::du("--op-menu-item-height", item_height),
+            Metric::du("--op-menu-padding-end", padding_end),
+            Metric::du("--op-menu-padding-start", padding_start),
+            Metric::du("--op-menu-icon-size", icon_size),
+            Metric::tu("--op-menu-shortcut-font-size", shortcut_font_size),
+            Metric::du("--op-menu-padding-y", padding_y),
+            Metric::tu("--op-menu-font-size", font_size),
+            Metric::tu("--op-menu-line-height", line_height),
+        ],
+        style,
+    ));
+    let customization = StoredValue::new(MenuCustomization {
+        class,
+        style: layer_style.into(),
+        option,
+        empty,
+        before_options,
+        after_options,
+        header,
+        footer,
+        submenu_icon,
+        submenu_icon_prop,
+    });
     let menu = NodeRef::<leptos::html::Div>::new();
     let layer_id = new_layer_id();
     // Id of the item whose submenu is open.
@@ -176,16 +238,16 @@ pub fn Menu(
         }
     };
 
-    let label = StoredValue::new(label);
     view! {
                 <Popover
                     open=open
                     anchor=popover_anchor
                     placement=placement
                     dismiss_on_resize=true
-                    class="op-menu"
+                    class=layer_class
+                    style=layer_style
                     role="menu"
-                    label=label.get_value()
+                    aria_label=label
                     node_ref=menu
                     on_placed=focus_first
                     layer_id=Some(layer_id)
@@ -214,195 +276,38 @@ pub fn Menu(
                         }
                         on:contextmenu=|e| e.prevent_default()
                     >
+                        {customization.with_value(|c| c.header.run())}
+                        {customization.with_value(|c| c.before_options.run())}
                         <ScrollView viewport_class="op-menu-list op-scroll-contain">
+                        {items.with_value(Vec::is_empty).then(|| customization.with_value(|c| c.empty.run()))}
                         {items
                             .get_value()
                             .into_iter()
-                            .map(|item| menu_row(item, open, open_sub, layer_id, on_select))
+                            .map(|item| menu_row(item, open, open_sub, layer_id, on_select, customization))
                             .collect_view()}
                         </ScrollView>
+                        {customization.with_value(|c| c.after_options.run())}
+                        {customization.with_value(|c| c.footer.run())}
                     </div>
                 </Popover>
     }
 }
 
-/// One row of a [`Menu`]: a command, or an item that opens a submenu beside itself.
-fn menu_row(
-    item: MenuItem,
-    open: RwSignal<bool>,
-    open_sub: RwSignal<Option<String>>,
-    layer_id: u64,
-    on_select: Callback<String>,
-) -> AnyView {
-    let id = item.id.clone();
-    let enabled = item.enabled;
-    let has_sub = !item.children.is_empty();
-    let row = NodeRef::<leptos::html::Button>::new();
-    let sub_anchor = RwSignal::new(MenuAnchor::Point(0.0, 0.0));
-    let sub_open = RwSignal::new(false);
-    let show_sub = {
-        let id = id.clone();
-        move || {
-            if let Some(r) = row.get_untracked() {
-                let b = r.get_bounding_client_rect();
-                sub_anchor.set(MenuAnchor::Side(b.left(), b.top(), b.width(), b.height()));
-            }
-            open_sub.set(Some(id.clone()));
-        }
-    };
-    {
-        let id = id.clone();
-        Effect::new(move |_| sub_open.set(open_sub.with(|s| s.as_deref() == Some(id.as_str()))));
-    }
-    // Closing a submenu by itself (ArrowLeft) clears the open entry.
-    {
-        let id = id.clone();
-        Effect::new(move |_| {
-            if !sub_open.get() && open_sub.with_untracked(|s| s.as_deref() == Some(id.as_str())) {
-                open_sub.set(None);
-            }
-        });
-    }
-    // Picking in the submenu closes this menu too.
-    let pick_sub = Callback::new(move |picked: String| {
-        open.set(false);
-        on_select.run(picked);
-    });
-    let children = item.children;
-    let label = item.label.clone();
-    view! {
-        {item.separator.then(|| view! { <div class="op-menu-sep" role="separator"></div> })}
-        <button
-            node_ref=row
-            type="button"
-            role="menuitem"
-            class="op-rippled op-menu-item"
-            data-danger=item.danger.then_some("")
-            data-open=move || sub_open.get().then_some("")
-            aria-disabled=(!enabled).then_some("true")
-            aria-haspopup=has_sub.then_some("menu")
-            aria-expanded=move || has_sub.then(|| sub_open.get().to_string())
-            on:pointerdown=move |ev| {
-                if enabled {
-                    spawn_ripple(&ev);
-                }
-            }
-            on:pointerenter={
-                let show_sub = show_sub.clone();
-                move |_| {
-                    if has_sub && enabled {
-                        show_sub();
-                    } else {
-                        open_sub.set(None);
-                    }
-                }
-            }
-            on:keydown={
-                let show_sub = show_sub.clone();
-                move |e| {
-                    if has_sub && enabled && e.key() == "ArrowRight" {
-                        e.prevent_default();
-                        e.stop_propagation();
-                        show_sub();
-                    }
-                }
-            }
-            on:click=move |_| {
-                if !enabled {
-                    return;
-                }
-                if has_sub {
-                    show_sub();
-                } else {
-                    open.set(false);
-                    on_select.run(id.clone());
-                }
-            }
-        >
-            <span class="op-menu-icon">
-                {item.icon.map(|i| view! { <Icon icon=i size=dim::ICON_SMALL/> })}
-            </span>
-            <span class="op-menu-label">{item.label}</span>
-            {item.shortcut.map(|s| view! { <span class="op-menu-shortcut">{s}</span> })}
-            {has_sub.then(|| view! { <span class="op-menu-chevron"><Icon icon=icons::CHEVRON_RIGHT size=dim::ICON_SMALL/></span> })}
-        </button>
-        {has_sub.then(|| submenu(sub_open, sub_anchor, children, pick_sub, label, layer_id))}
-    }
-    .into_any()
+#[derive(Clone)]
+struct MenuCustomization {
+    class: MaybeProp<String>,
+    style: MaybeProp<String>,
+    option: Option<ScopedSlot<MenuItem>>,
+    empty: Slot,
+    before_options: Slot,
+    after_options: Slot,
+    header: Slot,
+    footer: Slot,
+    submenu_icon: Signal<IconData>,
+    submenu_icon_prop: Option<IconData>,
 }
 
-/// A nested [`Menu`]; boxed so the component can contain itself.
-fn submenu(
-    open: RwSignal<bool>,
-    anchor: RwSignal<MenuAnchor>,
-    items: Vec<MenuItem>,
-    on_select: Callback<String>,
-    label: String,
-    parent: u64,
-) -> AnyView {
-    view! { <Menu open=open anchor=anchor.into() items=items on_select=on_select label=label parent_layer=parent/> }
-        .into_any()
-}
-
-/// Icon button that opens a [`Menu`] under itself; the overflow (⋮) menu.
-#[component]
-pub fn MenuButton(
-    items: Vec<MenuItem>,
-    on_select: Callback<String>,
-    #[prop(default = icons::MORE_VERT)] icon: IconData,
-    #[prop(default = "More actions".into(), into)] label: String,
-    /// Button size in DU.
-    #[prop(default = dim::ROW_COMPACT)]
-    size: f32,
-) -> impl IntoView {
-    let open = RwSignal::new(false);
-    let host = NodeRef::<leptos::html::Span>::new();
-    let anchor = RwSignal::new(MenuAnchor::Point(0.0, 0.0));
-    // The window listener closes an open menu on the same press, so remember the state at press time.
-    let open_at_press = StoredValue::new(false);
-    let toggle = Callback::new(move |()| {
-        if let Some(h) = host.try_get_untracked().flatten() {
-            let r = h.get_bounding_client_rect();
-            anchor.set(MenuAnchor::Below(r.left(), r.top(), r.width(), r.height()));
-        }
-        open.set(!open_at_press.get_value());
-        open_at_press.set_value(false);
-    });
-    let state = Signal::derive(move || open.get().then_some(ControlState::Selected));
-    view! {
-        <span
-            node_ref=host
-            class="op-menu-anchor"
-            aria-haspopup="menu"
-            aria-expanded=move || open.get().to_string()
-            on:pointerdown=move |_| open_at_press.set_value(open.get_untracked())
-        >
-            <IconButton icon=icon label=label.clone() size=size state=state on_click=toggle/>
-        </span>
-        <Menu open=open anchor=anchor.into() items=items on_select=on_select label=label/>
-    }
-}
-
-/// Area that opens a [`Menu`] on right click or touch long press.
-#[component]
-pub fn ContextMenu(
-    items: Vec<MenuItem>,
-    on_select: Callback<String>,
-    children: Children,
-) -> impl IntoView {
-    let open = RwSignal::new(false);
-    let anchor = RwSignal::new(MenuAnchor::Point(0.0, 0.0));
-    view! {
-        <div
-            class="op-context-area"
-            on:contextmenu=move |e| {
-                e.prevent_default();
-                anchor.set(MenuAnchor::Point(f64::from(e.client_x()), f64::from(e.client_y())));
-                open.set(true);
-            }
-        >
-            {children()}
-        </div>
-        <Menu open=open anchor=anchor.into() items=items on_select=on_select label="Context menu"/>
-    }
-}
+mod rows;
+use rows::menu_row;
+mod triggers;
+pub use triggers::{ContextMenu, ContextMenuProps, MenuButton, MenuButtonProps};

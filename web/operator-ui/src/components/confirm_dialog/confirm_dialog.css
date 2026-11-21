@@ -1,4 +1,25 @@
 /* ------------------------------------------------------------------ */
 /* ConfirmDialog                                                       */
 /* ------------------------------------------------------------------ */
-.op-dialog-message { color: var(--op-text-secondary); }
+.op-dialog-message { color: var(--op-confirm-dialog-text, var(--op-text-secondary)); }
+
+.op-confirm-dialog .op-dialog-message { font-size: var(--op-confirm-dialog-font-size, var(--op-type-body-size)); line-height: var(--op-confirm-dialog-line-height, var(--op-type-body-line)); }
+.op-confirm-dialog {
+  --op-dialog-padding: var(--op-confirm-dialog-padding, var(--op-dim-margin-screen));
+  --op-dialog-header-padding: var(--op-confirm-dialog-header-padding, var(--op-dim-gutter));
+  --op-dialog-title-font-size: var(--op-confirm-dialog-title-font-size, var(--op-type-screen-title-size));
+  --op-dialog-title-line-height: var(--op-confirm-dialog-title-line-height, var(--op-type-screen-title-line));
+  --op-dialog-gap: var(--op-confirm-dialog-gap, var(--op-dim-pad-card));
+  --op-dialog-button-height: var(--op-confirm-dialog-button-height, var(--op-dim-row-compact));
+  --op-dialog-min-width: var(--op-confirm-dialog-width, calc(var(--op-du) * 75));
+  --op-dialog-max-width: var(--op-confirm-dialog-width, calc(var(--op-du) * 75));
+  --op-dialog-text: var(--op-confirm-dialog-title-text, var(--op-text-primary));
+  --op-dialog-background: var(--op-confirm-dialog-background, var(--op-surface));
+  --op-dialog-divider: var(--op-confirm-dialog-divider, var(--op-divider));
+  --op-dialog-scrim: var(--op-confirm-dialog-scrim, rgb(0 0 0 / 55%));
+  --op-dialog-max-height: var(--op-confirm-dialog-max-height, calc(100vh - var(--op-confirm-dialog-padding, var(--op-dim-margin-screen)) * 2));
+  --op-dialog-border: var(--op-confirm-dialog-border, var(--op-border));
+  --op-dialog-pending: var(--op-confirm-dialog-pending, var(--op-pending));
+  --op-dialog-success: var(--op-confirm-dialog-success, var(--op-success));
+  --op-dialog-error: var(--op-confirm-dialog-error, var(--op-error));
+}

@@ -1,14 +1,53 @@
 /* ------------------------------------------------------------------ */
 /* Pagination                                                          */
 /* ------------------------------------------------------------------ */
-.op-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-dim-pad-tight); }
-.op-page { display: grid; place-items: center; min-width: var(--op-dim-row-compact); height: var(--op-dim-row-compact); padding: 0 var(--op-dim-pad-tight); background-color: var(--op-surface); color: var(--op-text-primary); font-variant-numeric: tabular-nums; }
+.op-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--op-pagination-gap, var(--op-dim-pad-tight));
+}
+.op-page {
+  display: grid;
+  place-items: center;
+  min-width: var(--op-pagination-page-size, var(--op-dim-row-compact));
+  height: var(--op-pagination-page-size, var(--op-dim-row-compact));
+  padding: 0 var(--op-pagination-page-padding-x, var(--op-dim-pad-tight));
+  background-color: var(--op-pagination-page-background, var(--op-surface));
+  color: var(--op-pagination-page-text, var(--op-text-primary));
+  font-variant-numeric: tabular-nums;
+}
 
 /* Current page: an editable field styled as the selected page. */
-.op-page-input { border: none; background-color: var(--op-selection); color: var(--op-accent); font: inherit; font-weight: 700; text-align: center; cursor: text; }
+.op-page-input {
+  border: none;
+  background-color: var(--op-pagination-current-background, var(--op-selection));
+  color: var(--op-pagination-current-text, var(--op-accent));
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  cursor: text;
+}
 .op-root .op-page-input:focus-visible { outline: none; }
-.op-page-input[data-state="focused"] { background-color: var(--op-surface); color: var(--op-text-primary); }
-.op-page-input::selection { background-color: var(--op-selection); color: var(--op-accent); }
+.op-page-input[data-state="focused"] {
+  background-color: var(--op-pagination-page-background, var(--op-surface));
+  color: var(--op-pagination-page-text, var(--op-text-primary));
+}
+.op-page-input::selection {
+  background-color: var(--op-pagination-current-background, var(--op-selection));
+  color: var(--op-pagination-current-text, var(--op-accent));
+}
 
-.op-page-gap { min-width: var(--op-dim-row-compact); text-align: center; color: var(--op-text-secondary); }
-.op-page-compact { display: inline-flex; align-items: center; gap: var(--op-dim-pad-small); padding: 0 var(--op-dim-pad-tight); color: var(--op-text-secondary); font-variant-numeric: tabular-nums; }
+.op-page-gap {
+  min-width: var(--op-pagination-page-size, var(--op-dim-row-compact));
+  text-align: center;
+  color: var(--op-pagination-gap-text, var(--op-text-secondary));
+}
+.op-page-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--op-pagination-compact-gap, var(--op-dim-pad-small));
+  padding: 0 var(--op-pagination-compact-padding-x, var(--op-dim-pad-tight));
+  color: var(--op-pagination-compact-text, var(--op-text-secondary));
+  font-variant-numeric: tabular-nums;
+}

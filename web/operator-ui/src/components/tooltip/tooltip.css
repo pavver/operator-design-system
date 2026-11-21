@@ -3,13 +3,13 @@
   position: fixed;
   z-index: 60;
   width: max-content;
-  padding: var(--op-dim-pad-tight) var(--op-dim-gutter);
+  padding: var(--op-tooltip-padding-y, var(--op-dim-pad-tight)) var(--op-tooltip-padding-x, var(--op-dim-gutter));
   /* Raised layer, like Menu: sunken fill, strong outline and a drop shadow separate it from the page. */
-  background-color: var(--op-surface-alt);
+  background-color: var(--op-tooltip-background, var(--op-surface-alt));
   box-shadow:
-    inset 0 0 0 var(--op-dim-border) var(--op-border-strong),
-    0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
-  color: var(--op-text-primary);
+    inset 0 0 0 var(--op-dim-border) var(--op-tooltip-border, var(--op-border-strong)),
+    0 var(--op-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-tooltip-shadow, rgb(0 0 0 / 35%));
+  color: var(--op-tooltip-text, var(--op-text-primary));
   white-space: normal;
   overflow-wrap: anywhere;
   display: -webkit-box;
@@ -19,3 +19,5 @@
   pointer-events: none;
 }
 
+.op-tooltip { font-size: var(--op-tooltip-font-size, var(--op-type-caption-size)); line-height: var(--op-tooltip-line-height, var(--op-type-caption-line)); --op-popover-gap: var(--op-tooltip-offset, calc(var(--op-du) * 1.5)); }
+.op-tooltip-content { max-width: var(--op-tooltip-max-width, calc(var(--op-du) * 75)); }

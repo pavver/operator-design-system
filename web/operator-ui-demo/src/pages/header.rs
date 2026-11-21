@@ -24,6 +24,22 @@ pub fn header() -> AnyView {
                 />
             </div>
         </Example>
+        <Example title="Customization" note="Custom metrics, colors via CSS variables, translated strings and replaceable icons." block=true>
+            <div class="demo-stack">
+                <Header
+                    title="Custom Header"
+                    subtitle="Custom height and back label"
+                    height=16.0
+                    back_label="Go back"
+                    on_back=Callback::new(move |()| b.log("[UI] custom back"))
+                    actions=Slot::from(move || {
+                        view! {
+                            <IconButton icon=icons::REFRESH label="Refresh" on_click=Callback::new(move |()| b.log("[UI] refresh"))/>
+                        }
+                    })
+                />
+            </div>
+        </Example>
     }
     .into_any()
 }

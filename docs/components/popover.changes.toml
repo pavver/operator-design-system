@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`offset_x`, `offset_y`, `gap`), `--op-popover-*` metric and color variables, slots (`header`, `actions`, `footer`), translatable strings."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`offset_x`, `offset_y`, `gap`), змінні розмірів і кольорів `--op-popover-*`, слоти (`header`, `actions`, `footer`), перекладні тексти."
+
+[[change]]
 date = "2026-11-20T16:34:36+02:00"
 status = "draft"
 commit = "014dff3"

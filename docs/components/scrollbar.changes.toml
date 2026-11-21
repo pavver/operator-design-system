@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`height`, `max_height`, `track_size`, `thumb_thickness`), color variables (`--op-scrollbar-thumb-color`, `--op-scrollbar-thumb-hover-color`, `--op-scrollbar-thumb-active-color`, `--op-scrollbar-track-hover-background`, `--op-scrollbar-track-active-background`, `--op-scrollbar-divider-color`), slots (`header`, `footer`), and translatable `label` string."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `max_height`, `track_size`, `thumb_thickness`), змінні кольорів (`--op-scrollbar-thumb-color`, `--op-scrollbar-thumb-hover-color`, `--op-scrollbar-thumb-active-color`, `--op-scrollbar-track-hover-background`, `--op-scrollbar-track-active-background`, `--op-scrollbar-divider-color`), слоти (`header`, `footer`) та перекладний рядок `label`."
+
+[[change]]
 date = "2026-11-11T21:05:07+02:00"
 status = "approved"
 commit = "8a5ac46"

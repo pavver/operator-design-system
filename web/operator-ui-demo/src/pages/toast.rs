@@ -1,5 +1,6 @@
 //! Live examples for toast.
 
+use crate::i18n::l;
 use crate::kit::{Example, backend, instant};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -53,6 +54,7 @@ pub fn toast() -> AnyView {
             view! { <ActionButton text=p.as_str() on_click=place/> }
         })
         .collect_view();
+    let preview_visible = RwSignal::new(true);
     view! {
         <Example title="Position" note="Set on ToastHost or at runtime with set_position. Top stacks put the newest toast nearest the edge.">
             {positions}
@@ -80,6 +82,35 @@ pub fn toast() -> AnyView {
         <Example title="Reporting an async result" note="The control shows its own result; the toast carries the error message the control cannot show.">
             <ActionButton text="Push preset" on_click=failing/>
         </Example>
+        <Example title="Customization" block=true>
+            <ToastHost width=115.0 gap=3.0 viewport_margin=6.0 label=l("Device notifications", "Сповіщення пристрою")
+                dismiss_label=l("Dismiss message", "Закрити повідомлення")
+                footer=move || view! { <small>{l("Device notification", "Сповіщення пристрою")}</small> }
+                style="--op-toast-background: var(--op-surface-alt);"
+            >
+                <CustomToastTrigger/>
+            </ToastHost>
+            <ActionButton text=l("Show preview", "Показати перегляд") on_click=instant(move || preview_visible.set(true))/>
+            <Show when=move || preview_visible.get()>
+            <Toast spec=ToastSpec::new(Tone::Info, "A preview with custom spacing")
+                on_dismiss=Callback::new(move |()| preview_visible.set(false)) padding_start=5.0 gap=3.0 icon_size=6.0
+                dismiss_label=l("Dismiss preview", "Закрити перегляд")
+                header=move || view! { <strong>{l("Preview", "Перегляд")}</strong> }
+                footer=move || view! { <small>{l("Inline notification preview", "Вбудований перегляд сповіщення")}</small> }
+            />
+            </Show>
+        </Example>
     }
     .into_any()
+}
+
+#[component]
+fn CustomToastTrigger() -> impl IntoView {
+    let toaster = use_toaster();
+    let message = l("Settings saved", "Налаштування збережено");
+    view! {
+        <ActionButton text=l("Show custom notification", "Показати власне сповіщення") on_click=instant(move || {
+            if let Some(t) = toaster { t.message(Tone::Success, message.get_untracked()); }
+        })/>
+    }
 }

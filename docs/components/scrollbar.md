@@ -66,8 +66,13 @@ Horizontal strips that hide their scrollbar on purpose, such as [Tabs](tabs.md) 
 | `viewport_class` | string | none | Classes for the scrolled element (padding, gap, layout). |
 | `height` | DU | none | Fixed height. |
 | `max_height` | DU | none | Maximum height. |
+| `track_size` | DU | `gutter` | Size of the track hit area. |
+| `thumb_thickness` | DU | `pad_tight` | Idle thickness of the thumb. |
 | `node_ref` | node ref | none | Reference to the scrolled element for programmatic scrolling. |
 | `focusable` | bool | `false` | Makes the scrolled element focusable for keyboard scrolling. |
+| `label` | string | `scroll-view.label` | Accessible name when focusable. |
+| `header` | slot | none | Fixed content before the scrolled viewport. |
+| `footer` | slot | none | Fixed content after the scrolled viewport. |
 | `children` | view | required | Content. |
 
 ### Scrollbar
@@ -77,5 +82,42 @@ Horizontal strips that hide their scrollbar on purpose, such as [Tabs](tabs.md) 
 | `target` | node ref | required | The scrolling element; it must carry the `op-scroll-native-off` class. |
 | `axis` | `ScrollAxis` | `Vertical` | Axis of this bar. |
 | `corner` | bool | `false` | Leaves room for the crossing bar. |
+| `track_size` | DU | `gutter` | Size of the track hit area. |
+| `thumb_thickness` | DU | `pad_tight` | Idle thickness of the thumb. |
 
 Place `Scrollbar` next to the target inside a positioned parent.
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-scrollbar-height` | none |
+| `max_height` | DU | `--op-scrollbar-max-height` | `100%` |
+| `track_size` | DU | `--op-scrollbar-track-size` | `gutter` |
+| `thumb_thickness` | DU | `--op-scrollbar-thumb-thickness` | `pad_tight` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-scrollbar-thumb-color` | `border_strong` |
+| `--op-scrollbar-thumb-hover-color` | `text_secondary` |
+| `--op-scrollbar-thumb-active-color` | `accent` |
+| `--op-scrollbar-track-hover-background` | `surface_alt` |
+| `--op-scrollbar-track-active-background` | `surface_alt` |
+| `--op-scrollbar-divider-color` | `divider` |
+
+| Slot | Place |
+| :--- | :--- |
+| `header` | Fixed content before the scrolled viewport in ScrollView. |
+| `footer` | Fixed content after the scrolled viewport in ScrollView. |
+
+`class` and `style` apply to the root element (`op-scrollbar` on Scrollbar, `op-scrollview` on ScrollView).
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `scroll-view.label` | `""` |
+
+### Icons
+
+Scrollbar has no built-in semantic icons.

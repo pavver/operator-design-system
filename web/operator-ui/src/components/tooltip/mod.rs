@@ -2,7 +2,7 @@
 
 use crate::components::popover::{Placement, Popover, PopoverAnchor};
 use crate::core::overlay::event_inside;
-use crate::core::{JobToken, du};
+use crate::core::{JobToken, Metric, Slot, root_class, root_style, ui_text};
 use leptos::ev;
 use leptos::prelude::*;
 use std::time::Duration;
@@ -41,8 +41,35 @@ pub fn Tooltip(
     #[prop(default = tooltip::SHOW_DELAY_MS)]
     delay_ms: u32,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
+    #[prop(optional, into)] padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] shadow_y: MaybeProp<f32>,
+    #[prop(optional, into)] shadow_blur: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] offset: MaybeProp<f32>,
+    #[prop(optional, into)] max_width: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] content: Slot,
     children: Children,
 ) -> impl IntoView {
+    let text = ui_text(text.into(), "tooltip.text", "");
+    let layer_class = Signal::derive(root_class("op-tooltip op-t-caption", class));
+    let layer_style = Signal::derive(root_style(
+        vec![
+            Metric::du("--op-tooltip-padding-y", padding_y),
+            Metric::du("--op-tooltip-padding-x", padding_x),
+            Metric::du("--op-tooltip-shadow-y", shadow_y),
+            Metric::du("--op-tooltip-shadow-blur", shadow_blur),
+            Metric::tu("--op-tooltip-font-size", font_size),
+            Metric::tu("--op-tooltip-line-height", line_height),
+            Metric::du("--op-tooltip-offset", offset),
+            Metric::du("--op-tooltip-max-width", max_width),
+        ],
+        style,
+    ));
+    let content = StoredValue::new(content);
     let host = NodeRef::<leptos::html::Span>::new();
     let open = RwSignal::new(false);
     let anchor = RwSignal::new(PopoverAnchor::Point { x: 0.0, y: 0.0 });
@@ -51,7 +78,9 @@ pub fn Tooltip(
     let long_pressed = StoredValue::new(false);
 
     let show = move || {
-        if !enabled.get_untracked() || text.with_untracked(String::is_empty) {
+        if !enabled.get_untracked()
+            || (text.with_untracked(String::is_empty) && !content.with_value(Slot::is_set))
+        {
             return;
         }
         show_job.next();
@@ -162,14 +191,14 @@ pub fn Tooltip(
                 open=open
                 anchor=anchor
                 placement=Placement::Above
-                gap=tooltip::GAP_DU
                 passive=true
                 dismiss_on_outside=false
                 restore_focus=false
-                class="op-tooltip op-t-caption"
+                class=layer_class
+                style=layer_style
                 role="tooltip"
             >
-                <div style:max-width=du(tooltip::MAX_WIDTH_DU)>{move || text.get()}</div>
+                <div class="op-tooltip-content">{move || if content.with_value(Slot::is_set) { content.with_value(Slot::run).into_any() } else { text.get().into_any() }}</div>
             </Popover>
         </span>
     }

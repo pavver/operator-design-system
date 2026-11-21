@@ -27,6 +27,7 @@ pub fn split_pane() -> AnyView {
         }
     });
     let (list2, detail2) = (list.clone(), detail.clone());
+    let (list3, detail3) = (list.clone(), detail.clone());
     view! {
         <Example title="Horizontal" note="Drag the divider, use the arrow keys when it is focused, or double-click to reset." block=true>
             <div class="demo-split-box">
@@ -37,6 +38,17 @@ pub fn split_pane() -> AnyView {
         <Example title="Vertical" block=true>
             <div class="demo-split-box demo-split-tall">
                 <SplitPane start=detail2 end=list2 vertical=true/>
+            </div>
+        </Example>
+        <Example title="Customization" note="Custom handle size, custom label, and custom grip slot." block=true>
+            <div class="demo-split-box">
+                <SplitPane
+                    start=list3
+                    end=detail3
+                    handle_size=3.0
+                    label="Custom divider"
+                    grip=Slot::from(move || view! { <span class="demo-muted">"⋮"</span> })
+                />
             </div>
         </Example>
     }
