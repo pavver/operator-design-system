@@ -1,13 +1,18 @@
 //! Stepper control: Stepper.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, JobToken, PendingRun, Press, du, sleep_ms, spawn_ripple,
-    use_pending_indicator, use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, root_class, root_style,
+    sleep_ms, spawn_ripple, ui_icon, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{dim, icons, motion};
+use operator_ui_tokens::{Icon as IconData, icons, motion};
+
+mod visuals;
+use visuals::{pending as pending_indicator, symbol};
+
+const ICON_SIZE: &str = "var(--op-stepper-icon-size, var(--op-dim-icon-small))";
+const SPINNER_SIZE: &str = "var(--op-stepper-spinner-size, calc(var(--op-du) * 3))";
 
 pub(crate) const CSS: &str = include_str!("stepper.css");
 
@@ -23,10 +28,48 @@ pub fn Stepper(
     /// Async commit; the value is updated only on success.
     #[prop(optional, into)]
     on_async_change: Option<AsyncAction<i32>>,
-    /// Width in DU.
-    #[prop(default = 35.0)]
-    width: f32,
+    #[prop(optional, into)] width: MaybeProp<f32>,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] button_size: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] content: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] success_label: MaybeProp<String>,
+    #[prop(optional)] success_icon: Option<IconData>,
+    #[prop(optional, into)] error_label: MaybeProp<String>,
+    #[prop(optional)] error_icon: Option<IconData>,
+    #[prop(optional, into)] increase_label: MaybeProp<String>,
+    #[prop(optional)] increase_icon: Option<IconData>,
+    #[prop(optional, into)] decrease_label: MaybeProp<String>,
+    #[prop(optional)] decrease_icon: Option<IconData>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "stepper.loading", "Loading");
+    let success_label = ui_text(success_label, "stepper.success", "Success");
+    let success_icon = ui_icon(success_icon, "stepper.success", icons::CHECK);
+    let error_label = ui_text(error_label, "stepper.error", "Error");
+    let error_icon = ui_icon(error_icon, "stepper.error", icons::CLOSE);
+    let increase_label = ui_text(increase_label, "stepper.increase", "Increase");
+    let increase_icon = ui_icon(increase_icon, "stepper.increase", icons::ADD);
+    let decrease_label = ui_text(decrease_label, "stepper.decrease", "Decrease");
+    let decrease_icon = ui_icon(decrease_icon, "stepper.decrease", icons::REMOVE);
+
+    let root_metrics = vec![
+        Metric::du("--op-stepper-spinner-stroke", spinner_stroke),
+        Metric::du("--op-stepper-width", width),
+        Metric::du("--op-stepper-height", height),
+        Metric::du("--op-stepper-button-size", button_size),
+        Metric::du("--op-stepper-icon-size", icon_size),
+        Metric::du("--op-stepper-spinner-size", spinner_size),
+        Metric::tu("--op-stepper-font-size", font_size),
+        Metric::tu("--op-stepper-line-height", line_height),
+    ];
+
     let local = RwSignal::new(ControlState::Idle);
     let pending = RwSignal::new(false);
     let direction = RwSignal::new(None::<bool>);
@@ -98,15 +141,15 @@ pub fn Stepper(
         let mine = move || direction.get() == Some(increment);
         let show_spinner = use_pending_indicator(move || mine() && pending.get());
         let (icon, label) = if increment {
-            (icons::ADD, "Increase")
+            (increase_icon, increase_label)
         } else {
-            (icons::REMOVE, "Decrease")
+            (decrease_icon, decrease_label)
         };
         view! {
             <button
                 type="button"
                 class="op-rippled op-stepper-btn"
-                aria-label=label
+                aria-label=move || label.get()
                 aria-disabled=move || (!allowed.get()).then_some("true")
                 data-pressed=move || press.pressed.get().then_some("")
                 data-muted=move || disabled_visual().then_some("")
@@ -133,13 +176,13 @@ pub fn Stepper(
                 >
                     {move || {
                         if show_spinner.get() {
-                            view! { <PendingIndicator size=3.0/> }.into_any()
+                            pending_indicator(SPINNER_SIZE, loading_label)
                         } else if mine() && current.get() == ControlState::Success {
-                            view! { <Icon icon=icons::CHECK size=dim::ICON_SMALL label="Success"/> }.into_any()
+                            symbol(success_icon, ICON_SIZE, Some(success_label))
                         } else if mine() && current.get() == ControlState::Error {
-                            view! { <Icon icon=icons::CLOSE size=dim::ICON_SMALL label="Error"/> }.into_any()
+                            symbol(error_icon, ICON_SIZE, Some(error_label))
                         } else {
-                            view! { <Icon icon=icon size=dim::ICON_SMALL/> }.into_any()
+                            symbol(icon, ICON_SIZE, None)
                         }
                     }}
                 </span>
@@ -149,15 +192,15 @@ pub fn Stepper(
 
     view! {
         <div
-            class="op-sb op-stepper"
-            style:width=du(width)
+            class=root_class("op-sb op-stepper", class)
+            style=root_style(root_metrics, style)
             data-state=move || visual.state.get()
             data-result=move || visual.result.get()
             data-fading=move || visual.fading.get().then_some("")
         >
             {button(false)}
             <div class="op-stepper-value" data-disabled=move || (!enabled.get()).then_some("")>
-                {move || value.get()}
+                {move || if content.is_set() { content.run().into_any() } else { value.get().into_any() }}
             </div>
             {button(true)}
             <PendingRun/>

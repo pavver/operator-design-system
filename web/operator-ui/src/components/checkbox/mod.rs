@@ -1,12 +1,18 @@
 //! Checkbox: AsyncCheckbox.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, JobToken, PendingRun, Press, mirrored, run_toggle, spawn_ripple,
-    use_pending_indicator, use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, mirrored, root_class,
+    root_style, run_toggle, spawn_ripple, ui_icon, ui_text, use_pending_indicator,
+    use_state_visual,
 };
 use leptos::prelude::*;
-use operator_ui_tokens::icons;
+use operator_ui_tokens::{Icon as IconData, icons};
+
+mod visuals;
+use visuals::{pending, symbol};
+
+const ICON_SIZE: &str = "var(--op-checkbox-icon-size, calc(var(--op-du) * 3.5))";
+const SPINNER_SIZE: &str = "var(--op-checkbox-spinner-size, calc(var(--op-du) * 3))";
 
 pub(crate) const CSS: &str = include_str!("checkbox.css");
 
@@ -18,7 +24,39 @@ pub fn AsyncCheckbox(
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] on_change: Option<AsyncAction<bool>>,
+    #[prop(optional, into)] size: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] label_slot: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional)] checked_icon: Option<IconData>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "checkbox.loading", "Loading");
+    let label = ui_text(label, "checkbox.label", "Checkbox");
+    let checked_icon = ui_icon(checked_icon, "checkbox.checked", icons::CHECK);
+
+    let root_metrics = vec![
+        Metric::du("--op-checkbox-spinner-stroke", spinner_stroke),
+        Metric::du("--op-checkbox-size", size),
+        Metric::du("--op-checkbox-gap", gap),
+        Metric::du("--op-checkbox-padding-x", padding_x),
+        Metric::du("--op-checkbox-padding-y", padding_y),
+        Metric::du("--op-checkbox-icon-size", icon_size),
+        Metric::du("--op-checkbox-spinner-size", spinner_size),
+        Metric::tu("--op-checkbox-font-size", font_size),
+        Metric::tu("--op-checkbox-line-height", line_height),
+    ];
+
+    let has_label_slot = label_slot.is_set();
     let local = RwSignal::new(ControlState::Idle);
     let value = mirrored(checked);
     let job = JobToken::new();
@@ -65,7 +103,9 @@ pub fn AsyncCheckbox(
         <button
             type="button"
             role="checkbox"
-            class="op-rippled op-checkbox"
+            class=root_class("op-rippled op-checkbox", class)
+            style=root_style(root_metrics, style)
+            aria-label=move || if text.is_none() && !has_label_slot { Some(label.get()) } else { None }
             aria-checked=move || value.get().to_string()
             aria-busy=move || (current.get() == ControlState::Pending).then_some("true")
             aria-disabled=move || (!clickable()).then_some("true")
@@ -100,9 +140,9 @@ pub fn AsyncCheckbox(
                 >
                     {move || {
                         if show_spinner.get() {
-                            view! { <PendingIndicator size=3.0/> }.into_any()
+                            pending(SPINNER_SIZE, loading_label)
                         } else if value.get() {
-                            view! { <Icon icon=icons::CHECK size=3.5/> }.into_any()
+                            symbol(checked_icon, ICON_SIZE, None)
                         } else {
                             ().into_any()
                         }
@@ -110,7 +150,7 @@ pub fn AsyncCheckbox(
                 </span>
                 <PendingRun/>
             </span>
-            {text.map(|t| view! { <span class="op-checkbox-text">{move || t.get()}</span> })}
+            {if label_slot.is_set() { label_slot.run() } else { text.map(|t| view! { <span class="op-checkbox-text">{move || t.get()}</span> }.into_any()) }}
         </button>
     }
 }

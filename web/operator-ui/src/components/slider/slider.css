@@ -1,67 +1,88 @@
 /* ------------------------------------------------------------------ */
 /* Slider                                                              */
 /* ------------------------------------------------------------------ */
-.op-slider { position: relative; width: 100%; height: var(--op-dim-row-compact); touch-action: none; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.op-slider { position: relative; width: var(--op-slider-width, 100%); height: var(--op-slider-height, var(--op-dim-row-compact)); touch-action: none; cursor: pointer; user-select: none; -webkit-user-select: none; }
 .op-slider[data-disabled] { cursor: default; }
 .op-root .op-slider:focus-visible { outline: none; }
-.op-slider:focus-visible .op-slider-thumb { outline: var(--op-dim-border-thick) solid var(--op-accent); outline-offset: var(--op-dim-gap-micro); }
-.op-slider-rail { position: absolute; inset: 0 calc(var(--op-du) * 3); }
+.op-slider:focus-visible .op-slider-thumb { outline: var(--op-slider-focus-width, var(--op-dim-border-thick)) solid var(--op-slider-accent, var(--op-accent)); outline-offset: var(--op-slider-focus-offset, var(--op-dim-gap-micro)); }
+.op-slider-rail { position: absolute; inset: 0 var(--op-slider-rail-inset, calc(var(--op-du) * 3)); }
 .op-slider-track {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% - var(--op-du));
-  height: calc(var(--op-du) * 2);
-  background-color: var(--op-surface);
+  top: calc(50% - var(--op-slider-track-height, calc(var(--op-du) * 2)) / 2);
+  height: var(--op-slider-track-height, calc(var(--op-du) * 2));
+  background-color: var(--op-slider-background, var(--op-surface));
 }
-.op-slider-fill { position: absolute; left: 0; top: 0; bottom: 0; background-color: color-mix(in srgb, var(--op-accent) 35%, transparent); }
+.op-slider-fill { position: absolute; left: 0; top: 0; bottom: 0; background-color: color-mix(in srgb, var(--op-slider-accent, var(--op-accent)) 35%, transparent); }
 /* Smooth jumps (track clicks, error rollback); disabled while dragging. */
 .op-slider:not([data-dragging]) .op-slider-fill { transition: width var(--op-motion-segment-slide) var(--op-ease-standard); }
 .op-slider:not([data-dragging]) .op-slider-thumb-slot { transition: left var(--op-motion-segment-slide) var(--op-ease-standard); }
-.op-slider[data-disabled] .op-slider-fill { background-color: var(--op-text-disabled); }
+.op-slider[data-disabled] .op-slider-fill { background-color: var(--op-slider-disabled-text, var(--op-text-disabled)); }
 .op-slider-tick {
   position: absolute;
   top: 50%;
-  width: var(--op-dim-pad-tight);
-  height: var(--op-dim-pad-tight);
+  width: var(--op-slider-tick-size, var(--op-dim-pad-tight));
+  height: var(--op-slider-tick-size, var(--op-dim-pad-tight));
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background-color: color-mix(in srgb, var(--op-border) 70%, transparent);
+  background-color: color-mix(in srgb, var(--op-slider-border, var(--op-border)) 70%, transparent);
 }
-.op-slider-tick[data-filled] { background-color: var(--op-accent); }
-.op-slider[data-disabled] .op-slider-tick { background-color: color-mix(in srgb, var(--op-text-disabled) 40%, transparent); }
-.op-slider[data-disabled] .op-slider-tick[data-filled] { background-color: color-mix(in srgb, var(--op-text-disabled) 60%, transparent); }
+.op-slider-tick[data-filled] { background-color: var(--op-slider-accent, var(--op-accent)); }
+.op-slider[data-disabled] .op-slider-tick { background-color: color-mix(in srgb, var(--op-slider-disabled-text, var(--op-text-disabled)) 40%, transparent); }
+.op-slider[data-disabled] .op-slider-tick[data-filled] { background-color: color-mix(in srgb, var(--op-slider-disabled-text, var(--op-text-disabled)) 60%, transparent); }
 .op-slider-thumb-slot { position: absolute; top: 50%; width: 0; height: 0; z-index: 2; }
 .op-slider-thumb {
-  --sb-rx: calc(var(--op-du) * 3);
+  --sb-rx: calc(var(--op-slider-thumb-size, var(--op-dim-icon-large)) / 2);
   position: absolute;
-  left: calc(var(--op-du) * -3);
-  top: calc(var(--op-du) * -3);
-  width: var(--op-dim-icon-large);
-  height: var(--op-dim-icon-large);
+  left: calc(var(--op-slider-thumb-size, var(--op-dim-icon-large)) / -2);
+  top: calc(var(--op-slider-thumb-size, var(--op-dim-icon-large)) / -2);
+  width: var(--op-slider-thumb-size, var(--op-dim-icon-large));
+  height: var(--op-slider-thumb-size, var(--op-dim-icon-large));
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background-color: var(--op-surface);
+  background-color: var(--op-slider-background, var(--op-surface));
 }
-.op-slider[data-disabled] .op-slider-thumb { background-color: var(--op-disabled-surface); }
-.op-slider-thumb-content { --tone-base: var(--op-accent); }
-.op-slider[data-disabled] .op-slider-thumb-content { --tone-base: var(--op-text-disabled); }
-.op-slider-dot { display: block; width: var(--op-dim-pad-small); height: var(--op-dim-pad-small); border-radius: 50%; background: currentColor; }
+.op-slider[data-disabled] .op-slider-thumb { background-color: var(--op-slider-disabled-background, var(--op-disabled-surface)); }
+.op-slider-thumb-content { --tone-base: var(--op-slider-accent, var(--op-accent)); }
+.op-slider[data-disabled] .op-slider-thumb-content { --tone-base: var(--op-slider-disabled-text, var(--op-text-disabled)); }
+.op-slider-dot { display: block; width: var(--op-slider-dot-size, var(--op-dim-pad-small)); height: var(--op-slider-dot-size, var(--op-dim-pad-small)); border-radius: 50%; background: currentColor; }
 .op-slider-tooltip {
   position: absolute;
-  top: calc(var(--op-du) * -10);
+  top: calc(var(--op-slider-tooltip-offset, calc(var(--op-du) * 10)) * -1);
   left: 0;
   transform: translateX(-50%);
-  padding: var(--op-dim-gap-micro) var(--op-dim-pad-small);
-  background-color: var(--op-surface);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
-  color: var(--op-text-primary);
-  font-size: var(--op-type-caption-size);
-  line-height: var(--op-type-caption-line);
+  padding: var(--op-slider-tooltip-padding-y, var(--op-dim-gap-micro)) var(--op-slider-tooltip-padding-x, var(--op-dim-pad-small));
+  background-color: var(--op-slider-background, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-slider-border, var(--op-border));
+  color: var(--op-slider-text, var(--op-text-primary));
+  font-size: var(--op-slider-font-size, var(--op-type-caption-size));
+  line-height: var(--op-slider-line-height, var(--op-type-caption-line));
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
   font-variant-numeric: tabular-nums;
 }
 
+
+/* Family hooks for shared state visuals. */
+.op-slider .op-slider-track { --sb-base: var(--op-slider-border, var(--op-border)); }
+.op-slider .op-slider-track[data-state="pressed"] { --sb-base: var(--op-slider-emphasis-border, var(--op-border-strong)); }
+.op-slider .op-slider-track[data-state="disabled"] { --sb-base: var(--op-slider-disabled-border, var(--op-disabled-border)); }
+.op-slider .op-slider-track[data-state="selected"], .op-slider .op-slider-track[data-state="focused"] { --sb-base: var(--op-slider-accent, var(--op-accent)); }
+.op-slider .op-slider-track[data-result="success"] { --sb-status: var(--op-slider-success, var(--op-success)); }
+.op-slider .op-slider-track[data-result="error"] { --sb-status: var(--op-slider-error, var(--op-error)); }
+.op-slider .op-slider-track > .op-run rect { stroke: var(--op-slider-pending, var(--op-pending)); }
+.op-slider .op-slider-thumb { --sb-base: var(--op-slider-border, var(--op-border)); }
+.op-slider .op-slider-thumb[data-state="pressed"] { --sb-base: var(--op-slider-emphasis-border, var(--op-border-strong)); }
+.op-slider .op-slider-thumb[data-state="disabled"] { --sb-base: var(--op-slider-disabled-border, var(--op-disabled-border)); }
+.op-slider .op-slider-thumb[data-state="selected"], .op-slider .op-slider-thumb[data-state="focused"] { --sb-base: var(--op-slider-accent, var(--op-accent)); }
+.op-slider .op-slider-thumb[data-result="success"] { --sb-status: var(--op-slider-success, var(--op-success)); }
+.op-slider .op-slider-thumb[data-result="error"] { --sb-status: var(--op-slider-error, var(--op-error)); }
+.op-slider .op-slider-thumb > .op-run rect { stroke: var(--op-slider-pending, var(--op-pending)); }
+.op-slider .op-tone[data-state="success"] { color: var(--op-slider-success, var(--op-success)); }
+.op-slider .op-tone[data-state="error"] { color: var(--op-slider-error, var(--op-error)); }
+.op-slider .op-ripple { background: color-mix(in srgb, var(--op-slider-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+@media (hover: hover) { .op-root .op-slider .op-slider-track[data-state="idle"]:hover { --sb-base: var(--op-slider-emphasis-border, var(--op-border-strong)); } }
+@media (hover: hover) { .op-root .op-slider .op-slider-thumb[data-state="idle"]:hover { --sb-base: var(--op-slider-emphasis-border, var(--op-border-strong)); } }

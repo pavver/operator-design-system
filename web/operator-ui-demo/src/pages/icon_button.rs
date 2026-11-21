@@ -8,6 +8,11 @@ pub fn icon_button() -> AnyView {
     let b = backend();
     let clicks = RwSignal::new(0u32);
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <IconButton icon=icons::SETTINGS label=crate::i18n::t("Actions") size=12.0 icon_size=5.0 gap=1.0
+                trailing=|| view! { <span aria-hidden="true">"+"</span> }
+                on_click=Callback::new(|()| {})/>
+        </Example>
         <Example title="Interactive">
             <IconButton
                 icon=icons::SETTINGS

@@ -1,31 +1,52 @@
 /* ------------------------------------------------------------------ */
 /* Stepper                                                             */
 /* ------------------------------------------------------------------ */
-.op-stepper { display: flex; height: var(--op-dim-row-compact); background-color: var(--op-surface); }
+.op-stepper { display: flex; height: var(--op-stepper-height, var(--op-dim-row-compact)); background-color: var(--op-stepper-background, var(--op-surface)); }
 .op-stepper-btn {
-  width: var(--op-dim-row-compact);
+  width: var(--op-stepper-button-size, var(--op-dim-row-compact));
   height: 100%;
   display: grid;
   place-items: center;
   flex: none;
-  background-color: var(--op-surface);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  background-color: var(--op-stepper-background, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-stepper-border, var(--op-border));
   transition: background-color var(--op-motion-state-color), box-shadow var(--op-motion-state-color);
 }
-.op-stepper-btn .op-tone { --tone-base: var(--op-icon); }
-.op-stepper-btn[data-pressed] { background-color: var(--op-pressed); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border-strong); }
-.op-stepper-btn[data-muted] { background-color: var(--op-disabled-surface); }
-.op-stepper-btn[data-muted] .op-tone { --tone-base: var(--op-icon-disabled); }
+.op-stepper-btn .op-tone { --tone-base: var(--op-stepper-icon, var(--op-icon)); }
+.op-stepper-btn[data-pressed] { background-color: var(--op-stepper-pressed, var(--op-pressed)); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-stepper-emphasis-border, var(--op-border-strong)); }
+.op-stepper-btn[data-muted] { background-color: var(--op-stepper-disabled-background, var(--op-disabled-surface)); }
+.op-stepper-btn[data-muted] .op-tone { --tone-base: var(--op-stepper-disabled-icon, var(--op-icon-disabled)); }
 .op-stepper-value {
   flex: 1;
   min-width: 0;
   display: grid;
   place-items: center;
-  background-color: var(--op-surface-alt);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
-  color: var(--op-text-primary);
+  background-color: var(--op-stepper-background-alt, var(--op-surface-alt));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-stepper-border, var(--op-border));
+  color: var(--op-stepper-text, var(--op-text-primary));
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.op-stepper-value[data-disabled] { color: var(--op-text-disabled); }
+.op-stepper-value[data-disabled] { color: var(--op-stepper-disabled-text, var(--op-text-disabled)); }
 
+
+.op-stepper { font-size: var(--op-stepper-font-size, var(--op-type-body-size)); line-height: var(--op-stepper-line-height, var(--op-type-body-line)); }
+
+.op-stepper { width: var(--op-stepper-width, calc(var(--op-du) * 35)); }
+
+/* Family hooks for shared state visuals. */
+.op-stepper { --sb-base: var(--op-stepper-border, var(--op-border)); }
+.op-stepper[data-state="pressed"] { --sb-base: var(--op-stepper-emphasis-border, var(--op-border-strong)); }
+.op-stepper[data-state="disabled"] { --sb-base: var(--op-stepper-disabled-border, var(--op-disabled-border)); }
+.op-stepper[data-state="selected"], .op-stepper[data-state="focused"] { --sb-base: var(--op-stepper-accent, var(--op-accent)); }
+.op-stepper[data-result="success"] { --sb-status: var(--op-stepper-success, var(--op-success)); }
+.op-stepper[data-result="error"] { --sb-status: var(--op-stepper-error, var(--op-error)); }
+.op-stepper > .op-run rect { stroke: var(--op-stepper-pending, var(--op-pending)); }
+.op-stepper .op-tone[data-state="success"] { color: var(--op-stepper-success, var(--op-success)); }
+.op-stepper .op-tone[data-state="error"] { color: var(--op-stepper-error, var(--op-error)); }
+.op-stepper .op-ripple { background: color-mix(in srgb, var(--op-stepper-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-stepper:focus-visible { outline-color: var(--op-stepper-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-stepper[data-state="idle"]:hover { --sb-base: var(--op-stepper-emphasis-border, var(--op-border-strong)); } }
+@media (hover: hover) {
+.op-root .op-stepper-btn:not([data-pressed]):not([data-muted]):hover { background-color: var(--op-stepper-hover, var(--op-hover)); }
+}

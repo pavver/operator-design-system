@@ -2,29 +2,47 @@
 /* ActionButton                                                        */
 /* ------------------------------------------------------------------ */
 .op-btn {
-  --bg: var(--op-surface);
-  --fg: var(--op-text-primary);
-  --ic: var(--op-icon);
+  --bg: var(--op-button-background, var(--op-surface));
+  --fg: var(--op-button-text, var(--op-text-primary));
+  --ic: var(--op-button-icon, var(--op-icon));
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--op-dim-row-standard);
-  padding: 0 var(--op-dim-margin-screen);
+  height: var(--op-button-height, var(--op-dim-row-standard));
+  padding: 0 var(--op-button-padding-x, var(--op-dim-margin-screen));
   background-color: var(--bg);
   color: var(--fg);
-  font-size: var(--op-type-body-size);
-  line-height: var(--op-type-body-line);
+  font-size: var(--op-button-font-size, var(--op-type-body-size));
+  line-height: var(--op-button-line-height, var(--op-type-body-line));
   font-weight: 500;
   text-align: center;
 }
-.op-btn[data-state="pressed"] { --bg: var(--op-pressed); }
-.op-btn[data-state="selected"] { --bg: var(--op-selection); }
-.op-btn.op-danger { --bg: color-mix(in srgb, var(--op-error) 15%, transparent); --fg: var(--op-error); --ic: var(--op-error); }
-.op-btn.op-danger[data-state="pressed"] { --bg: color-mix(in srgb, var(--op-error) 30%, transparent); }
-.op-btn[data-state="success"] { --fg: var(--op-success); --ic: var(--op-success); }
-.op-btn[data-state="error"] { --fg: var(--op-error); --ic: var(--op-error); }
-.op-btn[data-state="disabled"] { --bg: var(--op-disabled-surface); --fg: var(--op-text-disabled); --ic: var(--op-icon-disabled); }
+.op-btn[data-state="pressed"] { --bg: var(--op-button-pressed, var(--op-pressed)); }
+.op-btn[data-state="selected"] { --bg: var(--op-button-selection, var(--op-selection)); }
+.op-btn.op-danger { --bg: color-mix(in srgb, var(--op-button-error, var(--op-error)) 15%, transparent); --fg: var(--op-button-error, var(--op-error)); --ic: var(--op-button-error, var(--op-error)); }
+.op-btn.op-danger[data-state="pressed"] { --bg: color-mix(in srgb, var(--op-button-error, var(--op-error)) 30%, transparent); }
+.op-btn[data-state="success"] { --fg: var(--op-button-success, var(--op-success)); --ic: var(--op-button-success, var(--op-success)); }
+.op-btn[data-state="error"] { --fg: var(--op-button-error, var(--op-error)); --ic: var(--op-button-error, var(--op-error)); }
+.op-btn[data-state="disabled"] { --bg: var(--op-button-disabled-background, var(--op-disabled-surface)); --fg: var(--op-button-disabled-text, var(--op-text-disabled)); --ic: var(--op-button-disabled-icon, var(--op-icon-disabled)); }
 .op-btn-content { display: inline-flex; align-items: center; justify-content: center; }
-.op-btn-label { display: inline-flex; align-items: center; justify-content: center; gap: var(--op-dim-gutter); }
+.op-btn-label { display: inline-flex; align-items: center; justify-content: center; gap: var(--op-button-gap, var(--op-dim-gutter)); }
 .op-btn-icon { display: inline-flex; color: var(--ic); transition: inherit; }
 
+
+/* Family hooks for shared state visuals. */
+.op-btn { --sb-base: var(--op-button-border, var(--op-border)); }
+.op-btn[data-state="pressed"] { --sb-base: var(--op-button-emphasis-border, var(--op-border-strong)); }
+.op-btn[data-state="disabled"] { --sb-base: var(--op-button-disabled-border, var(--op-disabled-border)); }
+.op-btn[data-state="selected"], .op-btn[data-state="focused"] { --sb-base: var(--op-button-accent, var(--op-accent)); }
+.op-btn[data-result="success"] { --sb-status: var(--op-button-success, var(--op-success)); }
+.op-btn[data-result="error"] { --sb-status: var(--op-button-error, var(--op-error)); }
+.op-btn > .op-run rect { stroke: var(--op-button-pending, var(--op-pending)); }
+.op-btn .op-tone[data-state="success"] { color: var(--op-button-success, var(--op-success)); }
+.op-btn .op-tone[data-state="error"] { color: var(--op-button-error, var(--op-error)); }
+.op-btn .op-ripple { background: color-mix(in srgb, var(--op-button-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-btn:focus-visible { outline-color: var(--op-button-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-btn[data-state="idle"]:hover { --sb-base: var(--op-button-emphasis-border, var(--op-border-strong)); } }
+@media (hover: hover) {
+.op-root .op-btn[data-state="idle"]:hover { --bg: var(--op-button-hover, var(--op-hover)); }
+.op-root .op-btn.op-danger[data-state="idle"]:hover { --bg: color-mix(in srgb, var(--op-button-error, var(--op-error)) 22%, transparent); }
+}

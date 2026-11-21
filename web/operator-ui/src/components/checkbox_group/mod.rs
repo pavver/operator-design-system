@@ -1,14 +1,19 @@
 //! Checkbox group: GroupItem and CheckboxGroup.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, PendingRun, Press, sleep_ms, spawn_ripple, use_pending_indicator,
-    use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, ScopedSlot, Slot, root_class,
+    root_style, sleep_ms, spawn_ripple, ui_icon, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
 use std::collections::HashMap;
+
+mod visuals;
+use visuals::{pending, symbol};
+
+const MARK_SIZE: &str = "var(--op-checkbox-group-mark-size, var(--op-dim-icon-small))";
+const ITEM_ICON_SIZE: &str = "var(--op-checkbox-group-item-icon-size, var(--op-checkbox-group-default-icon-size, var(--op-dim-icon-small)))";
 
 pub(crate) const CSS: &str = include_str!("checkbox_group.css");
 
@@ -80,7 +85,46 @@ pub fn CheckboxGroup(
     /// Called with `(id, target_checked)`; the parent updates `selected` on success.
     #[prop(into)]
     on_change: AsyncAction<(String, bool)>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] item_gap: MaybeProp<f32>,
+    #[prop(optional, into)] large_icon_inset: MaybeProp<f32>,
+    #[prop(optional, into)] box_size: MaybeProp<f32>,
+    #[prop(optional, into)] mark_size: MaybeProp<f32>,
+    #[prop(optional, into)] item_icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] width: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional)] option: Option<ScopedSlot<GroupItem>>,
+    #[prop(optional, into)] before_options: Slot,
+    #[prop(optional, into)] after_options: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional)] checked_icon: Option<IconData>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "checkbox-group.loading", "Loading");
+    let label = ui_text(label, "checkbox-group.label", "Options");
+    let checked_icon = ui_icon(checked_icon, "checkbox-group.checked", icons::CHECK);
+
+    let root_metrics = vec![
+        Metric::du("--op-checkbox-group-width", width),
+        Metric::du("--op-checkbox-group-spinner-stroke", spinner_stroke),
+        Metric::du("--op-checkbox-group-gap", gap),
+        Metric::du("--op-checkbox-group-height", height),
+        Metric::du("--op-checkbox-group-padding-x", padding_x),
+        Metric::du("--op-checkbox-group-item-gap", item_gap),
+        Metric::du("--op-checkbox-group-large-icon-inset", large_icon_inset),
+        Metric::du("--op-checkbox-group-box-size", box_size),
+        Metric::du("--op-checkbox-group-mark-size", mark_size),
+        Metric::du("--op-checkbox-group-item-icon-size", item_icon_size),
+        Metric::tu("--op-checkbox-group-font-size", font_size),
+        Metric::tu("--op-checkbox-group-line-height", line_height),
+    ];
+
     let states = RwSignal::new(HashMap::<String, ControlState>::new());
 
     let tiles = items
@@ -88,6 +132,7 @@ pub fn CheckboxGroup(
         .map(|item| {
             let id = item.id.clone();
             let press = Press::new();
+            let job = JobToken::new();
             let action = on_change.clone();
             let is_selected = {
                 let id = id.clone();
@@ -113,8 +158,9 @@ pub fn CheckboxGroup(
             let tone = use_state_visual(item_state);
             let show_spinner =
                 use_pending_indicator(move || item_state.get() == ControlState::Pending);
-            let clickable = move || item_state.get() == ControlState::Idle;
+            let clickable = move || item_state.get() != ControlState::Pending;
             let click = move || {
+                let request = job.next();
                 let id = id.clone();
                 let action = action.clone();
                 states.update(|m| {
@@ -123,10 +169,12 @@ pub fn CheckboxGroup(
                 spawn_local(async move {
                     let target = !is_selected.get_untracked();
                     let result = action.call((id.clone(), target)).await;
+                    if !job.is_current(request) { return; }
                     states.update(|m| {
                         m.insert(id.clone(), result.into());
                     });
                     sleep_ms(motion::RESULT_HOLD_MS).await;
+                    if !job.is_current(request) { return; }
                     states.update(|m| {
                         m.insert(id, ControlState::Idle);
                     });
@@ -158,8 +206,8 @@ pub fn CheckboxGroup(
                         }
                     }
                 >
-                    {item.icon.map(|i| view! { <span class="op-group-icon"><Icon icon=i size=icon_size.du()/></span> })}
-                    <span class="op-group-name">{item.name}</span>
+                    {item.icon.map(|i| view! { <span class="op-group-icon">{symbol(Signal::stored(i), ITEM_ICON_SIZE, None)}</span> })}
+                    <span class="op-group-name">{option.map(|slot| slot.run(item.clone())).unwrap_or_else(|| item.name.clone().into_any())}</span>
                     <span class="op-group-box" data-checked=move || is_selected.get().then_some("")>
                         <span
                             class="op-tone op-group-mark"
@@ -169,9 +217,9 @@ pub fn CheckboxGroup(
                         >
                             {move || {
                                 if show_spinner.get() {
-                                    view! { <PendingIndicator size=dim::ICON_SMALL/> }.into_any()
+                                    pending(MARK_SIZE, loading_label)
                                 } else if is_selected.get() {
-                                    view! { <Icon icon=icons::CHECK size=dim::ICON_SMALL/> }.into_any()
+                                    symbol(checked_icon, MARK_SIZE, None)
                                 } else {
                                     ().into_any()
                                 }
@@ -184,5 +232,6 @@ pub fn CheckboxGroup(
         })
         .collect_view();
 
-    view! { <div class="op-group" data-icon-size=icon_size.as_str()>{tiles}</div> }
+    view! { <div class=root_class("op-group", class)
+    style=root_style(root_metrics, style) role="group" aria-label=move || label.get() data-icon-size=icon_size.as_str()>{before_options.run()}{tiles}{after_options.run()}</div> }
 }

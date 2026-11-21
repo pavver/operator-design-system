@@ -386,17 +386,6 @@ pub fn PendingRun() -> impl IntoView {
     }
 }
 
-/// Result icon shown briefly after an async action completes.
-#[cfg(any(feature = "action-button", feature = "icon-button"))]
-pub(crate) fn flash_icon(state: ControlState, size: f32) -> AnyView {
-    if state == ControlState::Success {
-        view! { <span class="op-c-success"><crate::components::primitives::Icon icon=operator_ui_tokens::icons::CHECK size=size label="Success"/></span> }.into_any()
-    } else {
-        view! { <span class="op-c-error"><crate::components::primitives::Icon icon=operator_ui_tokens::icons::CLOSE size=size label="Error"/></span> }
-            .into_any()
-    }
-}
-
 /// Shared async toggle flow: Pending -> result -> hold -> Idle, with rollback on error.
 #[cfg(any(feature = "checkbox", feature = "switch"))]
 pub(crate) fn run_toggle(

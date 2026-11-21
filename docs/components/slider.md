@@ -107,10 +107,94 @@ An external value change while idle becomes the new committed value.
 | `enabled` | bool | `true` | Interactivity. |
 | `on_change_finished` | `(f32)` callback | none | Called on every commit attempt. |
 | `on_commit` | async `(f32) -> ActionResult` | none | Async commit with rollback on error. |
-| `label` | string | none | Accessible name. |
+| `label` | string | `slider.label` | Accessible name. |
+| `height` | reactive DU | unset | Overrides `--op-slider-height`; see Customization. |
+| `rail_inset` | reactive DU | unset | Overrides `--op-slider-rail-inset`; see Customization. |
+| `track_height` | reactive DU | unset | Overrides `--op-slider-track-height`; see Customization. |
+| `thumb_size` | reactive DU | unset | Overrides `--op-slider-thumb-size`; see Customization. |
+| `tick_size` | reactive DU | unset | Overrides `--op-slider-tick-size`; see Customization. |
+| `dot_size` | reactive DU | unset | Overrides `--op-slider-dot-size`; see Customization. |
+| `icon_size` | reactive DU | unset | Overrides `--op-slider-icon-size`; see Customization. |
+| `spinner_size` | reactive DU | unset | Overrides `--op-slider-spinner-size`; see Customization. |
+| `tooltip_offset` | reactive DU | unset | Overrides `--op-slider-tooltip-offset`; see Customization. |
+| `tooltip_padding_x` | reactive DU | unset | Overrides `--op-slider-tooltip-padding-x`; see Customization. |
+| `tooltip_padding_y` | reactive DU | unset | Overrides `--op-slider-tooltip-padding-y`; see Customization. |
+| `font_size` | reactive TU | unset | Overrides `--op-slider-font-size`; see Customization. |
+| `line_height` | reactive TU | unset | Overrides `--op-slider-line-height`; see Customization. |
+| `focus_width` | reactive DU | unset | Overrides `--op-slider-focus-width`; see Customization. |
+| `focus_offset` | reactive DU | unset | Overrides `--op-slider-focus-offset`; see Customization. |
+| `spinner_stroke` | reactive DU | unset | Overrides `--op-slider-spinner-stroke`; see Customization. |
+| `width` | reactive DU | unset | Overrides `--op-slider-width`; see Customization. |
+| `class` | reactive string | none | Applied to the root element. |
+| `style` | reactive string | none | Applied to the root element. |
+| `thumb` | slot | none | Replaces the idle thumb dot; status feedback keeps priority. |
+| `loading_label` | reactive string | `slider.loading` | String override; see Strings. |
+| `success_label` | reactive string | `slider.success` | String override; see Strings. |
+| `error_label` | reactive string | `slider.error` | String override; see Strings. |
+| `success_icon` | icon | `slider.success` | Semantic icon override; see Icons. |
+| `error_icon` | icon | `slider.error` | Semantic icon override; see Icons. |
 
 ## Accessibility
 
 * The control has the `slider` role with minimum, maximum, and current value.
 * It is focusable while interactive.
 * The focus ring is drawn around the thumb.
+
+## Customization
+
+`class` and `style` apply to the root element.
+Metric props accept reactive DU or TU values; unset props keep the CSS variable or its exact design-system fallback.
+Caller `style` is appended after metric declarations and takes precedence.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-slider-height` | `var(--op-dim-row-compact)` |
+| `rail_inset` | DU | `--op-slider-rail-inset` | `calc(var(--op-du) * 3)` |
+| `track_height` | DU | `--op-slider-track-height` | `calc(var(--op-du) * 2)` |
+| `thumb_size` | DU | `--op-slider-thumb-size` | `var(--op-dim-icon-large)` |
+| `tick_size` | DU | `--op-slider-tick-size` | `var(--op-dim-pad-tight)` |
+| `dot_size` | DU | `--op-slider-dot-size` | `var(--op-dim-pad-small)` |
+| `icon_size` | DU | `--op-slider-icon-size` | `calc(var(--op-du) * 3.5)` |
+| `spinner_size` | DU | `--op-slider-spinner-size` | `calc(var(--op-du) * 3)` |
+| `tooltip_offset` | DU | `--op-slider-tooltip-offset` | `calc(var(--op-du) * 10)` |
+| `tooltip_padding_x` | DU | `--op-slider-tooltip-padding-x` | `var(--op-dim-pad-small)` |
+| `tooltip_padding_y` | DU | `--op-slider-tooltip-padding-y` | `var(--op-dim-gap-micro)` |
+| `font_size` | TU | `--op-slider-font-size` | `var(--op-type-caption-size)` |
+| `line_height` | TU | `--op-slider-line-height` | `var(--op-type-caption-line)` |
+| `focus_width` | DU | `--op-slider-focus-width` | `var(--op-dim-border-thick)` |
+| `focus_offset` | DU | `--op-slider-focus-offset` | `var(--op-dim-gap-micro)` |
+| `spinner_stroke` | DU | `--op-slider-spinner-stroke` | `var(--op-dim-spinner-stroke)` |
+| `width` | DU | `--op-slider-width` | `100%` |
+| Color variable | Default |
+| :--- | :--- |
+| `--op-slider-accent` | `var(--op-accent)` |
+| `--op-slider-border` | `var(--op-border)` |
+| `--op-slider-emphasis-border` | `var(--op-border-strong)` |
+| `--op-slider-disabled-border` | `var(--op-disabled-border)` |
+| `--op-slider-disabled-background` | `var(--op-disabled-surface)` |
+| `--op-slider-error` | `var(--op-error)` |
+| `--op-slider-pending` | `var(--op-pending)` |
+| `--op-slider-ripple` | `var(--op-ripple)` |
+| `--op-slider-success` | `var(--op-success)` |
+| `--op-slider-background` | `var(--op-surface)` |
+| `--op-slider-disabled-text` | `var(--op-text-disabled)` |
+| `--op-slider-text` | `var(--op-text-primary)` |
+| Slot | Place |
+| :--- | :--- |
+| `thumb` | Replaces the idle thumb dot; status feedback keeps priority. |
+
+### Strings
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `loading_label` | `slider.loading` | `Loading` |
+| `success_label` | `slider.success` | `Success` |
+| `error_label` | `slider.error` | `Error` |
+| `label` | `slider.label` | `Value` |
+
+### Icons
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `success_icon` | `slider.success` | `check` |
+| `error_icon` | `slider.error` | `close` |

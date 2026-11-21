@@ -5,47 +5,67 @@
 .op-chip {
   display: inline-flex;
   align-items: stretch;
-  height: var(--op-dim-row-dense);
-  background-color: var(--op-surface);
-  color: var(--op-text-primary);
-  font-size: var(--op-type-body-small-size);
-  line-height: var(--op-type-body-small-line);
+  height: var(--op-chip-height, var(--op-dim-row-dense));
+  background-color: var(--op-chip-background, var(--op-surface));
+  color: var(--op-chip-text, var(--op-text-primary));
+  font-size: var(--op-chip-font-size, var(--op-type-body-small-size));
+  line-height: var(--op-chip-line-height, var(--op-type-body-small-line));
   vertical-align: middle;
 }
-.op-chip[data-state="pressed"] { background-color: var(--op-pressed); }
-.op-chip[data-selected] { background-color: var(--op-selection); color: var(--op-accent); }
-.op-chip[data-state="disabled"] { background-color: var(--op-disabled-surface); color: var(--op-text-disabled); }
-.op-chip-main { display: inline-flex; align-items: center; gap: var(--op-dim-pad-tight); padding: 0 var(--op-dim-gutter); white-space: nowrap; }
+.op-chip[data-state="pressed"] { background-color: var(--op-chip-pressed, var(--op-pressed)); }
+.op-chip[data-selected] { background-color: var(--op-chip-selection, var(--op-selection)); color: var(--op-chip-accent, var(--op-accent)); }
+.op-chip[data-state="disabled"] { background-color: var(--op-chip-disabled-background, var(--op-disabled-surface)); color: var(--op-chip-disabled-text, var(--op-text-disabled)); }
+.op-chip-main { display: inline-flex; align-items: center; gap: var(--op-chip-gap, var(--op-dim-pad-tight)); padding: 0 var(--op-chip-padding-x, var(--op-dim-gutter)); white-space: nowrap; }
 .op-chip-check { display: inline-flex; }
-.op-chip-remove { display: grid; place-items: center; width: var(--op-dim-row-dense); margin-left: calc(var(--op-dim-pad-tight) * -1); color: var(--op-text-secondary); }
-.op-chip-remove:hover { color: var(--op-error); }
+.op-chip-remove { display: grid; place-items: center; width: var(--op-chip-remove-size, var(--op-dim-row-dense)); margin-left: calc(var(--op-chip-remove-overlap, var(--op-dim-pad-tight)) * -1); color: var(--op-chip-secondary-text, var(--op-text-secondary)); }
+.op-chip-remove:hover { color: var(--op-chip-error, var(--op-error)); }
 
 /* Colors: tinted background, colored text and outline; tones come from tokens, custom from --chip-c. */
-.op-chip[data-color="accent"] { --chip-c: var(--op-accent); }
-.op-chip[data-color="success"] { --chip-c: var(--op-success); }
-.op-chip[data-color="warning"] { --chip-c: var(--op-warning); }
-.op-chip[data-color="error"] { --chip-c: var(--op-error); }
-.op-chip[data-color="info"] { --chip-c: var(--op-info); }
+.op-chip[data-color="accent"] { --chip-c: var(--op-chip-accent, var(--op-accent)); }
+.op-chip[data-color="success"] { --chip-c: var(--op-chip-success, var(--op-success)); }
+.op-chip[data-color="warning"] { --chip-c: var(--op-chip-warning, var(--op-warning)); }
+.op-chip[data-color="error"] { --chip-c: var(--op-chip-error, var(--op-error)); }
+.op-chip[data-color="info"] { --chip-c: var(--op-chip-info, var(--op-info)); }
 .op-chip[data-color] {
   --chip-fg: var(--chip-c);
-  --sb-base: color-mix(in srgb, var(--chip-c) 55%, var(--op-surface));
-  background-color: color-mix(in srgb, var(--chip-c) 14%, var(--op-surface));
+  --sb-base: color-mix(in srgb, var(--chip-c) 55%, var(--op-chip-background, var(--op-surface)));
+  background-color: color-mix(in srgb, var(--chip-c) 14%, var(--op-chip-background, var(--op-surface)));
   color: var(--chip-fg);
 }
 /* A custom color is not tuned per mode, so the text leans toward the primary text color. */
-.op-chip[data-color="custom"] { --chip-fg: color-mix(in oklab, var(--chip-c) 65%, var(--op-text-primary)); }
-.op-chip[data-color][data-state="pressed"] { background-color: color-mix(in srgb, var(--chip-c) 22%, var(--op-pressed)); }
+.op-chip[data-color="custom"] { --chip-fg: color-mix(in oklab, var(--chip-c) 65%, var(--op-chip-text, var(--op-text-primary))); }
+.op-chip[data-color][data-state="pressed"] { background-color: color-mix(in srgb, var(--chip-c) 22%, var(--op-chip-pressed, var(--op-pressed))); }
 .op-chip[data-color][data-selected] {
   --sb-base: var(--chip-fg);
   --sb-base-w: calc(var(--sb-w) * 1.5);
-  background-color: color-mix(in srgb, var(--chip-c) 28%, var(--op-surface));
+  background-color: color-mix(in srgb, var(--chip-c) 28%, var(--op-chip-background, var(--op-surface)));
   color: var(--chip-fg);
 }
 .op-chip[data-color] .op-chip-remove { color: var(--chip-fg); }
-.op-chip[data-color] .op-chip-remove:hover { color: var(--op-error); }
+.op-chip[data-color] .op-chip-remove:hover { color: var(--op-chip-error, var(--op-error)); }
 .op-chip[data-color][data-state="disabled"] {
-  --sb-base: var(--op-disabled-border);
-  background-color: var(--op-disabled-surface);
-  color: var(--op-text-disabled);
+  --sb-base: var(--op-chip-disabled-border, var(--op-disabled-border));
+  background-color: var(--op-chip-disabled-background, var(--op-disabled-surface));
+  color: var(--op-chip-disabled-text, var(--op-text-disabled));
 }
 
+
+.op-chip-set { gap: var(--op-chip-set-gap, var(--op-dim-pad-tight)); }
+
+/* Family hooks for shared state visuals. */
+.op-chip { --sb-base: var(--op-chip-border, var(--op-border)); }
+.op-chip[data-state="pressed"] { --sb-base: var(--op-chip-emphasis-border, var(--op-border-strong)); }
+.op-chip[data-state="disabled"] { --sb-base: var(--op-chip-disabled-border, var(--op-disabled-border)); }
+.op-chip[data-state="selected"], .op-chip[data-state="focused"] { --sb-base: var(--op-chip-accent, var(--op-accent)); }
+.op-chip[data-result="success"] { --sb-status: var(--op-chip-success, var(--op-success)); }
+.op-chip[data-result="error"] { --sb-status: var(--op-chip-error, var(--op-error)); }
+.op-chip > .op-run rect { stroke: var(--op-chip-pending, var(--op-pending)); }
+.op-chip .op-tone[data-state="success"] { color: var(--op-chip-success, var(--op-success)); }
+.op-chip .op-tone[data-state="error"] { color: var(--op-chip-error, var(--op-error)); }
+.op-chip .op-ripple { background: color-mix(in srgb, var(--op-chip-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-chip:focus-visible { outline-color: var(--op-chip-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-chip[data-state="idle"]:hover { --sb-base: var(--op-chip-emphasis-border, var(--op-border-strong)); } }
+@media (hover: hover) {
+.op-root .op-chip[data-state="idle"]:not([data-selected]):hover { background-color: var(--op-chip-hover, var(--op-hover)); }
+.op-root .op-chip[data-state="idle"][data-selected]:hover { background-color: color-mix(in srgb, var(--op-chip-accent, var(--op-accent)) 22%, var(--op-chip-background, var(--op-surface))); }
+}

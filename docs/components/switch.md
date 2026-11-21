@@ -52,8 +52,73 @@ A change of the external value resets the displayed value.
 | `state` | `ControlState?` | none | External state override. |
 | `enabled` | bool | `true` | Interactivity. |
 | `on_toggle` | async `(bool) -> ActionResult` | none | Called with the requested value. |
-| `label` | string | none | Accessible name. |
+| `label` | string | `switch.label` | Accessible name. |
+| `width` | reactive DU | unset | Overrides `--op-switch-width`; see Customization. |
+| `height` | reactive DU | unset | Overrides `--op-switch-height`; see Customization. |
+| `thumb_size` | reactive DU | unset | Overrides `--op-switch-thumb-size`; see Customization. |
+| `thumb_inset` | reactive DU | unset | Overrides `--op-switch-thumb-inset`; see Customization. |
+| `icon_size` | reactive DU | unset | Overrides `--op-switch-icon-size`; see Customization. |
+| `spinner_size` | reactive DU | unset | Overrides `--op-switch-spinner-size`; see Customization. |
+| `spinner_stroke` | reactive DU | unset | Overrides `--op-switch-spinner-stroke`; see Customization. |
+| `class` | reactive string | none | Applied to the root element. |
+| `style` | reactive string | none | Applied to the root element. |
+| `content` | slot | none | Replaces the thumb content. |
+| `loading_label` | reactive string | `switch.loading` | String override; see Strings. |
+| `checked_icon` | icon | `switch.checked` | Semantic icon override; see Icons. |
+| `unchecked_icon` | icon | `switch.unchecked` | Semantic icon override; see Icons. |
 
 ## Accessibility
 
 The control has the `switch` role, reports its checked state, and reports busy while pending.
+
+## Customization
+
+`class` and `style` apply to the root element.
+Metric props accept reactive DU or TU values; unset props keep the CSS variable or its exact design-system fallback.
+Caller `style` is appended after metric declarations and takes precedence.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `width` | DU | `--op-switch-width` | `calc(var(--op-du) * 13)` |
+| `height` | DU | `--op-switch-height` | `var(--op-dim-row-compact)` |
+| `thumb_size` | DU | `--op-switch-thumb-size` | `var(--op-dim-row-dense)` |
+| `thumb_inset` | DU | `--op-switch-thumb-inset` | `var(--op-dim-pad-tight)` |
+| `icon_size` | DU | `--op-switch-icon-size` | `calc(var(--op-du) * 3)` |
+| `spinner_size` | DU | `--op-switch-spinner-size` | `calc(var(--op-du) * 3.5)` |
+| `spinner_stroke` | DU | `--op-switch-spinner-stroke` | `var(--op-dim-spinner-stroke)` |
+| Color variable | Default |
+| :--- | :--- |
+| `--op-switch-accent` | `var(--op-accent)` |
+| `--op-switch-border` | `var(--op-border)` |
+| `--op-switch-emphasis-border` | `var(--op-border-strong)` |
+| `--op-switch-checked-thumb` | palette token `switch_checked_thumb` |
+| `--op-switch-checked-track` | palette token `switch_checked_track` |
+| `--op-switch-disabled-border` | `var(--op-disabled-border)` |
+| `--op-switch-disabled-background` | `var(--op-disabled-surface)` |
+| `--op-switch-error` | `var(--op-error)` |
+| `--op-switch-pending` | `var(--op-pending)` |
+| `--op-switch-ripple` | `var(--op-ripple)` |
+| `--op-switch-success` | `var(--op-success)` |
+| `--op-switch-background` | `var(--op-surface)` |
+| `--op-switch-background-alt` | `var(--op-surface-alt)` |
+| `--op-switch-disabled-text` | `var(--op-text-disabled)` |
+| `--op-switch-icon` | `var(--op-toggle-cloud)` |
+| `--op-switch-unchecked-thumb` | palette token `switch_unchecked_thumb` |
+| `--op-switch-unchecked-track` | palette token `switch_unchecked_track` |
+| Slot | Place |
+| :--- | :--- |
+| `content` | Replaces the thumb content. |
+
+### Strings
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `loading_label` | `switch.loading` | `Loading` |
+| `label` | `switch.label` | `Switch` |
+
+### Icons
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `checked_icon` | `switch.checked` | `check` |
+| `unchecked_icon` | `switch.unchecked` | `close` |

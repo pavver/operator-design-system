@@ -1,13 +1,17 @@
 //! Asynchronous action button.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, JobToken, PendingRun, Press, flash_icon, link_state, sleep_ms,
-    spawn_ripple, use_pending_indicator, use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, link_state, root_class,
+    root_style, sleep_ms, spawn_ripple, ui_icon, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{Icon as IconData, dim, motion};
+use operator_ui_tokens::{Icon as IconData, icons, motion};
+
+mod visuals;
+use visuals::{pending, symbol};
+
+const ICON_SIZE: &str = "var(--op-button-icon-size, var(--op-dim-icon-small))";
 
 pub(crate) const CSS: &str = include_str!("action_button.css");
 
@@ -16,7 +20,7 @@ pub(crate) const CSS: &str = include_str!("action_button.css");
 /// With `href`, it renders a real link styled as a button and ignores the async props.
 #[component]
 pub fn ActionButton(
-    #[prop(into)] text: Signal<String>,
+    #[prop(optional, into)] text: MaybeProp<String>,
     #[prop(optional)] icon: Option<IconData>,
     /// External state; when `Some`, it overrides the local async state.
     #[prop(optional, into)]
@@ -34,14 +38,48 @@ pub fn ActionButton(
     /// Opens the link in a new tab (link mode only).
     #[prop(optional)]
     new_tab: bool,
-    #[prop(optional, into)] class: String,
-    #[prop(optional, into)] style: String,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] leading: Slot,
+    #[prop(optional, into)] trailing: Slot,
+    #[prop(optional, into)] content: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] success_label: MaybeProp<String>,
+    #[prop(optional)] success_icon: Option<IconData>,
+    #[prop(optional, into)] error_label: MaybeProp<String>,
+    #[prop(optional)] error_icon: Option<IconData>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "action-button.loading", "Loading");
+    let success_label = ui_text(success_label, "action-button.success", "Success");
+    let success_icon = ui_icon(success_icon, "action-button.success", icons::CHECK);
+    let error_label = ui_text(error_label, "action-button.error", "Error");
+    let error_icon = ui_icon(error_icon, "action-button.error", icons::CLOSE);
+    let text = ui_text(text, "action-button.text", "");
+
+    let root_metrics = vec![
+        Metric::du("--op-button-spinner-stroke", spinner_stroke),
+        Metric::du("--op-button-height", height),
+        Metric::du("--op-button-padding-x", padding_x),
+        Metric::du("--op-button-gap", gap),
+        Metric::du("--op-button-icon-size", icon_size),
+        Metric::tu("--op-button-font-size", font_size),
+        Metric::tu("--op-button-line-height", line_height),
+    ];
+
     let label = move || {
         view! {
             <span class="op-btn-label">
-                {icon.map(|i| view! { <span class="op-btn-icon"><Icon icon=i size=dim::ICON_SMALL/></span> })}
-                <span>{move || text.get()}</span>
+                {leading.run()}
+                {icon.map(|i| view! { <span class="op-btn-icon">{symbol(Signal::stored(i), ICON_SIZE, None)}</span> })}
+                {if content.is_set() { content.run() } else { Some(view! { <span>{move || text.get()}</span> }.into_any()) }}
+                {trailing.run()}
             </span>
         }
     };
@@ -51,9 +89,9 @@ pub fn ActionButton(
         let current = link_state(enabled, press);
         return view! {
             <a
-                class=format!("op-sb op-sb-bg op-rippled op-btn {class}")
+                class=root_class("op-sb op-sb-bg op-rippled op-btn", class)
                 class:op-danger=dangerous
-                style=style
+                style=root_style(root_metrics, style)
                 href=move || enabled.get().then(|| href.get())
                 target=new_tab.then_some("_blank")
                 rel=new_tab.then_some("noopener noreferrer")
@@ -155,9 +193,9 @@ pub fn ActionButton(
     view! {
         <button
             type="button"
-            class=format!("op-sb op-sb-bg op-rippled op-btn {class}")
+            class=root_class("op-sb op-sb-bg op-rippled op-btn", class)
             class:op-danger=dangerous
-            style=style
+            style=root_style(root_metrics, style)
             data-state=move || visual.state.get()
             data-result=move || visual.result.get()
             data-fading=move || visual.fading.get().then_some("")
@@ -184,9 +222,9 @@ pub fn ActionButton(
                     {move || {
                         let s = current.get();
                         if show_spinner.get() {
-                            view! { <PendingIndicator size=dim::ICON_SMALL/> }.into_any()
+                            pending(ICON_SIZE, loading_label)
                         } else if s.is_result() && show_flash.get() {
-                            flash_icon(s, dim::ICON_SMALL)
+                            if s == ControlState::Success { symbol(success_icon, ICON_SIZE, Some(success_label)) } else { symbol(error_icon, ICON_SIZE, Some(error_label)) }
                         } else {
                             label().into_any()
                         }
