@@ -14,9 +14,22 @@ Rules for AI agents contributing to this repository.
 * Its feature lists the component features it uses.
 * It joins `draft` and moves to `reviewed` when its spec status changes.
 
+## Customization
+
+* Every component follows [docs/foundations/customization.md](docs/foundations/customization.md): `class` and `style` on the root, every spacing and size as a DU/TU metric prop backed by a `--op-<family>-<metric>` variable, colors through `--op-<family>-<role>` variables, family slot names, string keys with English defaults (`ui_text`), semantic icon keys (`ui_icon`).
+* A component never hard-codes visible or accessible text.
+* Its specification lists the hooks in a **Customization** section (metric props, color variables, slots, strings, icons).
+
+## Change History and Translations
+
+* Each component has `docs/components/<name>.changes.toml`, newest entry first, with `date` (RFC 3339), `status`, optional `commit`, and the text in `en` and `uk`.
+* Every change to a component adds an entry with `status = "draft"` in the same commit.
+* The maintainer approves an entry by setting `status = "approved"`; a rejected change is reverted and its entry deleted.
+* Ukrainian versions of the documentation live in `docs/i18n/uk/` with the same relative paths; a change to an English page updates its Ukrainian page in the same commit.
+
 ## Language and Formatting
 
-* All files are written in English.
+* All files are written in English, except the Ukrainian pages in `docs/i18n/uk/` and the `uk` texts of change entries.
 * In Markdown files, every sentence is on its own line.
 * Files are referenced with relative paths.
 

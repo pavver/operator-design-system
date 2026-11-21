@@ -2,7 +2,7 @@
 /* SearchField                                                         */
 /* ------------------------------------------------------------------ */
 .op-search { padding-left: 0; }
-.op-search-lead { display: grid; place-items: center; width: var(--op-dim-row-standard); height: 100%; flex: none; color: var(--op-text-secondary); }
+.op-search > .op-field-prepend, .op-search > .op-field-append { margin: 0; }
+.op-search-lead { display: grid; place-items: center; width: var(--op-field-slot-size, var(--op-dim-row-standard)); height: 100%; flex: none; color: var(--op-text-secondary); }
 .op-search[data-state="focused"] .op-search-lead { color: var(--op-accent); }
 .op-search .op-field-input::-webkit-search-cancel-button { display: none; }
-

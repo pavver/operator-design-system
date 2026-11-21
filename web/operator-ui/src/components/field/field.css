@@ -1,0 +1,72 @@
+/* ------------------------------------------------------------------ */
+/* Field shell (TextField, SearchField, value fields, Combobox)        */
+/* ------------------------------------------------------------------ */
+.op-field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--op-field-height, var(--op-dim-row-standard));
+  padding: 0 var(--op-field-padding-x, var(--op-dim-pad-card));
+  background-color: var(--op-field-background, var(--op-surface));
+  box-shadow: none;
+}
+/* Base outline drawn above trailing buttons so the focus border is never covered. */
+.op-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 var(--sb-base-w) var(--sb-base);
+  transition: box-shadow var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-field[data-fading]::before { transition-duration: var(--op-motion-result-fade); transition-timing-function: var(--op-ease-smooth); }
+.op-field[data-trailing] { padding-right: 0; }
+.op-field[data-state="disabled"] { background-color: var(--op-disabled-surface); }
+.op-field-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--op-field-font-size, var(--op-type-body-size));
+  color: var(--op-field-text, var(--op-text-primary));
+  caret-color: var(--op-accent);
+}
+.op-root .op-field-input:focus-visible { outline: none; }
+.op-field-input::placeholder { color: var(--op-text-disabled); opacity: 1; }
+.op-field-input:disabled { color: var(--op-text-disabled); }
+.op-field-reveal {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--op-field-slot-size, var(--op-dim-row-standard));
+  height: 100%;
+  color: var(--op-text-secondary);
+  cursor: pointer;
+  transition: color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-field-reveal:hover, .op-field-reveal[aria-pressed="true"] { color: var(--op-accent); }
+.op-field-reveal:disabled { color: var(--op-text-disabled); cursor: default; }
+
+/* Root: label, row (before | box | after), hint or error. */
+.op-field-root { display: flex; flex-direction: column; gap: var(--op-field-gap, var(--op-dim-gap-micro)); width: 100%; min-width: 0; }
+.op-field-row { display: flex; align-items: center; gap: var(--op-field-gap, var(--op-dim-gap-micro)); min-width: 0; }
+.op-field-row > .op-field { flex: 1; min-width: 0; }
+.op-field-before, .op-field-after { display: flex; align-items: center; flex: none; }
+.op-field-label { font-size: var(--op-type-caption-size); line-height: var(--op-type-caption-line); color: var(--op-text-secondary); }
+.op-field-root:has(.op-field[data-state="focused"]) > .op-field-label { color: var(--op-accent); }
+.op-field-bottom { font-size: var(--op-type-caption-size); line-height: var(--op-type-caption-line); color: var(--op-text-secondary); }
+.op-field-error { color: var(--op-error); }
+.op-field[data-error]::before { box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-error); }
+/* Slots inside the box: a square slot for icons, or content-sized text (prefix, unit). */
+.op-field-prepend, .op-field-append { display: flex; align-items: center; align-self: stretch; flex: none; color: var(--op-text-secondary); }
+.op-field-prepend { margin-right: var(--op-dim-pad-tight); }
+.op-field-append { margin-left: var(--op-dim-pad-tight); }
+/* Borderless: no surface and no base outline until focused or showing a result. */
+.op-field-root[data-variant="borderless"] .op-field { background-color: transparent; }
+.op-field-root[data-variant="borderless"] .op-field[data-state="idle"]::before,
+.op-field-root[data-variant="borderless"] .op-field[data-state="disabled"]::before { box-shadow: none; }

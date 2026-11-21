@@ -1,9 +1,10 @@
 //! Search input with clear button: SearchField.
 
+use crate::components::field::{Field, FieldMetrics, FieldVariant};
 use crate::components::primitives::{Icon, ProgressIndicator};
-use crate::core::{JobToken, PendingRun, field_state, spawn_ripple, use_state_visual};
+use crate::core::{JobToken, Slot, field_state, spawn_ripple, ui_icon, ui_text};
 use leptos::prelude::*;
-use operator_ui_tokens::{dim, icons, motion};
+use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
 use std::time::Duration;
 
 pub(crate) const CSS: &str = include_str!("search_field.css");
@@ -12,7 +13,9 @@ pub(crate) const CSS: &str = include_str!("search_field.css");
 #[component]
 pub fn SearchField(
     value: RwSignal<String>,
-    #[prop(default = "Search".into(), into)] placeholder: Signal<String>,
+    /// Hint inside the empty field; defaults to the `search-field.placeholder` string.
+    #[prop(optional, into)]
+    placeholder: MaybeProp<String>,
     /// Called with the query after `debounce_ms` without typing, on Enter, and on clear.
     #[prop(optional, into)]
     on_search: Option<Callback<String>>,
@@ -21,15 +24,61 @@ pub fn SearchField(
     #[prop(optional, into)]
     pending: Signal<bool>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
-    #[prop(default = "Search".into(), into)] label: String,
-    /// Accessible label of the clear button.
-    #[prop(default = "Clear search".into(), into)]
-    clear_label: Signal<String>,
+    /// Visible label above the field; also the accessible name.
+    #[prop(optional, into)]
+    label: MaybeProp<String>,
+    /// Accessible name when there is no visible label; defaults to the `search-field.label` string.
+    #[prop(optional, into)]
+    aria_label: MaybeProp<String>,
+    /// Accessible label of the clear button; defaults to the `search-field.clear` string.
+    #[prop(optional, into)]
+    clear_label: MaybeProp<String>,
+    #[prop(optional, into)] hint: MaybeProp<String>,
+    #[prop(optional, into)] error: MaybeProp<String>,
+    #[prop(optional, into)] variant: Signal<FieldVariant>,
+    /// Search icon; defaults to the `search-field.search` icon.
+    #[prop(optional)]
+    icon: Option<IconData>,
+    /// Clear icon; defaults to the `field.clear` icon.
+    #[prop(optional)]
+    clear_icon: Option<IconData>,
+    /// Replaces the search icon slot.
+    #[prop(optional, into)]
+    prepend: Slot,
+    /// Content inside the box before the clear button.
+    #[prop(optional, into)]
+    append: Slot,
+    #[prop(optional, into)] before: Slot,
+    #[prop(optional, into)] after: Slot,
+    /// Box height in DU (`--op-field-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Horizontal box padding in DU (`--op-field-padding-x`).
+    #[prop(optional, into)]
+    padding_x: MaybeProp<f32>,
+    /// Size of the icon and clear-button slots in DU (`--op-field-slot-size`).
+    #[prop(optional, into)]
+    slot_size: MaybeProp<f32>,
+    /// Gap between label, box, hint and the outer slots in DU (`--op-field-gap`).
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
+    /// Text size in TU (`--op-field-font-size`).
+    #[prop(optional, into)]
+    font_size: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let input = NodeRef::<leptos::html::Input>::new();
     let focused = RwSignal::new(false);
-    let visual = use_state_visual(field_state(enabled, Signal::stored(None), focused));
+    let state = field_state(enabled, Signal::stored(None), focused);
     let job = JobToken::new();
+    let placeholder = ui_text(placeholder, "search-field.placeholder", "Search");
+    let fallback_name = ui_text(aria_label, "search-field.label", "Search");
+    let accessible_name =
+        Signal::derive(move || label.get().unwrap_or_else(|| fallback_name.get()));
+    let clear_label = ui_text(clear_label, "search-field.clear", "Clear search");
+    let icon = ui_icon(icon, "search-field.search", icons::SEARCH);
+    let clear_icon = ui_icon(clear_icon, "field.clear", icons::CLOSE);
 
     let emit_now = move || {
         job.next();
@@ -56,30 +105,65 @@ pub fn SearchField(
         }
     };
 
+    let lead = prepend.or(move || {
+        {
+            view! {
+                <span class="op-search-lead">
+                    {move || {
+                        if pending.get() {
+                            view! { <ProgressIndicator size=dim::ICON_MEDIUM stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }
+                                .into_any()
+                        } else {
+                            view! { <Icon icon=icon.get() size=dim::ICON_LARGE/> }.into_any()
+                        }
+                    }}
+                </span>
+            }
+        }
+    });
+    let trailing = Slot::from(move || {
+        view! {
+            {append.run()}
+            <Show when=move || value.with(|v| !v.is_empty())>
+                <button
+                    type="button"
+                    class="op-rippled op-field-reveal"
+                    aria-label=move || clear_label.get()
+                    disabled=move || !enabled.get()
+                    on:mousedown=|ev| ev.prevent_default()
+                    on:pointerdown=move |ev| spawn_ripple(&ev)
+                    on:click=move |_| clear()
+                >
+                    {move || view! { <Icon icon=clear_icon.get() size=dim::ICON_SMALL/> }}
+                </button>
+            </Show>
+        }
+    });
+
     view! {
-        <div
-            class="op-sb op-field op-search"
+        <Field
+            state=state
+            label=label
+            hint=hint
+            error=error
+            variant=variant
+            prepend=lead
+            append=trailing
+            before=before
+            after=after
+            box_class="op-search"
             role="search"
-            data-state=move || visual.state.get()
-            data-result=move || visual.result.get()
-            data-fading=move || visual.fading.get().then_some("")
-            data-trailing=move || value.with(|v| !v.is_empty()).then_some("")
+            trailing=Signal::derive(move || value.with(|v| !v.is_empty()))
+            pending_run=true
+            metrics=FieldMetrics { height, padding_x, slot_size, gap, font_size }
+            class=class
+            style=style
         >
-            <span class="op-search-lead">
-                {move || {
-                    if pending.get() {
-                        view! { <ProgressIndicator size=dim::ICON_MEDIUM stroke=dim::SPINNER_STROKE color="var(--op-pending)"/> }
-                            .into_any()
-                    } else {
-                        view! { <Icon icon=icons::SEARCH size=dim::ICON_LARGE/> }.into_any()
-                    }
-                }}
-            </span>
             <input
                 node_ref=input
                 class="op-field-input"
                 type="search"
-                aria-label=label
+                aria-label=move || accessible_name.get()
                 placeholder=move || placeholder.get()
                 prop:value=move || value.get()
                 disabled=move || !enabled.get()
@@ -98,20 +182,6 @@ pub fn SearchField(
                 on:focus=move |_| focused.set(true)
                 on:blur=move |_| focused.set(false)
             />
-            <Show when=move || value.with(|v| !v.is_empty())>
-                <button
-                    type="button"
-                    class="op-rippled op-field-reveal"
-                    aria-label=move || clear_label.get()
-                    disabled=move || !enabled.get()
-                    on:mousedown=|ev| ev.prevent_default()
-                    on:pointerdown=move |ev| spawn_ripple(&ev)
-                    on:click=move |_| clear()
-                >
-                    <Icon icon=icons::CLOSE size=dim::ICON_SMALL/>
-                </button>
-            </Show>
-            <PendingRun/>
-        </div>
+        </Field>
     }
 }

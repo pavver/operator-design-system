@@ -43,6 +43,8 @@ pub mod prelude {
     pub use crate::components::dropdown_menu::*;
     #[cfg(feature = "empty-state")]
     pub use crate::components::empty_state::*;
+    #[cfg(feature = "field")]
+    pub use crate::components::field::*;
     #[cfg(feature = "graph")]
     pub use crate::components::graph::*;
     #[cfg(feature = "header")]
@@ -135,7 +137,8 @@ pub mod prelude {
     pub use crate::components::virtual_list::*;
     pub use crate::core::theme::{OperatorTheme, Theme, ThemeRoot};
     pub use crate::core::{
-        ActionResult, AsyncAction, ControlState, du, sleep_ms, tu, use_pending_indicator,
+        ActionResult, AsyncAction, ControlState, Metric, ScopedSlot, Slot, UiIcons, UiStrings, du,
+        root_class, root_style, sleep_ms, tu, ui_icon, ui_text, use_pending_indicator,
     };
     pub use operator_ui_tokens::{dim, icons, motion};
 }

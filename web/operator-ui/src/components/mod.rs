@@ -32,6 +32,8 @@ pub mod dialog;
 pub mod dropdown_menu;
 #[cfg(feature = "empty-state")]
 pub mod empty_state;
+#[cfg(feature = "field")]
+pub mod field;
 #[cfg(feature = "graph")]
 pub mod graph;
 #[cfg(feature = "header")]

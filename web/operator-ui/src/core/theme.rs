@@ -13,7 +13,7 @@ const STYLED_TEXT_CSS: &str = include_str!("styled_text.css");
 
 fn stylesheet() -> &'static str {
     static CSS: LazyLock<String> = LazyLock::new(|| {
-        [
+        let parts = [
             TOKENS_CSS,
             BASE_CSS,
             #[cfg(feature = "primitives")]
@@ -29,6 +29,8 @@ fn stylesheet() -> &'static str {
             crate::components::checkbox::CSS,
             #[cfg(feature = "checkbox-group")]
             crate::components::checkbox_group::CSS,
+            #[cfg(feature = "field")]
+            crate::components::field::CSS,
             #[cfg(feature = "text-field")]
             crate::components::text_field::CSS,
             #[cfg(feature = "slider")]
@@ -134,8 +136,10 @@ fn stylesheet() -> &'static str {
             #[cfg(feature = "virtual-list")]
             crate::components::virtual_list::CSS,
             HOVER_CSS,
-        ]
-        .concat()
+        ];
+        // One cascade layer: unlayered application CSS always wins over component styles,
+        // whatever the selector specificity.
+        format!("@layer operator {{\n{}\n}}\n", parts.concat())
     });
     &CSS
 }
@@ -166,9 +170,21 @@ pub fn ThemeRoot(
     #[prop(optional)] theme: Option<RwSignal<Theme>>,
     #[prop(optional)] dark: Option<RwSignal<bool>>,
     #[prop(optional, into)] class: String,
+    /// Translations of component strings; nested roots inherit the outer lookup when unset.
+    #[prop(optional, into)]
+    strings: Option<Callback<&'static str, Option<String>>>,
+    /// Replacements of semantic icons; nested roots inherit the outer lookup when unset.
+    #[prop(optional, into)]
+    icons: Option<Callback<&'static str, Option<operator_ui_tokens::Icon>>>,
     children: Children,
 ) -> impl IntoView {
     let parent = use_context::<OperatorTheme>();
+    if let Some(strings) = strings {
+        provide_context(crate::core::UiStrings(strings));
+    }
+    if let Some(icons) = icons {
+        provide_context(crate::core::UiIcons(icons));
+    }
     let ctx = OperatorTheme {
         theme: theme.unwrap_or_else(|| {
             parent
