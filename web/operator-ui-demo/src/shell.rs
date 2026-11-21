@@ -96,7 +96,7 @@ pub fn TopBar(dark: RwSignal<bool>, menu_open: RwSignal<bool>) -> impl IntoView 
         }
     });
 
-    let width_signal = Signal::derive(move || if is_phone.get() { 19.0 } else { 34.0 });
+    let width_signal = Signal::derive(move || if is_phone.get() { 19.0 } else { 42.0 });
 
     view! {
         <header class="docs-topbar">

@@ -36,3 +36,9 @@
   width: 100%;
   height: 100%;
 }
+
+/* The list may be wider than a compact field (header pickers), so names are not cut.
+   Rows are virtualized and do not size the list, hence a fixed minimum. */
+.op-dropdown-menu:has(.op-language-picker-flag) {
+  min-width: var(--op-language-picker-list-min-width, calc(var(--op-du) * 64));
+}

@@ -119,6 +119,9 @@ Metric props declare CSS custom properties with token fallbacks.
 | `flag_width` | DU | `--op-language-picker-flag-width` | `6 DU` |
 | `flag_height` | DU | `--op-language-picker-flag-height` | `4 DU` |
 
+The list opens in the overlay host, outside the component root, so its minimum width is a theme-level variable: `--op-language-picker-list-min-width` (default `64 DU`).
+The list is at least that wide even when the field is compact, so language names are not cut.
+
 | Color variable | Default |
 | :--- | :--- |
 | `--op-language-picker-border` | `--op-border` |
