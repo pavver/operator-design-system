@@ -1,6 +1,7 @@
 //! Two panes with draggable divider: SplitPane.
 
 use crate::components::scrollbar::{ScrollAxis, ScrollView};
+use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use operator_ui_tokens::DU_POINTS;
 use wasm_bindgen::JsCast;
@@ -10,22 +11,46 @@ pub(crate) const CSS: &str = include_str!("split_pane.css");
 /// Two panes with a draggable divider.
 #[component]
 pub fn SplitPane(
-    #[prop(into)] start: ViewFn,
-    #[prop(into)] end: ViewFn,
+    #[prop(into)] start: Slot,
+    #[prop(into)] end: Slot,
     /// Share of the first pane, `0.0..1.0`.
     #[prop(optional, into)]
     ratio: Option<RwSignal<f32>>,
     /// Stacks the panes top and bottom.
     #[prop(optional)]
     vertical: bool,
-    /// Minimum size of each pane in DU.
-    #[prop(default = 20.0)]
-    min_size: f32,
+    /// Minimum size of each pane in DU (`--op-split-pane-min-size`).
+    #[prop(default = 20.0.into(), into)]
+    min_size: MaybeProp<f32>,
+    /// Size of the divider handle hit area in DU (`--op-split-pane-handle-size`).
+    #[prop(optional, into)]
+    handle_size: MaybeProp<f32>,
+    /// Divider line width in DU (`--op-split-pane-divider-width`).
+    #[prop(optional, into)]
+    divider_width: MaybeProp<f32>,
+    /// Active divider line width in DU (`--op-split-pane-divider-active-width`).
+    #[prop(optional, into)]
+    divider_active_width: MaybeProp<f32>,
+    /// Grip width in DU (`--op-split-pane-grip-width`).
+    #[prop(optional, into)]
+    grip_width: MaybeProp<f32>,
+    /// Grip length in DU (`--op-split-pane-grip-length`).
+    #[prop(optional, into)]
+    grip_length: MaybeProp<f32>,
+    /// Custom grip slot.
+    #[prop(optional, into)]
+    grip: Slot,
+    /// Accessible label for the separator handle; defaults to `split-pane.handle`.
+    #[prop(optional, into)]
+    label: MaybeProp<String>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let ratio = ratio.unwrap_or_else(|| RwSignal::new(0.5));
     let initial = ratio.get_untracked();
     let host = NodeRef::<leptos::html::Div>::new();
     let dragging = RwSignal::new(false);
+    let label = ui_text(label, "split-pane.handle", "Splitter");
 
     let limits = move || -> (f32, f32) {
         let Some(el) = host.try_get_untracked().flatten() else {
@@ -37,7 +62,8 @@ pub fn SplitPane(
             el.client_width()
         };
         let total = f64::from(total).max(1.0);
-        let min = (f64::from(min_size * DU_POINTS) / total).min(0.5);
+        let min_val = min_size.get().unwrap_or(20.0);
+        let min = (f64::from(min_val * DU_POINTS) / total).min(0.5);
         #[allow(clippy::cast_possible_truncation)]
         let min = min as f32;
         (min, 1.0 - min)
@@ -61,10 +87,19 @@ pub fn SplitPane(
     };
 
     let first_basis = move || format!("{}%", ratio.get() * 100.0);
+    let root_metrics = vec![
+        Metric::du("--op-split-pane-min-size", min_size),
+        Metric::du("--op-split-pane-handle-size", handle_size),
+        Metric::du("--op-split-pane-divider-width", divider_width),
+        Metric::du("--op-split-pane-divider-active-width", divider_active_width),
+        Metric::du("--op-split-pane-grip-width", grip_width),
+        Metric::du("--op-split-pane-grip-length", grip_length),
+    ];
     view! {
         <div
             node_ref=host
-            class="op-split"
+            class=root_class("op-split", class)
+            style=root_style(root_metrics, style)
             data-vertical=vertical.then_some("")
             data-dragging=move || dragging.get().then_some("")
         >
@@ -73,6 +108,7 @@ pub fn SplitPane(
                 class="op-split-handle"
                 role="separator"
                 tabindex="0"
+                aria-label=move || label.get()
                 aria-orientation=if vertical { "horizontal" } else { "vertical" }
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -109,7 +145,9 @@ pub fn SplitPane(
                     }
                 }
             >
-                <span class="op-split-grip" aria-hidden="true"></span>
+                {grip.run().unwrap_or_else(|| {
+                    view! { <span class="op-split-grip" aria-hidden="true"></span> }.into_any()
+                })}
             </div>
             <div class="op-split-pane op-split-pane-end"><ScrollView axis=ScrollAxis::Both>{end.run()}</ScrollView></div>
         </div>

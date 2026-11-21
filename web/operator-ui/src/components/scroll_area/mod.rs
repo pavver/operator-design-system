@@ -1,7 +1,7 @@
 //! Scroll container with stretch overscroll: ScrollArea.
 
 use crate::components::scrollbar::{ScrollAxis, Scrollbar};
-use crate::core::{JobToken, du};
+use crate::core::{JobToken, Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use operator_ui_tokens::motion;
 use std::time::Duration;
@@ -25,14 +25,27 @@ fn stretch_for(pull: f64, height: f64) -> f64 {
 /// Vertical scroll container with a thin scrollbar and stretch overscroll at the edges.
 #[component]
 pub fn ScrollArea(
-    /// Maximum height in DU; fills the parent when omitted.
-    #[prop(optional)]
-    max_height: Option<f32>,
-    /// Fixed height in DU.
-    #[prop(optional)]
-    height: Option<f32>,
+    /// Maximum height in DU (`--op-scroll-area-max-height`); fills the parent when omitted.
+    #[prop(optional, into)]
+    max_height: MaybeProp<f32>,
+    /// Fixed height in DU (`--op-scroll-area-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Width of focus outline in DU (`--op-scroll-area-focus-outline-width`).
+    #[prop(optional, into)]
+    focus_outline_width: MaybeProp<f32>,
     #[prop(default = true)] stretch: bool,
-    #[prop(optional, into)] label: Option<String>,
+    /// Makes the area a named region; defaults to `scroll-area.label`.
+    #[prop(optional, into)]
+    label: MaybeProp<String>,
+    /// Slot rendered before the scrollable content.
+    #[prop(optional, into)]
+    header: Slot,
+    /// Slot rendered after the scrollable content.
+    #[prop(optional, into)]
+    footer: Slot,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
     children: Children,
 ) -> impl IntoView {
     let host = NodeRef::<leptos::html::Div>::new();
@@ -41,6 +54,8 @@ pub fn ScrollArea(
     let held = RwSignal::new(false);
     let touch_y = StoredValue::new(None::<f64>);
     let wheel_job = JobToken::new();
+    let label_text = ui_text(label, "scroll-area.label", "");
+    let has_label = Signal::derive(move || !label_text.get().is_empty());
 
     let reduced = web_sys::window()
         .and_then(|w| {
@@ -74,90 +89,109 @@ pub fn ScrollArea(
     };
     let origin = move || if pull.get() >= 0.0 { "top" } else { "bottom" };
 
+    let root_metrics = vec![
+        Metric::du("--op-scroll-area-height", height),
+        Metric::du("--op-scroll-area-max-height", max_height),
+        Metric::du("--op-scroll-area-focus-outline-width", focus_outline_width),
+    ];
+    let base_style = root_style(root_metrics, style);
+    let full_style = move || {
+        let mut out = base_style().unwrap_or_default();
+        if let Some(h) = height.get() {
+            out.push_str(&format!("height:calc(var(--op-du) * {h});"));
+        }
+        if let Some(mh) = max_height.get() {
+            out.push_str(&format!("max-height:calc(var(--op-du) * {mh});"));
+        }
+        (!out.is_empty()).then_some(out)
+    };
+
     view! {
-        <div class="op-scrollview" style:max-height=max_height.map(du) style:height=height.map(du)>
-        <div
-            node_ref=host
-            class="op-scroll op-scrollview-viewport op-scroll-native-off"
-            data-axis="y"
-            tabindex="0"
-            role=label.is_some().then_some("region")
-            aria-label=label
-            on:touchstart=move |ev| {
-                if enabled {
-                    touch_y.set_value(ev.touches().get(0).map(|t| f64::from(t.client_y())));
-                }
-            }
-            on:touchmove=move |ev| {
-                if !enabled {
-                    return;
-                }
-                let (Some(start), Some(t)) = (touch_y.get_value(), ev.touches().get(0)) else {
-                    return;
-                };
-                let y = f64::from(t.client_y());
-                let Some((top, bottom, _)) = edges() else {
-                    return;
-                };
-                let dy = y - start;
-                let current = pull.get_untracked();
-                if (top && dy > 0.0) || (bottom && dy < 0.0) || current != 0.0 {
-                    let next = if current == 0.0 { dy } else { current + (y - start) };
-                    // Pulling back past the rest position hands control to native scrolling.
-                    if current != 0.0 && next.signum() != current.signum() {
-                        release();
-                    } else {
-                        ev.prevent_default();
-                        held.set(true);
-                        pull.set(next);
+        <div class=root_class("op-scrollview op-scroll-area", class) style=full_style>
+            {header.run()}
+            <div
+                node_ref=host
+                class="op-scroll op-scrollview-viewport op-scroll-native-off"
+                data-axis="y"
+                tabindex="0"
+                role=move || has_label.get().then_some("region")
+                aria-label=move || has_label.get().then(|| label_text.get())
+                on:touchstart=move |ev| {
+                    if enabled {
+                        touch_y.set_value(ev.touches().get(0).map(|t| f64::from(t.client_y())));
                     }
                 }
-                touch_y.set_value(Some(y));
-            }
-            on:touchend=move |_| {
-                touch_y.set_value(None);
-                release();
-            }
-            on:touchcancel=move |_| {
-                touch_y.set_value(None);
-                release();
-            }
-            on:wheel=move |ev| {
-                if !enabled || ev.ctrl_key() {
-                    return;
+                on:touchmove=move |ev| {
+                    if !enabled {
+                        return;
+                    }
+                    let (Some(start), Some(t)) = (touch_y.get_value(), ev.touches().get(0)) else {
+                        return;
+                    };
+                    let y = f64::from(t.client_y());
+                    let Some((top, bottom, _)) = edges() else {
+                        return;
+                    };
+                    let dy = y - start;
+                    let current = pull.get_untracked();
+                    if (top && dy > 0.0) || (bottom && dy < 0.0) || current != 0.0 {
+                        let next = if current == 0.0 { dy } else { current + (y - start) };
+                        // Pulling back past the rest position hands control to native scrolling.
+                        if current != 0.0 && next.signum() != current.signum() {
+                            release();
+                        } else {
+                            ev.prevent_default();
+                            held.set(true);
+                            pull.set(next);
+                        }
+                    }
+                    touch_y.set_value(Some(y));
                 }
-                let Some((top, bottom, h)) = edges() else {
-                    return;
-                };
-                let dy = -ev.delta_y();
-                if (top && dy > 0.0) || (bottom && dy < 0.0) {
-                    held.set(true);
-                    pull.update(|p| *p = (*p + dy * 0.5).clamp(-h, h));
-                    let id = wheel_job.next();
-                    set_timeout(
-                        move || {
-                            if wheel_job.is_current(id) {
-                                release();
-                            }
-                        },
-                        Duration::from_millis(WHEEL_IDLE_MS),
-                    );
+                on:touchend=move |_| {
+                    touch_y.set_value(None);
+                    release();
                 }
-            }
-        >
-            <div
-                class="op-scroll-content"
-                data-held=move || held.get().then_some("")
-                style:transform=scale
-                style:transform-origin=origin
-                style:transition-duration=move || {
-                    if held.get() { "0ms".to_string() } else { format!("{}ms", motion::OVERSCROLL_RELEASE_MS) }
+                on:touchcancel=move |_| {
+                    touch_y.set_value(None);
+                    release();
+                }
+                on:wheel=move |ev| {
+                    if !enabled || ev.ctrl_key() {
+                        return;
+                    }
+                    let Some((top, bottom, h)) = edges() else {
+                        return;
+                    };
+                    let dy = -ev.delta_y();
+                    if (top && dy > 0.0) || (bottom && dy < 0.0) {
+                        held.set(true);
+                        pull.update(|p| *p = (*p + dy * 0.5).clamp(-h, h));
+                        let id = wheel_job.next();
+                        set_timeout(
+                            move || {
+                                if wheel_job.is_current(id) {
+                                    release();
+                                }
+                            },
+                            Duration::from_millis(WHEEL_IDLE_MS),
+                        );
+                    }
                 }
             >
-                {children()}
+                <div
+                    class="op-scroll-content"
+                    data-held=move || held.get().then_some("")
+                    style:transform=scale
+                    style:transform-origin=origin
+                    style:transition-duration=move || {
+                        if held.get() { "0ms".to_string() } else { format!("{}ms", motion::OVERSCROLL_RELEASE_MS) }
+                    }
+                >
+                    {children()}
+                </div>
             </div>
-        </div>
-        <Scrollbar target=host axis=ScrollAxis::Vertical/>
+            <Scrollbar target=host axis=ScrollAxis::Vertical/>
+            {footer.run()}
         </div>
     }
 }

@@ -68,5 +68,5 @@
 .op-field-append { margin-left: var(--op-dim-pad-tight); }
 /* Borderless: no surface and no base outline until focused or showing a result. */
 .op-field-root[data-variant="borderless"] .op-field { background-color: transparent; }
-.op-field-root[data-variant="borderless"] .op-field[data-state="idle"]::before,
-.op-field-root[data-variant="borderless"] .op-field[data-state="disabled"]::before { box-shadow: none; }
+.op-field-root[data-variant="borderless"] .op-field[data-state="idle"]:not([data-error])::before,
+.op-field-root[data-variant="borderless"] .op-field[data-state="disabled"]:not([data-error])::before { box-shadow: none; }

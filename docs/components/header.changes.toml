@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`height`, `back_width`, `gap_back`, `padding_start`, `gap_avatar`, `title_size`, `title_line_height`, `title_small_size`, `title_small_line_height`, `subtitle_size`, `subtitle_line_height`, `actions_gap`, `actions_padding_end`), color variables (`--op-header-background`, `--op-header-border`, `--op-header-back-color`, `--op-header-title-color`, `--op-header-subtitle-color`), `actions` slot, translatable `back_label` string and replaceable `back_icon` icon."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `back_width`, `gap_back`, `padding_start`, `gap_avatar`, `title_size`, `title_line_height`, `title_small_size`, `title_small_line_height`, `subtitle_size`, `subtitle_line_height`, `actions_gap`, `actions_padding_end`), змінні кольорів (`--op-header-background`, `--op-header-border`, `--op-header-back-color`, `--op-header-title-color`, `--op-header-subtitle-color`), слот `actions`, перекладний рядок `back_label` та замінна іконка `back_icon`."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

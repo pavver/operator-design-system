@@ -3,5 +3,6 @@
 /* ------------------------------------------------------------------ */
 .op-field-save-slot { display: flex; align-self: stretch; flex: none; }
 .op-field-save-slot .op-field-save { height: 100%; }
-.op-field-save { flex: none; min-width: calc(var(--op-du) * 12); max-width: calc(var(--op-du) * 30); }
+.op-field-save { flex: none; min-width: var(--op-field-save-min-width, calc(var(--op-du) * 12)); max-width: var(--op-field-save-max-width, calc(var(--op-du) * 30)); }
 
+.op-text-field .op-field-append { margin-left: 0; }

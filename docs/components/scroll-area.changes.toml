@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`height`, `max_height`, `focus_outline_width`), color variable (`--op-scroll-area-focus-outline-color`), slots (`header`, `footer`), and translatable `label` string."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `max_height`, `focus_outline_width`), змінна кольору (`--op-scroll-area-focus-outline-color`), слоти (`header`, `footer`) та перекладний рядок `label`."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

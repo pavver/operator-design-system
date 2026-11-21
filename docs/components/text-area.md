@@ -39,7 +39,7 @@ Status: **reviewed** on web.
 | :--- | :--- | :--- | :--- |
 | `value` | string signal | required | Text. |
 | `placeholder` | string | empty | Hint shown while empty. |
-| `label` | string | none | Accessible name. |
+| `label` | string | none | Visible label above the box and accessible name. |
 | `min_rows` | integer | `3` | Initial height in lines. |
 | `max_rows` | integer | `8` | Height limit before scrolling. |
 | `resizable` | bool | `true` | Shows the resize grip. |
@@ -47,3 +47,93 @@ Status: **reviewed** on web.
 | `max_length` | integer | none | Character limit with counter. |
 | `state` | control state | none | External state. |
 | `enabled` | bool | `true` | Enables input. |
+
+### Customization API
+
+Every text-like input uses the public [Field](field.md) shell.
+Labels are visible above the box; use `aria_label` for an accessible name alone.
+
+| Property | Type | Default | Components | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `placeholder` | `string signal` | string key | TextArea | Translatable text; see Strings. |
+| `label` | `string signal` | none | TextArea | Visible label and accessible name. |
+| `hint` | `string signal` | none | TextArea | Helper text below the box. |
+| `error` | `string signal` | none | TextArea | Error text replaces hint and draws the error outline. |
+| `variant` | `FieldVariant signal` | outlined | TextArea | Field appearance. |
+| `aria_label` | `string signal` | string key | TextArea | Accessible name when label is unset. |
+| `prepend` | `slot` | none | TextArea | Inside the box before the control. |
+| `append` | `slot` | none | TextArea | Inside the box before built-in reveal, save or picker controls. |
+| `before` | `slot` | none | TextArea | Outside the box before it. |
+| `after` | `slot` | none | TextArea | Outside the box after it. |
+| `label_slot` | `slot` | none | TextArea | Replaces the visible label. |
+| `hint_slot` | `slot` | none | TextArea | Replaces the hint and error line. |
+| `height` | `number` | unset | TextArea | Metric override; see below. |
+| `padding_x` | `number` | unset | TextArea | Metric override; see below. |
+| `slot_size` | `number` | unset | TextArea | Metric override; see below. |
+| `gap` | `number` | unset | TextArea | Metric override; see below. |
+| `font_size` | `number` | unset | TextArea | Metric override; see below. |
+| `class` | `string signal` | none | TextArea | Additional root class. |
+| `style` | `string signal` | none | TextArea | Additional root style. |
+| `padding_y` | `number` | unset | TextArea | Metric override; see below. |
+| `line_height` | `number` | unset | TextArea | Metric override; see below. |
+| `grip_size` | `number` | unset | TextArea | Metric override; see below. |
+| `caption_font_size` | `number` | unset | TextArea | Metric override; see below. |
+| `caption_line_height` | `number` | unset | TextArea | Metric override; see below. |
+| `counter_gap` | `number` | unset | TextArea | Metric override; see below. |
+| `resize_label` | `string signal` | string key | TextArea | Translatable text; see Strings. |
+| `counter_text` | `string signal` | string key | TextArea | Translatable text; see Strings. |
+| `state` | `Signal<Option<ControlState>>` | none | TextArea | External control-state override. |
+
+## Customization
+
+`class` and `style` apply to the root; explicit `style` declarations follow metric props and win.
+Unset metric props preserve token fallbacks.
+All text-like inputs provide the same six field slots.
+
+| Metric prop | Unit | Variable | Default | Components |
+| :--- | :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-field-height` | `content height; optional minimum box height` | TextArea |
+| `padding_x` | DU | `--op-field-padding-x` | `pad_card` | TextArea |
+| `slot_size` | DU | `--op-field-slot-size` | `row_standard` | TextArea |
+| `gap` | DU | `--op-field-gap` | `gap_micro` | TextArea |
+| `font_size` | TU | `--op-field-font-size` | `type_body_size` | TextArea |
+| `padding_y` | DU | `--op-field-padding-y` | `pad_content` | TextArea |
+| `line_height` | TU | `--op-field-line-height` | `type_body_line` | TextArea |
+| `grip_size` | DU | `--op-field-grip-size` | `gutter` | TextArea |
+| `counter_gap` | DU | `--op-field-counter-gap` | `pad_tight` | TextArea |
+| `caption_font_size` | TU | `--op-field-caption-font-size` | `type_caption_size` | TextArea |
+| `caption_line_height` | TU | `--op-field-caption-line-height` | `type_caption_line` | TextArea |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-field-background` | `surface` |
+| `--op-field-text` | `text_primary` |
+| `--op-field-disabled-background` | `disabled_surface` |
+| `--op-field-accent` | `accent` |
+| `--op-field-disabled-text` | `text_disabled` |
+| `--op-field-grip` | `border_strong` |
+| `--op-field-secondary-text` | `text_secondary` |
+| `--op-field-warning` | `warning` |
+| `--op-field-error` | `error` |
+
+| Slot | Place |
+| :--- | :--- |
+| `prepend` | Inside the box before the control. |
+| `append` | Inside the box before built-in reveal, save or picker controls. |
+| `before` | Outside the box before it. |
+| `after` | Outside the box after it. |
+| `label_slot` | Replaces the visible label. |
+| `hint_slot` | Replaces the hint and error line. |
+
+### Strings
+
+| Key | Prop | Default |
+| :--- | :--- | :--- |
+| `text-area.placeholder` | `placeholder` | `(empty)` |
+| `text-area.label` | `aria_label` | `Text` |
+| `text-area.resize` | `resize_label` | `Drag to resize, double-click to fit the text` |
+| `text-area.counter` | `counter_text` | `{count} / {max}` |
+
+### Icons
+
+This component has no built-in icons.

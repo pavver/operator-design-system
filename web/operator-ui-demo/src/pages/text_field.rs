@@ -1,5 +1,6 @@
 //! Live examples for text field.
 
+use crate::i18n::l;
 use crate::kit::{Cell, Example, backend};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -38,6 +39,12 @@ pub fn text_field() -> AnyView {
                     </Cell>
                 })
                 .collect_view()}
+        </Example>
+        <Example title="Customization" block=true>
+            <TextField value=RwSignal::new(String::new()) label=l("Account", "Обліковий запис")
+                placeholder=l("Enter a name", "Введіть ім’я") height=12.0 padding_x=4.0 gap=2.0 font_size=16.0
+                hint=l("Shown above the input", "Показано над полем")
+                prepend=|| view! { <Icon icon=icons::INFO/> }/>
         </Example>
     }
     .into_any()

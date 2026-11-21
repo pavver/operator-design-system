@@ -1,6 +1,7 @@
 //! Live examples for combobox.
 
 use super::common::SEARCH_CAMERAS as CAMERAS;
+use crate::i18n::l;
 use crate::kit::{Example, backend};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -100,6 +101,14 @@ pub fn combobox() -> AnyView {
                 on_select=Callback::new(move |o: ComboOption| added.set(o.text().to_string()))
                 on_custom=Callback::new(move |t: String| added.set(format!("custom: {t}")))
             />
+        </Example>
+        <Example title="Customization" block=true>
+            <Combobox options=vec!["North", "South", "East", "West"] selected=RwSignal::new(String::new())
+                label=l("Direction", "Напрямок") placeholder=l("Choose a direction", "Виберіть напрямок")
+                height=12.0 padding_x=4.0 row_height=10.0 max_height=30.0
+                prepend=|| view! { <Icon icon=icons::INFO/> }
+                option=Callback::new(|item: ComboOption| view! { <strong>{item.text().to_string()}</strong> }.into_any())
+                footer=|| view! { <span>{l("Four directions", "Чотири напрямки")}</span> }/>
         </Example>
     }
     .into_any()
