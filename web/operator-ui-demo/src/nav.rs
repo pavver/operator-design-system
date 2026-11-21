@@ -16,6 +16,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "foundations/iconography",
             "foundations/motion",
             "foundations/states",
+            "foundations/customization",
         ],
     ),
     (
@@ -47,6 +48,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/text-field",
             "components/text-area",
             "components/search-field",
+            "components/field",
             "components/dropdown-menu",
             "components/combobox",
             "components/value-fields",
