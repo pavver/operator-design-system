@@ -47,3 +47,72 @@ A single-line row centers its content vertically; a multi-line row aligns it to 
 | `title_max_lines` | integer | `1` |
 | `subtitle_max_lines` | integer | `2` |
 | `on_click` | callback | none |
+
+### Customization API
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `min_height` | optional number (DU) | `row_avatar` with leading content, `row_two_line` with subtitle, otherwise `row_standard` | Overrides `--op-list-item-min-height`. |
+| `padding_x` | optional number (DU) | `pad_card` | Overrides `--op-list-item-padding-x`. |
+| `padding_y` | optional number (DU) | `gutter` | Overrides `--op-list-item-padding-y`. |
+| `leading_padding` | optional number (DU) | `gap_micro` | Overrides `--op-list-item-leading-padding`. |
+| `gap` | optional number (DU) | `pad_card` | Overrides `--op-list-item-gap`. |
+| `text_padding` | optional number (DU) | `border` | Overrides `--op-list-item-text-padding`. |
+| `subtitle_gap` | optional number (DU) | `0.75 DU` | Overrides `--op-list-item-subtitle-gap`. |
+| `title_font_size` | optional number (TU) | `type_row_title_size` | Overrides `--op-list-item-title-font-size`. |
+| `title_line_height` | optional number (TU) | `type_row_title_line` | Overrides `--op-list-item-title-line-height`. |
+| `subtitle_font_size` | optional number (TU) | `type_body_small_size` | Overrides `--op-list-item-subtitle-font-size`. |
+| `subtitle_line_height` | optional number (TU) | `type_body_small_line` | Overrides `--op-list-item-subtitle-line-height`. |
+| `leading` | slot | none | Before the text; retains the leading slot wrapper. |
+| `trailing` | slot | none | After the text; retains alignment for rows with a subtitle. |
+| `content` | slot | none | Replaces the title and subtitle inside the text wrapper. |
+| `class` | optional string | none | Added to the root classes. |
+| `style` | optional string | none | Appended after root metric declarations. |
+
+## Customization
+
+`class` and `style` apply to the root.
+Explicit root styles take precedence over metric props; unset metrics retain the original rendering.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `min_height` | DU | `--op-list-item-min-height` | `row_avatar` with leading content, `row_two_line` with subtitle, otherwise `row_standard` |
+| `padding_x` | DU | `--op-list-item-padding-x` | `pad_card` |
+| `padding_y` | DU | `--op-list-item-padding-y` | `gutter` |
+| `leading_padding` | DU | `--op-list-item-leading-padding` | `gap_micro` |
+| `gap` | DU | `--op-list-item-gap` | `pad_card` |
+| `text_padding` | DU | `--op-list-item-text-padding` | `border` |
+| `subtitle_gap` | DU | `--op-list-item-subtitle-gap` | `0.75 DU` |
+| `title_font_size` | TU | `--op-list-item-title-font-size` | `type_row_title_size` |
+| `title_line_height` | TU | `--op-list-item-title-line-height` | `type_row_title_line` |
+| `subtitle_font_size` | TU | `--op-list-item-subtitle-font-size` | `type_body_small_size` |
+| `subtitle_line_height` | TU | `--op-list-item-subtitle-line-height` | `type_body_small_line` |
+
+Border widths remain the fixed geometry specified above.
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-list-item-background` | `background` |
+| `--op-list-item-pressed` | `pressed` |
+| `--op-list-item-selected` | `selection` |
+| `--op-list-item-disabled-background` | `disabled_surface` |
+| `--op-list-item-text` | `text_primary` |
+| `--op-list-item-disabled-text` | `text_disabled` |
+| `--op-list-item-secondary-text` | `text_secondary` |
+| `--op-list-item-divider` | `divider` |
+| `--op-list-item-hover` | `hover` |
+
+| Slot | Place |
+| :--- | :--- |
+| `leading` | Before the text; retains the leading slot wrapper. |
+| `trailing` | After the text; retains alignment for rows with a subtitle. |
+| `content` | Replaces the title and subtitle inside the text wrapper. |
+
+### Strings
+
+No built-in strings.
+Visible text is supplied by the caller and can be resolved through the application string lookup.
+
+### Icons
+
+No built-in icons.

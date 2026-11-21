@@ -4,19 +4,23 @@
 .op-hover-card-anchor { display: inline-flex; }
 .op-hover-card {
   /* Raised layer, like Menu and Tooltip. */
-  background-color: var(--op-surface-alt);
+  background-color: var(--op-hover-card-background, var(--op-surface-alt));
   box-shadow:
-    inset 0 0 0 var(--op-dim-border) var(--op-border-strong),
-    0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgb(0 0 0 / 35%);
-  color: var(--op-text-primary);
+    inset 0 0 0 var(--op-dim-border) var(--op-hover-card-border, var(--op-border-strong)),
+    0 var(--op-hover-card-shadow-y, calc(var(--op-du) * 2)) var(--op-hover-card-shadow-blur, calc(var(--op-du) * 6)) var(--op-hover-card-shadow, rgb(0 0 0 / 35%));
+  color: var(--op-hover-card-text, var(--op-text-primary));
   animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
 }
 .op-hover-card-body {
-  max-width: calc(100vw - var(--op-dim-margin-screen) * 2);
+  max-width: var(--op-hover-card-max-width, calc(100vw - var(--op-hover-card-viewport-margin, var(--op-dim-margin-screen)) * 2));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--op-dim-pad-card);
+  padding: var(--op-hover-card-padding, var(--op-dim-pad-card));
   display: flex;
   flex-direction: column;
-  gap: var(--op-dim-pad-tight);
+  gap: var(--op-hover-card-gap, var(--op-dim-pad-tight));
 }
+
+.op-hover-card-body { width: var(--op-hover-card-width, calc(var(--op-du) * 80)); max-height: var(--op-hover-card-max-height, calc(var(--op-du) * 100)); }
+.op-hover-card { --op-popover-gap: var(--op-hover-card-offset, calc(var(--op-du) * 1.5)); }
+.op-hover-card { font-size: var(--op-hover-card-font-size, var(--op-type-body-size)); line-height: var(--op-hover-card-line-height, var(--op-type-body-line)); }

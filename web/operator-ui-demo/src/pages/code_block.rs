@@ -94,6 +94,13 @@ pub fn code_block() -> AnyView {
         <Example title="Wrapped, no header" block=true>
             <CodeBlock code=short wrap=true copy=false/>
         </Example>
+
+        <Example title="Customization" note="Code metrics, a header slot and an application copy string." block=true>
+            <ThemeRoot strings=Callback::new(|key| (key == "code-block.copy").then(|| "Copy snippet".to_string()))>
+                <CodeBlock code=SAMPLE language="toml" padding=5.0 font_size=15.0 line_height=23.0
+                    header=|| view! { <strong>"Camera configuration"</strong> }/>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

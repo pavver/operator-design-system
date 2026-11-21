@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`padding_y`, `padding_x`, `shadow_y`, `shadow_blur`, `font_size`, `line_height`, `offset`, `max_width`), `--op-tooltip-*` metric and color variables, slots (`content`), translatable strings."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`padding_y`, `padding_x`, `shadow_y`, `shadow_blur`, `font_size`, `line_height`, `offset`, `max_width`), змінні розмірів і кольорів `--op-tooltip-*`, слоти (`content`), перекладні тексти."
+
+[[change]]
 date = "2026-11-17T01:31:40+02:00"
 status = "draft"
 commit = "203c562"

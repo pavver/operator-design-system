@@ -1,15 +1,26 @@
 /* ------------------------------------------------------------------ */
 /* CodeBlock                                                           */
 /* ------------------------------------------------------------------ */
-.op-code { width: 100%; background-color: var(--op-surface-alt); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border); }
-.op-code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--op-dim-gutter); min-height: var(--op-dim-row-compact); padding: 0 var(--op-dim-pad-tight) 0 var(--op-dim-pad-card); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider); }
-.op-code-lang { color: var(--op-text-secondary); font-size: var(--op-type-caption-size); text-transform: uppercase; letter-spacing: 0.04em; }
-.op-code-body { margin: 0; padding: var(--op-dim-pad-card); width: max-content; min-width: 100%; font: inherit; font-size: var(--op-type-console-size); line-height: var(--op-type-console-line); color: var(--op-text-primary); tab-size: 4; }
+.op-code { width: 100%; background-color: var(--op-code-block-background, var(--op-surface-alt)); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-code-block-border, var(--op-border)); }
+.op-code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--op-code-block-header-gap, var(--op-dim-gutter)); min-height: var(--op-code-block-header-height, var(--op-dim-row-compact)); padding: 0 var(--op-code-block-header-padding-end, var(--op-dim-pad-tight)) 0 var(--op-code-block-header-padding-start, var(--op-dim-pad-card)); box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-code-block-divider, var(--op-divider)); }
+.op-code-lang { color: var(--op-code-block-secondary-text, var(--op-text-secondary)); font-size: var(--op-code-block-header-font-size, var(--op-type-caption-size)); text-transform: uppercase; letter-spacing: var(--op-code-block-header-letter-spacing, calc(var(--op-type-caption-size) * 0.04)); }
+.op-code-body { margin: 0; padding: var(--op-code-block-padding, var(--op-dim-pad-card)); width: max-content; min-width: 100%; font: inherit; font-size: var(--op-code-block-font-size, var(--op-type-console-size)); line-height: var(--op-code-block-line-height, var(--op-type-console-line)); color: var(--op-code-block-text, var(--op-text-primary)); tab-size: 4; }
 .op-code-body code { display: flex; flex-direction: column; min-width: max-content; font: inherit; }
 .op-code[data-wrap] .op-code-body code { min-width: 0; }
 .op-code-line { display: flex; white-space: pre; }
 .op-code[data-wrap] .op-code-body { width: auto; }
 .op-code[data-wrap] .op-code-line { white-space: pre-wrap; overflow-wrap: anywhere; }
-.op-code-num { flex: none; width: calc(var(--op-du) * 8); padding-right: var(--op-dim-pad-card); text-align: right; color: var(--op-text-disabled); user-select: none; }
+.op-code-num { flex: none; width: var(--op-code-block-number-width, calc(var(--op-du) * 8)); padding-right: var(--op-code-block-number-padding, var(--op-dim-pad-card)); text-align: right; color: var(--op-code-block-number, var(--op-text-disabled)); user-select: none; }
 .op-code-text { flex: 1; min-width: 0; }
+
+.op-code .op-syn-keyword { color: var(--op-code-block-syntax-keyword, var(--op-syntax-keyword)); }
+.op-code .op-syn-string { color: var(--op-code-block-syntax-string, var(--op-syntax-string)); }
+.op-code .op-syn-number { color: var(--op-code-block-syntax-number, var(--op-syntax-number)); }
+.op-code .op-syn-comment { color: var(--op-code-block-syntax-comment, var(--op-syntax-comment)); }
+.op-code .op-syn-type { color: var(--op-code-block-syntax-type, var(--op-syntax-type)); }
+.op-code .op-syn-function { color: var(--op-code-block-syntax-function, var(--op-syntax-function)); }
+.op-code .op-syn-constant { color: var(--op-code-block-syntax-constant, var(--op-syntax-constant)); }
+.op-code .op-syn-property { color: var(--op-code-block-syntax-property, var(--op-syntax-property)); }
+.op-code .op-syn-meta { color: var(--op-code-block-syntax-meta, var(--op-syntax-meta)); }
+.op-code .op-syn-punctuation { color: var(--op-code-block-syntax-punctuation, var(--op-syntax-punctuation)); }
 

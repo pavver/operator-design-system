@@ -3,3 +3,13 @@
 /* ------------------------------------------------------------------ */
 .op-popover { position: fixed; pointer-events: auto; box-sizing: border-box; }
 .op-popover[data-passive] { pointer-events: none; }
+
+/* Runtime coordinates are private; offsets use DU after viewport-aware placement. */
+.op-popover {
+  left: calc(var(--op-popover-left, 0%) + var(--op-popover-offset-x, calc(var(--op-du) * 0)));
+  top: calc(var(--op-popover-top, 0%) + var(--op-popover-offset-y, calc(var(--op-du) * 0)));
+
+}
+.op-popover { scroll-margin-top: var(--op-popover-gap, calc(var(--op-du) * 0)); }
+
+:where(.op-popover) { background-color: var(--op-popover-background, transparent); color: var(--op-popover-text, inherit); }

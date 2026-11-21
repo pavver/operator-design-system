@@ -25,6 +25,15 @@ pub fn marquee() -> AnyView {
                 </div>
             </div>
         </Example>
+
+        <Example title="Customization" note="Text and tooltip metrics, a tooltip slot and application text." block=true>
+            <ThemeRoot strings=Callback::new(|key| (key == "demo.marquee-text.tooltip").then(|| "Complete camera information".to_string()))>
+                <div class="demo-marquee-box">
+                    <MarqueeText text=long spacing=10.0 font_size=17.0 tooltip_padding_x=4.0
+                        tooltip_slot=|| { let text = ui_text(MaybeProp::default(), "demo.marquee-text.tooltip", "Full text"); view! { <strong>{move || text.get()}</strong> } }/>
+                </div>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

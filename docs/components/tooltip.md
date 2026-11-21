@@ -53,6 +53,58 @@ The same placement and look are used by the tooltip of [MarqueeText](marquee-tex
 | `enabled` | bool | `true` | Turns the tooltip off without removing it. |
 | `children` | view | required | The anchor. |
 
+The customization properties are optional and accept reactive values where indicated.
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `class`, `style` | reactive string | none | Root hooks. |
+| `padding_y` | reactive DU metric | design-system value | Sets `--op-tooltip-padding-y`. |
+| `padding_x` | reactive DU metric | design-system value | Sets `--op-tooltip-padding-x`. |
+| `shadow_y` | reactive DU metric | design-system value | Sets `--op-tooltip-shadow-y`. |
+| `shadow_blur` | reactive DU metric | design-system value | Sets `--op-tooltip-shadow-blur`. |
+| `font_size` | reactive TU metric | design-system value | Sets `--op-tooltip-font-size`. |
+| `line_height` | reactive TU metric | design-system value | Sets `--op-tooltip-line-height`. |
+| `offset` | reactive DU metric | design-system value | Sets `--op-tooltip-offset`. |
+| `max_width` | reactive DU metric | design-system value | Sets `--op-tooltip-max-width`. |
+| `content` | `Slot` | none | Replaces the hint text inside the bubble; informational content only. |
+
+## Customization
+
+`class` and `style` apply to the floating hint layer.
+Metric props write the corresponding variables; an explicit `style` declaration wins.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `padding_y` | DU | `--op-tooltip-padding-y` | `pad_tight` |
+| `padding_x` | DU | `--op-tooltip-padding-x` | `gutter` |
+| `shadow_y` | DU | `--op-tooltip-shadow-y` | `2 DU` |
+| `shadow_blur` | DU | `--op-tooltip-shadow-blur` | `6 DU` |
+| `font_size` | TU | `--op-tooltip-font-size` | `caption_size` |
+| `line_height` | TU | `--op-tooltip-line-height` | `caption_line` |
+| `offset` | DU | `--op-tooltip-offset` | `1.5 DU` |
+| `max_width` | DU | `--op-tooltip-max-width` | `75 DU` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-tooltip-background` | `surface_alt` |
+| `--op-tooltip-border` | `border_strong` |
+| `--op-tooltip-shadow` | `rgb(0 0 0 / 35%)` |
+| `--op-tooltip-text` | `text_primary` |
+
+| Slot | Place |
+| :--- | :--- |
+| `content` | Replaces the hint text inside the bubble; informational content only. |
+
+### Strings
+
+| Key | Default | Prop |
+| :--- | :--- | :--- |
+| `tooltip.text` | `empty; required caller text` | `text` |
+
+### Icons
+
+This component has no built-in icons.
+
 ## Accessibility
 
 * The bubble has the `tooltip` role.

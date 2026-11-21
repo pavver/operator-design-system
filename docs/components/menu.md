@@ -68,6 +68,106 @@ Status: **draft** on web.
 | `MenuButton` | `items`, `on_select(id)`, `icon` (`more_vert`), `label` (`"More actions"`), `size` (`8 DU`). |
 | `ContextMenu` | `items`, `on_select(id)`, `children`: the area that opens the menu. |
 
+The customization properties are optional and accept reactive values where indicated.
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `class`, `style` | reactive string | none | Root hooks. |
+| `min_width` | reactive DU metric | design-system value | Sets `--op-menu-min-width`. |
+| `max_width` | reactive DU metric | design-system value | Sets `--op-menu-max-width`. |
+| `viewport_margin` | reactive DU metric | design-system value | Sets `--op-menu-viewport-margin`. |
+| `shadow_y` | reactive DU metric | design-system value | Sets `--op-menu-shadow-y`. |
+| `shadow_blur` | reactive DU metric | design-system value | Sets `--op-menu-shadow-blur`. |
+| `gap` | reactive DU metric | design-system value | Sets `--op-menu-gap`. |
+| `item_height` | reactive DU metric | design-system value | Sets `--op-menu-item-height`. |
+| `padding_end` | reactive DU metric | design-system value | Sets `--op-menu-padding-end`. |
+| `padding_start` | reactive DU metric | design-system value | Sets `--op-menu-padding-start`. |
+| `icon_size` | reactive DU metric | design-system value | Sets `--op-menu-icon-size`. |
+| `shortcut_font_size` | reactive TU metric | design-system value | Sets `--op-menu-shortcut-font-size`. |
+| `padding_y` | reactive DU metric | design-system value | Sets `--op-menu-padding-y`. |
+| `font_size` | reactive TU metric | design-system value | Sets `--op-menu-font-size`. |
+| `line_height` | reactive TU metric | design-system value | Sets `--op-menu-line-height`. |
+| `max_height` | reactive DU metric | design-system value | Sets `--op-menu-max-height`. |
+| `option` | `ScopedSlot<MenuItem>` | none | Scoped `MenuItem` content inside the existing menuitem button; preserves keyboard, disabled, danger, selection, and submenu behavior. |
+| `empty` | `Slot` | none | Content when there are no items. |
+| `before_options` | `Slot` | none | Content before the scrollable items. |
+| `after_options` | `Slot` | none | Content after the scrollable items. |
+| `header` | `Slot` | none | Replaces the title content. |
+| `footer` | `Slot` | none | Content after the body and actions. |
+| `label` | reactive string | `menu.label` | Accessible name of the menu. |
+| `submenu_icon` | icon | `menu.submenu` | Submenu arrow override. |
+| `MenuButton.icon` | icon | `menu.more` | Overflow icon override. |
+| `MenuButton.label` | reactive string | `menu.more-actions` | Overflow button name. |
+| `MenuButton.size` | DU | `row_compact` | Button size; writes `--op-menu-button-size`. |
+| `ContextMenu.label` | reactive string | `menu.context` | Context menu name. |
+
+## Customization
+
+`class` and `style` apply to the floating menu layer; MenuButton and ContextMenu apply them to their trigger roots.
+Metric props write the corresponding variables; an explicit `style` declaration wins.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `min_width` | DU | `--op-menu-min-width` | `45 DU` |
+| `max_width` | DU | `--op-menu-max-width` | `80 DU` |
+| `viewport_margin` | DU | `--op-menu-viewport-margin` | `margin_screen` |
+| `shadow_y` | DU | `--op-menu-shadow-y` | `2 DU` |
+| `shadow_blur` | DU | `--op-menu-shadow-blur` | `6 DU` |
+| `gap` | DU | `--op-menu-gap` | `gutter` |
+| `item_height` | DU | `--op-menu-item-height` | `row_compact` |
+| `padding_end` | DU | `--op-menu-padding-end` | `pad_card` |
+| `padding_start` | DU | `--op-menu-padding-start` | `gutter` |
+| `icon_size` | DU | `--op-menu-icon-size` | `icon_small` |
+| `shortcut_font_size` | TU | `--op-menu-shortcut-font-size` | `caption_size` |
+| `padding_y` | DU | `--op-menu-padding-y` | `pad_tight` |
+| `font_size` | TU | `--op-menu-font-size` | `body_size` |
+| `line_height` | TU | `--op-menu-line-height` | `body_line` |
+| `max_height` | DU | `--op-menu-max-height` | `calc(100vh - var(--op-menu-viewport-margin, margin_screen) * 2)` |
+| `MenuButton.size` | DU | `--op-menu-button-size` | `row_compact` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-menu-background` | `surface` |
+| `--op-menu-border` | `border_strong` |
+| `--op-menu-shadow` | `rgb(0 0 0 / 35%)` |
+| `--op-menu-text` | `text_primary` |
+| `--op-menu-hover` | `hover` |
+| `--op-menu-focus` | `accent` |
+| `--op-menu-danger` | `error` |
+| `--op-menu-disabled` | `text_disabled` |
+| `--op-menu-icon` | `icon` |
+| `--op-menu-secondary` | `text_secondary` |
+| `--op-menu-divider` | `divider` |
+| `--op-menu-pressed` | `pressed` |
+| `--op-menu-ripple` | `ripple` |
+
+| Slot | Place |
+| :--- | :--- |
+| `option` | Scoped `MenuItem` content inside the existing menuitem button; preserves keyboard, disabled, danger, selection, and submenu behavior. |
+| `empty` | Content when there are no items. |
+| `before_options` | Content before the scrollable items. |
+| `after_options` | Content after the scrollable items. |
+| `header` | Replaces the title content. |
+| `footer` | Content after the body and actions. |
+
+The metric variables, `class`, `style`, all menu slots, and the submenu icon override propagate to every submenu.
+The `option` slot replaces row content only; keep it free of nested interactive controls.
+
+### Strings
+
+| Key | Default | Prop |
+| :--- | :--- | :--- |
+| `menu.label` | `Menu` | `label` |
+| `menu.more-actions` | `More actions` | `MenuButton.label` |
+| `menu.context` | `Context menu` | `ContextMenu.label` |
+
+### Icons
+
+| Key | Default | Prop |
+| :--- | :--- | :--- |
+| `menu.submenu` | `chevron_right` | `submenu_icon` |
+| `menu.more` | `more_vert` | `MenuButton.icon` |
+
 ## Accessibility
 
 `menu` with `menuitem` children; disabled items are marked `aria-disabled`.

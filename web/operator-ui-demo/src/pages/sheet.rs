@@ -1,5 +1,6 @@
 //! Live examples for sheet.
 
+use crate::i18n::l;
 use crate::kit::{Example, instant};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -18,6 +19,7 @@ pub fn sheet() -> AnyView {
             })
             .collect_view()
     };
+    let custom_open = RwSignal::new(false);
     view! {
         <Example title="Sides" note="Escape, the scrim, or the close button dismiss the sheet.">
             <ActionButton text="Navigation drawer" icon=icons::MENU on_click=instant(move || left.set(true))/>
@@ -49,6 +51,18 @@ pub fn sheet() -> AnyView {
             <ListItem title="Send to chat"/>
             <ListItem title="Download"/>
         </Sheet>
+        <Example title="Customization">
+            <ActionButton text=l("Open details", "Відкрити відомості") on_click=instant(move || custom_open.set(true))/>
+            <Sheet open=custom_open side=SheetSide::Right title="Device details" size=95.0 padding=4.0 gap=3.0 footer_padding=4.0
+                aria_label=l("Device details", "Відомості про пристрій") close_label=l("Close panel", "Закрити панель")
+                header=move || view! { <strong>{l("Device details", "Відомості про пристрій")}</strong> }
+                actions=move || view! { <ActionButton text=l("Done", "Готово") on_click=instant(move || custom_open.set(false))/> }
+                footer=move || view! { <small>{l("Live device information", "Актуальні відомості про пристрій")}</small> }
+                style="--op-sheet-background: var(--op-surface-alt);"
+            >
+                <p>{l("Connection is healthy.", "З’єднання працює справно.")}</p>
+            </Sheet>
+        </Example>
     }
     .into_any()
 }

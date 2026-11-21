@@ -66,6 +66,22 @@ pub fn data_table() -> AnyView {
                 empty=ViewFn::from(|| view! { <EmptyState title="No cameras" description="Add a camera to see it here." compact=true/> })
             />
         </Example>
+
+        <Example title="Customization" note="Scoped header and body cells, custom metrics and application sort strings." block=true>
+            <ThemeRoot strings=Callback::new(|key| match key {
+                "data-table.sort-ascending" => Some("Order from A to Z".to_string()),
+                "data-table.sort-descending" => Some("Order from Z to A".to_string()),
+                "data-table.sort-clear" => Some("Restore source order".to_string()),
+                _ => None,
+            })>
+                <DataTable columns=vec![Column::new("Camera").sortable()] rows=vec![TableRow::new("gate", ["Gate North"])]
+                    row_height=13.0 padding_x=5.0 header_height=10.0
+                    cell=Callback::new(|data: TableCell| view! { <strong>{data.value}</strong> }.into_any())
+                    header_cell=Callback::new(|data: TableHeaderCell| view! { <span>{data.column.title}</span> }.into_any())
+                    footer=|| view! { <span class="op-t-caption">"Application footer"</span> }
+                />
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

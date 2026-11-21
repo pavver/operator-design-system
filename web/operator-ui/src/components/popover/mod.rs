@@ -1,9 +1,9 @@
 //! Floating layer: Popover, the shared base of menus, lists, tooltips and hover cards.
 
 use crate::core::overlay::{
-    FloatPos, OverlayHost, place_above, place_at, place_below_end, place_below_start,
-    place_side_start,
+    FloatPos, OverlayHost, place_above, place_at, place_below_start, viewport,
 };
+use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::portal::Portal;
 use leptos::prelude::*;
 use send_wrapper::SendWrapper;
@@ -117,11 +117,36 @@ pub fn place(anchor: PopoverAnchor, placement: Placement, w: f64, h: f64, gap: f
     };
     match placement {
         Placement::BelowStart | Placement::BelowStretch => place_below_start(&rect, w, h, gap),
-        Placement::BelowEnd => place_below_end(&rect, w, h),
+        Placement::BelowEnd => place_end(&rect, w, h, gap),
         Placement::Above => place_above(&rect, w, h, gap),
         Placement::AtPoint => place_at(rect.left(), rect.top(), w, h),
-        Placement::SideStart => place_side_start(&rect, w, h),
+        Placement::SideStart => place_side(&rect, w, h, gap),
     }
+}
+
+// Keep the shared core unchanged while extending gap support to both aligned placements.
+fn place_end(rect: &web_sys::DomRect, w: f64, h: f64, gap: f32) -> FloatPos {
+    let (vw, vh) = viewport();
+    let gap = f64::from(gap * operator_ui_tokens::DU_POINTS);
+    let left = (rect.right() - w).clamp(0.0, (vw - w).max(0.0));
+    let top = if rect.bottom() + gap + h <= vh || rect.top() - gap < h {
+        (rect.bottom() + gap).min((vh - h).max(0.0))
+    } else {
+        rect.top() - gap - h
+    };
+    FloatPos { left, top }
+}
+
+fn place_side(rect: &web_sys::DomRect, w: f64, h: f64, gap: f32) -> FloatPos {
+    let (vw, vh) = viewport();
+    let gap = f64::from(gap * operator_ui_tokens::DU_POINTS);
+    let left = if rect.right() + gap + w <= vw {
+        rect.right() + gap
+    } else {
+        (rect.left() - gap - w).max(0.0)
+    };
+    let top = rect.top().clamp(0.0, (vh - h).max(0.0));
+    FloatPos { left, top }
 }
 
 /// Floating layer mounted in the [`ThemeRoot`](crate::core::ThemeRoot) overlay host.
@@ -135,8 +160,8 @@ pub fn Popover(
     #[prop(into)] anchor: Signal<PopoverAnchor>,
     #[prop(into, default = Placement::BelowStart.into())] placement: Signal<Placement>,
     /// Gap to the anchor in DU.
-    #[prop(default = 0.0)]
-    gap: f32,
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
     /// Closes on a press outside the layer and the anchor.
     #[prop(default = true)]
     dismiss_on_outside: bool,
@@ -154,9 +179,16 @@ pub fn Popover(
     passive: bool,
     /// Classes of the layer element.
     #[prop(optional, into)]
-    class: String,
+    class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] offset_x: MaybeProp<f32>,
+    #[prop(optional, into)] offset_y: MaybeProp<f32>,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] actions: Slot,
+    #[prop(optional, into)] footer: Slot,
     #[prop(optional, into)] role: Option<String>,
     #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] aria_label: MaybeProp<String>,
     /// Reference to the layer element.
     #[prop(optional)]
     node_ref: Option<NodeRef<leptos::html::Div>>,
@@ -171,6 +203,15 @@ pub fn Popover(
     on_placed: Option<Callback<()>>,
     children: ChildrenFn,
 ) -> impl IntoView {
+    let legacy_label = label;
+    let label = ui_text(
+        Signal::derive(move || aria_label.get().or_else(|| legacy_label.clone())).into(),
+        "popover.label",
+        "",
+    );
+    let header = StoredValue::new(header);
+    let actions = StoredValue::new(actions);
+    let footer = StoredValue::new(footer);
     let layer = node_ref.unwrap_or_default();
     let layer_id = layer_id.unwrap_or_else(new_layer_id);
     let pos = RwSignal::new(None::<FloatPos>);
@@ -191,6 +232,14 @@ pub fn Popover(
         }
         let (w, h) = (f64::from(el.offset_width()), f64::from(el.offset_height()));
         let first = pos.get_untracked().is_none();
+        let gap = window()
+            .get_computed_style(&el)
+            .ok()
+            .flatten()
+            .and_then(|s| s.get_property_value("scroll-margin-top").ok())
+            .and_then(|s| s.trim_end_matches("px").parse::<f32>().ok())
+            .unwrap_or(0.0)
+            / operator_ui_tokens::DU_POINTS;
         pos.set(Some(place(a, placement, w, h, gap)));
         // The layer becomes visible on the next render; focusing a hidden element fails.
         if first && let Some(cb) = on_placed {
@@ -233,10 +282,30 @@ pub fn Popover(
     });
     // A reactive anchor (a new pointer position) re-places an open layer.
     Effect::new(move |_| {
-        let _ = (anchor.get(), placement.get());
+        let _ = (
+            anchor.get(),
+            placement.get(),
+            gap.get(),
+            class.get(),
+            style.get(),
+        );
         if open.get_untracked() {
             request_animation_frame(measure);
         }
+    });
+
+    // Slot content, translated strings and metric variables can change the layer size.
+    Effect::new(move |_| {
+        let Some(el) = layer.get() else {
+            return;
+        };
+        let callback = wasm_bindgen::closure::Closure::<dyn FnMut()>::new(measure);
+        let Ok(observer) = web_sys::ResizeObserver::new(callback.as_ref().unchecked_ref()) else {
+            return;
+        };
+        observer.observe(&el);
+        let keep = SendWrapper::new((observer, callback));
+        on_cleanup(move || keep.0.disconnect());
     });
 
     // Window listeners exist only in a browser: rendering on a server has no window.
@@ -308,26 +377,57 @@ pub fn Popover(
     );
 
     let children = StoredValue::new(children);
-    let class = StoredValue::new(class);
+    let custom_style = root_style(
+        vec![
+            Metric::du("--op-popover-offset-x", offset_x),
+            Metric::du("--op-popover-offset-y", offset_y),
+            Metric::du("--op-popover-gap", gap),
+        ],
+        style,
+    );
+    let full_style = Signal::derive(move || {
+        let position = pos.get();
+        let visibility = if position.is_some() {
+            "visible"
+        } else {
+            "hidden"
+        };
+        let coordinates = position
+            .map(|p| {
+                format!(
+                    "--op-popover-left:{}px;--op-popover-top:{}px;",
+                    p.left, p.top
+                )
+            })
+            .unwrap_or_default();
+        let width = width
+            .get()
+            .map(|w| format!("width:{w}px;"))
+            .unwrap_or_default();
+        format!(
+            "visibility:{visibility};{coordinates}{width}{}",
+            custom_style().unwrap_or_default()
+        )
+    });
     let role = StoredValue::new(role);
-    let label = StoredValue::new(label);
+
     view! {
         <Show when=move || open.get()>
             <Portal mount=mount_point(host)>
                 <div
                     node_ref=layer
-                    class=format!("op-popover {}", class.get_value())
+                    class=root_class("op-popover", class)
                     data-passive=passive.then_some("")
                     data-op-layer=layer_id.to_string()
                     data-op-parent=parent_layer.map(|p| p.to_string())
                     role=role.get_value()
-                    aria-label=label.get_value()
-                    style:visibility=move || if pos.get().is_some() { "visible" } else { "hidden" }
-                    style:left=move || pos.get().map(|p| format!("{}px", p.left))
-                    style:top=move || pos.get().map(|p| format!("{}px", p.top))
-                    style:width=move || width.get().map(|w| format!("{w}px"))
+                    aria-label=move || { let value = label.get(); (!value.is_empty()).then_some(value) }
+                    style=move || full_style.get()
                 >
+                    {header.with_value(Slot::run)}
                     {children.with_value(|c| c())}
+                    {actions.with_value(Slot::run)}
+                    {footer.with_value(Slot::run)}
                 </div>
             </Portal>
         </Show>
