@@ -7,10 +7,9 @@ use operator_ui::prelude::*;
 const SVG_PREVIEW_1: &str = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'><rect width='200' height='150' fill='%231e293b'/><circle cx='100' cy='75' r='40' fill='%2300a0ff' opacity='0.3'/><text x='100' y='80' fill='%23fff' font-family='monospace' font-size='14' text-anchor='middle'>CLIP 1</text></svg>";
 const SVG_PREVIEW_2: &str = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'><rect width='200' height='150' fill='%230f172a'/><polygon points='100,20 150,120 50,120' fill='%2322c55e' opacity='0.3'/><text x='100' y='90' fill='%23fff' font-family='monospace' font-size='14' text-anchor='middle'>CLIP 2</text></svg>";
 
-pub fn gif_picker() -> AnyView {
-    let chosen_gif = RwSignal::new(String::from("None"));
-
-    let items = vec![
+/// Offline sample clips shared by the GIF and media keyboard demos.
+pub fn sample_gifs() -> Vec<GifItem> {
+    vec![
         GifItem::new(
             "gif1",
             "Radar Waveform",
@@ -27,7 +26,13 @@ pub fn gif_picker() -> AnyView {
             vec!["Cats".to_string(), "Party".to_string()],
             1.33,
         ),
-    ];
+    ]
+}
+
+pub fn gif_picker() -> AnyView {
+    let chosen_gif = RwSignal::new(String::from("None"));
+
+    let items = sample_gifs();
 
     let trending_tags = vec![
         "Trending".to_string(),

@@ -207,7 +207,12 @@ fn render_gif_cell(item: GifItem, on_select: Callback<GifItem>) -> impl IntoView
                     for i in 0..entries.length() {
                         let entry: IntersectionObserverEntry = entries.get(i).unchecked_into();
                         if entry.is_intersecting() {
-                            let _ = video_clone.play();
+                            // A clip that cannot play rejects the promise; the poster stays visible.
+                            if let Ok(promise) = video_clone.play() {
+                                leptos::task::spawn_local(async move {
+                                    let _ = wasm_bindgen_futures::JsFuture::from(promise).await;
+                                });
+                            }
                         } else {
                             let _ = video_clone.pause();
                         }

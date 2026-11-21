@@ -2,6 +2,7 @@
 
 use crate::kit::Example;
 use crate::pages::emoji_picker::{sample_emoji_categories, sample_recent_emojis};
+use crate::pages::gif_picker::sample_gifs;
 use leptos::prelude::*;
 use operator_ui::prelude::*;
 
@@ -41,6 +42,7 @@ pub fn media_keyboard() -> AnyView {
                         emoji_categories=sample_emoji_categories()
                         recent_emojis=sample_recent_emojis()
                         sticker_packs=vec![pack]
+                        gifs=sample_gifs()
                         on_select_emoji=Callback::new(move |em| picked_summary.set(format!("Emoji: {em}")))
                         on_select_sticker=Callback::new(move |st: StickerAttachment| picked_summary.set(format!("Sticker: {:?}", st.sticker_id)))
                         on_select_gif=Callback::new(move |g: GifItem| picked_summary.set(format!("GIF: {}", g.title)))
