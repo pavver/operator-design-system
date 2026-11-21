@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T21:05:52+02:00"
+status = "draft"
+en = "Evolve into full message bubble with rich attachments, safe markdown, reactions, TTL indicators, delivery statuses, and chat status badges."
+uk = "Розширено до повноцінної бульбашки повідомлення з мультимедійними додатками, безпечним markdown, реакціями, індикаторами TTL, статусами доставки та бейджами діалогів."
+
+[[change]]
 date = "2026-11-21T20:01:00+02:00"
 status = "draft"
 en = "New component."
