@@ -1,0 +1,45 @@
+# Change history of DropdownMenu. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-17T01:31:40+02:00"
+status = "draft"
+commit = "203c562"
+en = "Shared floating layer and overlay host."
+uk = "Спільний плаваючий шар та хост накладання."
+
+[[change]]
+date = "2026-11-17T01:23:57+02:00"
+status = "draft"
+commit = "0103e67"
+en = "Add a windowed list and virtualize DropdownMenu and Combobox."
+uk = "Додати віконний список і віртуалізувати DropdownMenu та Combobox."
+
+[[change]]
+date = "2026-11-11T21:05:07+02:00"
+status = "approved"
+commit = "8a5ac46"
+en = "Chain ScrollView scrolling to the page like native scrolling."
+uk = "Зв'язати прокручування ScrollView зі сторінкою як нативне прокручування."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+commit = "963bf4d"
+en = "Add delayed PendingIndicator shared by async controls."
+uk = "Додати відкладений PendingIndicator, спільний для асинхронних елементів керування."
+
+[[change]]
+date = "2026-11-10T23:17:32+02:00"
+status = "approved"
+commit = "793487c"
+en = "Restore every reviewed component with specifications."
+uk = "Відновити всі рецензовані компоненти зі специфікаціями."

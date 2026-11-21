@@ -1,0 +1,52 @@
+# Change history of Combobox. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-17T02:12:24+02:00"
+status = "draft"
+commit = "bdf999f"
+en = "Code input with highlighting, diagnostics and completion."
+uk = "Введення коду з підсвічуванням, діагностикою та автодоповненням."
+
+[[change]]
+date = "2026-11-17T01:40:47+02:00"
+status = "draft"
+commit = "654669f"
+en = "Rich options, sections, typed values and a pointer popup."
+uk = "Розширені опції, секції, типізовані значення та спливаюче вікно для вказівника."
+
+[[change]]
+date = "2026-11-17T01:31:40+02:00"
+status = "draft"
+commit = "203c562"
+en = "Shared floating layer and overlay host."
+uk = "Спільний плаваючий шар та хост накладання."
+
+[[change]]
+date = "2026-11-17T01:23:57+02:00"
+status = "draft"
+commit = "0103e67"
+en = "Add a windowed list and virtualize DropdownMenu and Combobox."
+uk = "Додати віконний список і віртуалізувати DropdownMenu та Combobox."
+
+[[change]]
+date = "2026-11-11T21:05:07+02:00"
+status = "approved"
+commit = "8a5ac46"
+en = "Chain ScrollView scrolling to the page like native scrolling."
+uk = "Зв'язати прокручування ScrollView зі сторінкою як нативне прокручування."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+commit = "648fa81"
+en = "Add TextArea, SearchField, RadioGroup and Combobox."
+uk = "Додати TextArea, SearchField, RadioGroup та Combobox."

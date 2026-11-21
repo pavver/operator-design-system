@@ -1,0 +1,38 @@
+# Change history of CodeBlock. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-11T21:50:57+02:00"
+status = "approved"
+commit = "53e1ab4"
+en = "Mark CodeBlock reviewed."
+uk = "Позначити CodeBlock як рецензований."
+
+[[change]]
+date = "2026-11-11T20:46:55+02:00"
+status = "approved"
+commit = "2669011"
+en = "Add the optional arborium feature for tree-sitter highlighting."
+uk = "Додати необов'язкову функціональність arborium для підсвічування через tree-sitter."
+
+[[change]]
+date = "2026-11-11T20:46:54+02:00"
+status = "approved"
+commit = "7dae485"
+en = "Highlight Rust, Kotlin, TOML, JSON, YAML and shell with a built-in scanner."
+uk = "Підсвічувати Rust, Kotlin, TOML, JSON, YAML та shell за допомогою вбудованого сканера."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+commit = "26068eb"
+en = "Add draft DataTable, Counter, PropertyList, Accordion, CodeBlock and Toolbar."
+uk = "Додати чернетки DataTable, Counter, PropertyList, Accordion, CodeBlock та Toolbar."

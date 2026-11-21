@@ -1,0 +1,24 @@
+# Change history of Tooltip. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-17T01:31:40+02:00"
+status = "draft"
+commit = "203c562"
+en = "Shared floating layer and overlay host."
+uk = "Спільний плаваючий шар та хост накладання."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+commit = "ba9deda"
+en = "Add Tooltip, Toast and Banner."
+uk = "Додати Tooltip, Toast та Banner."

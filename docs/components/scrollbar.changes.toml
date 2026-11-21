@@ -1,0 +1,24 @@
+# Change history of Scrollbar. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-11T21:05:07+02:00"
+status = "approved"
+commit = "8a5ac46"
+en = "Chain ScrollView scrolling to the page like native scrolling."
+uk = "Зв'язати прокручування ScrollView зі сторінкою як нативне прокручування."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+commit = "27ba774"
+en = "Add Scrollbar, ScrollView and reviewed ScrollArea."
+uk = "Додати Scrollbar, ScrollView та рецензований ScrollArea."

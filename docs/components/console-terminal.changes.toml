@@ -1,0 +1,31 @@
+# Change history of ConsoleTerminal. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-11T20:46:54+02:00"
+status = "approved"
+commit = "b485813"
+en = "Color logs from xterm SGR escape sequences on a shared styled text base."
+uk = "Розфарбовувати логи за керуючими послідовностями xterm SGR на спільній основі стилізованого тексту."
+
+[[change]]
+date = "2026-11-11T19:40:14+02:00"
+status = "approved"
+commit = "e2080a6"
+en = "Move shared fade keyframes, reduced motion and stray menu and terminal rules to their owners."
+uk = "Перенести спільні ключові кадри згасання, reduced motion та окремі правила меню і термінала до їхніх власників."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-10T23:17:32+02:00"
+status = "approved"
+commit = "793487c"
+en = "Restore every reviewed component with specifications."
+uk = "Відновити всі рецензовані компоненти зі специфікаціями."

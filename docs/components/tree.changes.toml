@@ -1,0 +1,10 @@
+# Change history of Tree. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-17T01:58:27+02:00"
+status = "draft"
+commit = "a65383d"
+en = "NavigationRail, SidePanel and a virtualized Tree."
+uk = "NavigationRail, SidePanel та віртуалізоване Tree."

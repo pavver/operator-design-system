@@ -1,0 +1,10 @@
+# Change history of Value fields. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-17T01:49:55+02:00"
+status = "draft"
+commit = "21fdbf8"
+en = "Number, duration, time, date-time and colour fields."
+uk = "Поля чисел, тривалості, часу, дати й часу та кольору."

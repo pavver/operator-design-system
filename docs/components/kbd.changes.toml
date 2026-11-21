@@ -1,0 +1,17 @@
+# Change history of Kbd. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Split operator-ui into one module and stylesheet per component."
+uk = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."
+
+[[change]]
+date = "2026-11-11T03:33:12+02:00"
+status = "approved"
+commit = "ece776d"
+en = "Add Chip, Tabs, Kbd and SplitPane with hover and held-press feedback."
+uk = "Додати Chip, Tabs, Kbd та SplitPane зі зворотним зв'язком на наведення та утримання натискання."
