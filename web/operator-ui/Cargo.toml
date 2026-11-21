@@ -61,36 +61,47 @@ reviewed = [
 ]
 
 draft = [
+    "aspect-ratio",
+    "breadcrumbs",
+    "button-group",
+    "chat-message",
+    "circular-progress",
+    "color-field",
+    "combobox",
+    "data-table",
+    "date-time-field",
+    "dropdown-menu",
+    "duration-field",
     "editor",
     "fab",
+    "field",
     "file-field",
     "form",
-    "knob",
-    "popup-edit",
-    "range-slider",
-    "rating",
-    "split-button",
-    "uploader",
-    "field",
-    "text-field",
-    "navigation-rail",
-    "side-panel",
-    "tree",
-    "color-field",
-    "date-time-field",
-    "duration-field",
-    "number-field",
-    "time-field",
     "hover-card",
+    "image",
+    "knob",
+    "loading-bar",
+    "loading-overlay",
     "marquee-text",
     "menu",
-    "tooltip",
+    "navigation-rail",
+    "number-field",
     "popover",
-    "combobox",
-    "dropdown-menu",
-    "data-table",
+    "popup-edit",
     "property-list",
+    "range-slider",
+    "rating",
+    "side-panel",
+    "space",
+    "split-button",
+    "text-field",
+    "time-field",
+    "timeline",
     "toolbar",
+    "tooltip",
+    "tree",
+    "uploader",
+    "video",
     "virtual-list",
 ]
 
@@ -106,11 +117,16 @@ field = ["primitives"]
 accordion = ["primitives"]
 action-button = ["primitives"]
 arborium = ["code-block", "dep:arborium"]
+aspect-ratio = []
 avatar = ["primitives", "status-badge"]
 banner = ["primitives", "toast"]
+breadcrumbs = ["icon-button", "menu", "primitives"]
+button-group = []
+chat-message = []
 checkbox = ["primitives"]
 checkbox-group = ["primitives"]
 chip = ["primitives"]
+circular-progress = []
 code-block = ["icon-button", "scrollbar"]
 code-field = ["combobox", "field", "hover-card", "popover", "virtual-list"]
 color-field = ["field", "popover", "primitives"]
@@ -130,10 +146,13 @@ header = ["avatar", "primitives", "status-badge"]
 graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
+image = ["primitives", "skeleton"]
 kbd = []
 knob = ["primitives"]
 linear-progress = []
 list-item = []
+loading-bar = []
+loading-overlay = ["primitives"]
 marquee-text = ["tooltip"]
 menu = ["icon-button", "popover", "primitives", "scrollbar"]
 navigation-rail = ["primitives"]
@@ -154,6 +173,7 @@ sheet = ["icon-button", "scrollbar"]
 side-panel = ["icon-button"]
 skeleton = []
 slider = ["primitives"]
+space = []
 split-button = ["action-button", "menu", "primitives"]
 split-pane = ["scrollbar"]
 status-badge = ["primitives"]
@@ -166,8 +186,10 @@ theme-toggle = []
 toast = ["primitives"]
 toolbar = ["icon-button", "menu", "tooltip"]
 time-field = ["field"]
+timeline = ["primitives"]
 tree = ["primitives", "virtual-list"]
 tooltip = ["popover"]
+video = ["primitives"]
 uploader = ["action-button", "file-field", "linear-progress", "primitives"]
 virtual-list = ["scrollbar"]
 

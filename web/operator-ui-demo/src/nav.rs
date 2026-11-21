@@ -28,6 +28,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/icon-button",
             "components/menu",
             "components/toolbar",
+            "components/button-group",
         ],
     ),
     (
@@ -73,6 +74,9 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/skeleton",
             "components/empty-state",
             "components/status-badge",
+            "components/circular-progress",
+            "components/loading-overlay",
+            "components/loading-bar",
         ],
     ),
     (
@@ -94,6 +98,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/pagination",
             "components/navigation-rail",
             "components/side-panel",
+            "components/breadcrumbs",
         ],
     ),
     (
@@ -111,6 +116,10 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/console-terminal",
             "components/marquee-text",
             "components/primitives",
+            "components/timeline",
+            "components/chat-message",
+            "components/image",
+            "components/video",
         ],
     ),
     (
@@ -120,6 +129,8 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/scroll-area",
             "components/scrollbar",
             "components/virtual-list",
+            "components/space",
+            "components/aspect-ratio",
         ],
     ),
     ("Project extensions", &["components/graph"]),

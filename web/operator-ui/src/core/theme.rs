@@ -135,6 +135,28 @@ fn stylesheet() -> &'static str {
             crate::components::value_field::CSS,
             #[cfg(feature = "virtual-list")]
             crate::components::virtual_list::CSS,
+            #[cfg(feature = "aspect-ratio")]
+            crate::components::aspect_ratio::CSS,
+            #[cfg(feature = "breadcrumbs")]
+            crate::components::breadcrumbs::CSS,
+            #[cfg(feature = "button-group")]
+            crate::components::button_group::CSS,
+            #[cfg(feature = "chat-message")]
+            crate::components::chat_message::CSS,
+            #[cfg(feature = "circular-progress")]
+            crate::components::circular_progress::CSS,
+            #[cfg(feature = "image")]
+            crate::components::image::CSS,
+            #[cfg(feature = "loading-bar")]
+            crate::components::loading_bar::CSS,
+            #[cfg(feature = "loading-overlay")]
+            crate::components::loading_overlay::CSS,
+            #[cfg(feature = "space")]
+            crate::components::space::CSS,
+            #[cfg(feature = "timeline")]
+            crate::components::timeline::CSS,
+            #[cfg(feature = "video")]
+            crate::components::video::CSS,
             #[cfg(feature = "editor")]
             crate::components::editor::CSS,
             #[cfg(feature = "fab")]

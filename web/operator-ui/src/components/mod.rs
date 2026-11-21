@@ -2,16 +2,26 @@
 pub mod accordion;
 #[cfg(feature = "action-button")]
 pub mod action_button;
+#[cfg(feature = "aspect-ratio")]
+pub mod aspect_ratio;
 #[cfg(feature = "avatar")]
 pub mod avatar;
 #[cfg(feature = "banner")]
 pub mod banner;
+#[cfg(feature = "breadcrumbs")]
+pub mod breadcrumbs;
+#[cfg(feature = "button-group")]
+pub mod button_group;
+#[cfg(feature = "chat-message")]
+pub mod chat_message;
 #[cfg(feature = "checkbox")]
 pub mod checkbox;
 #[cfg(feature = "checkbox-group")]
 pub mod checkbox_group;
 #[cfg(feature = "chip")]
 pub mod chip;
+#[cfg(feature = "circular-progress")]
+pub mod circular_progress;
 #[cfg(feature = "code-block")]
 pub mod code_block;
 #[cfg(feature = "code-field")]
@@ -50,6 +60,8 @@ pub mod header;
 pub mod hover_card;
 #[cfg(feature = "icon-button")]
 pub mod icon_button;
+#[cfg(feature = "image")]
+pub mod image;
 #[cfg(feature = "kbd")]
 pub mod kbd;
 #[cfg(feature = "knob")]
@@ -58,6 +70,10 @@ pub mod knob;
 pub mod linear_progress;
 #[cfg(feature = "list-item")]
 pub mod list_item;
+#[cfg(feature = "loading-bar")]
+pub mod loading_bar;
+#[cfg(feature = "loading-overlay")]
+pub mod loading_overlay;
 #[cfg(feature = "marquee-text")]
 pub mod marquee_text;
 #[cfg(feature = "menu")]
@@ -96,6 +112,8 @@ pub mod side_panel;
 pub mod skeleton;
 #[cfg(feature = "slider")]
 pub mod slider;
+#[cfg(feature = "space")]
+pub mod space;
 #[cfg(feature = "split-button")]
 pub mod split_button;
 #[cfg(feature = "split-pane")]
@@ -114,6 +132,8 @@ pub mod text_area;
 pub mod text_field;
 #[cfg(feature = "theme-toggle")]
 pub mod theme_toggle;
+#[cfg(feature = "timeline")]
+pub mod timeline;
 #[cfg(feature = "toast")]
 pub mod toast;
 #[cfg(feature = "toolbar")]
@@ -132,5 +152,7 @@ pub mod uploader;
     feature = "color-field"
 ))]
 pub mod value_field;
+#[cfg(feature = "video")]
+pub mod video;
 #[cfg(feature = "virtual-list")]
 pub mod virtual_list;

@@ -1,0 +1,9 @@
+:where(.op-space) {
+    min-width: var(--op-space-min-width, 0);
+    min-height: var(--op-space-min-height, 0);
+}
+
+.op-space {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
