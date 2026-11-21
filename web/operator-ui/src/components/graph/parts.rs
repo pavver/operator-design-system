@@ -1,9 +1,12 @@
 //! Wires, frames and the minimap of a graph.
 
-use super::camera::{Camera, WorldRect};
-use super::canvas::GraphCamera;
-use super::route::{Point, route_midpoint, route_path};
+use super::camera::WorldRect;
+use super::route::{
+    Point, route_midpoint_with_handle as route_midpoint, route_path_with_handle as route_path,
+};
+use crate::core::{Metric, Slot, root_class, root_style};
 use leptos::prelude::*;
+use operator_ui_tokens::DU_POINTS;
 
 /// Look of a [`Wire`].
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -19,8 +22,13 @@ pub enum WireState {
 
 /// SVG layer for [`Wire`]s in world coordinates; place it first in the canvas world.
 #[component]
-pub fn WireLayer(children: Children) -> impl IntoView {
-    view! { <svg class="op-wires" aria-hidden="true">{children()}</svg> }
+pub fn WireLayer(
+    children: Children,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] layer_size: MaybeProp<f32>,
+) -> impl IntoView {
+    view! { <svg class=root_class("op-wires", class) style=root_style(vec![Metric::du("--op-graph-layer-size", layer_size)], style) aria-hidden="true">{children()}</svg> }
 }
 
 /// A connection between two world points, optionally through route points.
@@ -40,9 +48,60 @@ pub fn Wire(
     #[prop(optional, into)]
     label: Option<Signal<String>>,
     #[prop(optional)] on_pointerdown: Option<Callback<leptos::ev::PointerEvent>>,
+    #[prop(optional, into)] wire_width: MaybeProp<f32>,
+    #[prop(optional, into)] wire_exec_width: MaybeProp<f32>,
+    #[prop(optional, into)] wire_hit_width: MaybeProp<f32>,
+    #[prop(optional, into)] wire_dash: MaybeProp<f32>,
+    #[prop(optional, into)] wire_dash_gap: MaybeProp<f32>,
+    #[prop(optional, into)] wire_detached_dash: MaybeProp<f32>,
+    #[prop(optional, into)] wire_label_width: MaybeProp<f32>,
+    #[prop(optional, into)] wire_label_height: MaybeProp<f32>,
+    #[prop(optional, into)] wire_label_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] wire_handle_min: MaybeProp<f32>,
+    #[prop(optional, into)] border_width: MaybeProp<f32>,
+    #[prop(optional, into)] caption_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] caption_line_height: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
-    let d = move || points.with(|p| route_path(from.get(), p, to.get()));
-    let mid = move || points.with(|p| route_midpoint(from.get(), p, to.get()));
+    let custom_style = root_style(
+        vec![
+            Metric::du("--op-graph-wire-width", wire_width),
+            Metric::du("--op-graph-wire-exec-width", wire_exec_width),
+            Metric::du("--op-graph-wire-hit-width", wire_hit_width),
+            Metric::du("--op-graph-wire-dash", wire_dash),
+            Metric::du("--op-graph-wire-dash-gap", wire_dash_gap),
+            Metric::du("--op-graph-wire-detached-dash", wire_detached_dash),
+            Metric::du("--op-graph-wire-label-width", wire_label_width),
+            Metric::du("--op-graph-wire-label-height", wire_label_height),
+            Metric::du("--op-graph-wire-label-padding-x", wire_label_padding_x),
+            Metric::du("--op-graph-wire-handle-min", wire_handle_min),
+            Metric::du("--op-graph-border-width", border_width),
+            Metric::tu("--op-graph-caption-font-size", caption_font_size),
+            Metric::tu("--op-graph-caption-line-height", caption_line_height),
+        ],
+        style,
+    );
+    let d = move || {
+        points.with(|p| {
+            route_path(
+                from.get(),
+                p,
+                to.get(),
+                f64::from(wire_handle_min.get().unwrap_or(10.0) * DU_POINTS),
+            )
+        })
+    };
+    let mid = move || {
+        points.with(|p| {
+            route_midpoint(
+                from.get(),
+                p,
+                to.get(),
+                f64::from(wire_handle_min.get().unwrap_or(10.0) * DU_POINTS),
+            )
+        })
+    };
     let state_attr = move || match state.get() {
         WireState::Normal => "normal",
         WireState::Selected => "selected",
@@ -51,10 +110,10 @@ pub fn Wire(
     };
     view! {
         <g
-            class="op-wire"
+            class=root_class("op-wire", class)
             data-state=state_attr
             data-exec=exec.then_some("")
-            style=move || color.map(|c| format!("--op-wire-color: {}", c.get()))
+            style=move || format!("{}{}", color.map(|c| format!("--op-graph-wire-color:{};", c.get())).unwrap_or_default(), custom_style().unwrap_or_default())
         >
             <path class="op-wire-hit" d=d on:pointerdown=move |e| {
                 if let Some(cb) = on_pointerdown {
@@ -65,10 +124,10 @@ pub fn Wire(
             {label.map(|l| view! {
                 <foreignObject
                     class="op-wire-label-box"
-                    x=move || mid().0 - 200.0
-                    y=move || mid().1 - 12.0
-                    width="400"
-                    height="24"
+                    x=move || mid().0
+                    y=move || mid().1
+                    width=move || wire_label_width.get().unwrap_or(100.0) * DU_POINTS
+                    height=move || wire_label_height.get().unwrap_or(6.0) * DU_POINTS
                 >
                     <div class="op-wire-label-wrap"><span class="op-wire-label op-t-caption">{move || l.get()}</span></div>
                 </foreignObject>
@@ -92,136 +151,43 @@ pub fn GraphFrame(
     /// Views at the end of the header.
     #[prop(optional)]
     actions: Option<ChildrenFn>,
+    #[prop(optional, into)] title_slot: Slot,
+    #[prop(optional, into)] frame_header_height: MaybeProp<f32>,
+    #[prop(optional, into)] frame_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] frame_gap: MaybeProp<f32>,
+    #[prop(optional, into)] border_width: MaybeProp<f32>,
+    #[prop(optional, into)] emphasis_width: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
+    let custom_style = root_style(
+        vec![
+            Metric::du("--op-graph-frame-header-height", frame_header_height),
+            Metric::du("--op-graph-frame-padding-x", frame_padding_x),
+            Metric::du("--op-graph-frame-gap", frame_gap),
+            Metric::du("--op-graph-border-width", border_width),
+            Metric::du("--op-graph-emphasis-width", emphasis_width),
+            Metric::tu("--op-graph-font-size", font_size),
+            Metric::tu("--op-graph-line-height", line_height),
+        ],
+        style,
+    );
     view! {
         <div
-            class="op-graph-frame"
+            class=root_class("op-graph-frame", class)
             data-selected=move || selected.get().then_some("")
-            style:left=move || format!("{}px", rect.get().x)
-            style:top=move || format!("{}px", rect.get().y)
-            style:width=move || format!("{}px", rect.get().w)
-            style:height=move || format!("{}px", rect.get().h)
-            style=move || color.map(|c| format!("--op-frame-color: {}", c.get()))
+            style=move || { let r = rect.get(); format!("left:{}px;top:{}px;width:{}px;height:{}px;{}{}", r.x, r.y, r.w, r.h, color.map(|c| format!("--op-graph-frame-color:{};", c.get())).unwrap_or_default(), custom_style().unwrap_or_default()) }
         >
             <div class="op-graph-frame-head" on:pointerdown=move |e| {
                 if let Some(cb) = on_header_down {
                     cb.run(e);
                 }
             }>
-                <span class="op-graph-frame-title">{move || title.get()}</span>
+                <span class="op-graph-frame-title">{if title_slot.is_set() { title_slot.run().into_any() } else { (move || title.get()).into_any() }}</span>
                 {actions.map(|a| a())}
             </div>
         </div>
     }
 }
-
-/// One rectangle of a [`Minimap`].
-#[derive(Clone, Debug, PartialEq)]
-pub struct MiniItem {
-    pub rect: WorldRect,
-    /// Any CSS colour; the default is the neutral node colour.
-    pub color: Option<String>,
-}
-
-/// Scale and offset that fit `bounds` into a `w` × `h` box: `box = (world - origin) * scale`.
-pub fn minimap_scale(bounds: WorldRect, w: f64, h: f64) -> (f64, f64, f64) {
-    let scale = (w / bounds.w.max(1.0)).min(h / bounds.h.max(1.0));
-    let ox = bounds.x - (w / scale - bounds.w) / 2.0;
-    let oy = bounds.y - (h / scale - bounds.h) / 2.0;
-    (scale, ox, oy)
-}
-
-/// Overview of the graph in a [`GraphCanvas`](super::GraphCanvas) overlay: the items and the
-/// visible area; a press or drag moves the camera there.
-#[component]
-pub fn Minimap(
-    #[prop(into)] items: Signal<Vec<MiniItem>>,
-    /// Size in DU.
-    #[prop(default = (50.0, 35.0))]
-    size: (f32, f32),
-    #[prop(default = "Minimap".into(), into)] label: String,
-) -> impl IntoView {
-    let ctx = use_context::<GraphCamera>();
-    let (w, h) = (
-        f64::from(size.0 * operator_ui_tokens::DU_POINTS),
-        f64::from(size.1 * operator_ui_tokens::DU_POINTS),
-    );
-    let geometry = Memo::new(move |_| {
-        let view = ctx.map_or(WorldRect::default(), |c| {
-            let (vw, vh) = c.viewport.get();
-            c.camera.get().visible(vw, vh)
-        });
-        let bounds = items
-            .with(|i| WorldRect::bounds(i.iter().map(|m| m.rect)))
-            .map_or(view, |b| b.union(view));
-        (view, minimap_scale(bounds, w, h))
-    });
-    let dragging = StoredValue::new(false);
-    let move_to = move |e: &leptos::ev::PointerEvent| {
-        let Some(c) = ctx else { return };
-        let Some(target) = e
-            .current_target()
-            .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
-        else {
-            return;
-        };
-        let r = target.get_bounding_client_rect();
-        let (_, (scale, ox, oy)) = geometry.get_untracked();
-        let wx = (f64::from(e.client_x()) - r.left()) / scale + ox;
-        let wy = (f64::from(e.client_y()) - r.top()) / scale + oy;
-        let (vw, vh) = c.viewport.get_untracked();
-        c.camera
-            .update(|cam: &mut Camera| *cam = cam.centered_on(wx, wy, vw, vh));
-    };
-    let rect_style = move |rect: WorldRect| {
-        let (_, (scale, ox, oy)) = geometry.get();
-        format!(
-            "left:{}px;top:{}px;width:{}px;height:{}px",
-            (rect.x - ox) * scale,
-            (rect.y - oy) * scale,
-            (rect.w * scale).max(1.0),
-            (rect.h * scale).max(1.0)
-        )
-    };
-    let entries = move || items.get().into_iter().enumerate().collect::<Vec<_>>();
-    let entry_key = |(i, m): &(usize, MiniItem)| (*i, format!("{:?}", m.rect));
-    view! {
-        <div
-            class="op-minimap"
-            role="img"
-            aria-label=label
-            style:width=format!("{w}px")
-            style:height=format!("{h}px")
-            on:pointerdown=move |e| {
-                e.stop_propagation();
-                dragging.set_value(true);
-                if let Some(t) = e.current_target().and_then(|t| t.dyn_into::<web_sys::Element>().ok()) {
-                    let _ = t.set_pointer_capture(e.pointer_id());
-                }
-                move_to(&e);
-            }
-            on:pointermove=move |e| {
-                if dragging.get_value() {
-                    move_to(&e);
-                }
-            }
-            on:pointerup=move |_| dragging.set_value(false)
-        >
-            <For each=entries key=entry_key let:entry>
-                <span
-                    class="op-minimap-item"
-                    style=move || {
-                        let base = rect_style(entry.1.rect);
-                        match &entry.1.color {
-                            Some(c) => format!("{base};background-color:{c}"),
-                            None => base,
-                        }
-                    }
-                ></span>
-            </For>
-            <span class="op-minimap-view" style=move || rect_style(geometry.get().0)></span>
-        </div>
-    }
-}
-
-use wasm_bindgen::JsCast;

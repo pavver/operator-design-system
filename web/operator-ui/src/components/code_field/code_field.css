@@ -1,50 +1,61 @@
 /* ------------------------------------------------------------------ */
 /* CodeField                                                           */
 /* ------------------------------------------------------------------ */
-.op-code-field { display: flex; flex-direction: column; width: 100%; background-color: var(--op-surface); }
-.op-code-field[data-state="disabled"] { background-color: var(--op-disabled-surface); }
-.op-code-stack { display: grid; position: relative; }
+.op-code-field { display: flex; flex-direction: column; width: 100%; }
+.op-field.op-code-box { height: auto; min-height: var(--op-field-height, 0); padding: 0; align-items: stretch; }
+.op-code-box[data-state="disabled"] { background-color: var(--op-field-disabled-background, var(--op-disabled-surface)); }
+.op-code-editor { display: flex; width: 100%; min-width: 0; gap: var(--op-field-gutter-gap, 0); }
+.op-code-gutter { flex: none; width: var(--op-field-gutter-width, auto); padding-block: var(--op-field-padding-y, var(--op-dim-pad-tight)); color: var(--op-field-secondary-text, var(--op-text-secondary)); font-size: var(--op-field-font-size, var(--op-type-console-size)); line-height: var(--op-field-line-height, var(--op-type-console-line)); }
+.op-code-stack { display: grid; position: relative; flex: 1; min-width: 0; }
 .op-code-layer, .op-code-input {
   grid-area: 1 / 1;
   box-sizing: border-box;
   width: 100%;
-  min-height: calc(var(--op-type-console-line) * var(--op-code-min-lines, 2) + var(--op-dim-pad-tight) * 2);
+  min-height: calc(var(--op-field-line-height, var(--op-type-console-line)) * var(--op-field-min-lines, 2) + var(--op-field-padding-y, var(--op-dim-pad-tight)) * 2);
   margin: 0;
-  padding: var(--op-dim-pad-tight) var(--op-dim-pad-card);
+  padding: var(--op-field-padding-y, var(--op-dim-pad-tight)) var(--op-field-padding-x, var(--op-dim-pad-card));
   border: 0;
   font-family: var(--op-font);
-  font-size: var(--op-type-console-size);
-  line-height: var(--op-type-console-line);
+  font-size: var(--op-field-font-size, var(--op-type-console-size));
+  line-height: var(--op-field-line-height, var(--op-type-console-line));
   letter-spacing: normal;
-  tab-size: 2;
+  tab-size: var(--op-field-tab-size, 2);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
-.op-code-layer { color: var(--op-text-primary); pointer-events: none; overflow: hidden; }
+.op-code-layer { color: var(--op-field-text, var(--op-text-primary)); pointer-events: none; overflow: hidden; }
 .op-code-input {
   resize: none;
   overflow: hidden;
   background: transparent;
   color: transparent;
-  caret-color: var(--op-accent);
+  caret-color: var(--op-field-accent, var(--op-accent));
   outline: none;
 }
 .op-code-field .op-code-input:focus, .op-code-field .op-code-input:focus-visible { outline: none; }
-.op-code-input::placeholder { color: var(--op-text-disabled); }
-.op-code-input::selection { background-color: color-mix(in srgb, var(--op-accent) 30%, transparent); color: transparent; }
-.op-code-keyword { color: var(--op-syntax-keyword); }
-.op-code-string { color: var(--op-syntax-string); }
-.op-code-number { color: var(--op-syntax-number); }
-.op-code-comment { color: var(--op-syntax-comment); }
-.op-code-type { color: var(--op-syntax-type); }
-.op-code-function { color: var(--op-syntax-function); }
-.op-code-constant { color: var(--op-syntax-constant); }
-.op-code-property { color: var(--op-syntax-property); }
-.op-code-meta { color: var(--op-syntax-meta); }
-.op-code-punctuation { color: var(--op-syntax-punctuation); }
-.op-code-error { text-decoration: underline wavy var(--op-error); text-decoration-skip-ink: none; }
-.op-code-warning { text-decoration: underline wavy var(--op-warning); text-decoration-skip-ink: none; }
-.op-code-message { padding: 0 var(--op-dim-pad-card) var(--op-dim-pad-tight); }
-.op-code-message[data-kind="error"] { color: var(--op-error); }
-.op-code-message[data-kind="warning"] { color: var(--op-warning); }
-.op-code-completion { min-width: calc(var(--op-du) * 50); max-width: calc(var(--op-du) * 90); }
+.op-code-input::placeholder { color: var(--op-field-disabled-text, var(--op-text-disabled)); }
+.op-code-input::selection { background-color: color-mix(in srgb, var(--op-field-accent, var(--op-accent)) 30%, transparent); color: transparent; }
+.op-code-keyword { color: var(--op-field-syntax-keyword, var(--op-syntax-keyword)); }
+.op-code-string { color: var(--op-field-syntax-string, var(--op-syntax-string)); }
+.op-code-number { color: var(--op-field-syntax-number, var(--op-syntax-number)); }
+.op-code-comment { color: var(--op-field-syntax-comment, var(--op-syntax-comment)); }
+.op-code-type { color: var(--op-field-syntax-type, var(--op-syntax-type)); }
+.op-code-function { color: var(--op-field-syntax-function, var(--op-syntax-function)); }
+.op-code-constant { color: var(--op-field-syntax-constant, var(--op-syntax-constant)); }
+.op-code-property { color: var(--op-field-syntax-property, var(--op-syntax-property)); }
+.op-code-meta { color: var(--op-field-syntax-meta, var(--op-syntax-meta)); }
+.op-code-punctuation { color: var(--op-field-syntax-punctuation, var(--op-syntax-punctuation)); }
+.op-code-error { text-decoration: underline wavy var(--op-field-error, var(--op-error)); text-decoration-skip-ink: none; }
+.op-code-warning { text-decoration: underline wavy var(--op-field-warning, var(--op-warning)); text-decoration-skip-ink: none; }
+.op-code-message { padding: 0 var(--op-field-padding-x, var(--op-dim-pad-card)) var(--op-field-padding-y, var(--op-dim-pad-tight)); font-size: var(--op-field-caption-font-size, var(--op-type-caption-size)); line-height: var(--op-field-caption-line-height, var(--op-type-caption-line)); }
+.op-code-message[data-kind="error"] { color: var(--op-field-error, var(--op-error)); }
+.op-code-message[data-kind="warning"] { color: var(--op-field-warning, var(--op-warning)); }
+.op-code-completion { min-width: var(--op-field-completion-min-width, calc(var(--op-du) * 50)); max-width: var(--op-field-completion-max-width, calc(var(--op-du) * 90)); }
+
+.op-code-field .op-field-label, .op-code-field .op-field-bottom {
+  font-size: var(--op-field-caption-font-size, var(--op-type-caption-size));
+  line-height: var(--op-field-caption-line-height, var(--op-type-caption-line));
+}
+.op-code-field .op-field-label, .op-code-field .op-field-hint { color: var(--op-field-secondary-text, var(--op-text-secondary)); }
+.op-code-field .op-field-error { color: var(--op-field-error, var(--op-error)); }
+.op-code-field .op-field-root:has(.op-code-box[data-state="focused"]) > .op-field-label { color: var(--op-field-accent, var(--op-accent)); }

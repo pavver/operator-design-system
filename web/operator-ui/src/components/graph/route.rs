@@ -5,7 +5,7 @@ use std::fmt::Write;
 pub type Point = (f64, f64);
 
 /// Shortest horizontal handle at a wire end, in world units (10 DU).
-const HANDLE_MIN: f64 = 40.0;
+const HANDLE_MIN: f64 = 10.0 * operator_ui_tokens::DU_POINTS as f64;
 
 /// Endpoints and intermediate points as one ordered route.
 pub fn route_points(a: Point, points: &[Point], b: Point) -> Vec<Point> {
@@ -50,6 +50,10 @@ fn route_tangent(route: &[Point], index: usize) -> Point {
 ///   with handle lengths proportional to the adjacent segment length (one third),
 ///   ensuring smooth U-turns without loops and maintaining tangent continuity.
 pub fn segment_controls(route: &[Point], i: usize) -> (Point, Point) {
+    segment_controls_with_handle(route, i, HANDLE_MIN)
+}
+
+fn segment_controls_with_handle(route: &[Point], i: usize, handle_min: f64) -> (Point, Point) {
     let n = route.len();
     if n < 2 || i + 1 >= n {
         let fallback = if let Some(&pt) = route.last() {
@@ -64,7 +68,7 @@ pub fn segment_controls(route: &[Point], i: usize) -> (Point, Point) {
     let seg_len = (end.0 - start.0).hypot(end.1 - start.1);
 
     let c1 = if i == 0 {
-        let dx = ((end.0 - start.0).abs() / 2.0).max(HANDLE_MIN);
+        let dx = ((end.0 - start.0).abs() / 2.0).max(handle_min);
         (start.0 + dx, start.1)
     } else {
         let tangent = route_tangent(route, i);
@@ -76,7 +80,7 @@ pub fn segment_controls(route: &[Point], i: usize) -> (Point, Point) {
     };
 
     let c2 = if i + 1 == n - 1 {
-        let dx = ((end.0 - start.0).abs() / 2.0).max(HANDLE_MIN);
+        let dx = ((end.0 - start.0).abs() / 2.0).max(handle_min);
         (end.0 - dx, end.1)
     } else {
         let tangent = route_tangent(route, i + 1);
@@ -93,10 +97,19 @@ pub fn segment_controls(route: &[Point], i: usize) -> (Point, Point) {
 /// A continuous route with horizontal tangents at endpoints and direction-aware tangents
 /// at intermediate route points.
 pub fn route_path(a: Point, points: &[Point], b: Point) -> String {
+    route_path_with_handle(a, points, b, HANDLE_MIN)
+}
+
+pub(super) fn route_path_with_handle(
+    a: Point,
+    points: &[Point],
+    b: Point,
+    handle_min: f64,
+) -> String {
     let route = route_points(a, points, b);
     let mut path = format!("M {} {}", a.0, a.1);
     for i in 0..route.len() - 1 {
-        let (c1, c2) = segment_controls(&route, i);
+        let (c1, c2) = segment_controls_with_handle(&route, i, handle_min);
         let end = route[i + 1];
         let _ = write!(
             path,
@@ -151,12 +164,21 @@ pub fn route_insert_index(a: Point, points: &[Point], b: Point, p: Point) -> usi
 
 /// Halfway along the sampled route, including intermediate points and backwards curves.
 pub fn route_midpoint(a: Point, points: &[Point], b: Point) -> Point {
+    route_midpoint_with_handle(a, points, b, HANDLE_MIN)
+}
+
+pub(super) fn route_midpoint_with_handle(
+    a: Point,
+    points: &[Point],
+    b: Point,
+    handle_min: f64,
+) -> Point {
     let route = route_points(a, points, b);
     let mut samples = vec![a];
     for i in 0..route.len() - 1 {
         let start = route[i];
         let end = route[i + 1];
-        let (c1, c2) = segment_controls(&route, i);
+        let (c1, c2) = segment_controls_with_handle(&route, i, handle_min);
         for n in 1..=24 {
             samples.push(cubic(start, c1, c2, end, n as f64 / 24.0));
         }

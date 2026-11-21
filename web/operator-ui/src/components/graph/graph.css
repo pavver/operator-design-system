@@ -6,37 +6,38 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: var(--op-background);
+  background-color: var(--op-graph-background, var(--op-background));
   touch-action: none;
   user-select: none;
 }
 .op-graph[data-grid] {
+  background-size: calc(var(--op-graph-grid, calc(var(--op-du) * 5)) * var(--op-graph-zoom, 1)) calc(var(--op-graph-grid, calc(var(--op-du) * 5)) * var(--op-graph-zoom, 1));
   background-image:
-    linear-gradient(to right, var(--op-divider) var(--op-dim-border), transparent var(--op-dim-border)),
-    linear-gradient(to bottom, var(--op-divider) var(--op-dim-border), transparent var(--op-dim-border));
+    linear-gradient(to right, var(--op-graph-divider, var(--op-divider)) var(--op-graph-grid-width, var(--op-dim-border)), transparent var(--op-graph-grid-width, var(--op-dim-border))),
+    linear-gradient(to bottom, var(--op-graph-divider, var(--op-divider)) var(--op-graph-grid-width, var(--op-dim-border)), transparent var(--op-graph-grid-width, var(--op-dim-border)));
 }
 .op-graph-world { position: absolute; top: 0; left: 0; width: 0; height: 0; transform-origin: 0 0; }
 .op-graph-overlay { position: absolute; inset: 0; pointer-events: none; }
 .op-graph-overlay > * { pointer-events: auto; }
 
-.op-wires { position: absolute; top: 0; left: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
-.op-wire-hit { fill: none; stroke: transparent; stroke-width: calc(var(--op-du) * 3); pointer-events: stroke; cursor: pointer; }
+.op-wires { position: absolute; top: 0; left: 0; width: var(--op-graph-layer-size, calc(var(--op-du) * 0.25)); height: var(--op-graph-layer-size, calc(var(--op-du) * 0.25)); overflow: visible; pointer-events: none; }
+.op-wire-hit { fill: none; stroke: transparent; stroke-width: var(--op-graph-wire-hit-width, calc(var(--op-du) * 3)); pointer-events: stroke; cursor: pointer; }
 .op-wire-line {
   fill: none;
-  stroke: var(--op-wire-color, var(--op-text-secondary));
-  stroke-width: var(--op-dim-border-emphasis);
+  stroke: var(--op-graph-wire-color, var(--op-graph-secondary-text, var(--op-text-secondary)));
+  stroke-width: var(--op-graph-wire-width, var(--op-dim-border-emphasis));
   transition: stroke var(--op-motion-state-color) var(--op-ease-standard);
 }
-.op-wire[data-exec] .op-wire-line { stroke-width: calc(var(--op-du) * 0.75); }
-.op-wire[data-state="selected"] .op-wire-line { stroke: var(--op-accent); }
-.op-wire[data-state="preview"] .op-wire-line { stroke-dasharray: calc(var(--op-du) * 2) var(--op-du); }
-.op-wire[data-state="detached"] .op-wire-line { stroke-dasharray: var(--op-du) var(--op-du); opacity: 0.6; }
+.op-wire[data-exec] .op-wire-line { stroke-width: var(--op-graph-wire-exec-width, calc(var(--op-du) * 0.75)); }
+.op-wire[data-state="selected"] .op-wire-line { stroke: var(--op-graph-accent, var(--op-accent)); }
+.op-wire[data-state="preview"] .op-wire-line { stroke-dasharray: var(--op-graph-wire-dash, calc(var(--op-du) * 2)) var(--op-graph-wire-dash-gap, var(--op-du)); }
+.op-wire[data-state="detached"] .op-wire-line { stroke-dasharray: var(--op-graph-wire-detached-dash, var(--op-du)) var(--op-graph-wire-dash-gap, var(--op-du)); opacity: 0.6; }
 .op-wire-label-wrap { display: flex; justify-content: center; align-items: center; height: 100%; }
 .op-wire-label {
-  padding: 0 var(--op-dim-pad-tight);
-  background-color: var(--op-surface);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-wire-color, var(--op-border-strong));
-  color: var(--op-text-primary);
+  padding: 0 var(--op-graph-wire-label-padding-x, var(--op-dim-pad-tight));
+  background-color: var(--op-graph-surface, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-graph-border-width, var(--op-dim-border)) var(--op-graph-wire-color, var(--op-graph-strong-border, var(--op-border-strong)));
+  color: var(--op-graph-text, var(--op-text-primary));
   white-space: nowrap;
 }
 
@@ -44,33 +45,33 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  background-color: var(--op-surface);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
-  color: var(--op-text-primary);
+  background-color: var(--op-graph-surface, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-graph-border-width, var(--op-dim-border)) var(--op-graph-border, var(--op-border));
+  color: var(--op-graph-text, var(--op-text-primary));
 }
-.op-node[data-selected] { outline: var(--op-dim-border-emphasis) solid var(--op-accent); }
-.op-node[data-error] .op-node-head { box-shadow: inset 0 calc(var(--op-dim-border-emphasis) * -1) 0 var(--op-error); }
+.op-node[data-selected] { outline: var(--op-graph-emphasis-width, var(--op-dim-border-emphasis)) solid var(--op-graph-accent, var(--op-accent)); }
+.op-node[data-error] .op-node-head { box-shadow: inset 0 calc(var(--op-graph-emphasis-width, var(--op-dim-border-emphasis)) * -1) 0 var(--op-graph-error, var(--op-error)); }
 .op-node-head {
   display: flex;
   align-items: center;
-  gap: var(--op-dim-pad-tight);
-  height: var(--op-dim-row-compact);
-  padding: 0 var(--op-dim-pad-tight) 0 var(--op-dim-pad-card);
-  background-color: var(--op-surface-alt);
+  gap: var(--op-graph-header-gap, var(--op-dim-pad-tight));
+  height: var(--op-graph-header-height, var(--op-dim-row-compact));
+  padding: 0 var(--op-graph-header-padding-end, var(--op-dim-pad-tight)) 0 var(--op-graph-header-padding-start, var(--op-dim-pad-card));
+  background-color: var(--op-graph-header-background, var(--op-surface-alt));
   box-shadow:
-    inset 0 var(--op-dim-border-emphasis) 0 var(--op-node-color, transparent),
-    inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider);
+    inset 0 var(--op-graph-emphasis-width, var(--op-dim-border-emphasis)) 0 var(--op-graph-node-color, transparent),
+    inset 0 calc(var(--op-graph-border-width, var(--op-dim-border)) * -1) 0 var(--op-graph-divider, var(--op-divider));
   cursor: grab;
 }
 .op-node-title { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
-.op-node-category { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--op-node-color, var(--op-text-secondary)); font-weight: 700; }
+.op-node-category { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--op-graph-node-color, var(--op-graph-secondary-text, var(--op-text-secondary))); font-weight: 700; }
 .op-node-info, .op-node-actions { display: inline-flex; align-items: center; flex: none; cursor: default; }
-.op-node-info-icon { display: grid; place-items: center; color: var(--op-text-secondary); cursor: help; }
-.op-node-info-icon:hover, .op-node-info-icon:focus-visible { color: var(--op-accent); }
+.op-node-info-icon { display: grid; place-items: center; color: var(--op-graph-secondary-text, var(--op-text-secondary)); cursor: help; }
+.op-node-info-icon:hover, .op-node-info-icon:focus-visible { color: var(--op-graph-accent, var(--op-accent)); }
 .op-node-body {
   display: grid;
-  grid-template-columns: fit-content(40%) minmax(0, 1fr);
-  padding: var(--op-dim-gap-micro) 0;
+  grid-template-columns: fit-content(var(--op-graph-label-width, 40%)) minmax(0, 1fr);
+  padding: var(--op-graph-body-padding-y, var(--op-dim-gap-micro)) 0;
 }
 .op-node-row {
   position: relative;
@@ -78,55 +79,55 @@
   display: grid;
   grid-template-columns: subgrid;
   align-items: center;
-  column-gap: var(--op-dim-pad-tight);
-  height: var(--op-dim-row-standard);
-  padding: 0 var(--op-dim-pad-card);
-  color: var(--op-text-secondary);
+  column-gap: var(--op-graph-row-gap, var(--op-dim-pad-tight));
+  height: var(--op-graph-row-height, var(--op-dim-row-standard));
+  padding: 0 var(--op-graph-row-padding-x, var(--op-dim-pad-card));
+  color: var(--op-graph-secondary-text, var(--op-text-secondary));
 }
-.op-node-row[data-content] { height: auto; min-height: var(--op-dim-row-standard); align-items: start; padding-block: var(--op-dim-gap-micro); }
-.op-node-row[data-error] > .op-node-label { color: var(--op-error); }
+.op-node-row[data-content] { height: auto; min-height: var(--op-graph-row-height, var(--op-dim-row-standard)); align-items: start; padding-block: var(--op-graph-row-padding-y, var(--op-dim-gap-micro)); }
+.op-node-row[data-error] > .op-node-label { color: var(--op-graph-error, var(--op-error)); }
 .op-node-label { grid-column: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.op-node-control { grid-column: 2; display: flex; align-items: center; min-width: 0; color: var(--op-text-primary); }
+.op-node-control { grid-column: 2; display: flex; align-items: center; min-width: 0; color: var(--op-graph-text, var(--op-text-primary)); }
 .op-node-end-label { grid-column: 2; justify-self: end; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .op-node-row[data-wide] > .op-node-label, .op-node-row[data-wide] > .op-node-end-label { grid-column: 1 / -1; }
-.op-node-row[data-content] > .op-node-label, .op-node-row[data-content] > .op-node-end-label { line-height: calc(var(--op-dim-row-standard) - var(--op-dim-gap-micro) * 2); }
-.op-node-socket-slot { position: absolute; top: calc(var(--op-dim-row-standard) / 2); display: flex; transform: translateY(-50%); }
+.op-node-row[data-content] > .op-node-label, .op-node-row[data-content] > .op-node-end-label { line-height: calc(var(--op-graph-row-height, var(--op-dim-row-standard)) - var(--op-graph-row-padding-y, var(--op-dim-gap-micro)) * 2); }
+.op-node-socket-slot { position: absolute; top: calc(var(--op-graph-row-height, var(--op-dim-row-standard)) / 2); display: flex; transform: translateY(-50%); }
 .op-node-socket-slot[data-side="in"] { left: 0; transform: translate(-50%, -50%); }
 .op-node-socket-slot[data-side="out"] { right: 0; transform: translate(50%, -50%); }
 
 .op-socket {
   display: block;
-  width: calc(var(--op-du) * 2.5);
-  height: calc(var(--op-du) * 2.5);
-  background-color: var(--op-surface);
-  box-shadow: inset 0 0 0 var(--op-dim-border-emphasis) var(--op-socket-color, var(--op-text-secondary));
+  width: var(--op-graph-socket-size, calc(var(--op-du) * 2.5));
+  height: var(--op-graph-socket-size, calc(var(--op-du) * 2.5));
+  background-color: var(--op-graph-surface, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-graph-socket-border-width, var(--op-dim-border-emphasis)) var(--op-graph-socket-color, var(--op-graph-secondary-text, var(--op-text-secondary)));
   cursor: crosshair;
 }
-.op-socket[data-connected] { background-color: var(--op-socket-color, var(--op-text-secondary)); }
+.op-socket[data-connected] { background-color: var(--op-graph-socket-color, var(--op-graph-secondary-text, var(--op-text-secondary))); }
 .op-socket[data-kind="exec"] {
   clip-path: polygon(0 0, 100% 50%, 0 100%);
   box-shadow: none;
-  background-color: var(--op-socket-color, var(--op-text-secondary));
+  background-color: var(--op-graph-socket-color, var(--op-graph-secondary-text, var(--op-text-secondary)));
   opacity: 0.45;
 }
 .op-socket[data-kind="exec"][data-connected] { opacity: 1; }
-.op-socket[data-missing] { --op-socket-color: var(--op-error); }
-.op-socket[data-highlighted], .op-socket:hover { outline: var(--op-dim-border) solid var(--op-accent); outline-offset: var(--op-dim-border); }
+.op-socket[data-missing] { --op-graph-socket-color: var(--op-graph-error, var(--op-error)); }
+.op-socket[data-highlighted], .op-socket:hover { outline: var(--op-graph-socket-outline-width, var(--op-dim-border)) solid var(--op-graph-accent, var(--op-accent)); outline-offset: var(--op-graph-socket-outline-offset, var(--op-dim-border)); }
 
 .op-graph-frame {
   position: absolute;
-  background-color: color-mix(in srgb, var(--op-frame-color, var(--op-accent)) 8%, transparent);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-frame-color, var(--op-accent));
+  background-color: color-mix(in srgb, var(--op-graph-frame-color, var(--op-graph-accent, var(--op-accent))) 8%, transparent);
+  box-shadow: inset 0 0 0 var(--op-graph-border-width, var(--op-dim-border)) var(--op-graph-frame-color, var(--op-graph-accent, var(--op-accent)));
 }
-.op-graph-frame[data-selected] { outline: var(--op-dim-border-emphasis) solid var(--op-accent); }
+.op-graph-frame[data-selected] { outline: var(--op-graph-emphasis-width, var(--op-dim-border-emphasis)) solid var(--op-graph-accent, var(--op-accent)); }
 .op-graph-frame-head {
   display: flex;
   align-items: center;
-  gap: var(--op-dim-pad-tight);
-  height: var(--op-dim-row-compact);
-  padding: 0 var(--op-dim-pad-card);
-  background-color: color-mix(in srgb, var(--op-frame-color, var(--op-accent)) 25%, transparent);
-  color: var(--op-text-primary);
+  gap: var(--op-graph-frame-gap, var(--op-dim-pad-tight));
+  height: var(--op-graph-frame-header-height, var(--op-dim-row-compact));
+  padding: 0 var(--op-graph-frame-padding-x, var(--op-dim-pad-card));
+  background-color: color-mix(in srgb, var(--op-graph-frame-color, var(--op-graph-accent, var(--op-accent))) 25%, transparent);
+  color: var(--op-graph-text, var(--op-text-primary));
   font-weight: 700;
   cursor: grab;
 }
@@ -134,12 +135,34 @@
 
 .op-minimap {
   position: absolute;
-  right: var(--op-dim-margin-screen);
-  bottom: var(--op-dim-margin-screen);
+  right: var(--op-graph-minimap-offset-x, var(--op-dim-margin-screen));
+  bottom: var(--op-graph-minimap-offset-y, var(--op-dim-margin-screen));
   overflow: hidden;
-  background-color: var(--op-surface);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border-strong);
+  width: var(--op-graph-minimap-width, var(--op-graph-minimap-default-width, calc(var(--op-du) * 50)));
+  height: var(--op-graph-minimap-height, var(--op-graph-minimap-default-height, calc(var(--op-du) * 35)));
+  background-color: var(--op-graph-surface, var(--op-surface));
+  box-shadow: inset 0 0 0 var(--op-graph-border-width, var(--op-dim-border)) var(--op-graph-strong-border, var(--op-border-strong));
   cursor: pointer;
 }
-.op-minimap-item { position: absolute; background-color: var(--op-text-disabled); }
-.op-minimap-view { position: absolute; box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-accent); pointer-events: none; }
+.op-minimap-map { display: block; width: 100%; height: 100%; }
+.op-minimap-item { fill: var(--op-graph-minimap-item, var(--op-text-disabled)); }
+.op-minimap-view { width: 100%; height: 100%; box-shadow: inset 0 0 0 var(--op-graph-border-width, var(--op-dim-border)) var(--op-graph-accent, var(--op-accent)); pointer-events: none; }
+
+.op-graph-empty { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+:where(.op-node), :where(.op-node-row), :where(.op-graph-frame) {
+  font-size: var(--op-graph-font-size, var(--op-type-body-size));
+  line-height: var(--op-graph-line-height, var(--op-type-body-line));
+}
+.op-node-category, .op-wire-label {
+  font-size: var(--op-graph-caption-font-size, var(--op-type-caption-size));
+  line-height: var(--op-graph-caption-line-height, var(--op-type-caption-line));
+}
+.op-node-footer { padding: var(--op-graph-footer-padding-y, var(--op-dim-pad-tight)) var(--op-graph-footer-padding-x, var(--op-dim-pad-card)); }
+.op-wire-label-box {
+  width: var(--op-graph-wire-label-width, calc(var(--op-du) * 100));
+  height: var(--op-graph-wire-label-height, calc(var(--op-du) * 6));
+  transform: translate(-50%, -50%);
+  transform-box: fill-box;
+}
+
+.op-minimap-probe { position: absolute; visibility: hidden; pointer-events: none; width: var(--op-graph-minimap-item-min-size, calc(var(--op-du) * 0.25)); height: 0; }
