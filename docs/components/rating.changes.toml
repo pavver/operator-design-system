@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T20:30:00+02:00"
+status = "draft"
+en = "Support icon and icon_selected props with rating.icon and rating.icon-selected keys."
+uk = "Підтримка властивостей icon та icon_selected з ключами rating.icon та rating.icon-selected."
+
+[[change]]
 date = "2026-11-21T19:53:42+02:00"
 status = "draft"
 en = "New component: discrete rating with pointer preview and roving keyboard focus."

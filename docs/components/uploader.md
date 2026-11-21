@@ -15,7 +15,7 @@ Status: **draft** on web.
 | Property | Value |
 | :--- | :--- |
 | Gap | `gap_small` (`2 DU`). |
-| Padding | `pad_card` (`3 DU`). |
+| Padding | `0 DU`. |
 | Corner radius | `0 DU`. |
 
 ## Behavior
@@ -46,7 +46,7 @@ Status: **draft** on web.
 | `actions` | `Slot` | none | Custom action buttons slot. |
 | `footer` | `Slot` | none | Footer content slot below queue list. |
 | `gap` | DU metric | `gap_small` | Spacing between items and sections. |
-| `padding` | DU metric | `pad_card` | Outer padding around uploader. |
+| `padding` | DU metric | none | Optional padding around uploader. |
 | `class`, `style` | string | none | Root hooks. |
 
 ## Customization
@@ -54,7 +54,7 @@ Status: **draft** on web.
 | Metric prop | Unit | Variable | Default |
 | :--- | :--- | :--- | :--- |
 | `gap` | DU | `--op-uploader-gap` | `gap_small` (`2 DU`) |
-| `padding` | DU | `--op-uploader-padding` | `pad_card` (`3 DU`) |
+| `padding` | DU | `--op-uploader-padding` | `0 DU` |
 
 | Color variable | Default |
 | :--- | :--- |

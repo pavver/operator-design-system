@@ -1,4 +1,6 @@
 //! Form validation through registered FormField boundaries.
+
+use crate::components::action_button::ActionButton;
 use crate::core::{
     ActionResult, AsyncAction, ControlState, JobToken, Metric, PendingRun, Slot, root_class,
     root_style, sleep_ms, ui_text, use_state_visual,
@@ -8,13 +10,17 @@ use leptos::task::spawn_local;
 use operator_ui_tokens::motion;
 use std::sync::atomic::{AtomicU64, Ordering};
 use wasm_bindgen::JsCast;
+
 pub(crate) const CSS: &str = include_str!("form.css");
+
 /// First rule returning a message wins; None means valid.
 pub type ValidationRule = Callback<String, Option<String>>;
+
 /// Applies rules in declaration order.
 pub fn validate_rules(value: &str, rules: &[ValidationRule]) -> Option<String> {
     rules.iter().find_map(|rule| rule.run(value.to_string()))
 }
+
 #[derive(Clone, Copy)]
 struct Registration {
     id: u64,
@@ -22,12 +28,14 @@ struct Registration {
     reset: Callback<()>,
     focus: Callback<()>,
 }
+
 /// Context for custom fields and programmatic validation/reset.
 #[derive(Clone, Copy)]
 pub struct FormContext {
     fields: RwSignal<Vec<Registration>>,
     pub pending: Signal<bool>,
 }
+
 impl FormContext {
     pub fn validate(self, focus_error: bool) -> bool {
         let fields = self.fields.get_untracked();
@@ -42,6 +50,7 @@ impl FormContext {
         }
         first.is_none()
     }
+
     pub fn reset(self) {
         if !self.pending.get_untracked() {
             for field in self.fields.get_untracked() {
@@ -49,6 +58,7 @@ impl FormContext {
             }
         }
     }
+
     /// Register a custom control and automatically remove it on owner cleanup.
     pub fn register(self, validate: Callback<(), bool>, reset: Callback<()>, focus: Callback<()>) {
         static NEXT: AtomicU64 = AtomicU64::new(1);
@@ -66,6 +76,7 @@ impl FormContext {
         });
     }
 }
+
 #[component]
 pub fn Form(
     children: Children,
@@ -104,30 +115,132 @@ pub fn Form(
     let reset = ui_text(reset_label, "form.reset", "Reset");
     let action = StoredValue::new(on_submit);
     let job = JobToken::new();
-    view! {
-            <form class=root_class("op-form op-sb",class) style=root_style(vec![Metric::du("--op-form-gap",gap),Metric::du("--op-form-padding",padding)],style) novalidate=true aria-label=move || label.get() aria-busy=move || pending.get().to_string()
-                data-state=move || visual.state.get() data-result=move || visual.result.get() data-fading=move || visual.fading.get().then_some("")
-                on:submit=move |ev| {
-                    ev.prevent_default(); if pending.get_untracked() || !enabled.get_untracked() {return;}
-                    let valid=context.validate(true);if let Some(cb)=on_validation {cb.run(valid);}
-    if !valid {return;}
-                    error.set(None);let id=job.next();local.set(ControlState::Pending);let action=action.get_value();
-                    spawn_local(async move {let result=if let Some(action)=action {action.call(()).await} else {ActionResult::Success};if !job.is_current(id) {return;}
-                        if let ActionResult::Error(message)=&result {error.set(message.clone());}local.set(result.into());
-                        sleep_ms(motion::RESULT_HOLD_MS).await;if job.is_current(id) {local.set(ControlState::Idle);}
-                    });
-                }
-                on:reset=move |ev| {ev.prevent_default();if !pending.get_untracked() && enabled.get_untracked() {job.next();context.reset();error.set(None);local.set(ControlState::Idle);if let Some(cb)=on_reset {cb.run(());}}}>
-                {header.run()}
-                <fieldset disabled=move || pending.get() || !enabled.get()>
-                    <div class="op-form-fields" inert=move || pending.get() || !enabled.get()>{children()}</div>
-                    <div class="op-form-actions">{if actions.is_set() {actions.run()} else {Some(view! {<button type="submit">{move || submit.get()}</button><button type="reset">{move || reset.get()}</button>}.into_any())}}</div>
-                </fieldset>
-                <span role="status">{move || error.get()}</span>
-                {footer.run()}<PendingRun/>
-            </form>
+
+    let submit_state = Signal::derive(move || Some(local.get()));
+
+    let do_reset = Callback::new(move |()| {
+        if !pending.get_untracked() && enabled.get_untracked() {
+            job.next();
+            context.reset();
+            error.set(None);
+            local.set(ControlState::Idle);
+            if let Some(cb) = on_reset {
+                cb.run(());
+            }
         }
+    });
+
+    let submit_action = AsyncAction::new(move |()| {
+        let action = action.get_value();
+        async move {
+            if pending.get_untracked() || !enabled.get_untracked() {
+                return ActionResult::Success;
+            }
+            let valid = context.validate(true);
+            if let Some(cb) = on_validation {
+                cb.run(valid);
+            }
+            if !valid {
+                return ActionResult::Error(None);
+            }
+            error.set(None);
+            let id = job.next();
+            local.set(ControlState::Pending);
+            let result = if let Some(action) = action {
+                action.call(()).await
+            } else {
+                ActionResult::Success
+            };
+            if !job.is_current(id) {
+                return result;
+            }
+            if let ActionResult::Error(message) = &result {
+                error.set(message.clone());
+            }
+            local.set(result.clone().into());
+            sleep_ms(motion::RESULT_HOLD_MS).await;
+            if job.is_current(id) {
+                local.set(ControlState::Idle);
+            }
+            result
+        }
+    });
+
+    let reset_action = AsyncAction::new(move |()| async move {
+        do_reset.run(());
+        ActionResult::Success
+    });
+
+    let form_submit_action = submit_action.clone();
+
+    view! {
+        <form
+            class=root_class("op-form op-sb", class)
+            style=root_style(
+                vec![
+                    Metric::du("--op-form-gap", gap),
+                    Metric::du("--op-form-padding", padding),
+                ],
+                style,
+            )
+            novalidate=true
+            aria-label=move || label.get()
+            aria-busy=move || pending.get().to_string()
+            data-state=move || visual.state.get()
+            data-result=move || visual.result.get()
+            data-fading=move || visual.fading.get().then_some("")
+            on:submit=move |ev| {
+                ev.prevent_default();
+                let act = form_submit_action.clone();
+                spawn_local(async move {
+                    let _ = act.call(()).await;
+                });
+            }
+            on:reset=move |ev| {
+                ev.prevent_default();
+                do_reset.run(());
+            }
+        >
+            {header.run()}
+            <fieldset disabled=move || pending.get() || !enabled.get()>
+                <div
+                    class="op-form-fields"
+                    inert=move || pending.get() || !enabled.get()
+                >
+                    {children()}
+                </div>
+                <div class="op-form-actions">
+                    {if actions.is_set() {
+                        actions.run()
+                    } else {
+                        Some(
+                            view! {
+                                <ActionButton
+                                    text=submit
+                                    state=submit_state
+                                    enabled=Signal::derive(move || enabled.get() && !pending.get())
+                                    on_click=submit_action.clone()
+                                    class="op-form-submit"
+                                />
+                                <ActionButton
+                                    text=reset
+                                    enabled=Signal::derive(move || enabled.get() && !pending.get())
+                                    on_click=reset_action.clone()
+                                    class="op-form-reset"
+                                />
+                            }
+                                .into_any(),
+                        )
+                    }}
+                </div>
+            </fieldset>
+            <span role="status">{move || error.get()}</span>
+            {footer.run()}
+            <PendingRun/>
+        </form>
+    }
 }
+
 /// Wrap any string-valued field to register its validation, blur and reset behavior.
 #[component]
 pub fn FormField(
@@ -155,7 +268,23 @@ pub fn FormField(
         valid
     });
     if let Some(context) = use_context::<FormContext>() {
-        context.register(validate,Callback::new(move |()| {value.set(initial.get_value());error.set(None);}),Callback::new(move |()| {if let Some(el)=root.get_untracked() && let Ok(Some(el))=el.query_selector("input:not(:disabled),textarea:not(:disabled),select:not(:disabled),[tabindex='0']") && let Ok(el)=el.dyn_into::<web_sys::HtmlElement>() {let _=el.focus();}}));
+        context.register(
+            validate,
+            Callback::new(move |()| {
+                value.set(initial.get_value());
+                error.set(None);
+            }),
+            Callback::new(move |()| {
+                if let Some(el) = root.get_untracked()
+                    && let Ok(Some(el)) = el.query_selector(
+                        "input:not(:disabled),textarea:not(:disabled),select:not(:disabled),[tabindex='0']",
+                    )
+                    && let Ok(el) = el.dyn_into::<web_sys::HtmlElement>()
+                {
+                    let _ = el.focus();
+                }
+            }),
+        );
     }
     let context = use_context::<FormContext>();
     static NEXT: AtomicU64 = AtomicU64::new(1);
@@ -171,15 +300,37 @@ pub fn FormField(
         }
     });
     view! {
-        <div node_ref=root class=root_class("op-form-field",class) style=root_style(vec![Metric::du("--op-form-gap",gap)],style)
-            on:focusout=move |ev| {if context.is_some_and(|c|c.pending.get_untracked()) {return;} let inside=ev.related_target().and_then(|t|t.dyn_into::<web_sys::Node>().ok()).is_some_and(|node|root.get_untracked().is_some_and(|el|el.contains(Some(&node))));if !inside {validate.run(());}}>
-            {children()}<span id=id class="op-form-error" role="alert">{move || error.get()}</span>
+        <div
+            node_ref=root
+            class=root_class("op-form-field", class)
+            style=root_style(vec![Metric::du("--op-form-gap", gap)], style)
+            on:focusout=move |ev| {
+                if context.is_some_and(|c| c.pending.get_untracked()) {
+                    return;
+                }
+                let inside = ev
+                    .related_target()
+                    .and_then(|t| t.dyn_into::<web_sys::Node>().ok())
+                    .is_some_and(|node| {
+                        root.get_untracked().is_some_and(|el| el.contains(Some(&node)))
+                    });
+                if !inside {
+                    validate.run(());
+                }
+            }
+        >
+            {children()}
+            <span id=id class="op-form-error" role="alert">
+                {move || error.get()}
+            </span>
         </div>
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
     #[test]
     fn stops_at_first_error_and_preserves_rule_order() {
         let owner = Owner::new();

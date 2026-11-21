@@ -113,5 +113,5 @@ Editor does not define built-in icons.
 ## Accessibility
 
 The editor content area uses `role="textbox"` with `aria-multiline="true"` and `aria-readonly`.
-The toolbar has `role="toolbar"` and buttons express active formatting using `aria-pressed`.
+The toolbar has `role="toolbar"`, and command buttons use dense square icon buttons grouped by separators with tooltips.
 Link errors report via `role="alert"`.

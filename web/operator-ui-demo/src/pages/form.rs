@@ -8,8 +8,8 @@ use operator_ui::prelude::*;
 pub fn form() -> AnyView {
     let b = backend();
     let name = RwSignal::new(String::new());
-    let error = RwSignal::new(None::<String>);
-    let rules = vec![
+    let name_error = RwSignal::new(None::<String>);
+    let name_rules = vec![
         Callback::new(|v: String| {
             v.trim()
                 .is_empty()
@@ -23,23 +23,51 @@ pub fn form() -> AnyView {
         let name = name.get_untracked();
         async move { b.call(format!("submit {name}")).await }
     });
+
+    let unavailable = RwSignal::new(String::new());
+    let unavailable_error = RwSignal::new(None::<String>);
+    let note = RwSignal::new(String::new());
+    let note_error = RwSignal::new(None::<String>);
+
     view! {
         <Example title="Interactive" block=true>
             <Form on_submit=submit_action>
-                <FormField value=name rules=rules error=error>
-                    <TextField value=name label="Name"/>
+                <FormField value=name rules=name_rules error=name_error>
+                    <TextField
+                        value=name
+                        label=l("Name", "Ім’я")
+                        placeholder=l("Enter your name", "Введіть ваше ім’я")
+                        error=Signal::derive(move || name_error.get())
+                    />
                 </FormField>
             </Form>
         </Example>
         <Example title="States" block=true>
             <Form enabled=false>
-                <TextField value=RwSignal::new(String::new()) label="Unavailable"/>
+                <FormField value=unavailable error=unavailable_error rules=vec![]>
+                    <TextField
+                        value=unavailable
+                        label=l("Unavailable", "Недоступно")
+                        enabled=false
+                    />
+                </FormField>
             </Form>
         </Example>
         <Example title="Customization" block=true>
-            <Form label=l("Profile", "Профіль") gap=4.0 padding=5.0 submit_label=l("Save profile", "Зберегти профіль")>
-                <TextField value=RwSignal::new(String::new()) label="Optional note"/>
+            <Form
+                label=l("Profile", "Профіль")
+                gap=4.0
+                padding=5.0
+                submit_label=l("Save profile", "Зберегти профіль")
+            >
+                <FormField value=note error=note_error rules=vec![]>
+                    <TextField
+                        value=note
+                        label=l("Optional note", "Додаткова примітка")
+                    />
+                </FormField>
             </Form>
         </Example>
-    }.into_any()
+    }
+    .into_any()
 }

@@ -39,8 +39,8 @@ Status: **draft** on web.
 | `no_reset` | bool | `false` | Disallows resetting to zero when clicking current value. |
 | `label` | string | `rating.label` | Accessible group label. |
 | `item_label` | string | `rating.item` | Template string for each item label. |
-| `icon` | icon | `rating.empty` | Icon for unselected items. |
-| `selected_icon` | icon | `rating.selected` | Icon for selected items. |
+| `icon` | icon | `rating.icon` | Icon for unselected items. |
+| `icon_selected` | icon | `rating.icon-selected` | Icon for selected items. |
 | `size` | DU metric | `row_compact` | Item button width and height. |
 | `gap` | DU metric | `gap_micro` | Spacing between rating items. |
 | `leading` | `Slot` | none | Slot before the rating items. |
@@ -82,8 +82,8 @@ Status: **draft** on web.
 
 | Key | Default |
 | :--- | :--- |
-| `rating.empty` | `check_circle` |
-| `rating.selected` | `check_circle` |
+| `rating.icon` | `check_circle` |
+| `rating.icon-selected` | `check_circle` |
 
 ## Accessibility
 

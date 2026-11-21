@@ -1,10 +1,86 @@
-.op-editor-box { height: auto; padding: 0; align-items: stretch; background: var(--op-editor-background, var(--op-surface)); color: var(--op-editor-text, var(--op-text-primary)); }
-.op-editor-body { display: flex; flex-direction: column; width: 100%; min-width: 0; }
-.op-editor-toolbar, .op-editor-link { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-editor-gap, var(--op-dim-gap-micro)); padding: var(--op-editor-padding, var(--op-dim-pad-small)); }
-.op-editor-toolbar button, .op-editor-link button, .op-editor-link input { border: 0; border-radius: 0; padding: var(--op-editor-gap, var(--op-dim-gap-micro)); font: inherit; background: var(--op-editor-background, var(--op-surface)); color: var(--op-editor-text, var(--op-text-primary)); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-editor-border, var(--op-border)); }
-.op-editor-toolbar button[aria-pressed="true"] { color: var(--op-editor-accent, var(--op-accent)); background: var(--op-editor-selected-background, var(--op-hover)); }
-.op-editor-toolbar button:disabled { color: var(--op-editor-disabled-text, var(--op-text-disabled)); }
-.op-editor-content { min-height: var(--op-editor-min-height, calc(var(--op-du) * 40)); max-height: var(--op-editor-max-height, calc(var(--op-du) * 100)); overflow: auto; padding: var(--op-editor-padding, var(--op-dim-pad-small)); font-size: var(--op-editor-font-size, var(--op-type-body-size)); line-height: var(--op-editor-line-height, var(--op-type-body-line)); outline: none; overflow-wrap: anywhere; }
-.op-editor-content:empty::before { content: attr(data-placeholder); color: var(--op-editor-disabled-text, var(--op-text-disabled)); pointer-events: none; }
-.op-editor-content > :first-child { margin-top: 0; }
-.op-editor-content > :last-child { margin-bottom: 0; }
+.op-editor-box {
+  height: auto;
+  padding: 0;
+  align-items: stretch;
+  background: var(--op-editor-background, var(--op-surface));
+  color: var(--op-editor-text, var(--op-text-primary));
+}
+
+.op-editor-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.op-editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--op-editor-gap, var(--op-dim-gap-micro));
+  padding: var(--op-editor-padding, var(--op-dim-pad-small));
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-editor-border, var(--op-border));
+}
+
+.op-editor-sep {
+  align-self: center;
+  width: var(--op-editor-separator-width, var(--op-dim-border));
+  height: var(--op-editor-separator-height, var(--op-dim-icon-large));
+  margin: 0 var(--op-editor-separator-margin-x, var(--op-dim-gap-micro));
+  background-color: var(--op-editor-separator-color, var(--op-divider));
+}
+
+.op-editor-btn {
+  --op-button-size: var(--op-editor-btn-size, var(--op-dim-row-compact));
+}
+
+.op-editor-glyph {
+  font-size: var(--op-type-caption-size);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.op-editor-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--op-editor-gap, var(--op-dim-gap-micro));
+  padding: var(--op-editor-padding, var(--op-dim-pad-small));
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-editor-border, var(--op-border));
+}
+
+.op-editor-link-field {
+  flex: 1;
+  min-width: calc(var(--op-du) * 40);
+}
+
+.op-editor-link-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--op-editor-gap, var(--op-dim-gap-micro));
+}
+
+.op-editor-content {
+  min-height: var(--op-editor-min-height, calc(var(--op-du) * 40));
+  max-height: var(--op-editor-max-height, calc(var(--op-du) * 100));
+  overflow: auto;
+  padding: var(--op-editor-padding, var(--op-dim-pad-small));
+  font-size: var(--op-editor-font-size, var(--op-type-body-size));
+  line-height: var(--op-editor-line-height, var(--op-type-body-line));
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+.op-editor-content:empty::before {
+  content: attr(data-placeholder);
+  color: var(--op-editor-disabled-text, var(--op-text-disabled));
+  pointer-events: none;
+}
+
+.op-editor-content > :first-child {
+  margin-top: 0;
+}
+
+.op-editor-content > :last-child {
+  margin-bottom: 0;
+}

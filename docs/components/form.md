@@ -72,6 +72,11 @@ Status: **draft** on web.
 | `--op-form-background` | `surface` |
 | `--op-form-border` | `border` |
 | `--op-form-error` | `error` |
+| `--op-form-submit-background` | `accent` |
+| `--op-form-submit-text` | `on_accent` |
+| `--op-form-submit-border` | `accent` |
+| `--op-form-reset-background` | `surface` |
+| `--op-form-reset-text` | `text_secondary` |
 
 | Slot | Place |
 | :--- | :--- |
