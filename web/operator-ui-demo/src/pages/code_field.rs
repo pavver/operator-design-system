@@ -1,5 +1,6 @@
 //! Live examples for code field.
 
+use crate::i18n::l;
 use crate::kit::Example;
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -106,6 +107,7 @@ pub fn code_field() -> AnyView {
     let source =
         RwSignal::new("Hello {{ name | upper }}, it is {{ temperature | round }} °C.".to_string());
     let committed = RwSignal::new(source.get_untracked());
+    let customized = RwSignal::new("{{ sensor | unknown }}".to_string());
     view! {
         <Example title="Template field" note="Type {{ for variables or | for filters; Ctrl+Space asks again. Unknown filters are underlined; Ctrl+Enter or leaving commits." block=true>
             <CodeField
@@ -116,6 +118,20 @@ pub fn code_field() -> AnyView {
                 label="Template"
             />
             <span class="op-t-caption demo-muted">{move || format!("Committed: {}", committed.get())}</span>
+        </Example>
+        <Example title="Customization" note="Custom typography, gutter, completion rows and diagnostic help; type {{ to open completion." block=true>
+            <CodeField value=customized highlight=Callback::new(demo_highlight) complete=Callback::new(demo_complete)
+                padding_x=4.0 padding_y=3.0 font_size=15.0 line_height=23.0 row_height=9.0
+                gutter_width=7.0 gutter_gap=2.0
+                placeholder=l("Write an expression", "Введіть вираз")
+                aria_label=l("Expression editor", "Редактор виразів")
+                style="--op-field-background:var(--op-surface-alt);--op-field-syntax-property:var(--op-accent);"
+                gutter=|| view! { <span class="demo-muted">"1"</span> }
+                diagnostics_hover=|| view! { <span>"Choose upper, lower, round or default from completion."</span> }
+                completion_item=Callback::new(|item: ComboOption| view! {
+                    <strong>{item.value}</strong><span class="demo-muted">{item.detail}</span>
+                }.into_any())
+            />
         </Example>
     }
     .into_any()

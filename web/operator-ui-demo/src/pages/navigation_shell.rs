@@ -52,6 +52,46 @@ pub fn navigation_shell() -> AnyView {
                 </div>
             </div>
         </Example>
+        <Example title="Customization: rail and panel" note="Metric props, header/footer slots and custom labels customize NavigationRail and SidePanel." block=true>
+            <div class="demo-shell">
+                <NavigationRail
+                    items=vec![
+                        RailItem::new("events", crate::i18n::t("Events").get_untracked(), icons::INFO),
+                        RailItem::new("settings", crate::i18n::t("Settings").get_untracked(), icons::SETTINGS),
+                    ]
+                    selected=RwSignal::new("events".to_string())
+                    width=20.0
+                    item_height=14.0
+                    header=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: var(--op-du); text-align: center;">"App"</div> })
+                    footer=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: var(--op-du); text-align: center;">"v1.0"</div> })
+                    label=crate::i18n::t("Navigation")
+                />
+                <SidePanel
+                    title=crate::i18n::t("Inspector")
+                    collapsed=RwSignal::new(false)
+                    width=60.0
+                    header_height=12.0
+                    collapse_label=crate::i18n::t("Collapse")
+                    footer=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: calc(var(--op-du) * 2);">"Ready"</div> })
+                >
+                    <div style="padding: calc(var(--op-du) * 2);">"Panel content"</div>
+                </SidePanel>
+                <div class="demo-shell-main op-t-caption demo-muted">
+                    "Main area"
+                </div>
+            </div>
+        </Example>
+
+        <Example title="Customization: tree" note="Tree row metrics, a scoped node label and an application accessible name." block=true>
+            <ThemeRoot strings=Callback::new(|key| (key == "tree.label").then(|| "Browse devices".to_string()))>
+                <Tree nodes=vec![TreeNode::new("custom", "Devices").children(vec![TreeNode::new("camera", "Camera")])]
+                    expanded=RwSignal::new(std::collections::HashSet::from(["custom".to_string()]))
+                    selected=RwSignal::new(None::<String>) height=Some(30.0)
+                    row_height=12.0 indent=6.0 gap=2.0
+                    option=Callback::new(|row: TreeRow| view! { <strong>{row.label}</strong> }.into_any())
+                    footer=|| view! { <span class="op-t-caption">"Application footer"</span> }/>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

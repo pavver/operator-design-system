@@ -4,12 +4,12 @@
 .op-rail {
   display: flex;
   flex-direction: column;
-  width: calc(var(--op-du) * 16);
+  width: var(--op-navigation-rail-width, calc(var(--op-du) * 16));
   height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
-  background-color: var(--op-surface);
-  box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-divider);
+  background-color: var(--op-navigation-rail-background, var(--op-surface));
+  box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-navigation-rail-divider, var(--op-divider));
 }
 .op-rail-list { display: flex; flex-direction: column; }
 .op-rail-item {
@@ -18,46 +18,63 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--op-dim-gap-micro);
-  height: var(--op-dim-row-two-line);
-  padding: 0 var(--op-dim-gap-micro);
+  gap: var(--op-navigation-rail-gap, var(--op-dim-gap-micro));
+  height: var(--op-navigation-rail-item-height, var(--op-dim-row-two-line));
+  padding: 0 var(--op-navigation-rail-item-padding-x, var(--op-dim-gap-micro));
   border: 0;
   background: transparent;
-  color: var(--op-text-secondary);
+  color: var(--op-navigation-rail-text, var(--op-text-secondary));
   font: inherit;
   cursor: pointer;
   transition: background-color var(--op-motion-state-color) var(--op-ease-standard), color var(--op-motion-state-color) var(--op-ease-standard);
 }
-.op-rail-item:hover { background-color: var(--op-pressed); color: var(--op-text-primary); }
-.op-rail-item[aria-selected="true"] { color: var(--op-text-primary); background-color: var(--op-pressed); }
+.op-rail-item:hover {
+  background-color: var(--op-navigation-rail-hover-background, var(--op-pressed));
+  color: var(--op-navigation-rail-hover-text, var(--op-text-primary));
+}
+.op-rail-item[aria-selected="true"] {
+  color: var(--op-navigation-rail-selected-text, var(--op-text-primary));
+  background-color: var(--op-navigation-rail-selected-background, var(--op-pressed));
+}
 .op-rail-item[aria-selected="true"]::before {
   content: "";
   position: absolute;
   inset: 0 auto 0 0;
-  width: var(--op-dim-border-emphasis);
-  background-color: var(--op-rail-color, var(--op-accent));
+  width: var(--op-navigation-rail-indicator-thickness, var(--op-dim-border-emphasis));
+  background-color: var(--op-rail-color, var(--op-navigation-rail-indicator-color, var(--op-accent)));
 }
 .op-rail-icon {
   display: grid;
   place-items: center;
-  width: calc(var(--op-du) * 7);
-  height: calc(var(--op-du) * 7);
+  width: var(--op-navigation-rail-icon-tile-size, calc(var(--op-du) * 7));
+  height: var(--op-navigation-rail-icon-tile-size, calc(var(--op-du) * 7));
   color: var(--op-rail-color, currentColor);
 }
-.op-rail-item[aria-selected="true"] .op-rail-icon { color: var(--op-rail-color, var(--op-accent)); }
-.op-rail-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.op-rail-item[aria-selected="true"] .op-rail-icon {
+  color: var(--op-rail-color, var(--op-navigation-rail-selected-icon, var(--op-accent)));
+}
+.op-rail-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--op-navigation-rail-font-size, var(--op-type-caption-size));
+}
 /* Horizontal: a row of top tabs under the app bar; the indicator moves to the bottom edge. */
 .op-rail[data-horizontal] {
   width: 100%;
   height: auto;
   overflow-x: auto;
   overflow-y: hidden;
-  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider);
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-navigation-rail-divider, var(--op-divider));
 }
 .op-rail[data-horizontal] .op-rail-list { flex-direction: row; }
-.op-rail[data-horizontal] .op-rail-item { flex: 1 0 auto; min-width: calc(var(--op-du) * 16); }
+.op-rail[data-horizontal] .op-rail-item {
+  flex: 1 0 auto;
+  min-width: var(--op-navigation-rail-width, calc(var(--op-du) * 16));
+}
 .op-rail[data-horizontal] .op-rail-item[aria-selected="true"]::before {
   inset: auto 0 0 0;
   width: auto;
-  height: var(--op-dim-border-emphasis);
+  height: var(--op-navigation-rail-indicator-thickness, var(--op-dim-border-emphasis));
 }

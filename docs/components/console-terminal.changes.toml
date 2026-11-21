@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`gap`, `padding`, `font_size`, `line_height`, `height`), color variables, slots (`header`, `footer`, `empty`), strings (`console-terminal.label`) and icons (caller icons); unchanged defaults and a final Customization demo."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`gap`, `padding`, `font_size`, `line_height`, `height`), змінні кольорів, слоти (`header`, `footer`, `empty`), перекладні тексти (`console-terminal.label`) й іконки застосунку; початковий вигляд збережено, приклад Customization додано останнім."
+
+[[change]]
 date = "2026-11-11T20:46:54+02:00"
 status = "approved"
 commit = "b485813"

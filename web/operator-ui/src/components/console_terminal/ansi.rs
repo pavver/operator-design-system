@@ -26,7 +26,10 @@ impl Color {
         match self {
             Color::Indexed(i) if i < 16 => {
                 let bright = if i >= 8 { "bright-" } else { "" };
-                format!("var(--op-term-{bright}{})", ANSI_NAMES[usize::from(i % 8)])
+                format!(
+                    "var(--op-console-terminal-{bright}{0}, var(--op-term-{bright}{0}))",
+                    ANSI_NAMES[usize::from(i % 8)]
+                )
             }
             Color::Indexed(i) => {
                 let (r, g, b) = xterm_rgb(i);
@@ -72,8 +75,12 @@ impl Sgr {
         let bg = self.bg.map(Color::css);
         let (fg, bg) = if self.inverse {
             (
-                Some(bg.unwrap_or_else(|| "var(--op-term-background)".into())),
-                Some(fg.unwrap_or_else(|| "var(--op-term-foreground)".into())),
+                Some(bg.unwrap_or_else(|| {
+                    "var(--op-console-terminal-background, var(--op-term-background))".into()
+                })),
+                Some(fg.unwrap_or_else(|| {
+                    "var(--op-console-terminal-text, var(--op-term-foreground))".into()
+                })),
             )
         } else {
             (fg, bg)
@@ -291,10 +298,13 @@ mod tests {
     fn basic_and_bright_colors_map_to_term_tokens() {
         let lines = parse_lines(&["\x1b[31mred\x1b[92mgreen\x1b[0m plain"]);
         let l = &lines[0];
-        assert_eq!(l[0].style.fg.as_deref(), Some("var(--op-term-red)"));
+        assert_eq!(
+            l[0].style.fg.as_deref(),
+            Some("var(--op-console-terminal-red, var(--op-term-red))")
+        );
         assert_eq!(
             l[1].style.fg.as_deref(),
-            Some("var(--op-term-bright-green)")
+            Some("var(--op-console-terminal-bright-green, var(--op-term-bright-green))")
         );
         assert_eq!(l[2].style, SpanStyle::default());
         assert_eq!(texts(&lines), ["redgreen plain"]);
@@ -304,7 +314,10 @@ mod tests {
     fn style_carries_over_to_the_next_entry() {
         let lines = parse_lines(&["\x1b[1;34mstart", "still blue"]);
         assert!(lines[1][0].style.bold);
-        assert_eq!(lines[1][0].style.fg.as_deref(), Some("var(--op-term-blue)"));
+        assert_eq!(
+            lines[1][0].style.fg.as_deref(),
+            Some("var(--op-console-terminal-blue, var(--op-term-blue))")
+        );
     }
 
     #[test]
@@ -323,7 +336,7 @@ mod tests {
         let lines = parse_lines(&["\x1b[38;5;9mA"]);
         assert_eq!(
             lines[0][0].style.fg.as_deref(),
-            Some("var(--op-term-bright-red)")
+            Some("var(--op-console-terminal-bright-red, var(--op-term-bright-red))")
         );
     }
 
@@ -339,10 +352,19 @@ mod tests {
     fn inverse_swaps_colors_with_terminal_defaults() {
         let lines = parse_lines(&["\x1b[7mx\x1b[27;31;7my"]);
         let x = &lines[0][0].style;
-        assert_eq!(x.fg.as_deref(), Some("var(--op-term-background)"));
-        assert_eq!(x.bg.as_deref(), Some("var(--op-term-foreground)"));
+        assert_eq!(
+            x.fg.as_deref(),
+            Some("var(--op-console-terminal-background, var(--op-term-background))")
+        );
+        assert_eq!(
+            x.bg.as_deref(),
+            Some("var(--op-console-terminal-text, var(--op-term-foreground))")
+        );
         let y = &lines[0][1].style;
-        assert_eq!(y.bg.as_deref(), Some("var(--op-term-red)"));
+        assert_eq!(
+            y.bg.as_deref(),
+            Some("var(--op-console-terminal-red, var(--op-term-red))")
+        );
     }
 
     #[test]

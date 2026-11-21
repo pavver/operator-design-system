@@ -5,14 +5,17 @@
 
 mod camera;
 mod canvas;
+mod minimap;
 mod node_card;
 mod parts;
 pub mod route;
+mod sockets;
 
 pub use camera::{Camera, WorldRect};
 pub use canvas::{GraphCamera, GraphCanvas, wheel_factor};
+pub use minimap::{MiniItem, Minimap, minimap_scale};
 pub use node_card::{NodeCard, NodeRow, Socket, SocketKind, SocketPosition, SocketSide};
-pub use parts::{GraphFrame, MiniItem, Minimap, Wire, WireLayer, WireState, minimap_scale};
+pub use parts::{GraphFrame, Wire, WireLayer, WireState};
 
 pub(crate) const CSS: &str = include_str!("graph.css");
 

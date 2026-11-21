@@ -35,10 +35,40 @@ Status: **draft** on web.
 | `handle` | `VirtualListHandle` | required | Row height in DU; scrolls the list from the outside. |
 | `height` | DU | none | Fixed height. |
 | `max_height` | DU | none | Height limit. |
+| `row_height` | DU | from `handle` | Row height override. |
 | `overscan` | integer | `6` | Extra rows above and below the window. |
 | `focusable` | bool | `false` | Makes the scrolled element focusable for keyboard scrolling. |
+| `header` | slot | none | Slot rendered before the scrolled viewport. |
+| `footer` | slot | none | Slot rendered after the scrolled viewport. |
+| `empty` | slot | none | Slot rendered when items is empty. |
+| `class` | string | none | Classes for the outer box. |
+| `style` | string | none | Inline styles for the outer box. |
 | `key` | `item -> key` | required | Stable identity of an item. |
 | `children` | `(index, item) -> view` | required | Renders one row. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-virtual-list-height` | none |
+| `max_height` | DU | `--op-virtual-list-max-height` | none |
+| `row_height` | DU | `--op-virtual-list-row-height` | row height from handle |
+
+| Slot | Place |
+| :--- | :--- |
+| `header` | Before the scrolled viewport. |
+| `footer` | After the scrolled viewport. |
+| `empty` | When items is empty. |
+
+`class` and `style` apply to the root element.
+
+### Strings
+
+The component has no built-in strings.
+
+### Icons
+
+The component has no built-in icons.
 
 ## Accessibility
 

@@ -2,11 +2,9 @@
 
 use crate::components::hover_card::HoverCard;
 use crate::components::primitives::Icon;
+use crate::core::{Metric, Slot, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
-use operator_ui_tokens::{dim, icons};
-use send_wrapper::SendWrapper;
-use wasm_bindgen::JsCast;
-use wasm_bindgen::prelude::Closure;
+use operator_ui_tokens::{Icon as IconData, dim, icons};
 
 /// Shape of a [`Socket`].
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -47,17 +45,32 @@ pub fn Socket(
     #[prop(optional, into)]
     missing: Signal<bool>,
     #[prop(optional)] on_pointerdown: Option<Callback<leptos::ev::PointerEvent>>,
+    #[prop(optional, into)] socket_size: MaybeProp<f32>,
+    #[prop(optional, into)] socket_border_width: MaybeProp<f32>,
+    #[prop(optional, into)] socket_outline_width: MaybeProp<f32>,
+    #[prop(optional, into)] socket_outline_offset: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
+    let custom_style = root_style(
+        vec![
+            Metric::du("--op-graph-socket-size", socket_size),
+            Metric::du("--op-graph-socket-border-width", socket_border_width),
+            Metric::du("--op-graph-socket-outline-width", socket_outline_width),
+            Metric::du("--op-graph-socket-outline-offset", socket_outline_offset),
+        ],
+        style,
+    );
     view! {
         <span
-            class="op-socket"
+            class=root_class("op-socket", class)
             data-socket=id
             data-side=if side == SocketSide::In { "in" } else { "out" }
             data-kind=if kind == SocketKind::Exec { "exec" } else { "data" }
             data-connected=move || connected.get().then_some("")
             data-highlighted=move || highlighted.get().then_some("")
             data-missing=move || missing.get().then_some("")
-            style=move || color.map(|c| format!("--op-socket-color: {}", c.get()))
+            style=move || format!("{}{}", color.map(|c| format!("--op-graph-socket-color:{};", c.get())).unwrap_or_default(), custom_style().unwrap_or_default())
             on:pointerdown=move |e| {
                 if let Some(cb) = on_pointerdown {
                     e.stop_propagation();
@@ -79,8 +92,8 @@ pub fn NodeRow(
     /// Label at the end edge (an output name).
     #[prop(optional, into)]
     end_label: Option<Signal<String>>,
-    #[prop(optional)] input: Option<ViewFn>,
-    #[prop(optional)] output: Option<ViewFn>,
+    #[prop(optional, into)] input: Slot,
+    #[prop(optional, into)] output: Slot,
     /// Grows with its content instead of keeping the row height.
     #[prop(optional)]
     content: bool,
@@ -88,20 +101,36 @@ pub fn NodeRow(
     #[prop(optional, into)]
     error: Signal<bool>,
     #[prop(optional)] children: Option<Children>,
+    #[prop(optional, into)] row_height: MaybeProp<f32>,
+    #[prop(optional, into)] row_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] row_padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] row_gap: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let has_control = children.is_some();
     view! {
         <div
-            class="op-node-row"
+            class=root_class("op-node-row", class)
+            style=root_style(vec![
+                Metric::du("--op-graph-row-height", row_height),
+                Metric::du("--op-graph-row-padding-x", row_padding_x),
+                Metric::du("--op-graph-row-padding-y", row_padding_y),
+                Metric::du("--op-graph-row-gap", row_gap),
+                Metric::tu("--op-graph-font-size", font_size),
+                Metric::tu("--op-graph-line-height", line_height)
+            ], style)
             data-content=content.then_some("")
             data-error=move || error.get().then_some("")
             data-wide=(!has_control && label.is_some() != end_label.is_some()).then_some("")
         >
-            {input.map(|s| view! { <span class="op-node-socket-slot" data-side="in">{s.run()}</span> })}
+            {input.is_set().then(|| view! { <span class="op-node-socket-slot" data-side="in">{input.run()}</span> })}
             {label.map(|l| view! { <span class="op-node-label">{move || l.get()}</span> })}
             {children.map(|c| view! { <span class="op-node-control">{c()}</span> })}
             {end_label.map(|l| view! { <span class="op-node-end-label">{move || l.get()}</span> })}
-            {output.map(|s| view! { <span class="op-node-socket-slot" data-side="out">{s.run()}</span> })}
+            {output.is_set().then(|| view! { <span class="op-node-socket-slot" data-side="out">{output.run()}</span> })}
         </div>
     }
 }
@@ -132,8 +161,9 @@ pub fn NodeCard(
     #[prop(optional)]
     help: Option<ViewFn>,
     /// Accessible name of the help card.
-    #[prop(default = "About this node".into(), into)]
-    help_label: String,
+    #[prop(optional, into)]
+    help_label: MaybeProp<String>,
+    #[prop(optional)] help_icon: Option<IconData>,
     /// Views at the end of the header (run button, status).
     #[prop(optional)]
     actions: Option<ChildrenFn>,
@@ -141,42 +171,71 @@ pub fn NodeCard(
     #[prop(optional)]
     on_header_down: Option<Callback<leptos::ev::PointerEvent>>,
     #[prop(optional)] on_sockets: Option<Callback<Vec<SocketPosition>>>,
-    children: Children,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] body: Slot,
+    #[prop(optional, into)] footer: Slot,
+    #[prop(optional, into)] header_height: MaybeProp<f32>,
+    #[prop(optional, into)] header_padding_start: MaybeProp<f32>,
+    #[prop(optional, into)] header_padding_end: MaybeProp<f32>,
+    #[prop(optional, into)] header_gap: MaybeProp<f32>,
+    #[prop(optional, into)] body_padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] label_width: MaybeProp<f32>,
+    #[prop(optional, into)] row_height: MaybeProp<f32>,
+    #[prop(optional, into)] row_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] row_padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] row_gap: MaybeProp<f32>,
+    #[prop(optional, into)] socket_size: MaybeProp<f32>,
+    #[prop(optional, into)] border_width: MaybeProp<f32>,
+    #[prop(optional, into)] emphasis_width: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] caption_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] caption_line_height: MaybeProp<f32>,
+    #[prop(optional, into)] footer_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] footer_padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let card = NodeRef::<leptos::html::Div>::new();
     if let Some(report) = on_sockets {
-        Effect::new(move |_| {
-            let Some(el) = card.get() else { return };
-            let el: web_sys::HtmlElement = el.unchecked_ref::<web_sys::HtmlElement>().clone();
-            let measure = {
-                let el = el.clone();
-                move || report.run(measure_sockets(&el))
-            };
-            measure();
-            let on_resize = Closure::<dyn FnMut()>::new(measure);
-            let observer = web_sys::ResizeObserver::new(on_resize.as_ref().unchecked_ref()).ok();
-            if let Some(o) = &observer {
-                o.observe(&el);
-            }
-            let keep = SendWrapper::new((observer, on_resize));
-            on_cleanup(move || {
-                if let Some(o) = &keep.0 {
-                    o.disconnect();
-                }
-            });
-        });
+        super::sockets::observe_sockets(card, report);
     }
-    let help_label = StoredValue::new(help_label);
+    let help_label = ui_text(help_label, "graph.node-help", "About this node");
+    let help_icon = ui_icon(help_icon, "graph.node-help", icons::INFO);
+    let custom_style = root_style(
+        vec![
+            Metric::du("--op-graph-header-height", header_height),
+            Metric::du("--op-graph-header-padding-start", header_padding_start),
+            Metric::du("--op-graph-header-padding-end", header_padding_end),
+            Metric::du("--op-graph-header-gap", header_gap),
+            Metric::du("--op-graph-body-padding-y", body_padding_y),
+            Metric::du("--op-graph-label-width", label_width),
+            Metric::du("--op-graph-row-height", row_height),
+            Metric::du("--op-graph-row-padding-x", row_padding_x),
+            Metric::du("--op-graph-row-padding-y", row_padding_y),
+            Metric::du("--op-graph-row-gap", row_gap),
+            Metric::du("--op-graph-socket-size", socket_size),
+            Metric::du("--op-graph-border-width", border_width),
+            Metric::du("--op-graph-emphasis-width", emphasis_width),
+            Metric::du("--op-graph-icon-size", icon_size),
+            Metric::tu("--op-graph-font-size", font_size),
+            Metric::tu("--op-graph-line-height", line_height),
+            Metric::tu("--op-graph-caption-font-size", caption_font_size),
+            Metric::tu("--op-graph-caption-line-height", caption_line_height),
+            Metric::du("--op-graph-footer-padding-x", footer_padding_x),
+            Metric::du("--op-graph-footer-padding-y", footer_padding_y),
+        ],
+        style,
+    );
     view! {
         <div
             node_ref=card
-            class="op-node"
+            class=root_class("op-node", class)
             data-selected=move || selected.get().then_some("")
             data-error=move || error.get().then_some("")
-            style:left=move || format!("{}px", x.get())
-            style:top=move || format!("{}px", y.get())
-            style:width=move || format!("{}px", width.get())
-            style=move || color.map(|c| format!("--op-node-color: {}", c.get()))
+            style=move || format!("left:{}px;top:{}px;width:{}px;{}{}", x.get(), y.get(), width.get(), color.map(|c| format!("--op-graph-node-color:{};", c.get())).unwrap_or_default(), custom_style().unwrap_or_default())
         >
             <div
                 class="op-node-head"
@@ -186,49 +245,23 @@ pub fn NodeCard(
                     }
                 }
             >
+                {if header.is_set() { header.run() } else { Some(view! {
                 <span class="op-node-title">{move || title.get()}</span>
                 {category.map(|c| view! { <span class="op-node-category op-t-caption">{move || c.get()}</span> })}
+                }.into_any()) }}
                 {help.map(|h| view! {
                     <span class="op-node-info" on:pointerdown=|e| e.stop_propagation()>
-                        <HoverCard card=h label=help_label.get_value()>
-                            <span class="op-node-info-icon" tabindex="0" aria-label=help_label.get_value()>
-                                <Icon icon=icons::INFO size=dim::ICON_SMALL/>
+                        <HoverCard card=h aria_label=help_label>
+                            <span class="op-node-info-icon" tabindex="0" aria-label=move || help_label.get()>
+                                {move || view! { <Icon icon=help_icon.get() size=dim::ICON_SMALL attr:style="width:var(--op-graph-icon-size, var(--op-dim-icon-small));height:var(--op-graph-icon-size, var(--op-dim-icon-small));"/> }}
                             </span>
                         </HoverCard>
                     </span>
                 })}
                 {actions.map(|a| view! { <span class="op-node-actions" on:pointerdown=|e| e.stop_propagation()>{a()}</span> })}
             </div>
-            <div class="op-node-body">{children()}</div>
+            <div class="op-node-body">{if body.is_set() { body.run() } else { children.map(|c| c().into_any()) }}</div>
+            {footer.is_set().then(|| view! { <div class="op-node-footer">{footer.run()}</div> })}
         </div>
     }
-}
-
-/// Socket centres of a card in world units, independent of the camera zoom.
-fn measure_sockets(card: &web_sys::HtmlElement) -> Vec<SocketPosition> {
-    let rect = card.get_bounding_client_rect();
-    let width = f64::from(card.offset_width());
-    let scale = if width > 0.0 {
-        rect.width() / width
-    } else {
-        1.0
-    };
-    let Ok(list) = card.query_selector_all("[data-socket]") else {
-        return Vec::new();
-    };
-    (0..list.length())
-        .filter_map(|i| list.item(i))
-        .filter_map(|n| n.dyn_into::<web_sys::Element>().ok())
-        .filter_map(|el| {
-            let id = el.get_attribute("data-socket")?;
-            let side = if el.get_attribute("data-side").as_deref() == Some("out") {
-                SocketSide::Out
-            } else {
-                SocketSide::In
-            };
-            let r = el.get_bounding_client_rect();
-            let y = (r.top() + r.height() / 2.0 - rect.top()) / scale;
-            Some((id, side, y))
-        })
-        .collect()
 }

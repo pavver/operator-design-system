@@ -53,3 +53,75 @@ The background is `term_background`.
 | :--- | :--- | :--- |
 | `logs` | list of strings | required |
 | `height` | DU | `45` |
+
+### Customization API
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `gap` | optional number (DU) | `gap_micro` | Overrides `--op-console-terminal-gap`. |
+| `padding` | optional number (DU) | `gutter` | Overrides `--op-console-terminal-padding`. |
+| `font_size` | optional number (TU) | `type_console_size` | Overrides `--op-console-terminal-font-size`. |
+| `line_height` | optional number (TU) | `type_console_line` | Overrides `--op-console-terminal-line-height`. |
+| `height` | optional number (DU) | `45 DU` | Overrides `--op-console-terminal-height`. |
+| `header` | slot | none | Before the scrolling log. |
+| `footer` | slot | none | After the scrolling log. |
+| `empty` | slot | none | When the input log is empty; the default remains blank. |
+| `label` | optional string | `console-terminal.label` | Text override. |
+| `class` | optional string | none | Added to the root classes. |
+| `style` | optional string | none | Appended after root metric declarations. |
+
+## Customization
+
+`class` and `style` apply to the root.
+Explicit root styles take precedence over metric props; unset metrics retain the original rendering.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `gap` | DU | `--op-console-terminal-gap` | `gap_micro` |
+| `padding` | DU | `--op-console-terminal-padding` | `gutter` |
+| `font_size` | TU | `--op-console-terminal-font-size` | `type_console_size` |
+| `line_height` | TU | `--op-console-terminal-line-height` | `type_console_line` |
+| `height` | DU | `--op-console-terminal-height` | `45 DU` |
+
+Border widths remain the fixed geometry specified above.
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-console-terminal-background` | `term_background` |
+| `--op-console-terminal-text` | `term_foreground` |
+| `--op-console-terminal-border` | `border` |
+| `--op-console-terminal-hover-border` | `border_strong` |
+| `--op-console-terminal-black` | `term_black` |
+| `--op-console-terminal-bright-black` | `term_bright_black` |
+| `--op-console-terminal-red` | `term_red` |
+| `--op-console-terminal-bright-red` | `term_bright_red` |
+| `--op-console-terminal-green` | `term_green` |
+| `--op-console-terminal-bright-green` | `term_bright_green` |
+| `--op-console-terminal-yellow` | `term_yellow` |
+| `--op-console-terminal-bright-yellow` | `term_bright_yellow` |
+| `--op-console-terminal-blue` | `term_blue` |
+| `--op-console-terminal-bright-blue` | `term_bright_blue` |
+| `--op-console-terminal-magenta` | `term_magenta` |
+| `--op-console-terminal-bright-magenta` | `term_bright_magenta` |
+| `--op-console-terminal-cyan` | `term_cyan` |
+| `--op-console-terminal-bright-cyan` | `term_bright_cyan` |
+| `--op-console-terminal-white` | `term_white` |
+| `--op-console-terminal-bright-white` | `term_bright_white` |
+
+| Slot | Place |
+| :--- | :--- |
+| `header` | Before the scrolling log. |
+| `footer` | After the scrolling log. |
+| `empty` | When the input log is empty; the default remains blank. |
+
+### Strings
+
+Resolution: prop, application lookup, English default.
+
+| Key | Default |
+| :--- | :--- |
+| `console-terminal.label` | `empty; preserves the unnamed log` |
+
+### Icons
+
+No built-in icons.

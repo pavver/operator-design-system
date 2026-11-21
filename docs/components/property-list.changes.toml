@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`row_height`, `padding_y`, `gap`, `value_gap`, `copy_size`, `icon_size`, `stack_width`, `font_size`, `line_height`, `label_font_size`, `label_line_height`), color variables, slots (`option`, `value_slot`, `empty`, `header`, `footer`, `before_options`, `after_options`), strings (`property-list.copy`) and icons (`property-list.copy`); unchanged defaults and a final Customization demo."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`row_height`, `padding_y`, `gap`, `value_gap`, `copy_size`, `icon_size`, `stack_width`, `font_size`, `line_height`, `label_font_size`, `label_line_height`), змінні кольорів, слоти (`option`, `value_slot`, `empty`, `header`, `footer`, `before_options`, `after_options`), перекладні тексти (`property-list.copy`) й замінні іконки (`property-list.copy`); початковий вигляд збережено, приклад Customization додано останнім."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "draft"
 commit = "a27d1f0"
