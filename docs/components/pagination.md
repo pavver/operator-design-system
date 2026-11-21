@@ -46,6 +46,63 @@ In compact mode the field is followed by `/ total`.
 | `total` | integer | required | Number of pages. |
 | `siblings` | integer | `1` | Pages on each side of the current one. |
 | `compact` | bool | `false` | Shows `page / total`. |
+| `gap` | DU | `pad_tight` | Spacing between page controls. |
+| `page_size` | DU | `row_compact` | Size of page buttons. |
+| `page_padding_x` | DU | `pad_tight` | Horizontal padding of page buttons. |
+| `compact_gap` | DU | `pad_small` | Gap in compact mode. |
+| `compact_padding_x` | DU | `pad_tight` | Horizontal padding in compact mode. |
+| `label` | string | `pagination.label` | Accessible name of the pagination container. |
+| `prev_label` | string | `pagination.previous` | Accessible label of the previous button. |
+| `next_label` | string | `pagination.next` | Accessible label of the next button. |
+| `page_label` | string | `pagination.page` | Template for page buttons. |
+| `current_page_label` | string | `pagination.current_page` | Template for the current page input. |
+| `prev_icon` | icon | `pagination.previous` | Previous button icon override. |
+| `next_icon` | icon | `pagination.next` | Next button icon override. |
+| `before` | slot | none | Slot before pagination elements. |
+| `after` | slot | none | Slot after pagination elements. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `gap` | DU | `--op-pagination-gap` | `pad_tight` |
+| `page_size` | DU | `--op-pagination-page-size` | `row_compact` |
+| `page_padding_x` | DU | `--op-pagination-page-padding-x` | `pad_tight` |
+| `compact_gap` | DU | `--op-pagination-compact-gap` | `pad_small` |
+| `compact_padding_x` | DU | `--op-pagination-compact-padding-x` | `pad_tight` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-pagination-page-background` | `surface` |
+| `--op-pagination-page-text` | `text_primary` |
+| `--op-pagination-current-background` | `selection` |
+| `--op-pagination-current-text` | `accent` |
+| `--op-pagination-gap-text` | `text_secondary` |
+| `--op-pagination-compact-text` | `text_secondary` |
+
+| Slot | Place |
+| :--- | :--- |
+| `before` | Before previous page button. |
+| `after` | After next page button. |
+
+`class` and `style` apply to the root nav element.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `pagination.label` | `Pagination` |
+| `pagination.previous` | `Previous page` |
+| `pagination.next` | `Next page` |
+| `pagination.page` | `Page {n}` |
+| `pagination.current_page` | `Page {page} of {total}, type a page number` |
+
+### Icons
+
+| Key | Default |
+| :--- | :--- |
+| `pagination.previous` | `chevron_left` |
+| `pagination.next` | `chevron_right` |
 
 ## Accessibility
 

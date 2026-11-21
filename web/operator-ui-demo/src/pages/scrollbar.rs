@@ -17,6 +17,9 @@ pub fn scrollbar() -> AnyView {
         })
         .collect::<Vec<_>>()
         .join("\n");
+    let custom_rows = (1..=20)
+        .map(|i| view! { <ListItem title=format!("Custom Row {i}")/> })
+        .collect_view();
     view! {
         <Example title="Vertical" note="Hover the right edge to widen the bar; drag the thumb or press the track to page." block=true>
             <div class="demo-list">
@@ -27,6 +30,21 @@ pub fn scrollbar() -> AnyView {
             <div class="demo-list">
                 <ScrollView axis=ScrollAxis::Both height=50.0 focusable=true>
                     <pre class="demo-wide">{wide}</pre>
+                </ScrollView>
+            </div>
+        </Example>
+        <Example title="Customization" note="Custom track size, thumb thickness, and header/footer slots." block=true>
+            <div class="demo-list">
+                <ScrollView
+                    height=45.0
+                    track_size=4.0
+                    thumb_thickness=2.0
+                    focusable=true
+                    label="Custom scroll view"
+                    header=Slot::from(move || view! { <div class="op-t-caption demo-muted demo-sheet-pad">"Top fixed slot"</div> })
+                    footer=Slot::from(move || view! { <div class="op-t-caption demo-muted demo-sheet-pad">"Bottom fixed slot"</div> })
+                >
+                    {custom_rows}
                 </ScrollView>
             </div>
         </Example>

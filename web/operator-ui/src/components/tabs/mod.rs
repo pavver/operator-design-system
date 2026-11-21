@@ -1,5 +1,5 @@
 use crate::components::primitives::Icon;
-use crate::core::spawn_ripple;
+use crate::core::{Metric, ScopedSlot, Slot, root_class, root_style, spawn_ripple, ui_text};
 use leptos::ev;
 use leptos::prelude::*;
 use operator_ui_tokens::dim;
@@ -55,11 +55,46 @@ pub fn Tabs(
     /// Stretches the tabs to fill the width equally.
     #[prop(optional)]
     fill: bool,
-    #[prop(optional, into)] label: Option<String>,
+    /// Accessible name of the tab list; defaults to `tabs.label`.
+    #[prop(optional, into)]
+    label: MaybeProp<String>,
+    /// Tab height in DU (`--op-tabs-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Tab horizontal padding in DU (`--op-tabs-padding-x`).
+    #[prop(optional, into)]
+    padding_x: MaybeProp<f32>,
+    /// Gap between icon and label in DU (`--op-tabs-gap`).
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
+    /// Font size in TU (`--op-tabs-font-size`).
+    #[prop(optional, into)]
+    font_size: MaybeProp<f32>,
+    /// Minimum width of counter in DU (`--op-tabs-count-min-width`).
+    #[prop(optional, into)]
+    count_min_width: MaybeProp<f32>,
+    /// Counter horizontal padding in DU (`--op-tabs-count-padding-x`).
+    #[prop(optional, into)]
+    count_padding_x: MaybeProp<f32>,
+    /// Thickness of indicator in DU (`--op-tabs-indicator-thickness`).
+    #[prop(optional, into)]
+    indicator_thickness: MaybeProp<f32>,
+    /// Custom rendering for each tab.
+    #[prop(optional)]
+    option: Option<ScopedSlot<TabItem>>,
+    /// Slot before the tabs list.
+    #[prop(optional, into)]
+    before_options: Slot,
+    /// Slot after the tabs list.
+    #[prop(optional, into)]
+    after_options: Slot,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let list = NodeRef::<leptos::html::Div>::new();
     let indicator = RwSignal::new(None::<(f64, f64)>);
     let count = items.len();
+    let label = ui_text(label, "tabs.label", "Tabs");
 
     let measure = move || {
         let Some(el) = list.try_get_untracked().flatten() else {
@@ -103,6 +138,15 @@ pub fn Tabs(
         .enumerate()
         .map(|(i, item)| {
             let active = move || selected.get() == i;
+            let item_view = match &option {
+                Some(slot) => slot.run(item.clone()),
+                None => view! {
+                    {item.icon.map(|ic| view! { <Icon icon=ic size=dim::ICON_SMALL/> })}
+                    <span class="op-tab-label">{item.label}</span>
+                    {item.count.filter(|c| *c > 0).map(|c| view! { <span class="op-tab-count">{c.to_string()}</span> })}
+                }
+                .into_any(),
+            };
             view! {
                 <button
                     type="button"
@@ -124,9 +168,7 @@ pub fn Tabs(
                         }
                     }
                 >
-                    {item.icon.map(|ic| view! { <Icon icon=ic size=dim::ICON_SMALL/> })}
-                    <span class="op-tab-label">{item.label}</span>
-                    {item.count.filter(|c| *c > 0).map(|c| view! { <span class="op-tab-count">{c.to_string()}</span> })}
+                    {item_view}
                 </button>
             }
         })
@@ -136,9 +178,24 @@ pub fn Tabs(
         TabsVariant::Folder => "folder",
         TabsVariant::Line => "line",
     };
+    let root_metrics = vec![
+        Metric::du("--op-tabs-height", height),
+        Metric::du("--op-tabs-padding-x", padding_x),
+        Metric::du("--op-tabs-gap", gap),
+        Metric::tu("--op-tabs-font-size", font_size),
+        Metric::du("--op-tabs-count-min-width", count_min_width),
+        Metric::du("--op-tabs-count-padding-x", count_padding_x),
+        Metric::du("--op-tabs-indicator-thickness", indicator_thickness),
+    ];
     view! {
-        <div class="op-tabs" data-variant=variant_name data-fill=fill.then_some("")>
-            <div node_ref=list class="op-tabs-list" role="tablist" aria-label=label>
+        <div
+            class=root_class("op-tabs", class)
+            style=root_style(root_metrics, style)
+            data-variant=variant_name
+            data-fill=fill.then_some("")
+        >
+            {before_options.run()}
+            <div node_ref=list class="op-tabs-list" role="tablist" aria-label=move || label.get()>
                 <span
                     class="op-tabs-indicator"
                     aria-hidden="true"
@@ -148,6 +205,7 @@ pub fn Tabs(
                 ></span>
                 {tabs}
             </div>
+            {after_options.run()}
         </div>
     }
 }

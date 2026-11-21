@@ -4,6 +4,7 @@
 //! so wheel, touch, keyboard and assistive technology keep their native behavior.
 //! [`Scrollbar`] draws a rectangular overlay thumb on top of the scrolled element.
 
+use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::html::ElementType;
 use leptos::prelude::*;
 use operator_ui_tokens::DU_POINTS;
@@ -118,6 +119,14 @@ pub fn Scrollbar<E>(
     /// Leaves room for the crossing scrollbar in the corner.
     #[prop(optional)]
     corner: Signal<bool>,
+    /// Track hit zone size in DU (`--op-scrollbar-track-size`).
+    #[prop(optional, into)]
+    track_size: MaybeProp<f32>,
+    /// Thumb thickness in DU (`--op-scrollbar-thumb-thickness`).
+    #[prop(optional, into)]
+    thumb_thickness: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView
 where
     E: ElementType + 'static,
@@ -279,10 +288,15 @@ where
         set_offset(&el, vertical, next.clamp(0.0, m.max_offset()));
     };
 
+    let root_metrics = vec![
+        Metric::du("--op-scrollbar-track-size", track_size),
+        Metric::du("--op-scrollbar-thumb-thickness", thumb_thickness),
+    ];
     view! {
         <div
             node_ref=track
-            class="op-scrollbar"
+            class=root_class("op-scrollbar", class)
+            style=root_style(root_metrics, style)
             aria-hidden="true"
             data-axis=if vertical { "y" } else { "x" }
             data-visible=move || visible().then_some("")
@@ -321,42 +335,87 @@ pub fn ScrollView(
     #[prop(default = ScrollAxis::Vertical)] axis: ScrollAxis,
     /// Classes for the outer box.
     #[prop(optional, into)]
-    class: String,
+    class: MaybeProp<String>,
     /// Classes for the scrolled element.
     #[prop(optional, into)]
-    viewport_class: String,
-    /// Fixed height in DU.
-    #[prop(into, default = None)]
-    height: Option<f32>,
-    /// Maximum height in DU.
-    #[prop(into, default = None)]
-    max_height: Option<f32>,
+    viewport_class: MaybeProp<String>,
+    /// Fixed height in DU (`--op-scrollbar-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Maximum height in DU (`--op-scrollbar-max-height`).
+    #[prop(optional, into)]
+    max_height: MaybeProp<f32>,
+    /// Track hit zone size in DU (`--op-scrollbar-track-size`).
+    #[prop(optional, into)]
+    track_size: MaybeProp<f32>,
+    /// Thumb thickness in DU (`--op-scrollbar-thumb-thickness`).
+    #[prop(optional, into)]
+    thumb_thickness: MaybeProp<f32>,
     /// Reference to the scrolled element, for components that scroll it programmatically.
     #[prop(optional)]
     node_ref: Option<NodeRef<leptos::html::Div>>,
     /// Makes the scrolled element focusable so keyboard users can scroll it.
     #[prop(optional)]
     focusable: bool,
+    /// Accessible label when focusable; defaults to `scroll-view.label`.
+    #[prop(optional, into)]
+    label: MaybeProp<String>,
+    /// Slot rendered before the scrolled viewport.
+    #[prop(optional, into)]
+    header: Slot,
+    /// Slot rendered after the scrolled viewport.
+    #[prop(optional, into)]
+    footer: Slot,
+    #[prop(optional, into)] style: MaybeProp<String>,
     children: Children,
 ) -> impl IntoView {
     let viewport = node_ref.unwrap_or_default();
     let both = axis == ScrollAxis::Both;
+    let label_text = ui_text(label, "scroll-view.label", "");
+    let has_label = Signal::derive(move || !label_text.get().is_empty());
+    let vp_class = move || {
+        let extra = viewport_class.get().unwrap_or_default();
+        if extra.is_empty() {
+            "op-scrollview-viewport op-scroll-native-off".to_string()
+        } else {
+            format!("op-scrollview-viewport op-scroll-native-off {extra}")
+        }
+    };
+    let root_metrics = vec![
+        Metric::du("--op-scrollbar-height", height),
+        Metric::du("--op-scrollbar-max-height", max_height),
+        Metric::du("--op-scrollbar-track-size", track_size),
+        Metric::du("--op-scrollbar-thumb-thickness", thumb_thickness),
+    ];
+    let base_style = root_style(root_metrics, style);
+    let full_style = move || {
+        // Fixed sizes first, so the caller's `style` (inside `base_style`) wins.
+        let mut out = String::new();
+        if let Some(h) = height.get() {
+            out.push_str(&format!("height:calc(var(--op-du) * {h});"));
+        }
+        if let Some(mh) = max_height.get() {
+            out.push_str(&format!("max-height:calc(var(--op-du) * {mh});"));
+        }
+        out.push_str(&base_style().unwrap_or_default());
+        (!out.is_empty()).then_some(out)
+    };
     view! {
-        <div
-            class=format!("op-scrollview {class}")
-            style:height=height.map(crate::core::du)
-            style:max-height=max_height.map(crate::core::du)
-        >
+        <div class=root_class("op-scrollview", class) style=full_style>
+            {header.run()}
             <div
                 node_ref=viewport
-                class=format!("op-scrollview-viewport op-scroll-native-off {viewport_class}")
+                class=vp_class
                 data-axis=axis.as_str()
                 tabindex=focusable.then_some("0")
+                role=move || has_label.get().then_some("region")
+                aria-label=move || has_label.get().then(|| label_text.get())
             >
                 {children()}
             </div>
-            {axis.vertical().then(|| view! { <Scrollbar target=viewport axis=ScrollAxis::Vertical corner=Signal::stored(both)/> })}
-            {axis.horizontal().then(|| view! { <Scrollbar target=viewport axis=ScrollAxis::Horizontal corner=Signal::stored(both)/> })}
+            {axis.vertical().then(|| view! { <Scrollbar target=viewport axis=ScrollAxis::Vertical corner=Signal::stored(both) track_size=track_size thumb_thickness=thumb_thickness/> })}
+            {axis.horizontal().then(|| view! { <Scrollbar target=viewport axis=ScrollAxis::Horizontal corner=Signal::stored(both) track_size=track_size thumb_thickness=thumb_thickness/> })}
+            {footer.run()}
         </div>
     }
 }

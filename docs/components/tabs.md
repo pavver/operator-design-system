@@ -46,7 +46,62 @@ A `0.25 DU` `divider` under the tabs and a `0.5 DU` `accent` underline under the
 | `selected` | index signal | required | Active tab. |
 | `variant` | Folder or Line | Folder | Style. |
 | `fill` | bool | `false` | Equal widths over the full row. |
-| `label` | string | none | Accessible name of the tab list. |
+| `label` | string | `tabs.label` | Accessible name of the tab list. |
+| `height` | DU | `row_standard` | Tab height. |
+| `padding_x` | DU | `pad_content` | Tab horizontal padding. |
+| `gap` | DU | `pad_tight` | Gap between icon and label. |
+| `font_size` | TU | `type_caption_size` | Label font size. |
+| `count_min_width` | DU | `4 DU` | Minimum width of the counter badge. |
+| `count_padding_x` | DU | `pad_tight` | Counter badge horizontal padding. |
+| `indicator_thickness` | DU | `border_thick` | Indicator line thickness. |
+| `option` | scoped slot | none | Custom rendering for each tab. |
+| `before_options` | slot | none | Content before the tabs list. |
+| `after_options` | slot | none | Content after the tabs list. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-tabs-height` | `row_standard` |
+| `padding_x` | DU | `--op-tabs-padding-x` | `pad_content` |
+| `gap` | DU | `--op-tabs-gap` | `pad_tight` |
+| `font_size` | TU | `--op-tabs-font-size` | `type_caption_size` |
+| `count_min_width` | DU | `--op-tabs-count-min-width` | `4 DU` |
+| `count_padding_x` | DU | `--op-tabs-count-padding-x` | `pad_tight` |
+| `indicator_thickness` | DU | `--op-tabs-indicator-thickness` | `border_thick` |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-tabs-text` | `text_secondary` |
+| `--op-tabs-text-hover` | `text_primary` |
+| `--op-tabs-text-active` | `accent` |
+| `--op-tabs-count-background` | `surface_alt` |
+| `--op-tabs-count-text` | `text_secondary` |
+| `--op-tabs-count-active-background` | `accent` |
+| `--op-tabs-count-active-text` | `on_accent` |
+| `--op-tabs-divider` | `divider` |
+| `--op-tabs-indicator-color` | `accent` |
+| `--op-tabs-dock-background` | `surface_alt` |
+| `--op-tabs-dock-border` | `border` |
+| `--op-tabs-active-background` | `background` |
+
+| Slot | Place |
+| :--- | :--- |
+| `option` | Scoped slot replacing default tab contents. |
+| `before_options` | Before the tab list. |
+| `after_options` | After the tab list. |
+
+`class` and `style` apply to the root tabs element.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `tabs.label` | `Tabs` |
+
+### Icons
+
+Tabs has no built-in semantic icons.
 
 ## Accessibility
 
