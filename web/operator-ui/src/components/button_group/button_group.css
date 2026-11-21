@@ -1,0 +1,36 @@
+:where(.op-button-group) {
+    display: inline-flex;
+}
+
+.op-button-group {
+    position: relative;
+    gap: var(--op-button-group-gap, 0);
+}
+
+.op-button-group[data-vertical] {
+    flex-direction: column;
+}
+
+.op-button-group[data-spread] {
+    display: flex;
+    width: 100%;
+}
+
+.op-button-group[data-spread] > * {
+    flex: 1 1 0;
+}
+
+/* Share borders between joined buttons */
+.op-button-group:not([data-vertical]) > *:not(:first-child) {
+    margin-left: calc(-1 * var(--op-border-standard, calc(var(--op-du) * 0.25)));
+}
+
+.op-button-group[data-vertical] > *:not(:first-child) {
+    margin-top: calc(-1 * var(--op-border-standard, calc(var(--op-du) * 0.25)));
+}
+
+.op-button-group > *:focus-visible,
+.op-button-group > *:hover,
+.op-button-group > *[data-state="pressed"] {
+    z-index: 1;
+}

@@ -61,26 +61,37 @@ reviewed = [
 ]
 
 draft = [
-    "field",
-    "text-field",
-    "navigation-rail",
-    "side-panel",
-    "tree",
+    "aspect-ratio",
+    "breadcrumbs",
+    "button-group",
+    "chat-message",
+    "circular-progress",
     "color-field",
+    "combobox",
+    "data-table",
     "date-time-field",
+    "dropdown-menu",
     "duration-field",
-    "number-field",
-    "time-field",
+    "field",
     "hover-card",
+    "image",
+    "loading-bar",
+    "loading-overlay",
     "marquee-text",
     "menu",
-    "tooltip",
+    "navigation-rail",
+    "number-field",
     "popover",
-    "combobox",
-    "dropdown-menu",
-    "data-table",
     "property-list",
+    "side-panel",
+    "space",
+    "text-field",
+    "time-field",
+    "timeline",
     "toolbar",
+    "tooltip",
+    "tree",
+    "video",
     "virtual-list",
 ]
 
@@ -94,11 +105,16 @@ field = ["primitives"]
 accordion = ["primitives"]
 action-button = ["primitives"]
 arborium = ["code-block", "dep:arborium"]
+aspect-ratio = []
 avatar = ["primitives", "status-badge"]
 banner = ["primitives", "toast"]
+breadcrumbs = ["icon-button", "menu", "primitives"]
+button-group = []
+chat-message = []
 checkbox = ["primitives"]
 checkbox-group = ["primitives"]
 chip = ["primitives"]
+circular-progress = []
 code-block = ["icon-button", "scrollbar"]
 code-field = ["combobox", "popover", "virtual-list"]
 color-field = ["field", "popover", "primitives"]
@@ -116,9 +132,12 @@ header = ["avatar", "primitives", "status-badge"]
 graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
+image = ["primitives", "skeleton"]
 kbd = []
 linear-progress = []
 list-item = []
+loading-bar = []
+loading-overlay = ["primitives"]
 marquee-text = ["tooltip"]
 menu = ["icon-button", "popover", "primitives", "scrollbar"]
 navigation-rail = ["primitives"]
@@ -136,6 +155,7 @@ sheet = ["icon-button", "scrollbar"]
 side-panel = ["icon-button"]
 skeleton = []
 slider = ["primitives"]
+space = []
 split-pane = ["scrollbar"]
 status-badge = ["primitives"]
 stepper = ["primitives"]
@@ -147,7 +167,9 @@ theme-toggle = []
 toast = ["primitives"]
 toolbar = ["icon-button", "menu", "tooltip"]
 time-field = ["field"]
+timeline = ["primitives"]
 tree = ["primitives", "virtual-list"]
 tooltip = ["popover"]
+video = []
 virtual-list = ["scrollbar"]
 

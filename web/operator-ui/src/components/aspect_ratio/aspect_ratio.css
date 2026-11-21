@@ -1,0 +1,24 @@
+:where(.op-aspect-ratio) {
+    color: inherit;
+}
+
+.op-aspect-ratio {
+    position: relative;
+    width: 100%;
+    aspect-ratio: calc(16 / 9);
+    max-width: var(--op-aspect-ratio-max-width, none);
+    max-height: var(--op-aspect-ratio-max-height, none);
+}
+
+.op-aspect-ratio-content {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.op-aspect-ratio-content > * {
+    width: 100%;
+    height: 100%;
+}

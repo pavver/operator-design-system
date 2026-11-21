@@ -1,0 +1,83 @@
+:where(.op-chat-message) {
+    font-size: var(--op-chat-message-font-size, inherit);
+    color: var(--op-chat-message-text, inherit);
+}
+
+.op-chat-message {
+    display: flex;
+    flex-direction: column;
+    gap: var(--op-chat-message-gap, calc(var(--op-du) * 1));
+    max-width: 85%;
+}
+
+.op-chat-message[data-sent] {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.op-chat-message:not([data-sent]) {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+.op-chat-message-container {
+    display: flex;
+    align-items: flex-end;
+    gap: calc(var(--op-du) * 2);
+}
+
+.op-chat-message[data-sent] .op-chat-message-container {
+    flex-direction: row-reverse;
+}
+
+.op-chat-message-avatar-wrap {
+    flex-shrink: 0;
+}
+
+.op-chat-message-avatar {
+    width: calc(var(--op-du) * 8);
+    height: calc(var(--op-du) * 8);
+    object-fit: cover;
+    display: block;
+}
+
+.op-chat-message-body-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.op-chat-message[data-sent] .op-chat-message-body-wrap {
+    align-items: flex-end;
+}
+
+.op-chat-message:not([data-sent]) .op-chat-message-body-wrap {
+    align-items: flex-start;
+}
+
+.op-chat-message-name {
+    font-size: var(--op-type-caption-size, 10TU);
+    color: var(--op-chat-message-name-color, var(--op-text-secondary));
+    margin-bottom: calc(var(--op-du) * 0.5);
+}
+
+.op-chat-message-bubble {
+    padding: var(--op-chat-message-padding, calc(var(--op-du) * 2));
+    border: var(--op-border-standard, calc(var(--op-du) * 0.25)) solid var(--op-chat-message-border, var(--op-border));
+    word-break: break-word;
+}
+
+.op-chat-message[data-sent] .op-chat-message-bubble {
+    background-color: var(--op-chat-message-sent-bg, var(--op-surface-raised));
+    color: var(--op-chat-message-sent-text, var(--op-text-primary));
+}
+
+.op-chat-message:not([data-sent]) .op-chat-message-bubble {
+    background-color: var(--op-chat-message-received-bg, var(--op-surface-subtle));
+    color: var(--op-chat-message-received-text, var(--op-text-primary));
+}
+
+.op-chat-message-stamp {
+    font-size: var(--op-type-caption-size, 10TU);
+    color: var(--op-chat-message-stamp-color, var(--op-text-secondary));
+    margin-top: calc(var(--op-du) * 0.5);
+}

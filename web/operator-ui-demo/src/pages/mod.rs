@@ -2,11 +2,16 @@
 
 mod accordion;
 mod action_button;
+mod aspect_ratio;
 mod avatar;
 mod banner;
+mod breadcrumbs;
+mod button_group;
+mod chat_message;
 mod checkbox;
 mod checkbox_group;
 mod chip;
+mod circular_progress;
 mod code_block;
 mod code_field;
 mod combobox;
@@ -24,9 +29,12 @@ mod graph;
 mod header;
 mod hover_card;
 mod icon_button;
+mod image;
 mod kbd;
 mod linear_progress;
 mod list_item;
+mod loading_bar;
+mod loading_overlay;
 mod marquee_text;
 mod menu;
 mod navigation_shell;
@@ -42,6 +50,7 @@ mod segmented_control;
 mod sheet;
 mod skeleton;
 mod slider;
+mod space;
 mod split_pane;
 mod status_badge;
 mod stepper;
@@ -50,10 +59,12 @@ mod tabs;
 mod text_area;
 mod text_field;
 mod theme_toggle;
+mod timeline;
 mod toast;
 mod toolbar;
 mod tooltip;
 mod value_fields;
+mod video;
 mod virtual_list;
 
 use leptos::prelude::AnyView;
@@ -122,6 +133,17 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/navigation-rail" => (navigation_shell::navigation_shell, false),
         "components/side-panel" => (navigation_shell::navigation_shell, false),
         "components/tree" => (navigation_shell::navigation_shell, false),
+        "components/aspect-ratio" => (aspect_ratio::aspect_ratio, false),
+        "components/breadcrumbs" => (breadcrumbs::breadcrumbs, false),
+        "components/button-group" => (button_group::button_group, false),
+        "components/chat-message" => (chat_message::chat_message, false),
+        "components/circular-progress" => (circular_progress::circular_progress, false),
+        "components/image" => (image::image, false),
+        "components/loading-bar" => (loading_bar::loading_bar, false),
+        "components/loading-overlay" => (loading_overlay::loading_overlay, false),
+        "components/space" => (space::space, false),
+        "components/timeline" => (timeline::timeline, false),
+        "components/video" => (video::video, false),
         _ => return None,
     };
     Some(entry)

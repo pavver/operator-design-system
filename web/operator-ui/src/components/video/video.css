@@ -1,0 +1,20 @@
+:where(.op-video) {
+    background-color: var(--op-video-background, var(--op-surface-subtle));
+}
+
+.op-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: calc(16 / 9);
+    max-width: var(--op-video-max-width, none);
+    max-height: var(--op-video-max-height, none);
+    overflow: hidden;
+}
+
+.op-video-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}

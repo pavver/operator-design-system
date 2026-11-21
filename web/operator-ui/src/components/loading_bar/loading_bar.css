@@ -1,0 +1,44 @@
+:where(.op-loading-bar) {
+    background-color: var(--op-surface-raised);
+}
+
+.op-loading-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: var(--op-loading-bar-thickness, calc(var(--op-du) * 0.5));
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--op-motion-fade, 150ms) ease;
+    overflow: hidden;
+}
+
+.op-loading-bar[data-position="top"] {
+    top: 0;
+}
+
+.op-loading-bar[data-position="bottom"] {
+    bottom: 0;
+}
+
+.op-loading-bar[data-pending] {
+    opacity: 1;
+}
+
+.op-loading-bar-indicator {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--op-loading-bar-color, var(--op-accent)) 50%,
+        transparent 100%
+    );
+    animation: op-loading-bar-sweep 1.5s infinite linear;
+}
+
+@keyframes op-loading-bar-sweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
