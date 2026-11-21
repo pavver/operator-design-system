@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T18:41:35+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`width`, `height`, `thumb_inset`, `star_scale`), color variables, slots (`content`), translatable strings."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`width`, `height`, `thumb_inset`, `star_scale`), змінні кольорів, слоти (`content`), перекладні тексти."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

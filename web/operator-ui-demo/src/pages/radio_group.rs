@@ -9,6 +9,12 @@ pub fn radio_group() -> AnyView {
     let mode = RwSignal::new("auto".to_string());
     let codec = RwSignal::new("h265".to_string());
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <RadioGroup items=vec![GroupItem::new("a", "Option A"), GroupItem::new("b", "Option B")]
+                selected=RwSignal::new("a".to_string()) label=crate::i18n::t("Selection")
+                height=12.0 size=6.0 gap=3.0
+                option=Callback::new(|item: GroupItem| view! { <strong>{item.name}</strong> }.into_any())/>
+        </Example>
         <Example title="Async commit" note="The mark moves only after the request succeeds; the target shows a spinner while pending.">
             <RadioGroup
                 label="Day/night mode"

@@ -1,13 +1,17 @@
 //! Segment switcher: SegmentItem and SegmentedControl.
 
-use crate::components::primitives::{Icon, PendingIndicator};
 use crate::core::{
-    AsyncAction, ControlState, PendingRun, Press, du, sleep_ms, spawn_ripple,
-    use_pending_indicator, use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, ScopedSlot, Slot, root_class,
+    root_style, sleep_ms, spawn_ripple, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::{Icon as IconData, dim};
+use operator_ui_tokens::Icon as IconData;
+
+mod visuals;
+use visuals::{pending, symbol};
+
+const ICON_SIZE: &str = "var(--op-segmented-control-icon-size, var(--op-dim-icon-small))";
 
 pub(crate) const CSS: &str = include_str!("segmented_control.css");
 
@@ -50,11 +54,38 @@ pub fn SegmentedControl(
     /// When set, the selection commits only after the request succeeds.
     #[prop(optional, into)]
     on_select: Option<AsyncAction<usize>>,
-    /// Height in DU.
-    #[prop(default = 9.0)]
-    height: f32,
+    #[prop(optional, into)] height: MaybeProp<f32>,
+    #[prop(optional, into)] padding: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] spinner_stroke: MaybeProp<f32>,
+    #[prop(optional, into)] width: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional)] option: Option<ScopedSlot<SegmentItem>>,
+    #[prop(optional, into)] before_options: Slot,
+    #[prop(optional, into)] after_options: Slot,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
 ) -> impl IntoView {
+    let loading_label = ui_text(loading_label, "segmented-control.loading", "Loading");
+    let label = ui_text(label, "segmented-control.label", "Options");
+
+    let root_metrics = vec![
+        Metric::du("--op-segmented-control-width", width),
+        Metric::du("--op-segmented-control-spinner-stroke", spinner_stroke),
+        Metric::du("--op-segmented-control-height", height),
+        Metric::du("--op-segmented-control-padding", padding),
+        Metric::du("--op-segmented-control-gap", gap),
+        Metric::du("--op-segmented-control-icon-size", icon_size),
+        Metric::tu("--op-segmented-control-font-size", font_size),
+        Metric::tu("--op-segmented-control-line-height", line_height),
+    ];
+
     let count = items.len().max(1);
+    let job = JobToken::new();
     let pending_index = RwSignal::new(None::<usize>);
     let feedback = RwSignal::new(ControlState::Idle);
     let is_async = on_select.is_some();
@@ -82,9 +113,13 @@ pub fn SegmentedControl(
         if index == selected.get_untracked() || pending_index.get_untracked().is_some() {
             return;
         }
+        let request = job.next();
         pending_index.set(Some(index));
         spawn_local(async move {
             let result = action.call(index).await;
+            if !job.is_current(request) {
+                return;
+            }
             pending_index.set(None);
             if result.is_success() {
                 selected.set(index);
@@ -94,7 +129,9 @@ pub fn SegmentedControl(
                 feedback.set(ControlState::Error);
                 sleep_ms(600).await;
             }
-            feedback.set(ControlState::Idle);
+            if job.is_current(request) {
+                feedback.set(ControlState::Idle);
+            }
         });
     };
 
@@ -146,12 +183,13 @@ pub fn SegmentedControl(
                 >
                     {move || {
                         if show_spinner.get() {
-                            view! { <PendingIndicator size=dim::ICON_SMALL/> }.into_any()
+                            pending(ICON_SIZE, loading_label)
                         } else {
                             let item = item.clone();
+                            if let Some(slot) = option { return slot.run(item); }
                             view! {
                                 <span class="op-seg-content">
-                                    {item.icon.map(|i| view! { <Icon icon=i size=dim::ICON_SMALL/> })}
+                                    {item.icon.map(|i| view! { {symbol(Signal::stored(i), ICON_SIZE, None)} })}
                                     {item.text.map(|t| view! { <span>{t}</span> })}
                                 </span>
                             }
@@ -165,11 +203,13 @@ pub fn SegmentedControl(
 
     view! {
         <div
-            class="op-seg"
+            class=root_class("op-seg", class)
+            style=root_style(root_metrics, style)
             role="tablist"
-            style:height=du(height)
+            aria-label=move || label.get()
             data-disabled=move || (!enabled.get()).then_some("")
         >
+            {before_options.run()}
             <div class="op-seg-track">
                 <Show when=move || enabled.get()>
                     <div
@@ -190,6 +230,7 @@ pub fn SegmentedControl(
                 </Show>
                 {buttons}
             </div>
+            {after_options.run()}
         </div>
     }
 }

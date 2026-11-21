@@ -22,7 +22,13 @@ fn async_switch(label: &'static str, value: RwSignal<bool>) -> impl IntoView {
 }
 
 pub fn switch() -> AnyView {
+    let custom_value = RwSignal::new(false);
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <AsyncSwitch checked=custom_value label=crate::i18n::t("Dark mode") width=16.0 height=9.0 thumb_size=7.0
+                content=|| view! { <span aria-hidden="true">"+"</span> }
+                on_toggle=AsyncAction::new(move |next: bool| async move { custom_value.set(next); ActionResult::Success })/>
+        </Example>
         <Example title="Interactive" note="The value commits only after success; the thumb parks in the center with a spinner while pending.">
             <Cell label="Night mode">{async_switch("night_mode", RwSignal::new(true))}</Cell>
             <Cell label="IR light">{async_switch("ir_light", RwSignal::new(false))}</Cell>

@@ -66,7 +66,7 @@ Use it when the press opens a page or an external resource rather than running a
 
 | Property | Type | Default |
 | :--- | :--- | :--- |
-| `text` | string | required |
+| `text` | string | `action-button.text` |
 | `icon` | icon | none |
 | `state` | `ControlState?` | none |
 | `enabled` | bool | `true` |
@@ -76,3 +76,79 @@ Use it when the press opens a page or an external resource rather than running a
 | `on_click` | async `() -> ActionResult` | none |
 | `href` | string | none |
 | `new_tab` | bool | `false` |
+| `height` | reactive DU | unset |
+| `padding_x` | reactive DU | unset |
+| `gap` | reactive DU | unset |
+| `icon_size` | reactive DU | unset |
+| `font_size` | reactive TU | unset |
+| `line_height` | reactive TU | unset |
+| `spinner_stroke` | reactive DU | unset |
+| `class` | reactive string | none |
+| `style` | reactive string | none |
+| `leading` | slot | none |
+| `trailing` | slot | none |
+| `content` | slot | none |
+| `loading_label` | reactive string | `action-button.loading` |
+| `success_label` | reactive string | `action-button.success` |
+| `error_label` | reactive string | `action-button.error` |
+| `success_icon` | icon | `action-button.success` |
+| `error_icon` | icon | `action-button.error` |
+
+## Customization
+
+`class` and `style` apply to the root element.
+Metric props accept reactive DU or TU values; unset props keep the CSS variable or its exact design-system fallback.
+Caller `style` is appended after metric declarations and takes precedence.
+ActionButton and IconButton share `--op-button-*` variables for metrics and colors with the same meaning.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-button-height` | `var(--op-dim-row-standard)` |
+| `padding_x` | DU | `--op-button-padding-x` | `var(--op-dim-margin-screen)` |
+| `gap` | DU | `--op-button-gap` | `var(--op-dim-gutter)` |
+| `icon_size` | DU | `--op-button-icon-size` | `var(--op-dim-icon-small)` |
+| `font_size` | TU | `--op-button-font-size` | `var(--op-type-body-size)` |
+| `line_height` | TU | `--op-button-line-height` | `var(--op-type-body-line)` |
+| `spinner_stroke` | DU | `--op-button-spinner-stroke` | `var(--op-dim-spinner-stroke)` |
+| Color variable | Default |
+| :--- | :--- |
+| `--op-button-accent` | `var(--op-accent)` |
+| `--op-button-border` | `var(--op-border)` |
+| `--op-button-emphasis-border` | `var(--op-border-strong)` |
+| `--op-button-disabled-border` | `var(--op-disabled-border)` |
+| `--op-button-disabled-background` | `var(--op-disabled-surface)` |
+| `--op-button-error` | `var(--op-error)` |
+| `--op-button-hover` | `var(--op-hover)` |
+| `--op-button-icon` | `var(--op-icon)` |
+| `--op-button-disabled-icon` | `var(--op-icon-disabled)` |
+| `--op-button-pending` | `var(--op-pending)` |
+| `--op-button-pressed` | `var(--op-pressed)` |
+| `--op-button-ripple` | `var(--op-ripple)` |
+| `--op-button-selection` | `var(--op-selection)` |
+| `--op-button-success` | `var(--op-success)` |
+| `--op-button-background` | `var(--op-surface)` |
+| `--op-button-disabled-text` | `var(--op-text-disabled)` |
+| `--op-button-text` | `var(--op-text-primary)` |
+| Slot | Place |
+| :--- | :--- |
+| `leading` | Before the default content. |
+| `trailing` | After the default content. |
+| `content` | Replaces the default text or icon; pending and result feedback keep priority. |
+
+### Strings
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `loading_label` | `action-button.loading` | `Loading` |
+| `success_label` | `action-button.success` | `Success` |
+| `error_label` | `action-button.error` | `Error` |
+| `text` | `action-button.text` | empty string |
+
+### Icons
+
+| Prop | Key | Default |
+| :--- | :--- | :--- |
+| `success_icon` | `action-button.success` | `check` |
+| `error_icon` | `action-button.error` | `close` |
+
+Icons supplied as item data or through the existing `icon` prop remain caller-owned.

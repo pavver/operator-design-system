@@ -2,12 +2,12 @@
 /* SegmentedControl                                                    */
 /* ------------------------------------------------------------------ */
 .op-seg {
-  width: 100%;
-  padding: var(--op-dim-gap-micro);
-  background-color: var(--op-surface-alt);
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  width: var(--op-segmented-control-width, 100%);
+  padding: var(--op-segmented-control-padding, var(--op-dim-gap-micro));
+  background-color: var(--op-segmented-control-background-alt, var(--op-surface-alt));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-segmented-control-border, var(--op-border));
 }
-.op-seg[data-disabled] { background-color: var(--op-disabled-surface); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-disabled-border); }
+.op-seg[data-disabled] { background-color: var(--op-segmented-control-disabled-background, var(--op-disabled-surface)); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-segmented-control-disabled-border, var(--op-disabled-border)); }
 .op-seg-track { position: relative; display: flex; height: 100%; }
 .op-seg-slide {
   position: absolute;
@@ -17,13 +17,13 @@
   transition: transform var(--op-motion-segment-slide) linear;
 }
 .op-seg-indicator {
-  --sb-base: var(--op-accent);
+  --sb-base: var(--op-segmented-control-accent, var(--op-accent));
   height: 100%;
-  background-color: color-mix(in srgb, var(--op-accent) 15%, transparent);
+  background-color: color-mix(in srgb, var(--op-segmented-control-accent, var(--op-accent)) 15%, transparent);
 }
-.op-seg-indicator-async { --sb-base: var(--op-border); }
-.op-seg-indicator[data-state="success"] { background-color: color-mix(in srgb, var(--op-success) 15%, transparent); }
-.op-seg-indicator[data-state="error"] { background-color: color-mix(in srgb, var(--op-error) 15%, transparent); }
+.op-seg-indicator-async { --sb-base: var(--op-segmented-control-border, var(--op-border)); }
+.op-seg-indicator[data-state="success"] { background-color: color-mix(in srgb, var(--op-segmented-control-success, var(--op-success)) 15%, transparent); }
+.op-seg-indicator[data-state="error"] { background-color: color-mix(in srgb, var(--op-segmented-control-error, var(--op-error)) 15%, transparent); }
 .op-seg-item {
   position: relative;
   z-index: 4;
@@ -31,19 +31,39 @@
   min-width: 0;
   display: grid;
   place-items: center;
-  color: var(--op-text-secondary);
-  font-size: var(--op-type-body-small-size);
-  line-height: var(--op-type-body-small-line);
+  color: var(--op-segmented-control-secondary-text, var(--op-text-secondary));
+  font-size: var(--op-segmented-control-font-size, var(--op-type-body-small-size));
+  line-height: var(--op-segmented-control-line-height, var(--op-type-body-small-line));
   font-weight: 500;
   transition:
     color var(--op-motion-segment-slide) linear,
     background-color var(--op-motion-state-color) var(--op-ease-standard);
 }
-.op-seg-item[data-pressed] { background-color: var(--op-pressed); }
-.op-seg-item[data-tone="selected"] { color: var(--op-accent); font-weight: 700; }
-.op-seg-item[data-tone="success"] { color: var(--op-success); font-weight: 700; }
-.op-seg-item[data-tone="error"] { color: var(--op-error); font-weight: 700; }
-.op-seg-item[data-tone="pending"] { color: var(--op-pending); }
-.op-seg-item[data-tone="disabled"] { color: var(--op-text-disabled); }
-.op-seg-content { display: inline-flex; align-items: center; gap: var(--op-dim-pad-small); white-space: nowrap; }
+.op-seg-item[data-pressed] { background-color: var(--op-segmented-control-pressed, var(--op-pressed)); }
+.op-seg-item[data-tone="selected"] { color: var(--op-segmented-control-accent, var(--op-accent)); font-weight: 700; }
+.op-seg-item[data-tone="success"] { color: var(--op-segmented-control-success, var(--op-success)); font-weight: 700; }
+.op-seg-item[data-tone="error"] { color: var(--op-segmented-control-error, var(--op-error)); font-weight: 700; }
+.op-seg-item[data-tone="pending"] { color: var(--op-segmented-control-pending, var(--op-pending)); }
+.op-seg-item[data-tone="disabled"] { color: var(--op-segmented-control-disabled-text, var(--op-text-disabled)); }
+.op-seg-content { display: inline-flex; align-items: center; gap: var(--op-segmented-control-gap, var(--op-dim-pad-small)); white-space: nowrap; }
 
+
+.op-seg { height: var(--op-segmented-control-height, calc(var(--op-du) * 9)); }
+
+/* Family hooks for shared state visuals. */
+.op-seg .op-seg-indicator { --sb-base: var(--op-segmented-control-accent, var(--op-accent)); }
+.op-seg .op-seg-indicator.op-seg-indicator-async { --sb-base: var(--op-segmented-control-border, var(--op-border)); }
+.op-seg .op-seg-indicator[data-state="pressed"] { --sb-base: var(--op-segmented-control-emphasis-border, var(--op-border-strong)); }
+.op-seg .op-seg-indicator[data-state="disabled"] { --sb-base: var(--op-segmented-control-disabled-border, var(--op-disabled-border)); }
+.op-seg .op-seg-indicator[data-state="selected"], .op-seg .op-seg-indicator[data-state="focused"] { --sb-base: var(--op-segmented-control-accent, var(--op-accent)); }
+.op-seg .op-seg-indicator[data-result="success"] { --sb-status: var(--op-segmented-control-success, var(--op-success)); }
+.op-seg .op-seg-indicator[data-result="error"] { --sb-status: var(--op-segmented-control-error, var(--op-error)); }
+.op-seg .op-seg-indicator > .op-run rect { stroke: var(--op-segmented-control-pending, var(--op-pending)); }
+.op-seg .op-tone[data-state="success"] { color: var(--op-segmented-control-success, var(--op-success)); }
+.op-seg .op-tone[data-state="error"] { color: var(--op-segmented-control-error, var(--op-error)); }
+.op-seg .op-ripple { background: color-mix(in srgb, var(--op-segmented-control-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-seg .op-seg-item:focus-visible { outline-color: var(--op-segmented-control-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-seg .op-seg-indicator[data-state="idle"]:hover { --sb-base: var(--op-segmented-control-emphasis-border, var(--op-border-strong)); } }
+@media (hover: hover) {
+.op-root .op-seg-item[data-tone="idle"]:not([data-pressed]):hover { background-color: var(--op-segmented-control-hover, var(--op-hover)); }
+}

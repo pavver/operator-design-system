@@ -7,6 +7,12 @@ use operator_ui::prelude::*;
 pub fn segmented() -> AnyView {
     let b = backend();
     view! {
+        <Example title="Customization" note="Metric props and slots customize this instance; its translated string follows the language selector.">
+            <SegmentedControl items=vec![SegmentItem::text("Auto"), SegmentItem::text("Manual")]
+                selected=RwSignal::new(0usize) label=crate::i18n::t("Selection")
+                height=12.0 gap=3.0 font_size=15.0
+                option=Callback::new(|item: SegmentItem| view! { <strong>{item.text}</strong> }.into_any())/>
+        </Example>
         <Example title="Variants" note="The async variant shows a spinner in the target segment and slides back on error." block=true>
             <div class="demo-stack demo-narrow">
                 <SegmentedControl items=vec![SegmentItem::text("Auto"), SegmentItem::text("Day"), SegmentItem::text("Night")] selected=RwSignal::new(1usize)/>

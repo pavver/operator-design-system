@@ -2,22 +2,41 @@
 /* RadioGroup (round mark: allowed exception, see principles.md)       */
 /* ------------------------------------------------------------------ */
 .op-radio-group { display: flex; flex-direction: column; }
-.op-radio-group[data-horizontal] { flex-direction: row; flex-wrap: wrap; column-gap: var(--op-dim-margin-screen); }
+.op-radio-group[data-horizontal] { flex-direction: row; flex-wrap: wrap; column-gap: var(--op-radio-group-column-gap, var(--op-dim-margin-screen)); }
 .op-radio {
   display: flex;
   align-items: center;
-  gap: var(--op-dim-pad-content);
-  min-height: var(--op-dim-row-standard);
-  padding: 0 var(--op-dim-pad-tight);
-  color: var(--op-text-primary);
+  gap: var(--op-radio-group-gap, var(--op-dim-pad-content));
+  min-height: var(--op-radio-group-height, var(--op-dim-row-standard));
+  padding: 0 var(--op-radio-group-padding-x, var(--op-dim-pad-tight));
+  color: var(--op-radio-group-text, var(--op-text-primary));
 }
-.op-radio[aria-disabled="true"] { color: var(--op-text-disabled); cursor: default; }
+.op-radio[aria-disabled="true"] { color: var(--op-radio-group-disabled-text, var(--op-text-disabled)); cursor: default; }
 /* Round exception (docs/foundations/principles.md): the circle is the universal sign of a single choice. */
-.op-radio-box { --sb-rx: calc((var(--op-du) * 5 - var(--sb-w)) / 2); display: grid; place-items: center; width: calc(var(--op-du) * 5); height: calc(var(--op-du) * 5); flex: none; border-radius: 50%; background-color: var(--op-surface); }
-.op-radio-box[data-state="selected"] { background-color: color-mix(in srgb, var(--op-accent) 15%, transparent); }
-.op-radio-box[data-state="disabled"] { background-color: var(--op-disabled-surface); }
-.op-radio-dot { width: var(--op-dim-pad-content); height: var(--op-dim-pad-content); border-radius: 50%; background-color: var(--op-accent); transform: scale(0); transition: transform var(--op-motion-state-color) var(--op-ease-standard); }
+.op-radio-box { --sb-rx: calc((var(--op-radio-group-size, calc(var(--op-du) * 5)) - var(--sb-w)) / 2); display: grid; place-items: center; width: var(--op-radio-group-size, calc(var(--op-du) * 5)); height: var(--op-radio-group-size, calc(var(--op-du) * 5)); flex: none; border-radius: 50%; background-color: var(--op-radio-group-background, var(--op-surface)); }
+.op-radio-box[data-state="selected"] { background-color: color-mix(in srgb, var(--op-radio-group-accent, var(--op-accent)) 15%, transparent); }
+.op-radio-box[data-state="disabled"] { background-color: var(--op-radio-group-disabled-background, var(--op-disabled-surface)); }
+.op-radio-dot { width: var(--op-radio-group-dot-size, var(--op-dim-pad-content)); height: var(--op-radio-group-dot-size, var(--op-dim-pad-content)); border-radius: 50%; background-color: var(--op-radio-group-accent, var(--op-accent)); transform: scale(0); transition: transform var(--op-motion-state-color) var(--op-ease-standard); }
 .op-radio[data-checked] .op-radio-dot { transform: scale(1); }
-.op-radio[aria-disabled="true"] .op-radio-dot { background-color: var(--op-text-disabled); }
-.op-radio[aria-disabled="true"] .op-radio-label { color: var(--op-text-disabled); }
+.op-radio[aria-disabled="true"] .op-radio-dot { background-color: var(--op-radio-group-disabled-text, var(--op-text-disabled)); }
+.op-radio[aria-disabled="true"] .op-radio-label { color: var(--op-radio-group-disabled-text, var(--op-text-disabled)); }
 
+
+.op-radio-group { font-size: var(--op-radio-group-font-size, var(--op-type-body-size)); line-height: var(--op-radio-group-line-height, var(--op-type-body-line)); }
+
+/* Family hooks for shared state visuals. */
+.op-radio-group .op-radio-box { --sb-base: var(--op-radio-group-border, var(--op-border)); }
+.op-radio-group .op-radio-box[data-state="pressed"] { --sb-base: var(--op-radio-group-emphasis-border, var(--op-border-strong)); }
+.op-radio-group .op-radio-box[data-state="disabled"] { --sb-base: var(--op-radio-group-disabled-border, var(--op-disabled-border)); }
+.op-radio-group .op-radio-box[data-state="selected"], .op-radio-group .op-radio-box[data-state="focused"] { --sb-base: var(--op-radio-group-accent, var(--op-accent)); }
+.op-radio-group .op-radio-box[data-result="success"] { --sb-status: var(--op-radio-group-success, var(--op-success)); }
+.op-radio-group .op-radio-box[data-result="error"] { --sb-status: var(--op-radio-group-error, var(--op-error)); }
+.op-radio-group .op-radio-box > .op-run rect { stroke: var(--op-radio-group-pending, var(--op-pending)); }
+.op-radio-group .op-tone[data-state="success"] { color: var(--op-radio-group-success, var(--op-success)); }
+.op-radio-group .op-tone[data-state="error"] { color: var(--op-radio-group-error, var(--op-error)); }
+.op-radio-group .op-ripple { background: color-mix(in srgb, var(--op-radio-group-ripple, var(--op-ripple)) var(--op-ripple-alpha), transparent); }
+.op-root .op-radio-group .op-radio:focus-visible { outline-color: var(--op-radio-group-accent, var(--op-accent)); }
+@media (hover: hover) { .op-root .op-radio-group .op-radio-box[data-state="idle"]:hover { --sb-base: var(--op-radio-group-emphasis-border, var(--op-border-strong)); } }
+@media (hover: hover) {
+.op-root .op-radio:hover > .op-radio-box[data-state="idle"] { background-color: var(--op-radio-group-hover, var(--op-hover)); --sb-base: var(--op-radio-group-emphasis-border, var(--op-border-strong)); }
+}
