@@ -1,0 +1,44 @@
+/* ------------------------------------------------------------------ */
+/* LanguagePicker                                                     */
+/* ------------------------------------------------------------------ */
+.op-language-picker {
+  width: var(--op-language-picker-width, 100%);
+}
+
+.op-language-picker .op-field-prepend:empty,
+.op-language-picker .op-field-prepend:not(:has(*)) {
+  display: none;
+  margin: 0;
+}
+
+.op-language-picker-flag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--op-language-picker-flag-width, calc(var(--op-du) * 6));
+  height: var(--op-language-picker-flag-height, calc(var(--op-du) * 4));
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.op-language-picker-flag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 var(--op-dim-border, calc(var(--op-du) * 0.25)) var(--op-border);
+  pointer-events: none;
+}
+
+.op-language-picker-flag > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The list may be wider than a compact field (header pickers), so names are not cut.
+   Rows are virtualized and do not size the list, hence a fixed minimum. */
+.op-dropdown-menu:has(.op-language-picker-flag) {
+  min-width: var(--op-language-picker-list-min-width, calc(var(--op-du) * 64));
+}

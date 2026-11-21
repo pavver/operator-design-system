@@ -1,6 +1,7 @@
 //! Site translations and the language context shared with examples.
 
 use leptos::prelude::*;
+use operator_ui::prelude::*;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Lang {
@@ -9,12 +10,39 @@ pub enum Lang {
 }
 
 impl Lang {
+    pub const ALL: &[Lang] = &[Self::En, Self::Uk];
+
     pub fn code(self) -> &'static str {
         match self {
             Self::En => "en",
             Self::Uk => "uk",
         }
     }
+
+    pub fn from_code(code: &str) -> Option<Self> {
+        let trimmed = code.trim();
+        Self::ALL
+            .iter()
+            .copied()
+            .find(|&lang| lang.code().eq_ignore_ascii_case(trimmed))
+    }
+
+    pub fn to_operator_language(self) -> Option<Language> {
+        Language::from_code(self.code())
+    }
+
+    pub fn to_language_option(self) -> LanguageOption {
+        if let Some(op_lang) = self.to_operator_language() {
+            LanguageOption::from(op_lang)
+        } else {
+            LanguageOption::new(self.code(), self.code(), self.code())
+        }
+    }
+}
+
+/// Returns the site's supported languages mapped to Operator UI LanguageOptions.
+pub fn supported_languages() -> Vec<LanguageOption> {
+    Lang::ALL.iter().map(|&l| l.to_language_option()).collect()
 }
 
 /// Storage may be unavailable in private browsing or restricted embedded contexts.
@@ -27,18 +55,18 @@ pub fn initial_language() -> Lang {
         .ok()
         .flatten()
         .and_then(|storage| storage.get_item("ods-lang").ok().flatten());
-    match stored.as_deref() {
-        Some("en") => Lang::En,
-        Some("uk") => Lang::Uk,
-        _ if window
-            .navigator()
-            .language()
-            .is_some_and(|s| s.starts_with("uk")) =>
-        {
-            Lang::Uk
-        }
-        _ => Lang::En,
+    if let Some(lang) = stored.as_deref().and_then(Lang::from_code) {
+        return lang;
     }
+    if let Some(nav_lang) = window.navigator().language() {
+        let nav_lower = nav_lang.to_ascii_lowercase();
+        for &lang in Lang::ALL {
+            if nav_lower.starts_with(lang.code()) {
+                return lang;
+            }
+        }
+    }
+    Lang::En
 }
 
 pub fn select_language(language: RwSignal<Lang>, value: Lang) {
@@ -141,5 +169,29 @@ pub fn tr(language: Lang, key: &'static str) -> &'static str {
         "Error" => "Помилка",
         "Alternate" => "Почергово",
         _ => key,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_lang_code_and_from_code() {
+        assert_eq!(Lang::En.code(), "en");
+        assert_eq!(Lang::Uk.code(), "uk");
+        assert_eq!(Lang::from_code("en"), Some(Lang::En));
+        assert_eq!(Lang::from_code("UK"), Some(Lang::Uk));
+        assert_eq!(Lang::from_code("de"), None);
+    }
+
+    #[test]
+    fn test_supported_languages() {
+        let langs = supported_languages();
+        assert_eq!(langs.len(), Lang::ALL.len());
+        assert_eq!(langs[0].code, "en");
+        assert_eq!(langs[1].code, "uk");
+        assert!(langs[0].flag.is_some());
+        assert!(langs[1].flag.is_some());
     }
 }

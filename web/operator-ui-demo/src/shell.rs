@@ -6,6 +6,8 @@ use crate::routing::Route;
 use crate::{REPO_URL, VERSION, docs};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::JsCast;
 
 #[component]
 pub fn StatusPill(status: Option<&'static str>) -> impl IntoView {
@@ -52,6 +54,50 @@ pub fn Sidebar(route: Memo<Route>, on_navigate: Callback<()>) -> impl IntoView {
 #[component]
 pub fn TopBar(dark: RwSignal<bool>, menu_open: RwSignal<bool>) -> impl IntoView {
     let language = use_context::<RwSignal<Lang>>().unwrap_or_else(|| RwSignal::new(Lang::En));
+    let selected_code = RwSignal::new(language.get_untracked().code().to_string());
+    Effect::new(move |_| {
+        let cur = language.get().code().to_string();
+        if selected_code.get_untracked() != cur {
+            selected_code.set(cur);
+        }
+    });
+
+    let is_phone = RwSignal::new(false);
+    #[cfg(target_arch = "wasm32")]
+    {
+        if let Some(window) = web_sys::window() {
+            let win = window.clone();
+            let check = move || {
+                if let Ok(Some(mql)) = win.match_media("(max-width: 48em)") {
+                    mql.matches()
+                } else if let Ok(inner) = win.inner_width() {
+                    inner.as_f64().is_some_and(|w| w <= 768.0)
+                } else {
+                    false
+                }
+            };
+            is_phone.set(check());
+            let resize_cb = wasm_bindgen::closure::Closure::<dyn Fn()>::new(move || {
+                is_phone.set(check());
+            });
+            let _ = window
+                .add_event_listener_with_callback("resize", resize_cb.as_ref().unchecked_ref());
+            resize_cb.forget();
+        }
+    }
+
+    let format_cb = Callback::new(move |opt: LanguageOption| {
+        if is_phone.get() {
+            opt.code.to_uppercase()
+        } else if !opt.native.is_empty() {
+            opt.native
+        } else {
+            opt.english
+        }
+    });
+
+    let width_signal = Signal::derive(move || if is_phone.get() { 19.0 } else { 42.0 });
+
     view! {
         <header class="docs-topbar">
             <div class="docs-topbar-inner">
@@ -80,10 +126,28 @@ pub fn TopBar(dark: RwSignal<bool>, menu_open: RwSignal<bool>) -> impl IntoView 
                 <span class="docs-topbar-spacer"></span>
                 <a class="docs-toplink" href=REPO_URL>"GitHub"</a>
                 <a class="docs-toplink" href=format!("{REPO_URL}/releases")>{t("Releases")}</a>
-                <div class="docs-language" role="group" aria-label=t("Language")>
-                    <button type="button" lang="en" aria-pressed=move || language.get() == Lang::En on:click=move |_| select_language(language, Lang::En)>"EN"</button>
-                    <button type="button" lang="uk" aria-pressed=move || language.get() == Lang::Uk on:click=move |_| select_language(language, Lang::Uk)>"УК"</button>
-                </div>
+                <LanguagePicker
+                    value=selected_code
+                    languages=Signal::derive(crate::i18n::supported_languages)
+                    on_select=Callback::new(move |code: String| {
+                        if let Some(l) = Lang::from_code(&code) {
+                            select_language(language, l);
+                        }
+                    })
+                    height=6.0
+                    width=width_signal
+                    format=format_cb
+                    aria_label=t("Language")
+                    class="docs-header-lang"
+                    option=Callback::new(move |opt: LanguageOption| {
+                        let label = default_format(&opt);
+                        view! {
+                            {opt.flag.as_ref().map(render_flag)}
+                            <span class="op-combo-label">{label}</span>
+                        }
+                        .into_any()
+                    })
+                />
                 <ThemeToggle attr:aria-label=t("Dark mode") dark=dark on_toggle=Callback::new(move |v: bool| dark.set(v)) width=13.0 height=6.0/>
             </div>
         </header>

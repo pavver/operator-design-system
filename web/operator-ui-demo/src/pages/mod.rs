@@ -22,8 +22,12 @@ mod counter;
 mod data_table;
 mod dialog;
 mod dropdown_menu;
+mod editor;
 mod empty_state;
+mod fab;
 mod field;
+mod file_field;
+mod form;
 mod foundations;
 mod graph;
 mod header;
@@ -31,6 +35,8 @@ mod hover_card;
 mod icon_button;
 mod image;
 mod kbd;
+mod knob;
+mod language_picker;
 mod linear_progress;
 mod list_item;
 mod loading_bar;
@@ -40,9 +46,12 @@ mod menu;
 mod navigation_shell;
 mod pagination;
 mod popover;
+mod popup_edit;
 mod primitives;
 mod property_list;
 mod radio_group;
+mod range_slider;
+mod rating;
 mod scroll_area;
 mod scrollbar;
 mod search_field;
@@ -51,6 +60,7 @@ mod sheet;
 mod skeleton;
 mod slider;
 mod space;
+mod split_button;
 mod split_pane;
 mod status_badge;
 mod stepper;
@@ -63,6 +73,7 @@ mod timeline;
 mod toast;
 mod toolbar;
 mod tooltip;
+mod uploader;
 mod value_fields;
 mod video;
 mod virtual_list;
@@ -108,6 +119,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/search-field" => (search_field::search_field, false),
         "components/radio-group" => (radio_group::radio_group, true),
         "components/combobox" => (combobox::combobox, false),
+        "components/language-picker" => (language_picker::language_picker, false),
         "components/value-fields" => (value_fields::value_fields, false),
         "components/chip" => (chip::chip, false),
         "components/menu" => (menu::menu, false),
@@ -144,6 +156,16 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/space" => (space::space, false),
         "components/timeline" => (timeline::timeline, false),
         "components/video" => (video::video, false),
+        "components/editor" => (editor::editor, false),
+        "components/fab" => (fab::fab, true),
+        "components/file-field" => (file_field::file_field, false),
+        "components/form" => (form::form, true),
+        "components/knob" => (knob::knob, true),
+        "components/popup-edit" => (popup_edit::popup_edit, true),
+        "components/range-slider" => (range_slider::range_slider, true),
+        "components/rating" => (rating::rating, true),
+        "components/split-button" => (split_button::split_button, true),
+        "components/uploader" => (uploader::uploader, true),
         _ => return None,
     };
     Some(entry)

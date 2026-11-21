@@ -1,0 +1,50 @@
+.op-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--op-form-gap, var(--op-dim-gap-small));
+  padding: var(--op-form-padding, var(--op-dim-pad-card));
+  color: var(--op-form-text, var(--op-text-primary));
+  background: var(--op-form-background, var(--op-surface));
+}
+
+.op-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.op-form-fields,
+.op-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--op-form-gap, var(--op-dim-gap-small));
+}
+
+.op-form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--op-form-gap, var(--op-dim-gap-small));
+  margin-top: var(--op-form-gap, var(--op-dim-gap-small));
+}
+
+.op-form-submit {
+  --op-button-background: var(--op-form-submit-background, var(--op-accent));
+  --op-button-text: var(--op-form-submit-text, var(--op-on-accent));
+  --op-button-border: var(--op-form-submit-border, var(--op-accent));
+}
+
+.op-form-reset {
+  --op-button-background: var(--op-form-reset-background, var(--op-surface));
+  --op-button-text: var(--op-form-reset-text, var(--op-text-secondary));
+}
+
+.op-form-error {
+  color: var(--op-form-error, var(--op-error));
+}
+
+.op-form-error:empty,
+.op-form-field:has(.op-field-error) > .op-form-error {
+  display: none;
+}

@@ -1,0 +1,2 @@
+.op-fab { display: inline-block; --op-button-height: var(--op-fab-size, var(--op-dim-row-standard)); --op-button-background: var(--op-fab-background, var(--op-surface)); --op-button-text: var(--op-fab-text, var(--op-text-primary)); }
+.op-fab-actions { display: flex; flex-direction: column; gap: var(--op-fab-gap, var(--op-dim-gap-small)); }

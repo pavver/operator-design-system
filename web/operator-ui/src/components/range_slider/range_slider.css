@@ -1,0 +1,3 @@
+.op-range-slider .op-slider-thumb:focus-visible { outline: var(--op-slider-focus-width, var(--op-dim-border-thick)) solid var(--op-slider-accent, var(--op-accent)); outline-offset: var(--op-slider-focus-offset, var(--op-dim-gap-micro)); }
+.op-range-slider .op-slider-thumb-slot:focus-within { z-index: 3; }
+.op-range-slider:not([data-dragging]) .op-slider-fill { transition: left var(--op-motion-segment-slide) var(--op-ease-standard), width var(--op-motion-segment-slide) var(--op-ease-standard); }

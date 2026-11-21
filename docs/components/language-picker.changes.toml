@@ -1,0 +1,15 @@
+# Change history of LanguagePicker. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-21T20:56:00+02:00"
+status = "draft"
+en = "Show the selected language flag in the closed field prepend slot, add the width metric prop, and replace the docs header language toggle."
+uk = "Показ прапора обраної мови у слоті prepend закритого поля, додано метричний проп width та замінено перемикач мов у шапці документації."
+
+[[change]]
+date = "2026-11-21T20:26:06+02:00"
+status = "draft"
+en = "New draft component: LanguagePicker for choosing an interface language with built-in SVG flags, BCP 47 codes, filtering by name or code, and customization hooks."
+uk = "Новий компонент-чернетка: LanguagePicker для вибору мови інтерфейсу із вбудованими SVG-прапорами, кодами BCP 47, фільтруванням за назвою чи кодом і точками кастомізації."

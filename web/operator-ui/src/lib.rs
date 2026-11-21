@@ -51,10 +51,18 @@ pub mod prelude {
     pub use crate::components::dialog::*;
     #[cfg(feature = "dropdown-menu")]
     pub use crate::components::dropdown_menu::*;
+    #[cfg(feature = "editor")]
+    pub use crate::components::editor::*;
     #[cfg(feature = "empty-state")]
     pub use crate::components::empty_state::*;
+    #[cfg(feature = "fab")]
+    pub use crate::components::fab::*;
     #[cfg(feature = "field")]
     pub use crate::components::field::*;
+    #[cfg(feature = "file-field")]
+    pub use crate::components::file_field::*;
+    #[cfg(feature = "form")]
+    pub use crate::components::form::*;
     #[cfg(feature = "graph")]
     pub use crate::components::graph::*;
     #[cfg(feature = "header")]
@@ -67,6 +75,10 @@ pub mod prelude {
     pub use crate::components::image::*;
     #[cfg(feature = "kbd")]
     pub use crate::components::kbd::*;
+    #[cfg(feature = "knob")]
+    pub use crate::components::knob::*;
+    #[cfg(feature = "language-picker")]
+    pub use crate::components::language_picker::*;
     #[cfg(feature = "linear-progress")]
     pub use crate::components::linear_progress::*;
     #[cfg(feature = "list-item")]
@@ -85,12 +97,18 @@ pub mod prelude {
     pub use crate::components::pagination::*;
     #[cfg(feature = "popover")]
     pub use crate::components::popover::*;
+    #[cfg(feature = "popup-edit")]
+    pub use crate::components::popup_edit::*;
     #[cfg(feature = "primitives")]
     pub use crate::components::primitives::*;
     #[cfg(feature = "property-list")]
     pub use crate::components::property_list::*;
     #[cfg(feature = "radio-group")]
     pub use crate::components::radio_group::*;
+    #[cfg(feature = "range-slider")]
+    pub use crate::components::range_slider::*;
+    #[cfg(feature = "rating")]
+    pub use crate::components::rating::*;
     #[cfg(feature = "scroll-area")]
     pub use crate::components::scroll_area::*;
     #[cfg(feature = "scrollbar")]
@@ -109,6 +127,8 @@ pub mod prelude {
     pub use crate::components::slider::*;
     #[cfg(feature = "space")]
     pub use crate::components::space::*;
+    #[cfg(feature = "split-button")]
+    pub use crate::components::split_button::*;
     #[cfg(feature = "split-pane")]
     pub use crate::components::split_pane::*;
     #[cfg(feature = "status-badge")]
@@ -135,6 +155,8 @@ pub mod prelude {
     pub use crate::components::tooltip::*;
     #[cfg(feature = "tree")]
     pub use crate::components::tree::*;
+    #[cfg(feature = "uploader")]
+    pub use crate::components::uploader::*;
     #[cfg(feature = "color-field")]
     pub use crate::components::value_field::ColorField;
     #[cfg(feature = "duration-field")]
