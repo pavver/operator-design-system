@@ -100,7 +100,7 @@ pub fn ui_text(
     let strings = use_context::<UiStrings>();
     Signal::derive(move || {
         prop.get()
-            .or_else(|| strings.and_then(|s| s.0.run(key)))
+            .or_else(|| strings.and_then(|s| s.0.try_run(key).flatten()))
             .unwrap_or_else(|| default.to_string())
     })
 }
@@ -109,7 +109,7 @@ pub fn ui_text(
 pub fn ui_icon(prop: Option<Icon>, key: &'static str, default: Icon) -> Signal<Icon> {
     let icons = use_context::<UiIcons>();
     Signal::derive(move || {
-        prop.or_else(|| icons.and_then(|i| i.0.run(key)))
+        prop.or_else(|| icons.and_then(|i| i.0.try_run(key).flatten()))
             .unwrap_or(default)
     })
 }

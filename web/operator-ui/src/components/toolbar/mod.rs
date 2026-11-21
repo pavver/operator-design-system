@@ -1,9 +1,15 @@
 //! Horizontal bar of commands that moves the commands that do not fit into an overflow menu.
 
+mod item;
+
 use crate::components::icon_button::IconButton;
 use crate::components::menu::{Menu, MenuAnchor, MenuItem};
 use crate::components::tooltip::Tooltip;
-use crate::core::{ActionResult, AsyncAction, ControlState, sleep_ms};
+use crate::core::{
+    ActionResult, ControlState, Metric, Slot, root_class, root_style, sleep_ms, ui_icon, ui_text,
+};
+use item::Run;
+pub use item::ToolbarItem;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
@@ -12,93 +18,6 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen::closure::Closure;
 
 pub(crate) const CSS: &str = include_str!("toolbar.css");
-
-/// What a toolbar command does.
-#[derive(Clone)]
-enum Run {
-    Click(Callback<()>),
-    Async(AsyncAction),
-}
-
-/// One command of a [`Toolbar`]: an icon button in the bar, a menu row when it overflows.
-#[derive(Clone)]
-pub struct ToolbarItem {
-    id: String,
-    label: String,
-    icon: IconData,
-    run: Option<Run>,
-    enabled: bool,
-    danger: bool,
-    separated: bool,
-    overflow: bool,
-}
-
-impl ToolbarItem {
-    /// Command with an id, a label (tooltip, accessible name, and menu text), and an icon.
-    pub fn new(id: impl Into<String>, label: impl Into<String>, icon: IconData) -> Self {
-        Self {
-            id: id.into(),
-            label: label.into(),
-            icon,
-            run: None,
-            enabled: true,
-            danger: false,
-            separated: false,
-            overflow: false,
-        }
-    }
-
-    /// Runs `callback` when the command is chosen.
-    pub fn on_click(mut self, callback: Callback<()>) -> Self {
-        self.run = Some(Run::Click(callback));
-        self
-    }
-
-    /// Runs an async action.
-    /// In the bar the button shows its states; from the menu the overflow button shows them.
-    pub fn on_async(mut self, action: AsyncAction) -> Self {
-        self.run = Some(Run::Async(action));
-        self
-    }
-
-    /// Disabled command.
-    pub fn disabled(mut self) -> Self {
-        self.enabled = false;
-        self
-    }
-
-    /// Destructive command, shown in the error color in the menu.
-    pub fn danger(mut self) -> Self {
-        self.danger = true;
-        self
-    }
-
-    /// Starts a new group: a separator in the bar, a divider in the menu.
-    pub fn separated(mut self) -> Self {
-        self.separated = true;
-        self
-    }
-
-    /// Always lives in the overflow menu, for rarely used commands.
-    pub fn overflow(mut self) -> Self {
-        self.overflow = true;
-        self
-    }
-
-    fn menu_item(&self, separated: bool) -> MenuItem {
-        let mut item = MenuItem::new(self.id.clone(), self.label.clone()).icon(self.icon);
-        if self.danger {
-            item = item.danger();
-        }
-        if !self.enabled {
-            item = item.disabled();
-        }
-        if separated {
-            item = item.separated();
-        }
-        item
-    }
-}
 
 /// How many bar commands fit into a row `available` pixels wide.
 ///
@@ -132,25 +51,74 @@ fn px(value: &str) -> f64 {
 pub fn Toolbar(
     /// Commands in order.
     items: Vec<ToolbarItem>,
-    #[prop(optional, into)] label: Option<String>,
+    #[prop(optional, into)] label: MaybeProp<String>,
     /// Title at the start of the bar.
     #[prop(optional, into)]
     title: Option<Signal<String>>,
+    /// Controls at the start of the bar before the title.
+    #[prop(optional, into)]
+    start: Slot,
     /// Controls at the end that never overflow, such as a search field.
     #[prop(optional, into)]
-    end: Option<ViewFn>,
+    end: Slot,
     /// 8 DU tall instead of 10 DU.
     #[prop(optional)]
     dense: bool,
+    /// Bar height in DU (`--op-toolbar-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Dense bar height in DU (`--op-toolbar-dense-height`).
+    #[prop(optional, into)]
+    dense_height: MaybeProp<f32>,
+    /// Horizontal padding in DU (`--op-toolbar-padding-x`).
+    #[prop(optional, into)]
+    padding_x: MaybeProp<f32>,
+    /// Items gap in DU (`--op-toolbar-gap`).
+    #[prop(optional, into)]
+    gap: MaybeProp<f32>,
+    /// Dense items gap in DU (`--op-toolbar-dense-gap`).
+    #[prop(optional, into)]
+    dense_gap: MaybeProp<f32>,
+    /// Title horizontal padding in DU (`--op-toolbar-title-padding-x`).
+    #[prop(optional, into)]
+    title_padding_x: MaybeProp<f32>,
+    /// Title font size in TU (`--op-toolbar-title-font-size`).
+    #[prop(optional, into)]
+    title_font_size: MaybeProp<f32>,
+    /// Separator line thickness in DU (`--op-toolbar-separator-width`).
+    #[prop(optional, into)]
+    separator_width: MaybeProp<f32>,
+    /// Separator line height in DU (`--op-toolbar-separator-height`).
+    #[prop(optional, into)]
+    separator_height: MaybeProp<f32>,
+    /// Separator horizontal margins in DU (`--op-toolbar-separator-margin-x`).
+    #[prop(optional, into)]
+    separator_margin_x: MaybeProp<f32>,
+    /// Command button size in DU (`--op-toolbar-button-size`).
+    #[prop(optional, into)]
+    button_size: MaybeProp<f32>,
+    /// Accessible name for the overflow button; defaults to `toolbar.more`.
+    #[prop(optional, into)]
+    more_label: MaybeProp<String>,
+    /// Icon for the overflow button.
+    #[prop(optional)]
+    more_icon: Option<IconData>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
+    let label = ui_text(label, "toolbar.label", "Toolbar");
+    let more_label = ui_text(more_label, "toolbar.more", "More commands");
+    let more_icon = ui_icon(more_icon, "toolbar.more", icons::MORE_VERT);
+
     let bar = NodeRef::<leptos::html::Div>::new();
     let row = NodeRef::<leptos::html::Div>::new();
     let more_host = NodeRef::<leptos::html::Span>::new();
-    let button_size = if dense {
+    let default_button_size = if dense {
         dim::ROW_DENSE
     } else {
         dim::ROW_COMPACT
     };
+    let button_sz = button_size.get().unwrap_or(default_button_size);
 
     let in_bar: Vec<ToolbarItem> = items.iter().filter(|i| !i.overflow).cloned().collect();
     let in_menu: Vec<ToolbarItem> = items.iter().filter(|i| i.overflow).cloned().collect();
@@ -346,15 +314,15 @@ pub fn Toolbar(
             });
             let button = match item.run.clone() {
                 Some(Run::Async(action)) => view! {
-                    <IconButton icon=item.icon label=item.label.clone() size=button_size enabled=item.enabled on_async_click=action/>
+                    <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=item.enabled on_async_click=action/>
                 }
                 .into_any(),
                 Some(Run::Click(callback)) => view! {
-                    <IconButton icon=item.icon label=item.label.clone() size=button_size enabled=item.enabled on_click=callback/>
+                    <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=item.enabled on_click=callback/>
                 }
                 .into_any(),
                 None => view! {
-                    <IconButton icon=item.icon label=item.label.clone() size=button_size enabled=false/>
+                    <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=false/>
                 }
                 .into_any(),
             };
@@ -367,12 +335,27 @@ pub fn Toolbar(
         })
         .collect_view();
 
+    let root_metrics = vec![
+        Metric::du("--op-toolbar-height", height),
+        Metric::du("--op-toolbar-dense-height", dense_height),
+        Metric::du("--op-toolbar-padding-x", padding_x),
+        Metric::du("--op-toolbar-gap", gap),
+        Metric::du("--op-toolbar-dense-gap", dense_gap),
+        Metric::du("--op-toolbar-title-padding-x", title_padding_x),
+        Metric::tu("--op-toolbar-title-font-size", title_font_size),
+        Metric::du("--op-toolbar-separator-width", separator_width),
+        Metric::du("--op-toolbar-separator-height", separator_height),
+        Metric::du("--op-toolbar-separator-margin-x", separator_margin_x),
+        Metric::du("--op-toolbar-button-size", button_size),
+    ];
+
     view! {
         <div
             node_ref=bar
-            class="op-toolbar"
+            class=root_class("op-toolbar", class)
+            style=root_style(root_metrics, style)
             role="toolbar"
-            aria-label=label
+            aria-label=move || label.get()
             data-dense=dense.then_some("")
             on:keydown=move |ev| {
                 let in_input = ev
@@ -395,6 +378,7 @@ pub fn Toolbar(
                 }
             }
         >
+            {start.run()}
             {title.map(|t| view! {
                 <span class="op-toolbar-title">{move || t.get()}</span>
                 <span class="op-toolbar-sep" role="separator" aria-orientation="vertical"></span>
@@ -409,13 +393,16 @@ pub fn Toolbar(
                     aria-expanded=move || open.get().to_string()
                     on:pointerdown=move |_| open_at_press.set_value(open.get_untracked())
                 >
-                    <IconButton icon=icons::MORE_VERT label="More commands" size=button_size state=more_state on_click=toggle/>
+                    <IconButton icon=more_icon.get() label=more_label size=button_sz state=more_state on_click=toggle/>
                 </span>
             </div>
-            {end.map(|e| view! { <div class="op-toolbar-end">{e.run()}</div> })}
+            {end.run().map(|e| view! { <div class="op-toolbar-end">{e}</div> })}
         </div>
-        {move || view! {
-            <Menu open=open anchor=anchor.into() items=menu_items.get() on_select=on_select label="More commands"/>
+        {move || {
+            let lbl = more_label.get();
+            view! {
+                <Menu open=open anchor=anchor.into() items=menu_items.get() on_select=on_select label=lbl/>
+            }
         }}
     }
 }

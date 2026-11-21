@@ -56,6 +56,114 @@ Status: **draft** on web.
 | `empty` | view | "No data" | Empty content. |
 | `label` | string | none | Accessible name. |
 
+### Customization API
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `row_height` | optional number (DU) | `row_standard` | Overrides `--op-data-table-row-height`. |
+| `dense_row_height` | optional number (DU) | `row_compact` | Overrides `--op-data-table-dense-row-height`. |
+| `header_height` | optional number (DU) | `row_compact` | Overrides `--op-data-table-header-height`. |
+| `padding_x` | optional number (DU) | `pad_card` | Overrides `--op-data-table-padding-x`. |
+| `sort_gap` | optional number (DU) | `pad_tight` | Overrides `--op-data-table-sort-gap`. |
+| `sort_padding` | optional number (DU) | `pad_tight` | Overrides `--op-data-table-sort-padding`. |
+| `icon_size` | optional number (DU) | `3.5 DU` | Overrides `--op-data-table-icon-size`. |
+| `loading_thickness` | optional number (DU) | `0.5 DU` | Overrides `--op-data-table-loading-thickness`. |
+| `empty_padding` | optional number (DU) | `section_gap` | Overrides `--op-data-table-empty-padding`. |
+| `font_size` | optional number (TU) | `type_body_small_size` | Overrides `--op-data-table-font-size`. |
+| `line_height` | optional number (TU) | `type_body_small_line` | Overrides `--op-data-table-line-height`. |
+| `header_font_size` | optional number (TU) | `type_caption_size` | Overrides `--op-data-table-header-font-size`. |
+| `header_letter_spacing` | optional number (TU) | `0.04 × type_caption_size` | Overrides `--op-data-table-header-letter-spacing`. |
+| `max_height` | optional number (DU) | `none` | Overrides `--op-data-table-max-height`. |
+| `row` | scoped slot | none | Scoped `TableRow`; replaces the cells inside the native body row; return `td` elements. |
+| `cell` | scoped slot | none | Scoped `TableCell { row, column_index, column, value }`; replaces content inside a native body cell. |
+| `header_cell` | scoped slot | none | Scoped `TableHeaderCell { column_index, column }`; replaces header content inside the existing sort button when sortable. |
+| `empty` | slot | none | Empty table cell; defaults to the `data-table.empty` string. |
+| `header` | slot | none | Before the scrolling table. |
+| `footer` | slot | none | After the scrolling table. |
+| `before_options` | slot | none | Full-width native table row before body rows. |
+| `after_options` | slot | none | Full-width native table row after body rows. |
+| `label` | optional string | `data-table.label` | Text override. |
+| `empty_text` | optional string | `data-table.empty` | Text override. |
+| `loading_label` | optional string | `data-table.loading` | Text override. |
+| `sort_ascending_label` | optional string | `data-table.sort-ascending` | Text override. |
+| `sort_descending_label` | optional string | `data-table.sort-descending` | Text override. |
+| `sort_clear_label` | optional string | `data-table.sort-clear` | Text override. |
+| `sort_ascending_icon` | optional icon | `data-table.sort-ascending` | Icon override. |
+| `sort_descending_icon` | optional icon | `data-table.sort-descending` | Icon override. |
+| `class` | optional string | none | Added to the root classes. |
+| `style` | optional string | none | Appended after root metric declarations. |
+
 ## Accessibility
 
 Native table semantics; sortable headers carry `aria-sort`, selected rows carry `aria-selected`.
+
+## Customization
+
+`class` and `style` apply to the root.
+Explicit root styles take precedence over metric props; unset metrics retain the original rendering.
+The row slot takes precedence over the cell slot.
+Column titles and cell values remain caller content.
+Sort button names combine the column title with the resolved action string; `aria-sort` retains the standard ARIA enum values.
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `row_height` | DU | `--op-data-table-row-height` | `row_standard` |
+| `dense_row_height` | DU | `--op-data-table-dense-row-height` | `row_compact` |
+| `header_height` | DU | `--op-data-table-header-height` | `row_compact` |
+| `padding_x` | DU | `--op-data-table-padding-x` | `pad_card` |
+| `sort_gap` | DU | `--op-data-table-sort-gap` | `pad_tight` |
+| `sort_padding` | DU | `--op-data-table-sort-padding` | `pad_tight` |
+| `icon_size` | DU | `--op-data-table-icon-size` | `3.5 DU` |
+| `loading_thickness` | DU | `--op-data-table-loading-thickness` | `0.5 DU` |
+| `empty_padding` | DU | `--op-data-table-empty-padding` | `section_gap` |
+| `font_size` | TU | `--op-data-table-font-size` | `type_body_small_size` |
+| `line_height` | TU | `--op-data-table-line-height` | `type_body_small_line` |
+| `header_font_size` | TU | `--op-data-table-header-font-size` | `type_caption_size` |
+| `header_letter_spacing` | TU | `--op-data-table-header-letter-spacing` | `0.04 × type_caption_size` |
+| `max_height` | DU | `--op-data-table-max-height` | `none` |
+
+Border widths remain the fixed geometry specified above.
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-data-table-border` | `border` |
+| `--op-data-table-header-background` | `surface_alt` |
+| `--op-data-table-secondary-text` | `text_secondary` |
+| `--op-data-table-text` | `text_primary` |
+| `--op-data-table-accent` | `accent` |
+| `--op-data-table-divider` | `divider` |
+| `--op-data-table-hover` | `hover` |
+| `--op-data-table-selected` | `selection` |
+| `--op-data-table-loading` | `pending` |
+| `--op-data-table-loading-track` | `color-mix(in srgb, pending 20%, surface_alt)` |
+
+| Slot | Place |
+| :--- | :--- |
+| `row` | Scoped `TableRow`; replaces the cells inside the native body row; return `td` elements. |
+| `cell` | Scoped `TableCell { row, column_index, column, value }`; replaces content inside a native body cell. |
+| `header_cell` | Scoped `TableHeaderCell { column_index, column }`; replaces header content inside the existing sort button when sortable. |
+| `empty` | Empty table cell; defaults to the `data-table.empty` string. |
+| `header` | Before the scrolling table. |
+| `footer` | After the scrolling table. |
+| `before_options` | Full-width native table row before body rows. |
+| `after_options` | Full-width native table row after body rows. |
+
+### Strings
+
+Resolution: prop, application lookup, English default.
+
+| Key | Default |
+| :--- | :--- |
+| `data-table.label` | `empty; preserves the unnamed table` |
+| `data-table.empty` | `No data` |
+| `data-table.loading` | `Loading rows` |
+| `data-table.sort-ascending` | `Sort ascending` |
+| `data-table.sort-descending` | `Sort descending` |
+| `data-table.sort-clear` | `Clear sorting` |
+
+### Icons
+
+| Key | Default |
+| :--- | :--- |
+| `data-table.sort-ascending` | `arrow_upward` |
+| `data-table.sort-descending` | `arrow_downward` |

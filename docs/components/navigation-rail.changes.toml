@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:27:42+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`width`, `item_height`, `item_padding_x`, `gap`, `icon_tile_size`, `icon_size`, `indicator_thickness`, `font_size`), color variables (`--op-navigation-rail-*`), slots `header`/`footer`/`option`, and translatable string `navigation-rail.label`."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`width`, `item_height`, `item_padding_x`, `gap`, `icon_tile_size`, `icon_size`, `indicator_thickness`, `font_size`), змінні кольорів (`--op-navigation-rail-*`), слоти `header`/`footer`/`option` та перекладний рядок `navigation-rail.label`."
+
+[[change]]
 date = "2026-11-17T02:41:39+02:00"
 status = "draft"
 commit = "2cf84d6"

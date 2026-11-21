@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:27:42+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`width`, `collapsed_width`, `header_height`, `header_padding_start`, `header_padding_end`, `header_gap`, `strip_padding_top`, `title_font_size`), color variables (`--op-side-panel-*`), slots `header`/`actions`/`footer`, translatable strings `side-panel.collapse`/`side-panel.expand`, and replaceable icons `side-panel.collapse`/`side-panel.expand`."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`width`, `collapsed_width`, `header_height`, `header_padding_start`, `header_padding_end`, `header_gap`, `strip_padding_top`, `title_font_size`), змінні кольорів (`--op-side-panel-*`), слоти `header`/`actions`/`footer`, перекладні тексти `side-panel.collapse`/`side-panel.expand` та замінні іконки `side-panel.collapse`/`side-panel.expand`."
+
+[[change]]
 date = "2026-11-17T01:58:27+02:00"
 status = "draft"
 commit = "a65383d"

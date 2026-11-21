@@ -46,10 +46,26 @@ Status: **draft** on web.
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `items` | list of `ToolbarItem` | required | Commands in order. |
-| `title` | string | none | Title at the start. |
-| `end` | view | none | Controls at the end that never overflow, such as a search field. |
-| `label` | string | none | Accessible name. |
+| `title` | string signal | none | Title at the start. |
+| `start` | slot | none | Controls before the title at the start of the bar. |
+| `end` | slot | none | Controls at the end that never overflow, such as a search field. |
+| `label` | string | `toolbar.label` | Accessible name. |
 | `dense` | bool | `false` | Smaller variant. |
+| `height` | DU | `row_standard` | Bar height. |
+| `dense_height` | DU | `row_compact` | Dense bar height. |
+| `padding_x` | DU | `pad_tight` | Horizontal padding. |
+| `gap` | DU | `pad_tight` | Items gap. |
+| `dense_gap` | DU | `gap_micro` | Dense items gap. |
+| `title_padding_x` | DU | `pad_tight` | Title horizontal padding. |
+| `title_font_size` | TU | `inherit` | Title font size. |
+| `separator_width` | DU | `border` | Separator line thickness. |
+| `separator_height` | DU | `icon_large` | Separator line height. |
+| `separator_margin_x` | DU | `pad_tight` | Separator horizontal margins. |
+| `button_size` | DU | `row_compact` (dense: `row_dense`) | Command button size. |
+| `more_label` | string | `toolbar.more` | Accessible name for the overflow button. |
+| `more_icon` | icon | `toolbar.more` | Icon override for the overflow button. |
+| `class` | string | none | Classes for the root element. |
+| `style` | string | none | Inline styles for the root element. |
 
 `ToolbarItem`:
 
@@ -62,6 +78,49 @@ Status: **draft** on web.
 | `overflow()` | Always in the overflow menu. |
 | `danger()` | Destructive; error color in the menu. |
 | `disabled()` | Not available. |
+
+## Customization
+
+| Metric prop | Unit | Variable | Default |
+| :--- | :--- | :--- | :--- |
+| `height` | DU | `--op-toolbar-height` | `row_standard` (`10 DU`) |
+| `dense_height` | DU | `--op-toolbar-dense-height` | `row_compact` (`8 DU`) |
+| `padding_x` | DU | `--op-toolbar-padding-x` | `pad_tight` (`1 DU`) |
+| `gap` | DU | `--op-toolbar-gap` | `pad_tight` (`1 DU`) |
+| `dense_gap` | DU | `--op-toolbar-dense-gap` | `gap_micro` (`0.5 DU`) |
+| `title_padding_x` | DU | `--op-toolbar-title-padding-x` | `pad_tight` (`1 DU`) |
+| `title_font_size` | TU | `--op-toolbar-title-font-size` | `inherit` |
+| `separator_width` | DU | `--op-toolbar-separator-width` | `border` (`0.25 DU`) |
+| `separator_height` | DU | `--op-toolbar-separator-height` | `icon_large` (`6 DU`) |
+| `separator_margin_x` | DU | `--op-toolbar-separator-margin-x` | `pad_tight` (`1 DU`) |
+| `button_size` | DU | `--op-toolbar-button-size` | `row_compact` (`8 DU`), dense `row_dense` (`6 DU`) |
+
+| Color variable | Default |
+| :--- | :--- |
+| `--op-toolbar-background` | `surface` |
+| `--op-toolbar-border` | `border` |
+| `--op-toolbar-title-color` | `text_primary` |
+| `--op-toolbar-separator-color` | `divider` |
+
+| Slot | Place |
+| :--- | :--- |
+| `start` | At the start of the toolbar before the title. |
+| `end` | At the end of the toolbar after free space. |
+
+`class` and `style` apply to the root element.
+
+### Strings
+
+| Key | Default |
+| :--- | :--- |
+| `toolbar.label` | `Toolbar` |
+| `toolbar.more` | `More commands` |
+
+### Icons
+
+| Key | Default |
+| :--- | :--- |
+| `toolbar.more` | `more_vert` |
 
 ## Accessibility
 

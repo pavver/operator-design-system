@@ -5,24 +5,30 @@
 .op-tree-row {
   display: flex;
   align-items: center;
-  gap: var(--op-dim-gap-micro);
-  padding-right: var(--op-dim-pad-tight);
-  color: var(--op-text-primary);
+  gap: var(--op-tree-gap, var(--op-dim-gap-micro));
+  padding-right: var(--op-tree-padding-end, var(--op-dim-pad-tight));
+  color: var(--op-tree-text, var(--op-text-primary));
   cursor: pointer;
   user-select: none;
   transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
 }
-.op-tree-row:hover { background-color: var(--op-pressed); }
-.op-tree-row[aria-selected="true"] { background-color: var(--op-pressed); box-shadow: inset var(--op-dim-border-emphasis) 0 0 var(--op-accent); }
+.op-tree-row:hover { background-color: var(--op-tree-hover, var(--op-pressed)); }
+.op-tree-row[aria-selected="true"] { background-color: var(--op-tree-selected, var(--op-pressed)); box-shadow: inset var(--op-dim-border-emphasis) 0 0 var(--op-tree-accent, var(--op-accent)); }
 .op-tree-arrow {
   display: grid;
   place-items: center;
   flex: none;
-  width: var(--op-dim-icon-small);
-  color: var(--op-text-secondary);
+  width: var(--op-tree-icon-size, var(--op-dim-icon-small));
+  color: var(--op-tree-secondary-text, var(--op-text-secondary));
   transition: transform var(--op-motion-state-color) var(--op-ease-standard);
 }
 .op-tree-arrow[data-open] { transform: rotate(90deg); }
-.op-tree-icon { display: inline-flex; flex: none; color: var(--op-text-secondary); }
+.op-tree-icon { display: inline-flex; flex: none; color: var(--op-tree-secondary-text, var(--op-text-secondary)); }
 .op-tree-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.op-tree-detail { flex: none; color: var(--op-text-secondary); }
+.op-tree-detail { flex: none; color: var(--op-tree-secondary-text, var(--op-text-secondary)); }
+
+:where(.op-tree) { font-size: var(--op-tree-font-size, inherit); line-height: var(--op-tree-line-height, inherit); }
+.op-tree-measure-clip { position: absolute; visibility: hidden; pointer-events: none; width: 0; height: 0; overflow: hidden; }
+.op-tree-measure { width: 0; height: var(--op-tree-row-height, var(--op-dim-row-compact)); }
+.op-tree > .op-vlist { height: var(--op-tree-height, auto); max-height: var(--op-tree-max-height, 100%); }
+.op-tree-detail { font-size: var(--op-tree-detail-font-size, var(--op-type-caption-size)); line-height: var(--op-tree-detail-line-height, var(--op-type-caption-line)); }

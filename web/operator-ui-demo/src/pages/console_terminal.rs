@@ -30,6 +30,13 @@ pub fn console() -> AnyView {
         <Example title="xterm escape sequences" note="Colors and attributes come from SGR sequences; a carriage return rewrites the line." block=true>
             <ConsoleTerminal logs=sample height=50.0/>
         </Example>
+
+        <Example title="Customization" note="Log metrics, a header slot and an application accessible name." block=true>
+            <ThemeRoot strings=Callback::new(|key| (key == "console-terminal.label").then(|| "Build output".to_string()))>
+                <ConsoleTerminal logs=vec!["Build complete".to_string()] height=25.0 padding=4.0 gap=2.0
+                    header=|| view! { <strong>"Build"</strong> }/>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

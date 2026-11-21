@@ -1,7 +1,7 @@
 //! MarqueeText: single-line text that scrolls when it overflows and shows the full text in a tooltip.
 
 use crate::components::popover::{Placement, Popover, PopoverAnchor};
-use crate::core::{JobToken, du};
+use crate::core::{JobToken, Metric, Slot, root_class, root_style};
 use leptos::ev;
 use leptos::prelude::*;
 use operator_ui_tokens::DU_POINTS;
@@ -41,15 +41,15 @@ pub fn MarqueeText(
     #[prop(into)] text: Signal<String>,
     /// Extra classes, typically a typography class such as `op-t-row-title`.
     #[prop(optional, into)]
-    class: String,
+    class: MaybeProp<String>,
     #[prop(default = marquee::INITIAL_DELAY_MS)] initial_delay_ms: u32,
     #[prop(default = marquee::LOOP_DELAY_MS)] delay_ms: u32,
     /// Scroll speed in DU per second.
     #[prop(default = marquee::VELOCITY_DU)]
     velocity: f32,
     /// Loop gap in DU.
-    #[prop(default = marquee::SPACING_DU)]
-    spacing: f32,
+    #[prop(optional, into)]
+    spacing: MaybeProp<f32>,
     /// Number of loops; `None` repeats forever.
     #[prop(optional)]
     iterations: Option<u32>,
@@ -58,9 +58,26 @@ pub fn MarqueeText(
     #[prop(optional, into)]
     tooltip_text: Option<Signal<String>>,
     #[prop(optional, into)] on_click: Option<Callback<()>>,
+    #[prop(optional, into)] content: Slot,
+    #[prop(optional, into)] tooltip_slot: Slot,
+    #[prop(optional, into)] tooltip_shadow_y: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_shadow_blur: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_gap: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_max_width: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_padding_y: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] tooltip_line_height: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let host = NodeRef::<leptos::html::Span>::new();
     let probe = NodeRef::<leptos::html::Span>::new();
+    let tip_layer = NodeRef::<leptos::html::Div>::new();
+    let tip_probe = NodeRef::<leptos::html::Span>::new();
+    let tip_gap = RwSignal::new(marquee::TOOLTIP_GAP_DU);
+    let gap_probe = NodeRef::<leptos::html::Span>::new();
     let overflow = RwSignal::new(false);
     let distance = RwSignal::new(0.0f64);
     let run = RwSignal::new(0u32);
@@ -84,10 +101,21 @@ pub fn MarqueeText(
         ) else {
             return;
         };
+        if let Some(marker) = tip_probe.get_untracked() {
+            #[allow(clippy::cast_possible_truncation)]
+            let gap = marker.get_bounding_client_rect().width() as f32 / DU_POINTS;
+            if (gap - tip_gap.get_untracked()).abs() > f32::EPSILON {
+                tip_gap.set(gap);
+            }
+        }
         let width = f64::from(p.offset_width());
         let available = f64::from(h.client_width());
         let over = width > available + 0.5;
-        let next = width + f64::from(spacing * DU_POINTS);
+        let gap = gap_probe.get_untracked().map_or(
+            f64::from(spacing.get_untracked().unwrap_or(marquee::SPACING_DU) * DU_POINTS),
+            |g| g.get_bounding_client_rect().width(),
+        );
+        let next = width + gap;
         if over == overflow.get_untracked() && (next - distance.get_untracked()).abs() < 0.5 {
             return;
         }
@@ -123,6 +151,15 @@ pub fn MarqueeText(
             return;
         };
         observer.observe(&el);
+        if let Some(marker) = tip_probe.get_untracked() {
+            observer.observe(&marker);
+        }
+        if let Some(probe) = probe.get_untracked() {
+            observer.observe(&probe);
+        }
+        if let Some(gap) = gap_probe.get_untracked() {
+            observer.observe(&gap);
+        }
         let keep = SendWrapper::new((observer, callback));
         on_cleanup(move || keep.0.disconnect());
     });
@@ -193,12 +230,50 @@ pub fn MarqueeText(
         on_cleanup(move || handle.remove());
     }
 
-    let content = move || text.get();
+    Effect::new(move |_| {
+        tip_open.track();
+        style.track();
+        tooltip_gap.track();
+        tooltip_shadow_y.track();
+        tooltip_shadow_blur.track();
+        tooltip_max_width.track();
+        tooltip_padding_x.track();
+        tooltip_padding_y.track();
+        tooltip_font_size.track();
+        tooltip_line_height.track();
+        let layer = tip_layer.get();
+        request_animation_frame(move || {
+            if let Some(layer) = layer {
+                forward_tooltip_style(host, &layer);
+            }
+        });
+    });
 
+    let tooltip_slot = StoredValue::new(tooltip_slot);
+    let content = Callback::new(move |()| {
+        if content.is_set() {
+            content.run().into_any()
+        } else {
+            text.get().into_any()
+        }
+    });
+    let metrics = vec![
+        Metric::du("--op-marquee-text-tooltip-shadow-y", tooltip_shadow_y),
+        Metric::du("--op-marquee-text-tooltip-shadow-blur", tooltip_shadow_blur),
+        Metric::du("--op-marquee-text-tooltip-gap", tooltip_gap),
+        Metric::du("--op-marquee-text-tooltip-max-width", tooltip_max_width),
+        Metric::du("--op-marquee-text-tooltip-padding-x", tooltip_padding_x),
+        Metric::du("--op-marquee-text-tooltip-padding-y", tooltip_padding_y),
+        Metric::tu("--op-marquee-text-tooltip-font-size", tooltip_font_size),
+        Metric::tu("--op-marquee-text-tooltip-line-height", tooltip_line_height),
+        Metric::tu("--op-marquee-text-font-size", font_size),
+        Metric::tu("--op-marquee-text-line-height", line_height),
+        Metric::du("--op-marquee-text-spacing", spacing),
+    ];
     view! {
         <span
             node_ref=host
-            class=format!("op-marquee {class}")
+            class=root_class("op-marquee", class) style=root_style(metrics, style)
             data-overflow=move || overflow.get().then_some("")
             data-clickable=on_click.is_some().then_some("")
             on:pointerenter=move |e| {
@@ -280,25 +355,32 @@ pub fn MarqueeText(
                 }
                 on:animationend=on_animation_end
             >
-                <span node_ref=probe class="op-marquee-text">{content}</span>
+                <span node_ref=probe class="op-marquee-text">{move || content.run(())}</span>
+                <span node_ref=tip_probe class="op-marquee-tip-measure" aria-hidden="true"></span>
+                <span node_ref=gap_probe class="op-marquee-measure" aria-hidden="true"></span>
                 <Show when=move || overflow.get()>
-                    <span class="op-marquee-gap" style:width=du(spacing)></span>
-                    <span class="op-marquee-text" aria-hidden="true">{content}</span>
+                    <span class="op-marquee-gap"></span>
+                    <span class="op-marquee-text" aria-hidden="true" inert="">{move || content.run(())}</span>
                 </Show>
             </span>
+            {move || view! {
             <Popover
+                node_ref=tip_layer
                 open=tip_open
                 anchor=tip_anchor
                 placement=Placement::Above
-                gap=marquee::TOOLTIP_GAP_DU
+                gap=tip_gap.get()
                 passive=true
                 dismiss_on_outside=false
                 restore_focus=false
-                class="op-tooltip op-t-caption"
+                class="op-tooltip op-t-caption op-marquee-tooltip"
                 role="tooltip"
             >
-                <div style:max-width=du(marquee::TOOLTIP_MAX_WIDTH_DU)>{move || tooltip_text.get()}</div>
+                <div class="op-marquee-tooltip-content">
+                    {tooltip_slot.with_value(|slot| if slot.is_set() { slot.run().into_any() } else { (move || tooltip_text.get()).into_any() })}
+                </div>
             </Popover>
+            }}
         </span>
     }
 }
@@ -311,5 +393,33 @@ impl PointerKind for web_sys::MouseEvent {
     fn pointer_type_is_touch(&self) -> bool {
         self.dyn_ref::<web_sys::PointerEvent>()
             .is_some_and(|p| p.pointer_type() == "touch")
+    }
+}
+
+/// The overlay host is outside the subtree, so forward only public tooltip variables.
+fn forward_tooltip_style(host: NodeRef<leptos::html::Span>, layer: &web_sys::HtmlElement) {
+    let Some(host) = host.get_untracked() else {
+        return;
+    };
+    let Some(style) = window().get_computed_style(&host).ok().flatten() else {
+        return;
+    };
+    for name in [
+        "max-width",
+        "padding-x",
+        "padding-y",
+        "font-size",
+        "line-height",
+        "background",
+        "border",
+        "text",
+        "shadow",
+        "shadow-y",
+        "shadow-blur",
+    ] {
+        let var = format!("--op-marquee-text-tooltip-{name}");
+        if let Ok(value) = style.get_property_value(&var) {
+            let _ = layer.style().set_property(&var, &value);
+        }
     }
 }

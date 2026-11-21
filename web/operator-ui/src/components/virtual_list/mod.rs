@@ -1,6 +1,7 @@
 //! Windowed list: VirtualList renders only the rows inside the viewport.
 
 use crate::components::scrollbar::ScrollView;
+use crate::core::{Metric, Slot, root_class, root_style};
 use leptos::prelude::*;
 use operator_ui_tokens::DU_POINTS;
 use send_wrapper::SendWrapper;
@@ -106,21 +107,36 @@ pub fn VirtualList<T, K, KF, V, VF>(
     #[prop(into)] items: Signal<Vec<T>>,
     /// Handle with the row height in DU; also scrolls the list from the outside.
     handle: VirtualListHandle,
-    /// Fixed height in DU.
-    #[prop(into, default = None)]
-    height: Option<f32>,
-    /// Maximum height in DU.
-    #[prop(into, default = None)]
-    max_height: Option<f32>,
+    /// Fixed height in DU (`--op-virtual-list-height`).
+    #[prop(optional, into)]
+    height: MaybeProp<f32>,
+    /// Maximum height in DU (`--op-virtual-list-max-height`).
+    #[prop(optional, into)]
+    max_height: MaybeProp<f32>,
+    /// Row height in DU (`--op-virtual-list-row-height`).
+    #[prop(optional, into)]
+    row_height: MaybeProp<f32>,
     /// Extra rows rendered above and below the visible window.
     #[prop(default = DEFAULT_OVERSCAN)]
     overscan: usize,
     /// Classes for the outer box.
     #[prop(optional, into)]
-    class: String,
+    class: MaybeProp<String>,
+    /// Inline styles for the outer box.
+    #[prop(optional, into)]
+    style: MaybeProp<String>,
     /// Makes the scrolled element focusable so keyboard users can scroll it.
     #[prop(optional)]
     focusable: bool,
+    /// Slot rendered before the scrolled viewport.
+    #[prop(optional, into)]
+    header: Slot,
+    /// Slot rendered after the scrolled viewport.
+    #[prop(optional, into)]
+    footer: Slot,
+    /// Slot rendered when items is empty.
+    #[prop(optional, into)]
+    empty: Slot,
     /// Stable key of an item.
     key: KF,
     /// Renders one row.
@@ -194,29 +210,58 @@ where
     let offset = move || format!("translateY({}px)", range.get().0 as f64 * row);
     let row_css = format!("{row}px");
 
+    let root_metrics = vec![
+        Metric::du("--op-virtual-list-height", height),
+        Metric::du("--op-virtual-list-max-height", max_height),
+        Metric::du("--op-virtual-list-row-height", row_height),
+    ];
+    let class_str = Signal::derive(root_class("op-vlist", class));
+    let custom_style = Signal::derive(root_style(root_metrics, style));
+
+    let has_empty = empty.is_set();
+
     view! {
         <ScrollView
-            class=format!("op-vlist {class}")
+            class=class_str
+            style=custom_style
             node_ref=viewport
             height=height
             max_height=max_height
             focusable=focusable
+            header=header
+            footer=footer
         >
-            <div class="op-vlist-space" style:height=total>
-                <div class="op-vlist-window" style:transform=offset style=format!("--op-vlist-row: {row_css}")>
-                    <For
-                        each=move || visible.get()
-                        key={
-                            let key = key.clone();
-                            move |(i, item): &(usize, T)| (*i, key(item))
+            <Show
+                when=move || has_empty && items.with(Vec::is_empty)
+                fallback={
+                    let row_css = row_css.clone();
+                    move || {
+                        let row_css = row_css.clone();
+                        view! {
+                            <div class="op-vlist-space" style=move || format!("height:{};", total())>
+                                <div
+                                    class="op-vlist-window"
+                                    style=move || format!("transform:{};--op-vlist-row:{row_css};", offset())
+                                >
+                                    <For
+                                        each=move || visible.get()
+                                        key={
+                                            let key = key.clone();
+                                            move |(i, item): &(usize, T)| (*i, key(item))
+                                        }
+                                        children={
+                                            let children = children.clone();
+                                            move |row: (usize, T)| children(row)
+                                        }
+                                    />
+                                </div>
+                            </div>
                         }
-                        children={
-                            let children = children.clone();
-                            move |row: (usize, T)| children(row)
-                        }
-                    />
-                </div>
-            </div>
+                    }
+                }
+            >
+                {empty.run()}
+            </Show>
         </ScrollView>
     }
 }

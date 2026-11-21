@@ -60,6 +60,22 @@ pub fn toolbar() -> AnyView {
                 />
             </div>
         </Example>
+        <Example title="Customization" note="Custom metrics, start/end slots, and translated strings." block=true>
+            <div class="demo-resize">
+                <Toolbar
+                    label=crate::i18n::t("Toolbar")
+                    items=vec![
+                        ToolbarItem::new("refresh", "Refresh", icons::REFRESH),
+                        ToolbarItem::new("settings", "Settings", icons::SETTINGS),
+                    ]
+                    height=12.0
+                    gap=2.0
+                    padding_x=2.0
+                    start=Slot::from(|| view! { <span class="op-t-caption demo-muted" style="padding-right: 8px;">"Tools"</span> })
+                    more_label=crate::i18n::t("More commands")
+                />
+            </div>
+        </Example>
     }
     .into_any()
 }
