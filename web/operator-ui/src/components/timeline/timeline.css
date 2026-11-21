@@ -1,0 +1,102 @@
+:where(.op-timeline) {
+    font-size: var(--op-timeline-font-size, inherit);
+    color: var(--op-timeline-text, inherit);
+}
+
+.op-timeline {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--op-timeline-gap, calc(var(--op-du) * 4));
+}
+
+.op-timeline[data-dense] {
+    gap: var(--op-timeline-gap, calc(var(--op-du) * 2));
+}
+
+.op-timeline-entry {
+    position: relative;
+    display: grid;
+    grid-template-columns: calc(var(--op-du) * 6) 1fr;
+    gap: calc(var(--op-du) * 2);
+}
+
+.op-timeline-rail {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.op-timeline-line {
+    position: absolute;
+    top: calc(var(--op-du) * 4);
+    bottom: calc(-1 * var(--op-timeline-gap, calc(var(--op-du) * 4)));
+    width: var(--op-timeline-line-width, calc(var(--op-du) * 0.25));
+    background-color: var(--op-timeline-line-color, var(--op-border));
+}
+
+.op-timeline-entry:last-child .op-timeline-line {
+    display: none;
+}
+
+.op-timeline-dot {
+    position: relative;
+    z-index: 1;
+    width: calc(var(--op-du) * 6);
+    height: calc(var(--op-du) * 6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--op-timeline-dot-bg, var(--op-surface-raised));
+    border: calc(var(--op-du) * 0.25) solid var(--op-timeline-dot-border, var(--op-border));
+    color: var(--op-timeline-dot-color, var(--op-text-primary));
+}
+
+.op-timeline-entry[data-tone="pending"] .op-timeline-dot {
+    border-color: var(--op-pending);
+    color: var(--op-pending);
+}
+
+.op-timeline-entry[data-tone="success"] .op-timeline-dot {
+    border-color: var(--op-success);
+    color: var(--op-success);
+}
+
+.op-timeline-entry[data-tone="warning"] .op-timeline-dot {
+    border-color: var(--op-warning);
+    color: var(--op-warning);
+}
+
+.op-timeline-entry[data-tone="error"] .op-timeline-dot {
+    border-color: var(--op-error);
+    color: var(--op-error);
+}
+
+.op-timeline-entry[data-tone="accent"] .op-timeline-dot {
+    border-color: var(--op-accent);
+    color: var(--op-accent);
+}
+
+.op-timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--op-du) * 1);
+}
+
+.op-timeline-date {
+    font-size: var(--op-type-caption-size, 10TU);
+    color: var(--op-timeline-date-color, var(--op-text-secondary));
+}
+
+.op-timeline-title {
+    font-weight: 600;
+    color: var(--op-timeline-title-color, var(--op-text-primary));
+}
+
+.op-timeline-body {
+    color: var(--op-timeline-body-color, var(--op-text-secondary));
+}

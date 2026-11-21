@@ -137,6 +137,48 @@ fn stylesheet() -> &'static str {
             crate::components::value_field::CSS,
             #[cfg(feature = "virtual-list")]
             crate::components::virtual_list::CSS,
+            #[cfg(feature = "aspect-ratio")]
+            crate::components::aspect_ratio::CSS,
+            #[cfg(feature = "breadcrumbs")]
+            crate::components::breadcrumbs::CSS,
+            #[cfg(feature = "button-group")]
+            crate::components::button_group::CSS,
+            #[cfg(feature = "chat-message")]
+            crate::components::chat_message::CSS,
+            #[cfg(feature = "circular-progress")]
+            crate::components::circular_progress::CSS,
+            #[cfg(feature = "image")]
+            crate::components::image::CSS,
+            #[cfg(feature = "loading-bar")]
+            crate::components::loading_bar::CSS,
+            #[cfg(feature = "loading-overlay")]
+            crate::components::loading_overlay::CSS,
+            #[cfg(feature = "space")]
+            crate::components::space::CSS,
+            #[cfg(feature = "timeline")]
+            crate::components::timeline::CSS,
+            #[cfg(feature = "video")]
+            crate::components::video::CSS,
+            #[cfg(feature = "editor")]
+            crate::components::editor::CSS,
+            #[cfg(feature = "fab")]
+            crate::components::fab::CSS,
+            #[cfg(feature = "file-field")]
+            crate::components::file_field::CSS,
+            #[cfg(feature = "form")]
+            crate::components::form::CSS,
+            #[cfg(feature = "knob")]
+            crate::components::knob::CSS,
+            #[cfg(feature = "popup-edit")]
+            crate::components::popup_edit::CSS,
+            #[cfg(feature = "range-slider")]
+            crate::components::range_slider::CSS,
+            #[cfg(feature = "rating")]
+            crate::components::rating::CSS,
+            #[cfg(feature = "split-button")]
+            crate::components::split_button::CSS,
+            #[cfg(feature = "uploader")]
+            crate::components::uploader::CSS,
             HOVER_CSS,
         ];
         // One cascade layer: unlayered application CSS always wins over component styles,

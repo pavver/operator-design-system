@@ -1,0 +1,15 @@
+# Change history of Uploader. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-21T20:30:00+02:00"
+status = "draft"
+en = "Remove duplicate outer frame around the field."
+uk = "Вилучено дубльовану зовнішню рамку навколо поля."
+
+[[change]]
+date = "2026-11-21T19:53:42+02:00"
+status = "draft"
+en = "New component: file queue with application-provided upload futures and per-file progress."
+uk = "Новий компонент: черга файлів із наданими застосунком асинхронними викликами завантаження та прогресом для кожного файлу."

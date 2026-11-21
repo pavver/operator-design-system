@@ -1,0 +1,7 @@
+.op-file-field-box { height: auto; min-height: var(--op-field-height, var(--op-dim-row-standard)); }
+.op-file-field-control { display: flex; align-items: center; flex-wrap: wrap; flex: 1; min-width: 0; gap: var(--op-file-field-chip-gap, var(--op-dim-gap-micro)); }
+.op-file-field-control[data-dragging] { background: var(--op-file-field-drop-background, var(--op-hover)); }
+.op-file-field-input { position: absolute; width: 0; height: 0; opacity: 0; }
+.op-file-field-pick { display: flex; align-items: center; gap: var(--op-file-field-chip-gap, var(--op-dim-gap-micro)); min-height: var(--op-field-height, var(--op-dim-row-standard)); padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--op-file-field-text, var(--op-text-primary)); font: inherit; cursor: pointer; }
+.op-file-field-pick:disabled { color: var(--op-file-field-disabled-text, var(--op-text-disabled)); cursor: default; }
+.op-file-field-chips { display: flex; flex-wrap: wrap; gap: var(--op-file-field-chip-gap, var(--op-dim-gap-micro)); }

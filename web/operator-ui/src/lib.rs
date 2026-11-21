@@ -13,16 +13,26 @@ pub mod prelude {
     pub use crate::components::accordion::*;
     #[cfg(feature = "action-button")]
     pub use crate::components::action_button::*;
+    #[cfg(feature = "aspect-ratio")]
+    pub use crate::components::aspect_ratio::*;
     #[cfg(feature = "avatar")]
     pub use crate::components::avatar::*;
     #[cfg(feature = "banner")]
     pub use crate::components::banner::*;
+    #[cfg(feature = "breadcrumbs")]
+    pub use crate::components::breadcrumbs::*;
+    #[cfg(feature = "button-group")]
+    pub use crate::components::button_group::*;
+    #[cfg(feature = "chat-message")]
+    pub use crate::components::chat_message::*;
     #[cfg(feature = "checkbox")]
     pub use crate::components::checkbox::*;
     #[cfg(feature = "checkbox-group")]
     pub use crate::components::checkbox_group::*;
     #[cfg(feature = "chip")]
     pub use crate::components::chip::*;
+    #[cfg(feature = "circular-progress")]
+    pub use crate::components::circular_progress::*;
     #[cfg(feature = "code-block")]
     pub use crate::components::code_block::*;
     #[cfg(feature = "code-field")]
@@ -41,10 +51,18 @@ pub mod prelude {
     pub use crate::components::dialog::*;
     #[cfg(feature = "dropdown-menu")]
     pub use crate::components::dropdown_menu::*;
+    #[cfg(feature = "editor")]
+    pub use crate::components::editor::*;
     #[cfg(feature = "empty-state")]
     pub use crate::components::empty_state::*;
+    #[cfg(feature = "fab")]
+    pub use crate::components::fab::*;
     #[cfg(feature = "field")]
     pub use crate::components::field::*;
+    #[cfg(feature = "file-field")]
+    pub use crate::components::file_field::*;
+    #[cfg(feature = "form")]
+    pub use crate::components::form::*;
     #[cfg(feature = "graph")]
     pub use crate::components::graph::*;
     #[cfg(feature = "header")]
@@ -53,14 +71,22 @@ pub mod prelude {
     pub use crate::components::hover_card::*;
     #[cfg(feature = "icon-button")]
     pub use crate::components::icon_button::*;
+    #[cfg(feature = "image")]
+    pub use crate::components::image::*;
     #[cfg(feature = "kbd")]
     pub use crate::components::kbd::*;
+    #[cfg(feature = "knob")]
+    pub use crate::components::knob::*;
     #[cfg(feature = "language-picker")]
     pub use crate::components::language_picker::*;
     #[cfg(feature = "linear-progress")]
     pub use crate::components::linear_progress::*;
     #[cfg(feature = "list-item")]
     pub use crate::components::list_item::*;
+    #[cfg(feature = "loading-bar")]
+    pub use crate::components::loading_bar::*;
+    #[cfg(feature = "loading-overlay")]
+    pub use crate::components::loading_overlay::*;
     #[cfg(feature = "marquee-text")]
     pub use crate::components::marquee_text::*;
     #[cfg(feature = "menu")]
@@ -71,12 +97,18 @@ pub mod prelude {
     pub use crate::components::pagination::*;
     #[cfg(feature = "popover")]
     pub use crate::components::popover::*;
+    #[cfg(feature = "popup-edit")]
+    pub use crate::components::popup_edit::*;
     #[cfg(feature = "primitives")]
     pub use crate::components::primitives::*;
     #[cfg(feature = "property-list")]
     pub use crate::components::property_list::*;
     #[cfg(feature = "radio-group")]
     pub use crate::components::radio_group::*;
+    #[cfg(feature = "range-slider")]
+    pub use crate::components::range_slider::*;
+    #[cfg(feature = "rating")]
+    pub use crate::components::rating::*;
     #[cfg(feature = "scroll-area")]
     pub use crate::components::scroll_area::*;
     #[cfg(feature = "scrollbar")]
@@ -93,6 +125,10 @@ pub mod prelude {
     pub use crate::components::skeleton::*;
     #[cfg(feature = "slider")]
     pub use crate::components::slider::*;
+    #[cfg(feature = "space")]
+    pub use crate::components::space::*;
+    #[cfg(feature = "split-button")]
+    pub use crate::components::split_button::*;
     #[cfg(feature = "split-pane")]
     pub use crate::components::split_pane::*;
     #[cfg(feature = "status-badge")]
@@ -109,6 +145,8 @@ pub mod prelude {
     pub use crate::components::text_field::*;
     #[cfg(feature = "theme-toggle")]
     pub use crate::components::theme_toggle::*;
+    #[cfg(feature = "timeline")]
+    pub use crate::components::timeline::*;
     #[cfg(feature = "toast")]
     pub use crate::components::toast::*;
     #[cfg(feature = "toolbar")]
@@ -117,6 +155,8 @@ pub mod prelude {
     pub use crate::components::tooltip::*;
     #[cfg(feature = "tree")]
     pub use crate::components::tree::*;
+    #[cfg(feature = "uploader")]
+    pub use crate::components::uploader::*;
     #[cfg(feature = "color-field")]
     pub use crate::components::value_field::ColorField;
     #[cfg(feature = "duration-field")]
@@ -135,6 +175,8 @@ pub mod prelude {
         feature = "color-field"
     ))]
     pub use crate::components::value_field::{ParsedField, parse::LocalDateTime};
+    #[cfg(feature = "video")]
+    pub use crate::components::video::*;
     #[cfg(feature = "virtual-list")]
     pub use crate::components::virtual_list::*;
     pub use crate::core::theme::{OperatorTheme, Theme, ThemeRoot};

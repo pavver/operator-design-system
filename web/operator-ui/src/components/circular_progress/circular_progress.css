@@ -1,0 +1,66 @@
+:where(.op-circular-progress) {
+    font-size: var(--op-circular-progress-font-size, 8TU);
+    color: var(--op-circular-progress-color, var(--op-accent));
+}
+
+.op-circular-progress {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.op-circular-progress-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.op-circular-progress[data-indeterminate] .op-circular-progress-svg {
+    animation: op-circular-spin 1.4s linear infinite;
+}
+
+.op-circular-progress-track {
+    fill: none;
+    stroke: var(--op-circular-progress-track-color, var(--op-surface-raised));
+}
+
+.op-circular-progress-circle {
+    fill: none;
+    stroke: currentColor;
+    transition: stroke-dashoffset var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-circular-progress[data-tone="pending"] {
+    color: var(--op-pending);
+}
+
+.op-circular-progress[data-tone="success"] {
+    color: var(--op-success);
+}
+
+.op-circular-progress[data-tone="error"] {
+    color: var(--op-error);
+}
+
+.op-circular-progress-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    color: var(--op-circular-progress-text, var(--op-text-primary));
+    pointer-events: none;
+}
+
+@keyframes op-circular-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
