@@ -1,5 +1,6 @@
 //! Live examples for graph.
 
+use crate::i18n::l;
 use crate::kit::Example;
 use leptos::prelude::*;
 use operator_ui::prelude::*;
@@ -88,6 +89,10 @@ pub fn graph() -> AnyView {
     });
     let exec_color = Signal::stored("var(--op-text-primary)".to_string());
     let text_color = Signal::stored("#c678dd".to_string());
+    let custom_camera = RwSignal::new(Camera::default());
+    let source_node = DemoNode::new(45.0, 55.0);
+    let target_node = DemoNode::new(365.0, 80.0);
+    let row_height = RwSignal::new(12.0_f32);
     view! {
         <Example title="Node graph" note="Drag headers to move nodes, the background or the middle button to pan, the wheel to zoom. Hover the info icon for node help." block=true>
             <div class="demo-graph">
@@ -158,6 +163,40 @@ pub fn graph() -> AnyView {
                         </NodeRow>
                         <NodeRow end_label="Done".to_string() output=ViewFn::from(|| view! { <Socket id="done" side=SocketSide::Out kind=SocketKind::Exec/> })/>
                     </NodeCard>
+                </GraphCanvas>
+            </div>
+        </Example>
+        <Example title="Customization" note="Change the row height to check that the measured sockets and wires stay aligned." block=true>
+            <label><input type="checkbox" on:change=move |e| row_height.set(if event_target_checked(&e) { 16.0 } else { 12.0 })/>" Taller rows"</label>
+            <div class="demo-graph">
+                <GraphCanvas camera=custom_camera grid=7.0 grid_width=0.5
+                    style="--op-graph-header-background:var(--op-hover);--op-graph-socket-color:var(--op-accent);"
+                    overlay=std::sync::Arc::new(move || view! {
+                        <Minimap items=Signal::derive(move || vec![MiniItem { rect: WorldRect::new(45.0, 55.0, NODE_W, 180.0), color: None }, MiniItem { rect: WorldRect::new(365.0, 80.0, NODE_W, 180.0), color: None }])
+                            minimap_width=38.0 minimap_height=24.0 minimap_offset_x=3.0 minimap_offset_y=3.0
+                            label=l("Graph overview", "Огляд графа")/>
+                    }.into_any())>
+                    <GraphFrame rect=WorldRect::new(20.0, 15.0, 615.0, 255.0) title="Custom group"
+                        frame_header_height=9.0 title_slot=|| view! { <strong>"Editing group"</strong> }/>
+                    <WireLayer>
+                        <Wire from=source_node.socket("value", true) to=target_node.socket("value", false)
+                            wire_width=0.75 wire_label_padding_x=3.0 label="Value".to_string()/>
+                    </WireLayer>
+                    <NodeCard x=45.0 y=55.0 width=NODE_W title="Source" header_height=11.0
+                        row_height=row_height socket_size=3.0 row_padding_x=4.0 on_sockets=source_node.record()
+                        help=ViewFn::from(|| view! { <span>"Reusable graph node with custom geometry."</span> })
+                        help_label=l("About the source", "Про джерело")
+                        header=|| view! { <strong>"Source node"</strong> }
+                        footer=|| view! { <span class="demo-muted">"Custom footer"</span> }>
+                        <NodeRow end_label="Value".to_string() output=ViewFn::from(|| view! { <Socket id="value" side=SocketSide::Out connected=true/> })/>
+                        <NodeRow label="Status".to_string()><span>"Ready"</span></NodeRow>
+                    </NodeCard>
+                    <NodeCard x=365.0 y=80.0 width=NODE_W title="Target" header_height=9.0 row_height=row_height
+                        socket_size=3.0 on_sockets=target_node.record()
+                        body=|| view! {
+                            <NodeRow label="Value".to_string() input=ViewFn::from(|| view! { <Socket id="value" side=SocketSide::In connected=true/> })/>
+                            <NodeRow label="Mode".to_string()><span>"Automatic"</span></NodeRow>
+                        }/>
                 </GraphCanvas>
             </div>
         </Example>

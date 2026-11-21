@@ -1,8 +1,8 @@
 //! GraphCanvas: a pannable, zoomable surface with a grid.
 
 use super::camera::Camera;
+use crate::core::{Metric, Slot, root_class, root_style};
 use leptos::prelude::*;
-use operator_ui_tokens::DU_POINTS;
 
 /// Camera of the nearest [`GraphCanvas`], for components inside it (minimap, overlays).
 #[derive(Clone, Copy)]
@@ -28,15 +28,21 @@ pub fn GraphCanvas(
     #[prop(default = 0.25)] min_zoom: f64,
     #[prop(default = 2.0)] max_zoom: f64,
     /// Grid cell in DU; `0` hides the grid.
-    #[prop(default = 5.0)]
-    grid: f32,
+    #[prop(optional, into)]
+    grid: MaybeProp<f32>,
     /// A primary-button drag on the empty background pans.
     #[prop(default = true)]
     pan_on_background: bool,
     /// Pointer down on the empty background (for selection boxes), in screen coordinates.
     #[prop(optional)]
     on_background_down: Option<Callback<leptos::ev::PointerEvent>>,
-    #[prop(optional, into)] class: String,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] grid_width: MaybeProp<f32>,
+    /// Shown in screen space when `is_empty` is true.
+    #[prop(optional, into)]
+    empty: Slot,
+    #[prop(optional, into)] is_empty: Signal<bool>,
     /// Screen-space views above the world (toolbars, minimap).
     #[prop(optional)]
     overlay: Option<ChildrenFn>,
@@ -67,15 +73,11 @@ pub fn GraphCanvas(
                 (f64::from(x) - r.left(), f64::from(y) - r.top())
             })
     };
-    let cell = f64::from(grid * DU_POINTS);
     let grid_style = move || {
         let c = camera.get();
-        if cell <= 0.0 {
-            return String::new();
-        }
-        let size = cell * c.zoom;
         format!(
-            "background-size: {size}px {size}px, {size}px {size}px; background-position: {x}px {y}px, {x}px {y}px",
+            "--op-graph-zoom:{zoom}; background-position: {x}px {y}px, {x}px {y}px",
+            zoom = c.zoom,
             x = c.x,
             y = c.y
         )
@@ -87,12 +89,19 @@ pub fn GraphCanvas(
             c.x, c.y, c.zoom
         )
     };
+    let custom_style = root_style(
+        vec![
+            Metric::du("--op-graph-grid", grid),
+            Metric::du("--op-graph-grid-width", grid_width),
+        ],
+        style,
+    );
     view! {
         <div
             node_ref=host
-            class=format!("op-graph {class}")
-            data-grid=(cell > 0.0).then_some("")
-            style=grid_style
+            class=root_class("op-graph", class)
+            data-grid=move || (grid.get().unwrap_or(5.0) > 0.0).then_some("")
+            style=move || format!("{};{}", grid_style(), custom_style().unwrap_or_default())
             on:wheel=move |e| {
                 e.prevent_default();
                 let (sx, sy) = local(e.client_x(), e.client_y());
@@ -125,6 +134,7 @@ pub fn GraphCanvas(
             <div class="op-graph-world" style=world_style>
                 {children()}
             </div>
+            <Show when=move || is_empty.get()><div class="op-graph-empty">{empty.run()}</div></Show>
             {overlay.map(|o| view! { <div class="op-graph-overlay">{o()}</div> })}
         </div>
     }

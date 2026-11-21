@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:58:14+02:00"
+status = "draft"
+en = "Customization hooks: Field shell with class/style, label/hint/error/variant and pending state; metric props padding_x/y, font_size, line_height, row_height, completion_min_width/max_width, gutter_width/gap and shared field metrics; --op-field-* colors; prepend, append, before, after, label_slot, hint_slot, gutter, scoped completion_item and diagnostics_hover slots; code-field.placeholder/label/completions/diagnostics strings; keep completion portal variables and measured list geometry aligned."
+uk = "Точки кастомізації: оболонка Field із class/style, label/hint/error/variant та станом очікування; пропи розмірів padding_x/y, font_size, line_height, row_height, completion_min_width/max_width, gutter_width/gap і спільні метрики полів; кольори --op-field-*; слоти prepend, append, before, after, label_slot, hint_slot, gutter, параметризований completion_item та diagnostics_hover; перекладні тексти code-field.placeholder/label/completions/diagnostics; узгодження змінних порталу автодоповнення та виміряної геометрії списку."
+
+[[change]]
 date = "2026-11-17T02:12:24+02:00"
 status = "draft"
 commit = "bdf999f"
