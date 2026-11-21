@@ -17,14 +17,19 @@ mod counter;
 mod data_table;
 mod dialog;
 mod dropdown_menu;
+mod editor;
 mod empty_state;
+mod fab;
 mod field;
+mod file_field;
+mod form;
 mod foundations;
 mod graph;
 mod header;
 mod hover_card;
 mod icon_button;
 mod kbd;
+mod knob;
 mod linear_progress;
 mod list_item;
 mod marquee_text;
@@ -32,9 +37,12 @@ mod menu;
 mod navigation_shell;
 mod pagination;
 mod popover;
+mod popup_edit;
 mod primitives;
 mod property_list;
 mod radio_group;
+mod range_slider;
+mod rating;
 mod scroll_area;
 mod scrollbar;
 mod search_field;
@@ -42,6 +50,7 @@ mod segmented_control;
 mod sheet;
 mod skeleton;
 mod slider;
+mod split_button;
 mod split_pane;
 mod status_badge;
 mod stepper;
@@ -53,6 +62,7 @@ mod theme_toggle;
 mod toast;
 mod toolbar;
 mod tooltip;
+mod uploader;
 mod value_fields;
 mod virtual_list;
 
@@ -122,6 +132,16 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/navigation-rail" => (navigation_shell::navigation_shell, false),
         "components/side-panel" => (navigation_shell::navigation_shell, false),
         "components/tree" => (navigation_shell::navigation_shell, false),
+        "components/editor" => (editor::editor, false),
+        "components/fab" => (fab::fab, true),
+        "components/file-field" => (file_field::file_field, false),
+        "components/form" => (form::form, true),
+        "components/knob" => (knob::knob, true),
+        "components/popup-edit" => (popup_edit::popup_edit, true),
+        "components/range-slider" => (range_slider::range_slider, true),
+        "components/rating" => (rating::rating, true),
+        "components/split-button" => (split_button::split_button, true),
+        "components/uploader" => (uploader::uploader, true),
         _ => return None,
     };
     Some(entry)

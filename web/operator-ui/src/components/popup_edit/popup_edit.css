@@ -1,0 +1,7 @@
+.op-popup-edit { display: inline-block; }
+:where(.op-popup-edit) { color: var(--op-popup-edit-text, inherit); }
+.op-popup-edit-trigger { padding: 0; border: 0; border-radius: 0; background: var(--op-popup-edit-background, transparent); color: inherit; font: inherit; cursor: pointer; }
+.op-popup-edit-trigger:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-popup-edit-accent, var(--op-accent)); outline-offset: var(--op-dim-gap-micro); }
+.op-popup-edit-panel { width: var(--op-popup-edit-width, calc(var(--op-du) * 72)); max-width: 100%; padding: var(--op-popup-edit-padding, var(--op-dim-pad-card)); background: var(--op-popup-edit-background, var(--op-surface)); color: var(--op-popup-edit-text, var(--op-text-primary)); }
+.op-popup-edit-panel form { display: flex; flex-direction: column; gap: var(--op-popup-edit-gap, var(--op-dim-gap-small)); }
+.op-popup-edit-actions { display: flex; gap: var(--op-popup-edit-gap, var(--op-dim-gap-small)); }

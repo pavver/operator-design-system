@@ -1,0 +1,7 @@
+.op-form { position: relative; display: flex; flex-direction: column; gap: var(--op-form-gap, var(--op-dim-gap-small)); padding: var(--op-form-padding, var(--op-dim-pad-card)); color: var(--op-form-text, var(--op-text-primary)); background: var(--op-form-background, var(--op-surface)); }
+.op-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.op-form-fields, .op-form-field { display: flex; flex-direction: column; gap: var(--op-form-gap, var(--op-dim-gap-small)); }
+.op-form-actions { display: flex; gap: var(--op-form-gap, var(--op-dim-gap-small)); margin-top: var(--op-form-gap, var(--op-dim-gap-small)); }
+.op-form-actions > button { position: relative; border: 0; border-radius: 0; padding: var(--op-form-gap, var(--op-dim-gap-small)); font: inherit; background: var(--op-form-background, var(--op-surface)); color: var(--op-form-text, var(--op-text-primary)); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-form-border, var(--op-border)); cursor: pointer; }
+.op-form-error { color: var(--op-form-error, var(--op-error)); }
+.op-form-error:empty { display: none; }

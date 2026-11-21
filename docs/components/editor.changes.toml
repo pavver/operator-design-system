@@ -1,0 +1,9 @@
+# Change history of Editor. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-21T19:53:42+02:00"
+status = "draft"
+en = "New component: browser rich text editing with an accessible toolbar and constrained HTML output."
+uk = "Новий компонент: редагування форматованого тексту у браузері з доступною панеллю інструментів та обмеженим виводом HTML."

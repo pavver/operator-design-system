@@ -61,6 +61,16 @@ reviewed = [
 ]
 
 draft = [
+    "editor",
+    "fab",
+    "file-field",
+    "form",
+    "knob",
+    "popup-edit",
+    "range-slider",
+    "rating",
+    "split-button",
+    "uploader",
     "field",
     "text-field",
     "navigation-rail",
@@ -90,6 +100,8 @@ full = ["reviewed", "draft"]
 extensions = ["code-field", "graph"]
 
 # Component features
+editor = ["field", "primitives", "web-sys/Selection", "web-sys/Range", "web-sys/ClipboardEvent", "web-sys/DataTransfer", "web-sys/DomParser", "web-sys/SupportedType"]
+fab = ["action-button", "popover"]
 field = ["primitives"]
 accordion = ["primitives"]
 action-button = ["primitives"]
@@ -112,11 +124,14 @@ date-time-field = ["field", "popover", "primitives"]
 duration-field = ["field"]
 dropdown-menu = ["field", "popover", "primitives", "scrollbar", "virtual-list"]
 empty-state = ["primitives"]
+file-field = ["field", "chip", "primitives", "web-sys/File", "web-sys/Blob", "web-sys/FileList", "web-sys/DragEvent", "web-sys/DataTransfer"]
+form = ["primitives", "web-sys/FocusEvent"]
 header = ["avatar", "primitives", "status-badge"]
 graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
 kbd = []
+knob = ["primitives"]
 linear-progress = []
 list-item = []
 marquee-text = ["tooltip"]
@@ -125,9 +140,12 @@ navigation-rail = ["primitives"]
 number-field = ["field"]
 pagination = ["icon-button"]
 popover = []
+popup-edit = ["action-button", "popover", "text-field"]
 primitives = []
 property-list = ["icon-button"]
 radio-group = ["checkbox-group", "primitives"]
+range-slider = ["slider", "primitives"]
+rating = ["primitives"]
 scroll-area = ["scrollbar"]
 scrollbar = []
 search-field = ["field", "primitives"]
@@ -136,6 +154,7 @@ sheet = ["icon-button", "scrollbar"]
 side-panel = ["icon-button"]
 skeleton = []
 slider = ["primitives"]
+split-button = ["action-button", "menu", "primitives"]
 split-pane = ["scrollbar"]
 status-badge = ["primitives"]
 stepper = ["primitives"]
@@ -149,5 +168,6 @@ toolbar = ["icon-button", "menu", "tooltip"]
 time-field = ["field"]
 tree = ["primitives", "virtual-list"]
 tooltip = ["popover"]
+uploader = ["action-button", "file-field", "linear-progress", "primitives"]
 virtual-list = ["scrollbar"]
 

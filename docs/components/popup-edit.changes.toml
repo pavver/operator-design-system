@@ -1,0 +1,9 @@
+# Change history of PopupEdit. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-21T19:53:42+02:00"
+status = "draft"
+en = "New component: inline value editing in an anchored popover with async save."
+uk = "Новий компонент: інлайн-редагування значення в закріпленому поповері з асинхронним збереженням."

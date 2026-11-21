@@ -1,0 +1,8 @@
+.op-knob { position: relative; width: var(--op-knob-size, calc(var(--op-du) * 24)); height: var(--op-knob-size, calc(var(--op-du) * 24)); touch-action: none; user-select: none; border-radius: 50%; --sb-rx: 50%; color: var(--op-knob-text, var(--op-text-primary)); background: var(--op-knob-background, var(--op-surface)); }
+.op-knob svg { width: 100%; height: 100%; fill: none; stroke-width: var(--op-knob-thickness, var(--op-dim-pad-small)); }
+.op-knob-track { stroke: var(--op-knob-border, var(--op-border)); }
+.op-knob-fill { stroke: var(--op-knob-accent, var(--op-accent)); transition: stroke-dasharray var(--op-motion-segment-slide) var(--op-ease-standard); }
+.op-knob[data-dragging] .op-knob-fill { transition: none; }
+.op-knob-content { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font-size: var(--op-knob-font-size, var(--op-type-body-size)); }
+.op-knob:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-knob-accent, var(--op-accent)); outline-offset: var(--op-dim-gap-micro); }
+.op-knob[data-state="disabled"] { color: var(--op-knob-disabled-text, var(--op-text-disabled)); }

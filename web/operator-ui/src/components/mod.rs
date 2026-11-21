@@ -30,10 +30,18 @@ pub mod data_table;
 pub mod dialog;
 #[cfg(feature = "dropdown-menu")]
 pub mod dropdown_menu;
+#[cfg(feature = "editor")]
+pub mod editor;
 #[cfg(feature = "empty-state")]
 pub mod empty_state;
+#[cfg(feature = "fab")]
+pub mod fab;
 #[cfg(feature = "field")]
 pub mod field;
+#[cfg(feature = "file-field")]
+pub mod file_field;
+#[cfg(feature = "form")]
+pub mod form;
 #[cfg(feature = "graph")]
 pub mod graph;
 #[cfg(feature = "header")]
@@ -44,6 +52,8 @@ pub mod hover_card;
 pub mod icon_button;
 #[cfg(feature = "kbd")]
 pub mod kbd;
+#[cfg(feature = "knob")]
+pub mod knob;
 #[cfg(feature = "linear-progress")]
 pub mod linear_progress;
 #[cfg(feature = "list-item")]
@@ -58,12 +68,18 @@ pub mod navigation_rail;
 pub mod pagination;
 #[cfg(feature = "popover")]
 pub mod popover;
+#[cfg(feature = "popup-edit")]
+pub mod popup_edit;
 #[cfg(feature = "primitives")]
 pub mod primitives;
 #[cfg(feature = "property-list")]
 pub mod property_list;
 #[cfg(feature = "radio-group")]
 pub mod radio_group;
+#[cfg(feature = "range-slider")]
+pub mod range_slider;
+#[cfg(feature = "rating")]
+pub mod rating;
 #[cfg(feature = "scroll-area")]
 pub mod scroll_area;
 #[cfg(feature = "scrollbar")]
@@ -80,6 +96,8 @@ pub mod side_panel;
 pub mod skeleton;
 #[cfg(feature = "slider")]
 pub mod slider;
+#[cfg(feature = "split-button")]
+pub mod split_button;
 #[cfg(feature = "split-pane")]
 pub mod split_pane;
 #[cfg(feature = "status-badge")]
@@ -104,6 +122,8 @@ pub mod toolbar;
 pub mod tooltip;
 #[cfg(feature = "tree")]
 pub mod tree;
+#[cfg(feature = "uploader")]
+pub mod uploader;
 #[cfg(any(
     feature = "number-field",
     feature = "duration-field",
