@@ -85,7 +85,7 @@ pub fn StickerPicker(
     #[prop(optional, into)]
     sticker_packs: Option<Vec<StickerPack>>,
     /// Recent stickers list.
-    #[prop(optional)]
+    #[prop(optional, into)]
     recent_stickers: Option<Vec<StickerItem>>,
     /// Custom sticker renderer for animated/vector formats.
     #[prop(optional)]
@@ -115,7 +115,29 @@ pub fn StickerPicker(
         "sticker-picker.search",
         "Search stickers...",
     );
+    let recent_label = ui_text(
+        None::<String>.into(),
+        "sticker-picker.recent",
+        "Recent stickers",
+    );
+    let packs_aria = ui_text(
+        None::<String>.into(),
+        "sticker-picker.packs",
+        "Sticker packs",
+    );
+    let search_prefix = ui_text(
+        None::<String>.into(),
+        "sticker-picker.search-prefix",
+        "Search results",
+    );
+    let empty_text = ui_text(
+        None::<String>.into(),
+        "sticker-picker.empty",
+        "No stickers found",
+    );
+
     let search_icon = ui_icon(None, "sticker-picker.search-icon", icons::SEARCH);
+    let recent_icon = ui_icon(None, "sticker-picker.recent-icon", icons::REFRESH);
 
     let metrics = vec![
         Metric::du("--op-sticker-picker-height", height),
@@ -174,8 +196,11 @@ pub fn StickerPicker(
                 if search_matched.is_some() {
                     ().into_any()
                 } else {
+                    let recent_lbl = recent_label.get();
+                    let recent_ic = recent_icon.get();
+                    let packs_lbl = packs_aria.get();
                     view! {
-                        <div class="op-sticker-picker__packs" role="tablist" aria-label="Sticker packs">
+                        <div class="op-sticker-picker__packs" role="tablist" aria-label=packs_lbl>
                             {has_recents.then(|| {
                                 let is_sel = move || selected_pack_idx.get() == 0;
                                 view! {
@@ -185,10 +210,10 @@ pub fn StickerPicker(
                                         data-selected=move || is_sel().then_some("true")
                                         role="tab"
                                         aria-selected=move || is_sel().to_string()
-                                        aria-label="Recent stickers"
+                                        aria-label=recent_lbl
                                         on:click=move |_| selected_pack_idx.set(0)
                                     >
-                                        <span style="font-size:16px;">"🕒"</span>
+                                        <Icon icon=recent_ic />
                                     </button>
                                 }
                             })}
@@ -221,21 +246,31 @@ pub fn StickerPicker(
                 {move || {
                     let (search_matched, ref_packs) = filtered_packs.get();
                     if let Some(matched) = search_matched {
-                        view! {
-                            <div class="op-sticker-picker__section-title">
-                                {format!("Search results ({} found)", matched.len())}
-                            </div>
-                            <div class="op-sticker-picker__grid">
-                                {matched.into_iter().map(|item| {
-                                    render_sticker_cell(item, None, on_select, preview_sticker, render_sticker)
-                                }).collect::<Vec<_>>()}
-                            </div>
-                        }.into_any()
+                        if matched.is_empty() {
+                            view! {
+                                <div class="op-sticker-picker__empty">
+                                    {empty_text.get()}
+                                </div>
+                            }.into_any()
+                        } else {
+                            let prefix = search_prefix.get();
+                            view! {
+                                <div class="op-sticker-picker__section-title">
+                                    {format!("{prefix} ({} found)", matched.len())}
+                                </div>
+                                <div class="op-sticker-picker__grid">
+                                    {matched.into_iter().map(|item| {
+                                        render_sticker_cell(item, None, on_select, preview_sticker, render_sticker)
+                                    }).collect::<Vec<_>>()}
+                                </div>
+                            }.into_any()
+                        }
                     } else {
                         let cur_idx = selected_pack_idx.get();
                         if has_recents && cur_idx == 0 {
+                            let r_lbl = recent_label.get();
                             view! {
-                                <div class="op-sticker-picker__section-title">"Recent stickers"</div>
+                                <div class="op-sticker-picker__section-title">{r_lbl}</div>
                                 <div class="op-sticker-picker__grid">
                                     {recents.clone().into_iter().map(|item| {
                                         render_sticker_cell(item, None, on_select, preview_sticker, render_sticker)
@@ -257,7 +292,11 @@ pub fn StickerPicker(
                                     </div>
                                 }.into_any()
                             } else {
-                                ().into_any()
+                                view! {
+                                    <div class="op-sticker-picker__empty">
+                                        {empty_text.get()}
+                                    </div>
+                                }.into_any()
                             }
                         }
                     }

@@ -21,7 +21,7 @@ Do not use `Gallery` for a single isolated photograph; use [Image](image.md) ins
 ## Behavior
 
 * Images outside the viewport defer downloading until intersecting the viewport using `IntersectionObserver`.
-* Supports both fluid responsive CSS grid mode and compact chat-bubble Telegram layout.
+* Supports both fluid responsive CSS grid mode and compact chat-attachment mosaic layout.
 * Videos display a play badge indicator over the thumbnail.
 * Optional selection mode adds checkboxes to each item and emits selection change events.
 * Tapping an item opens the full-screen [GalleryViewer](gallery-viewer.md) at that item by default (`viewer = true`), while selection mode selects instead.
@@ -32,7 +32,7 @@ Do not use `Gallery` for a single isolated photograph; use [Image](image.md) ins
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `items` | signal Vec MediaItem | required | Collection of media items to display. |
-| `layout` | GalleryLayout | `Grid` | Layout mode (`Grid` or `Telegram`). |
+| `layout` | GalleryLayout | `Grid` | Layout mode (`Grid` or `Compact`). |
 | `column_min_width` | DU | `30.0` | Minimum column width in DU for responsive grid. |
 | `gap` | DU | `0.5` | Spacing between items in DU. |
 | `selectable` | bool | `false` | Enables multi-item selection mode. |

@@ -100,6 +100,7 @@ pub fn ChatInput(
     let send_label = ui_text(None::<String>.into(), "chat-input.send", "Send");
     let attach_label = ui_text(None::<String>.into(), "chat-input.attach", "Attach");
     let media_label = ui_text(None::<String>.into(), "chat-input.media", "Media");
+    let cancel_label = ui_text(None::<String>.into(), "chat-input.cancel", "Cancel");
     let edit_label = ui_text(
         None::<String>.into(),
         "chat-input.editing",
@@ -184,7 +185,7 @@ pub fn ChatInput(
                                         type="button"
                                         class="op-chat-input__reply-cancel"
                                         on:click=move |_| cb.run(())
-                                        aria-label="Cancel"
+                                        aria-label=move || cancel_label.get()
                                     >
                                         <Icon icon=close_icon.get() />
                                     </button>

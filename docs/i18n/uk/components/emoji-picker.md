@@ -25,16 +25,16 @@
 * Клік на вкладку категорії оновлює сітку відповідно до вибраної групи.
 * Введення запиту в поле пошуку фільтрує емодзі за всіма категоріями.
 * Вибір емодзі викликає зворотний виклик `on_select` із символом або кодом.
-* Категорія "Недавні" зберігає історію раніше вибраних емодзі.
+* Категорія "Недавні" відображає передану застосунком історію вибору.
 
 ## API
 
 | Властивість | Тип | За замовчуванням | Опис |
 | :--- | :--- | :--- | :--- |
 | `on_select` | `Callback<String>` | немає | Подія вибору символу або коду емодзі. |
-| `recent_emojis` | `Option<Vec<String>>` | немає | Список нещодавно використаних емодзі. |
+| `categories` | `Option<Vec<EmojiCategory>>` | немає | Категорії емодзі від застосунку. |
+| `recent_emojis` | `Option<Vec<EmojiItem>>` | немає | Список нещодавно використаних емодзі від застосунку. |
 | `custom_emojis` | `Option<CustomEmojiMap>` | немає | Реєстр власних графічних емодзі. |
-| `initial_category` | `Option<EmojiTabCategory>` | `Smileys` | Початкова активна вкладка. |
 | `height` | `f32` | `60.0` | Висота контейнера в Design Units. |
 | `cell_size` | `f32` | `8.5` | Розмір комірки в Design Units. |
 | `class` | `string` | немає | Додаткові класи CSS. |
@@ -53,21 +53,27 @@
 
 | Змінна | За замовчуванням | Роль |
 | :--- | :--- | :--- |
-| `--op-emoji-picker-bg` | `var(--op-color-surface)` | Фон контейнера. |
-| `--op-emoji-picker-border` | `var(--op-color-border)` | Рамка контейнера. |
-| `--op-emoji-picker-accent` | `var(--op-color-accent)` | Підсвічування вкладки та фокусу. |
+| `--op-emoji-picker-bg` | `var(--op-surface)` | Фон контейнера. |
+| `--op-emoji-picker-border` | `var(--op-border)` | Рамка контейнера. |
+| `--op-emoji-picker-accent` | `var(--op-accent)` | Підсвічування вкладки та фокусу. |
+| `--op-emoji-picker-text` | `var(--op-text-primary)` | Основний колір тексту емодзі. |
 
 ## Рядки
 
 | Ключ | Англійський текст | Опис |
 | :--- | :--- | :--- |
 | `emoji-picker.search` | `"Search emoji..."` | Підказка в полі пошуку. |
+| `emoji-picker.search-prefix` | `"Search"` | Префікс заголовка результатів пошуку. |
+| `emoji-picker.recent` | `"Recent"` | Заголовок розділу та підпис вкладки останніх емодзі. |
+| `emoji-picker.categories` | `"Emoji categories"` | Доступна назва панелі вкладок. |
+| `emoji-picker.empty` | `"No emoji found"` | Повідомлення про відсутність результатів. |
 
 ## Піктограми
 
 | Ключ | За замовчуванням | Опис |
 | :--- | :--- | :--- |
 | `emoji-picker.search-icon` | `icons::SEARCH` | Піктограма пошуку. |
+| `emoji-picker.recent-icon` | `icons::REFRESH` | Піктограма вкладки останніх емодзі. |
 
 ## Доступність
 

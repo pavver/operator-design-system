@@ -1,51 +1,49 @@
 # MediaRecordButton
 
-Tactical media recording button that reports capture intents for voice audio and circular video notes.
-It supports click mode toggling, hold-to-record, slide-left-to-cancel, slide-up-to-lock, and active duration timer feedback.
+Tactical media recording button that captures audio voice notes and video notes.
+It features hold-to-record, slide-left-to-cancel, and slide-up-to-lock gestures.
 
 Status: **draft** on web.
 
 ## Use
 
-Use `MediaRecordButton` in chat inputs, dispatch panels, and multimedia communication feeds.
-The button reports recording intents (`on_record_start`, `on_record_stop`, `on_record_cancel`, `on_record_locked`) to the application.
-The host application is responsible for hardware microphone/camera streaming and audio file creation.
+Use `MediaRecordButton` alongside chat input bars and messaging dialogs.
+A quick tap toggles between audio voice note and video note capture modes.
+Pressing and holding begins recording; sliding left cancels without saving, while sliding up locks recording into hands-free mode.
 
 ## Geometry
 
 | Property | Value |
 | :--- | :--- |
-| Corner radius | `0 DU` (standard square geometry; round exception `50%` circular when `circular` prop is enabled). |
-| Standard border | `0.25 DU` standard resting border. |
-| Emphasis border | `0.5 DU` border during active recording or locked states. |
-| Default size | `12 DU` (48px square control; `--op-media-record-button-size`). |
+| Corner radius | `0 DU` standard (supports optional circular exception). |
+| Standard border | `0.25 DU` container outline border. |
+| Default size | `12 DU` (square control; `--op-media-record-button-size`). |
 
 ## Behavior
 
-* Short click toggles recording mode between Voice and Video note.
-* Holding down for 200ms triggers active recording start.
-* Sliding left by more than 15 DU triggers cancelation and discards the recording.
-* Sliding up by more than 15 DU locks the recording into hands-free mode.
-* When locked, a single click finalizes and submits the recording.
-* When released without locking or canceling, the recording completes normally.
+* Tap without holding switches between voice audio and round video note mode.
+* Pressing and holding past 200 ms triggers `on_record_start`.
+* Sliding left cancels active recording and triggers `on_record_cancel`.
+* Sliding up locks recording into hands-free mode and triggers `on_record_locked`.
+* Releasing after hold completes recording and triggers `on_record_stop`.
 
 ## API
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `mode` | `MediaRecordMode` | `Voice` | Current media capture mode (`Voice` or `Video`). |
-| `recording` | `bool` | `false` | True when media recording is currently active. |
-| `locked` | `bool` | `false` | True when recording is locked in hands-free mode. |
-| `disabled` | `bool` | `false` | Disables user interaction. |
-| `circular` | `bool` | `false` | Circular round shape exception. |
-| `size` | `f32` | `12.0` | Size in Design Units. |
-| `on_mode_change` | `Callback<MediaRecordMode>` | none | Triggered on mode toggle. |
-| `on_record_start` | `Callback<MediaRecordMode>` | none | Triggered when hold threshold begins recording. |
-| `on_record_stop` | `Callback<()>` | none | Triggered when recording completes. |
-| `on_record_cancel` | `Callback<()>` | none | Triggered when slide-left cancels recording. |
-| `on_record_locked` | `Callback<()>` | none | Triggered when slide-up locks hands-free recording. |
+| `mode` | `MediaRecordMode` | `Voice` | Recording mode (`Voice` or `Video`). |
+| `recording` | `bool` | `false` | Whether recording is active. |
+| `locked` | `bool` | `false` | Hands-free locked state. |
+| `disabled` | `bool` | `false` | Disables interaction. |
+| `circular` | `bool` | `false` | Optional round shape exception. |
+| `size` | `f32` | `12.0` | Button size in Design Units. |
 | `class` | `string` | none | Custom CSS classes. |
 | `style` | `string` | none | Custom inline style overrides. |
+| `on_mode_change` | `Callback<MediaRecordMode>` | none | Event reporting mode toggle. |
+| `on_record_start` | `Callback<MediaRecordMode>` | none | Event when recording begins. |
+| `on_record_stop` | `Callback<()>` | none | Event when recording finishes. |
+| `on_record_cancel` | `Callback<()>` | none | Event when recording is cancelled. |
+| `on_record_locked` | `Callback<()>` | none | Event when recording is locked. |
 
 ## Customization
 
@@ -59,12 +57,12 @@ The host application is responsible for hardware microphone/camera streaming and
 
 | Variable | Default | Role |
 | :--- | :--- | :--- |
-| `--op-media-record-button-bg` | `var(--op-color-surface)` | Resting background color. |
-| `--op-media-record-button-border` | `var(--op-color-border)` | Resting border color. |
-| `--op-media-record-button-active-bg` | accent tint | Active recording background. |
-| `--op-media-record-button-active-border` | `var(--op-color-accent)` | Active recording border. |
-| `--op-media-record-button-locked-bg` | success tint | Locked hands-free background. |
-| `--op-media-record-button-locked-border` | `var(--op-color-success)` | Locked hands-free border. |
+| `--op-media-record-button-bg` | `var(--op-surface)` | Resting background color. |
+| `--op-media-record-button-border` | `var(--op-border)` | Resting border color. |
+| `--op-media-record-button-color` | `var(--op-text-primary)` | Resting icon color. |
+| `--op-media-record-button-active-border` | `var(--op-accent)` | Active recording border. |
+| `--op-media-record-button-locked-border` | `var(--op-success)` | Locked hands-free border. |
+| `--op-media-record-button-canceling-border` | `var(--op-error)` | Cancelling drag border. |
 
 ## Strings
 
@@ -72,6 +70,7 @@ The host application is responsible for hardware microphone/camera streaming and
 | :--- | :--- | :--- |
 | `media-record.audio` | `"Voice note"` | Accessible voice mode label. |
 | `media-record.video` | `"Video note"` | Accessible video mode label. |
+| `media-record.locked-label` | `"Locked recording (click to stop)"` | Accessible locked state label. |
 | `media-record.cancel-hint` | `"< Slide to cancel"` | Slide left cancel hint. |
 | `media-record.lock-hint` | `"^ Slide to lock"` | Slide up lock hint. |
 

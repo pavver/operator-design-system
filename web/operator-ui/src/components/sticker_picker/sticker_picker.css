@@ -1,9 +1,16 @@
+/* Operator StickerPicker Styles */
+
+:where(.op-sticker-picker) {
+  color: var(--op-sticker-picker-text, inherit);
+}
+
 .op-sticker-picker {
   --op-sticker-picker-height: calc(var(--op-du) * 60);
   --op-sticker-picker-cell-size: calc(var(--op-du) * 18);
-  --op-sticker-picker-bg: var(--op-color-surface);
-  --op-sticker-picker-border: var(--op-color-border);
-  --op-sticker-picker-accent: var(--op-color-accent);
+  --op-sticker-picker-bg: var(--op-surface);
+  --op-sticker-picker-border: var(--op-border);
+  --op-sticker-picker-accent: var(--op-accent);
+  --op-sticker-picker-text: var(--op-text-primary);
 
   display: flex;
   flex-direction: column;
@@ -21,7 +28,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 1);
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
-  background: var(--op-color-surface-raised, var(--op-color-surface));
+  background: var(--op-surface-raised, var(--op-surface));
   border-bottom: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-border);
 }
 
@@ -31,7 +38,7 @@
   justify-content: center;
   width: calc(var(--op-du) * 4);
   height: calc(var(--op-du) * 4);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
 }
 
 .op-sticker-picker__search-icon svg {
@@ -45,13 +52,13 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--op-color-text);
+  color: var(--op-text-primary);
   font-family: inherit;
   font-size: calc(var(--op-tu) * 12);
 }
 
 .op-sticker-picker__search-input::placeholder {
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   opacity: 0.7;
 }
 
@@ -60,7 +67,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 0.5);
   padding: calc(var(--op-du) * 1);
-  background: var(--op-color-surface-alt, var(--op-color-surface));
+  background: var(--op-surface-alt, var(--op-surface));
   border-bottom: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-border);
   overflow-x: auto;
 }
@@ -73,14 +80,22 @@
   height: calc(var(--op-du) * 8);
   background: transparent;
   border: calc(var(--op-du) * 0.25) solid transparent;
+  color: var(--op-text-secondary);
   cursor: pointer;
   padding: calc(var(--op-du) * 0.5);
   box-sizing: border-box;
 }
 
+.op-sticker-picker__pack-btn svg {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  fill: currentColor;
+}
+
 .op-sticker-picker__pack-btn[data-selected="true"] {
   border-color: var(--op-sticker-picker-accent);
   background: color-mix(in srgb, var(--op-sticker-picker-accent) 15%, transparent);
+  color: var(--op-sticker-picker-accent);
 }
 
 .op-sticker-picker__pack-icon {
@@ -100,7 +115,7 @@
   font-size: calc(var(--op-tu) * 11);
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   letter-spacing: 0.05em;
 }
 
@@ -108,6 +123,14 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: calc(var(--op-du) * 1);
+}
+
+.op-sticker-picker__empty {
+  grid-column: 1 / -1;
+  padding: calc(var(--op-du) * 4);
+  text-align: center;
+  font-size: calc(var(--op-tu) * 12);
+  color: var(--op-text-secondary);
 }
 
 .op-sticker-picker__cell {

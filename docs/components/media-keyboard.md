@@ -1,7 +1,7 @@
 # MediaKeyboard
 
-Unified media keyboard replicating Telegram Android's EmojiView layout.
-It dispatches Emoji, Stickers, and GIFs with search filtering, phone docked replacement, and desktop anchored popover support.
+Generic media keyboard with unified Emoji, Stickers, and GIF dispatching.
+It is compatible with custom emoji packs, sticker sets, and animated clips (including Telegram packs), with search filtering, phone docked replacement, and desktop anchored popover support.
 
 Status: **draft** on web.
 
@@ -41,9 +41,12 @@ On phones, it docks to the bottom edge and replaces the software virtual keyboar
 | `desktop` | `bool` | `true` | Desktop popover vs phone docked panel mode. |
 | `anchor` | `Option<Signal<Option<PopoverAnchor>>>` | none | Target anchor for popover placement. |
 | `initial_tab` | `Option<MediaKeyboardTab>` | `Emoji` | Active initial tab. |
+| `emoji_categories` | `Option<Vec<EmojiCategory>>` | none | Pluggable emoji categories provided by host app. |
+| `recent_emojis` | `Option<Vec<EmojiItem>>` | none | Recently used emojis provided by host app. |
 | `custom_emojis` | `Option<CustomEmojiMap>` | none | Custom emoji registry. |
 | `sticker_packs` | `Option<Vec<StickerPack>>` | none | Sticker packs list. |
 | `gifs` | `Option<Vec<GifItem>>` | none | Curated GIF list. |
+| `trending_tags` | `Option<Vec<String>>` | none | Trending GIF tags list. |
 | `width` | `f32` | `85.0` | Desktop width in Design Units. |
 | `height` | `f32` | `70.0` | Container height in Design Units. |
 | `class` | `string` | none | Custom CSS classes. |
@@ -62,9 +65,10 @@ On phones, it docks to the bottom edge and replaces the software virtual keyboar
 
 | Variable | Default | Role |
 | :--- | :--- | :--- |
-| `--op-media-keyboard-bg` | `var(--op-color-surface)` | Keyboard background. |
-| `--op-media-keyboard-border` | `var(--op-color-border)` | Keyboard outline border. |
-| `--op-media-keyboard-accent` | `var(--op-color-accent)` | Active tab underline and focus border. |
+| `--op-media-keyboard-bg` | `var(--op-surface)` | Keyboard background. |
+| `--op-media-keyboard-border` | `var(--op-border)` | Keyboard outline border. |
+| `--op-media-keyboard-accent` | `var(--op-accent)` | Active tab underline and focus border. |
+| `--op-media-keyboard-text` | `var(--op-text-primary)` | Keyboard text color. |
 
 ## Strings
 
@@ -73,12 +77,13 @@ On phones, it docks to the bottom edge and replaces the software virtual keyboar
 | `media-keyboard.emoji` | `"Emoji"` | Emoji tab button label. |
 | `media-keyboard.stickers` | `"Stickers"` | Stickers tab button label. |
 | `media-keyboard.gifs` | `"GIF"` | GIF tab button label. |
+| `media-keyboard.backspace` | `"Backspace"` | Accessible label for backspace button. |
 
 ## Icons
 
 | Key | Default | Description |
 | :--- | :--- | :--- |
-| `media-keyboard.backspace` | `icons::CLOSE` | Backspace action icon. |
+| `media-keyboard.backspace-icon` | `icons::CLOSE` | Backspace action icon. |
 
 ## Accessibility
 

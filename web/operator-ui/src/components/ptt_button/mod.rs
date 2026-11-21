@@ -8,7 +8,7 @@ use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("ptt_button.css");
 
-/// Drag distance in pixels to lock hands-free transmission (approx 20 DU = 80px).
+/// Drag distance in pixels to lock hands-free transmission (approx 20 DU).
 const DRAG_LOCK_THRESHOLD_PX: f64 = 80.0;
 
 /// Tactical push-to-talk button supporting press-and-hold transmission,
@@ -30,7 +30,7 @@ pub fn PttButton(
     /// Render in circular shape (round exception); defaults to false (square geometry).
     #[prop(optional, into)]
     circular: MaybeProp<bool>,
-    /// Size in Design Units (`--op-ptt-button-size`). Default is 22.5 DU (90px).
+    /// Size in Design Units (`--op-ptt-button-size`). Default is 22.5 DU.
     #[prop(optional, into)]
     size: MaybeProp<f32>,
     /// Border stroke width in Design Units (`--op-ptt-button-border-width`). Default is 0.5 DU.

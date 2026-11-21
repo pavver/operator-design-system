@@ -1,18 +1,24 @@
+/* Operator MediaRecordButton Styles */
+
+:where(.op-media-record-button) {
+  color: var(--op-media-record-button-color, inherit);
+}
+
 .op-media-record-button {
   --op-media-record-button-size: calc(var(--op-du) * 12);
   --op-media-record-button-border-width: calc(var(--op-du) * 0.25);
-  --op-media-record-button-bg: var(--op-color-surface);
-  --op-media-record-button-border: var(--op-color-border);
-  --op-media-record-button-color: var(--op-color-text);
-  --op-media-record-button-active-bg: color-mix(in srgb, var(--op-color-accent) 20%, var(--op-color-surface));
-  --op-media-record-button-active-border: var(--op-color-accent);
-  --op-media-record-button-active-color: var(--op-color-accent);
-  --op-media-record-button-locked-bg: color-mix(in srgb, var(--op-color-success) 20%, var(--op-color-surface));
-  --op-media-record-button-locked-border: var(--op-color-success);
-  --op-media-record-button-locked-color: var(--op-color-success);
-  --op-media-record-button-canceling-bg: color-mix(in srgb, var(--op-color-error) 20%, var(--op-color-surface));
-  --op-media-record-button-canceling-border: var(--op-color-error);
-  --op-media-record-button-canceling-color: var(--op-color-error);
+  --op-media-record-button-bg: var(--op-surface);
+  --op-media-record-button-border: var(--op-border);
+  --op-media-record-button-color: var(--op-text-primary);
+  --op-media-record-button-active-bg: color-mix(in srgb, var(--op-accent) 20%, var(--op-surface));
+  --op-media-record-button-active-border: var(--op-accent);
+  --op-media-record-button-active-color: var(--op-accent);
+  --op-media-record-button-locked-bg: color-mix(in srgb, var(--op-success) 20%, var(--op-surface));
+  --op-media-record-button-locked-border: var(--op-success);
+  --op-media-record-button-locked-color: var(--op-success);
+  --op-media-record-button-canceling-bg: color-mix(in srgb, var(--op-error) 20%, var(--op-surface));
+  --op-media-record-button-canceling-border: var(--op-error);
+  --op-media-record-button-canceling-color: var(--op-error);
 
   display: inline-flex;
   align-items: center;
@@ -40,7 +46,7 @@
 }
 
 .op-media-record-button:focus-visible {
-  outline: calc(var(--op-du) * 0.5) solid var(--op-color-focus);
+  outline: calc(var(--op-du) * 0.5) solid var(--op-focus-ring);
   outline-offset: calc(var(--op-du) * 0.5);
 }
 
@@ -98,20 +104,20 @@
   font-family: var(--op-font-mono, monospace);
   font-size: calc(var(--op-tu) * 12);
   font-weight: 600;
-  color: var(--op-color-accent);
+  color: var(--op-accent);
 }
 
 .op-media-record-timer__dot {
   width: calc(var(--op-du) * 1.5);
   height: calc(var(--op-du) * 1.5);
-  background: var(--op-color-error);
+  background: var(--op-error);
   border-radius: 50%;
   animation: op-media-record-blink 1s ease-in-out infinite;
 }
 
 .op-media-record-hint {
   font-size: calc(var(--op-tu) * 11);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
 }
 
 @keyframes op-media-record-blink {

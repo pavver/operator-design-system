@@ -1,31 +1,31 @@
 # StickerPicker
 
-Pluggable sticker picker with pack navigation strips, search query filtering, and enlarged hover previews.
-It supports raster pictures, vector SVGs, and application-rendered animated formats.
+Pluggable vector and animated sticker picker with pack navigation and preview support.
+Supports static PNG/WebP graphics, vector SVGs, and animated vector formats.
 
 Status: **draft** on web.
 
 ## Use
 
-Use `StickerPicker` in media keyboards, chat input panels, and messaging interfaces.
-The component ships no built-in packs: all packs, metadata, and graphics are installed by the host application.
-Long-pressing or hovering over a sticker displays an enlarged floating preview overlay.
+Use `StickerPicker` in chat composer panels, media keyboards, and comment forms.
+The library ships no sticker packs: the application installs packs through `StickerPack` models.
+Long-press or hover displays an enlarged preview of the sticker graphic.
 
 ## Geometry
 
 | Property | Value |
 | :--- | :--- |
 | Corner radius | `0 DU` (standard square geometry). |
-| Standard border | `0.25 DU` container outline border. |
-| Default height | `60 DU` (`--op-sticker-picker-height`). |
+| Standard border | `0.25 DU` outline border. |
+| Container height | `60 DU` (`--op-sticker-picker-height`). |
 | Cell size | `18 DU` (`--op-sticker-picker-cell-size`). |
 
 ## Behavior
 
-* Clicking a pack icon in the navigation strip switches the visible sticker collection.
-* Live search matches against sticker titles and associated emoji keywords.
-* Selecting a sticker invokes `on_select` with a polymorphic `StickerAttachment`.
-* Hovering over a sticker opens an enlarged floating preview box.
+* Clicking a pack tab scrolls to that pack's sticker list.
+* Typing into the search field queries stickers across installed packs by name or emoji.
+* Selecting a sticker fires `on_select` with a `StickerAttachment`.
+* Hovering over any sticker displays an enlarged preview overlay.
 
 ## API
 
@@ -53,21 +53,27 @@ Long-pressing or hovering over a sticker displays an enlarged floating preview o
 
 | Variable | Default | Role |
 | :--- | :--- | :--- |
-| `--op-sticker-picker-bg` | `var(--op-color-surface)` | Picker background. |
-| `--op-sticker-picker-border` | `var(--op-color-border)` | Picker outline border. |
-| `--op-sticker-picker-accent` | `var(--op-color-accent)` | Pack tab highlight and cell focus. |
+| `--op-sticker-picker-bg` | `var(--op-surface)` | Picker background. |
+| `--op-sticker-picker-border` | `var(--op-border)` | Picker outline border. |
+| `--op-sticker-picker-accent` | `var(--op-accent)` | Pack tab highlight and cell focus. |
+| `--op-sticker-picker-text` | `var(--op-text-primary)` | Picker text color. |
 
 ## Strings
 
 | Key | Default English | Description |
 | :--- | :--- | :--- |
 | `sticker-picker.search` | `"Search stickers..."` | Search field placeholder. |
+| `sticker-picker.recent` | `"Recent stickers"` | Recent stickers section and tab label. |
+| `sticker-picker.packs` | `"Sticker packs"` | Sticker packs tablist accessible label. |
+| `sticker-picker.search-prefix` | `"Search results"` | Search results header title prefix. |
+| `sticker-picker.empty` | `"No stickers found"` | Empty search or pack state. |
 
 ## Icons
 
 | Key | Default | Description |
 | :--- | :--- | :--- |
 | `sticker-picker.search-icon` | `icons::SEARCH` | Search field icon. |
+| `sticker-picker.recent-icon` | `icons::REFRESH` | Recent stickers tab icon. |
 
 ## Accessibility
 

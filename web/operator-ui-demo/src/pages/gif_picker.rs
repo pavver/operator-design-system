@@ -29,6 +29,13 @@ pub fn gif_picker() -> AnyView {
         ),
     ];
 
+    let trending_tags = vec![
+        "Trending".to_string(),
+        "Reaction".to_string(),
+        "Cats".to_string(),
+        "Party".to_string(),
+    ];
+
     view! {
         <div class="demo-stack" style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 4);width:100%;max-width:calc(var(--op-du) * 120);">
             <Example
@@ -37,12 +44,13 @@ pub fn gif_picker() -> AnyView {
                 block=true
             >
                 <div style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 2);width:100%;max-width:calc(var(--op-du) * 90);margin:0 auto;">
-                    <div style="font-family:monospace;font-size:13px;color:var(--op-color-text);">
+                    <div style="font-family:monospace;font-size:calc(var(--op-tu) * 13);color:var(--op-text-primary);">
                         {move || format!("Selected: {}", chosen_gif.get())}
                     </div>
 
                     <GifPicker
                         gifs=items
+                        trending_tags=trending_tags
                         on_select=Callback::new(move |g: GifItem| chosen_gif.set(g.title))
                     />
                 </div>

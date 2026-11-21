@@ -1,9 +1,16 @@
+/* Operator EmojiPicker: pluggable emoji pack selector */
+
+:where(.op-emoji-picker) {
+  color: var(--op-emoji-picker-text, inherit);
+}
+
 .op-emoji-picker {
   --op-emoji-picker-height: calc(var(--op-du) * 60);
   --op-emoji-picker-cell-size: calc(var(--op-du) * 8.5);
-  --op-emoji-picker-bg: var(--op-color-surface);
-  --op-emoji-picker-border: var(--op-color-border);
-  --op-emoji-picker-accent: var(--op-color-accent);
+  --op-emoji-picker-bg: var(--op-surface);
+  --op-emoji-picker-border: var(--op-border);
+  --op-emoji-picker-accent: var(--op-accent);
+  --op-emoji-picker-text: var(--op-text-primary);
 
   display: flex;
   flex-direction: column;
@@ -20,7 +27,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 1);
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
-  background: var(--op-color-surface-raised, var(--op-color-surface));
+  background: var(--op-surface-raised, var(--op-surface));
   border-bottom: calc(var(--op-du) * 0.25) solid var(--op-emoji-picker-border);
 }
 
@@ -30,7 +37,7 @@
   justify-content: center;
   width: calc(var(--op-du) * 4);
   height: calc(var(--op-du) * 4);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
 }
 
 .op-emoji-picker__search-icon svg {
@@ -44,13 +51,13 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--op-color-text);
+  color: var(--op-text-primary);
   font-family: inherit;
   font-size: calc(var(--op-tu) * 12);
 }
 
 .op-emoji-picker__search-input::placeholder {
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   opacity: 0.7;
 }
 
@@ -59,7 +66,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 0.5);
   padding: calc(var(--op-du) * 1);
-  background: var(--op-color-surface-alt, var(--op-color-surface));
+  background: var(--op-surface-alt, var(--op-surface));
   border-bottom: calc(var(--op-du) * 0.25) solid var(--op-emoji-picker-border);
   overflow-x: auto;
 }
@@ -73,13 +80,28 @@
   background: transparent;
   border: calc(var(--op-du) * 0.25) solid transparent;
   font-size: calc(var(--op-tu) * 14);
+  color: var(--op-text-secondary);
   cursor: pointer;
   position: relative;
+  box-sizing: border-box;
+}
+
+.op-emoji-picker__cat-btn svg {
+  width: calc(var(--op-du) * 4.5);
+  height: calc(var(--op-du) * 4.5);
+  fill: currentColor;
 }
 
 .op-emoji-picker__cat-btn[data-selected="true"] {
   border-color: var(--op-emoji-picker-accent);
   background: color-mix(in srgb, var(--op-emoji-picker-accent) 15%, transparent);
+  color: var(--op-emoji-picker-accent);
+}
+
+.op-emoji-picker__cat-icon-img {
+  width: calc(var(--op-du) * 5);
+  height: calc(var(--op-du) * 5);
+  object-fit: contain;
 }
 
 .op-emoji-picker__section-title {
@@ -87,7 +109,7 @@
   font-size: calc(var(--op-tu) * 10);
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   letter-spacing: 0.05em;
 }
 
@@ -98,6 +120,14 @@
   padding: calc(var(--op-du) * 1);
   overflow-y: auto;
   flex: 1;
+}
+
+.op-emoji-picker__empty {
+  grid-column: 1 / -1;
+  padding: calc(var(--op-du) * 4);
+  text-align: center;
+  font-size: calc(var(--op-tu) * 12);
+  color: var(--op-text-secondary);
 }
 
 .op-emoji-picker__cell {

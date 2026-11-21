@@ -1,40 +1,39 @@
 # GifPicker
 
-Looping video clip picker with trending search tags and automated viewport pause management.
-GIF items are rendered as short looping MP4/WebM video clips and paused when scrolled out of view via `IntersectionObserver`.
+Looping animated GIF and video clip picker with IntersectionObserver viewport playback.
+GIFs are delivered as looping MP4/WebM videos and automatically paused when scrolled outside the viewport.
 
 Status: **draft** on web.
 
 ## Use
 
-Use `GifPicker` in chat media keyboards, reaction composers, and messaging panels.
-Real `.gif` files are slow to decode and CPU intensive; modern clients stream muted looping video clips instead.
-The picker automatically pauses clips that leave the visible scrolling viewport to preserve device battery and CPU.
+Use `GifPicker` in chat inputs, social reaction sheets, and comment dialogs.
+Clips and trending tags are provided entirely by the host application.
+The component renders high-efficiency muted looping videos instead of legacy high-overhead `.gif` bitmaps.
 
 ## Geometry
 
 | Property | Value |
 | :--- | :--- |
 | Corner radius | `0 DU` (standard square geometry). |
-| Standard border | `0.25 DU` container outline border. |
-| Default height | `60 DU` (`--op-gif-picker-height`). |
+| Standard border | `0.25 DU` outline border. |
+| Container height | `60 DU` (`--op-gif-picker-height`). |
 | Cell height | `30 DU` (`--op-gif-picker-cell-height`). |
 
 ## Behavior
 
-* Clicking a trending tag filters the grid by that thematic keyword.
-* Searching via the input field queries both titles and tags simultaneously.
-* An `IntersectionObserver` detects when video elements leave the viewport and pauses them.
-* When a cell enters the viewport, playback resumes smoothly.
-* Clicking a cell selects the item via the `on_select` callback.
+* Videos auto-play muted in a loop when intersecting the visible viewport.
+* An `IntersectionObserver` pauses off-screen videos to minimize CPU and power usage.
+* Clicking any tag filters the list by the tag key; clicking it again clears the tag filter.
+* Selecting a clip emits `on_select` with the `GifItem`.
 
 ## API
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `on_select` | `Callback<GifItem>` | none | Event reporting the chosen GIF item. |
-| `gifs` | `Option<Vec<GifItem>>` | none | Curated collection of looping GIF clips. |
-| `trending_tags` | `Option<Vec<String>>` | none | List of quick trending tag buttons. |
+| `gifs` | `Option<Vec<GifItem>>` | none | Curated collection of looping GIF clips from host app. |
+| `trending_tags` | `Option<Vec<String>>` | none | List of quick trending tag buttons from host app. |
 | `height` | `f32` | `60.0` | Container height in Design Units. |
 | `cell_height` | `f32` | `30.0` | Cell height in Design Units. |
 | `class` | `string` | none | Custom CSS classes. |
@@ -53,15 +52,18 @@ The picker automatically pauses clips that leave the visible scrolling viewport 
 
 | Variable | Default | Role |
 | :--- | :--- | :--- |
-| `--op-gif-picker-bg` | `var(--op-color-surface)` | Picker background. |
-| `--op-gif-picker-border` | `var(--op-color-border)` | Picker outline border. |
-| `--op-gif-picker-accent` | `var(--op-color-accent)` | Active tag and hover border. |
+| `--op-gif-picker-bg` | `var(--op-surface)` | Picker background. |
+| `--op-gif-picker-border` | `var(--op-border)` | Picker outline border. |
+| `--op-gif-picker-accent` | `var(--op-accent)` | Active tag and hover border. |
+| `--op-gif-picker-text` | `var(--op-text-primary)` | Text and title bar color. |
 
 ## Strings
 
 | Key | Default English | Description |
 | :--- | :--- | :--- |
 | `gif-picker.search` | `"Search GIFs..."` | Search input placeholder. |
+| `gif-picker.tags` | `"Trending GIF tags"` | Accessible label for tag toolbar. |
+| `gif-picker.empty` | `"No GIFs found"` | Empty search or tag state text. |
 
 ## Icons
 

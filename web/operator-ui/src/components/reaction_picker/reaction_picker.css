@@ -1,10 +1,17 @@
+/* Operator ReactionPicker Styles */
+
+:where(.op-reaction-picker-root) {
+  color: var(--op-reaction-picker-text, inherit);
+}
+
 .op-reaction-picker-root {
   --op-reaction-picker-width: calc(var(--op-du) * 85);
   --op-reaction-picker-max-height: calc(var(--op-du) * 110);
   --op-reaction-picker-cell-size: calc(var(--op-du) * 9);
-  --op-reaction-picker-bg: var(--op-color-surface);
-  --op-reaction-picker-border: var(--op-color-border);
-  --op-reaction-picker-accent: var(--op-color-accent);
+  --op-reaction-picker-bg: var(--op-surface);
+  --op-reaction-picker-border: var(--op-border);
+  --op-reaction-picker-accent: var(--op-accent);
+  --op-reaction-picker-text: var(--op-text-primary);
 
   display: inline-flex;
   flex-direction: column;
@@ -16,8 +23,8 @@
   align-items: center;
   gap: calc(var(--op-du) * 1);
   padding: calc(var(--op-du) * 1);
-  background: var(--op-color-surface);
-  border: calc(var(--op-du) * 0.25) solid var(--op-color-border);
+  background: var(--op-surface);
+  border: calc(var(--op-du) * 0.25) solid var(--op-border);
   box-sizing: border-box;
 }
 
@@ -37,8 +44,8 @@
 }
 
 .op-quick-reaction-btn:hover {
-  background: color-mix(in srgb, var(--op-color-accent) 15%, transparent);
-  border-color: var(--op-color-accent);
+  background: color-mix(in srgb, var(--op-accent) 15%, transparent);
+  border-color: var(--op-accent);
   transform: scale(1.15);
 }
 
@@ -48,16 +55,16 @@
   justify-content: center;
   width: calc(var(--op-du) * 8);
   height: calc(var(--op-du) * 8);
-  background: var(--op-color-surface-raised, var(--op-color-surface));
-  border: calc(var(--op-du) * 0.25) solid var(--op-color-border);
-  color: var(--op-color-text-secondary);
+  background: var(--op-surface-raised, var(--op-surface));
+  border: calc(var(--op-du) * 0.25) solid var(--op-border);
+  color: var(--op-text-secondary);
   cursor: pointer;
   user-select: none;
 }
 
 .op-quick-reaction-expand:hover {
-  border-color: var(--op-color-accent);
-  color: var(--op-color-accent);
+  border-color: var(--op-accent);
+  color: var(--op-accent);
 }
 
 .op-quick-reaction-expand svg {
@@ -102,13 +109,13 @@
   height: calc(var(--op-du) * 6);
   background: transparent;
   border: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-border);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   cursor: pointer;
 }
 
 .op-reaction-picker__close:hover {
-  border-color: var(--op-color-error);
-  color: var(--op-color-error);
+  border-color: var(--op-error);
+  color: var(--op-error);
 }
 
 .op-reaction-picker__close svg {
@@ -128,9 +135,9 @@
 .op-reaction-picker__tab {
   flex: 1;
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 1.5);
-  background: var(--op-color-surface);
+  background: var(--op-surface);
   border: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-border);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   font-size: calc(var(--op-tu) * 9);
   font-weight: 600;
   text-transform: uppercase;
@@ -154,13 +161,21 @@
   max-height: calc(var(--op-du) * 80);
 }
 
+.op-reaction-picker__empty {
+  grid-column: 1 / -1;
+  padding: calc(var(--op-du) * 4);
+  text-align: center;
+  font-size: calc(var(--op-tu) * 12);
+  color: var(--op-text-secondary);
+}
+
 .op-reaction-picker__cell {
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--op-reaction-picker-cell-size);
   height: var(--op-reaction-picker-cell-size);
-  background: color-mix(in srgb, var(--op-color-surface) 50%, transparent);
+  background: color-mix(in srgb, var(--op-surface) 50%, transparent);
   border: calc(var(--op-du) * 0.25) solid color-mix(in srgb, var(--op-reaction-picker-border) 40%, transparent);
   font-size: calc(var(--op-tu) * 20);
   cursor: pointer;

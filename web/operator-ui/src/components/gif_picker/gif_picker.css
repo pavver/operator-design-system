@@ -1,9 +1,16 @@
+/* Operator GifPicker: animated clips / short video clips */
+
+:where(.op-gif-picker) {
+  color: var(--op-gif-picker-text, inherit);
+}
+
 .op-gif-picker {
   --op-gif-picker-height: calc(var(--op-du) * 60);
   --op-gif-picker-cell-height: calc(var(--op-du) * 30);
-  --op-gif-picker-bg: var(--op-color-surface);
-  --op-gif-picker-border: var(--op-color-border);
-  --op-gif-picker-accent: var(--op-color-accent);
+  --op-gif-picker-bg: var(--op-surface);
+  --op-gif-picker-border: var(--op-border);
+  --op-gif-picker-accent: var(--op-accent);
+  --op-gif-picker-text: var(--op-text-primary);
 
   display: flex;
   flex-direction: column;
@@ -20,7 +27,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 1);
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
-  background: var(--op-color-surface-raised, var(--op-color-surface));
+  background: var(--op-surface-raised, var(--op-surface));
   border-bottom: calc(var(--op-du) * 0.25) solid var(--op-gif-picker-border);
 }
 
@@ -30,7 +37,7 @@
   justify-content: center;
   width: calc(var(--op-du) * 4);
   height: calc(var(--op-du) * 4);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
 }
 
 .op-gif-picker__search-icon svg {
@@ -44,13 +51,13 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--op-color-text);
+  color: var(--op-text-primary);
   font-family: inherit;
   font-size: calc(var(--op-tu) * 12);
 }
 
 .op-gif-picker__search-input::placeholder {
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   opacity: 0.7;
 }
 
@@ -59,7 +66,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 1);
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
-  background: var(--op-color-surface-alt, var(--op-color-surface));
+  background: var(--op-surface-alt, var(--op-surface));
   border-bottom: calc(var(--op-du) * 0.25) solid var(--op-gif-picker-border);
   overflow-x: auto;
 }
@@ -69,9 +76,9 @@
   align-items: center;
   justify-content: center;
   padding: calc(var(--op-du) * 0.5) calc(var(--op-du) * 1.5);
-  background: var(--op-color-surface);
+  background: var(--op-surface);
   border: calc(var(--op-du) * 0.25) solid var(--op-gif-picker-border);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   font-size: calc(var(--op-tu) * 10);
   font-weight: 600;
   cursor: pointer;
@@ -93,10 +100,18 @@
   flex: 1;
 }
 
+.op-gif-picker__empty {
+  grid-column: 1 / -1;
+  padding: calc(var(--op-du) * 4);
+  text-align: center;
+  font-size: calc(var(--op-tu) * 12);
+  color: var(--op-text-secondary);
+}
+
 .op-gif-picker__cell {
   position: relative;
   height: var(--op-gif-picker-cell-height);
-  background: var(--op-color-surface-alt, #000);
+  background: var(--op-surface-alt);
   border: calc(var(--op-du) * 0.25) solid var(--op-gif-picker-border);
   overflow: hidden;
   cursor: pointer;

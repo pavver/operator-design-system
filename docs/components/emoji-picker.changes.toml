@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+en = "Decouple emoji data and category titles to app-provided packs via EmojiCategory and EmojiItem; add string and icon hooks."
+uk = "Винесено дані емодзі та назви категорій у паки застосунку через EmojiCategory та EmojiItem; додано хуки рядків і піктограм."
+
+[[change]]
 date = "2026-11-22T00:12:17+02:00"
 status = "draft"
 en = "New component: pluggable emoji picker with category tabs, live search, and custom emoji support."

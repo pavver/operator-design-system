@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+en = "Use design token variables for color properties and remove pixel references from documentation."
+uk = "Використано стандартні токени дизайну для властивостей кольору та вилучено згадки пікселів з документації."
+
+[[change]]
 date = "2026-11-22T00:12:17+02:00"
 status = "draft"
 en = "New component: tactical push-to-talk button with hold transmission and upward lock gesture."

@@ -1,13 +1,20 @@
+/* Operator ChatInput Styles */
+
+:where(.op-chat-input-container) {
+  font-size: var(--op-chat-input-font-size, inherit);
+  color: var(--op-chat-input-text, inherit);
+}
+
 .op-chat-input-container {
   --op-chat-input-min-height: calc(var(--op-du) * 9);
   --op-chat-input-max-height: calc(var(--op-du) * 29);
   --op-chat-input-font-size: calc(var(--op-tu) * 13);
   --op-chat-input-border-width: calc(var(--op-du) * 0.25);
-  --op-chat-input-bg: var(--op-color-surface);
-  --op-chat-input-border: var(--op-color-border);
-  --op-chat-input-text: var(--op-color-text);
-  --op-chat-input-placeholder: var(--op-color-text-secondary);
-  --op-chat-input-accent: var(--op-color-accent);
+  --op-chat-input-bg: var(--op-surface);
+  --op-chat-input-border: var(--op-border);
+  --op-chat-input-text: var(--op-text-primary);
+  --op-chat-input-placeholder: var(--op-text-secondary);
+  --op-chat-input-accent: var(--op-accent);
 
   display: flex;
   flex-direction: column;
@@ -21,7 +28,7 @@
   justify-content: space-between;
   gap: calc(var(--op-du) * 2);
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
-  background: var(--op-color-surface-raised, var(--op-color-surface));
+  background: var(--op-surface-raised, var(--op-surface));
   border-left: calc(var(--op-du) * 0.75) solid var(--op-chat-input-accent);
   border-top: var(--op-chat-input-border-width) solid var(--op-chat-input-border);
   border-right: var(--op-chat-input-border-width) solid var(--op-chat-input-border);
@@ -47,7 +54,7 @@
 
 .op-chat-input__reply-text {
   font-size: calc(var(--op-tu) * 11);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -61,12 +68,12 @@
   height: calc(var(--op-du) * 6);
   background: transparent;
   border: none;
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   cursor: pointer;
 }
 
 .op-chat-input__reply-cancel:hover {
-  color: var(--op-color-error);
+  color: var(--op-error);
 }
 
 .op-chat-input__reply-cancel svg {
@@ -99,7 +106,7 @@
   height: calc(var(--op-du) * 9);
   background: transparent;
   border: var(--op-chat-input-border-width) solid transparent;
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   cursor: pointer;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -145,7 +152,7 @@
   height: calc(var(--op-du) * 9);
   background: var(--op-chat-input-accent);
   border: var(--op-chat-input-border-width) solid var(--op-chat-input-accent);
-  color: var(--op-color-text-inverse, #fff);
+  color: var(--op-text-inverse, var(--op-surface));
   cursor: pointer;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -169,11 +176,11 @@
 }
 
 .op-chat-input__send-btn[data-state="success"] {
-  background: var(--op-color-success);
-  border-color: var(--op-color-success);
+  background: var(--op-success);
+  border-color: var(--op-success);
 }
 
 .op-chat-input__send-btn[data-state="error"] {
-  background: var(--op-color-error);
-  border-color: var(--op-color-error);
+  background: var(--op-error);
+  border-color: var(--op-error);
 }

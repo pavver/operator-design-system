@@ -1,9 +1,16 @@
+/* Operator MediaKeyboard Styles */
+
+:where(.op-media-keyboard) {
+  color: var(--op-media-keyboard-text, inherit);
+}
+
 .op-media-keyboard {
   --op-media-keyboard-width: calc(var(--op-du) * 85);
   --op-media-keyboard-height: calc(var(--op-du) * 70);
-  --op-media-keyboard-bg: var(--op-color-surface);
-  --op-media-keyboard-border: var(--op-color-border);
-  --op-media-keyboard-accent: var(--op-color-accent);
+  --op-media-keyboard-bg: var(--op-surface);
+  --op-media-keyboard-border: var(--op-border);
+  --op-media-keyboard-accent: var(--op-accent);
+  --op-media-keyboard-text: var(--op-text-primary);
 
   display: flex;
   flex-direction: column;
@@ -37,7 +44,7 @@
   align-items: center;
   justify-content: space-between;
   height: calc(var(--op-du) * 10);
-  background: var(--op-color-surface-raised, var(--op-color-surface));
+  background: var(--op-surface-raised, var(--op-surface));
   border-top: calc(var(--op-du) * 0.25) solid var(--op-media-keyboard-border);
   padding: 0 calc(var(--op-du) * 1);
   box-sizing: border-box;
@@ -59,7 +66,7 @@
   height: calc(var(--op-du) * 8);
   background: transparent;
   border: calc(var(--op-du) * 0.25) solid transparent;
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   font-size: calc(var(--op-tu) * 11);
   font-weight: 700;
   text-transform: uppercase;
@@ -84,12 +91,12 @@
   height: calc(var(--op-du) * 8);
   background: transparent;
   border: calc(var(--op-du) * 0.25) solid transparent;
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   cursor: pointer;
 }
 
 .op-media-keyboard__backspace-btn:hover {
-  color: var(--op-color-error);
+  color: var(--op-error);
 }
 
 .op-media-keyboard__backspace-btn svg {

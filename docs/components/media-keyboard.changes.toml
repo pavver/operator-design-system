@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+en = "Describe generic media keyboard compatible with any packs (Telegram included); update emoji and trending tag props and tokens."
+uk = "Описано універсальну медіа-клавіатуру, сумісну з будь-якими паками (включно з Telegram); оновлено параметри емодзі й тегів та токени."
+
+[[change]]
 date = "2026-11-22T00:12:17+02:00"
 status = "draft"
 en = "New component: unified media keyboard with tabs for Emoji, Stickers, and GIFs, desktop popover, and mobile docked panel."

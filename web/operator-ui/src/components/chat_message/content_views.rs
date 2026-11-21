@@ -307,6 +307,10 @@ pub fn CodeBlockView(
                                 let _ = clipboard.write_text(&code_for_copy);
                             }
                         }
+                        #[cfg(not(target_arch = "wasm32"))]
+                        {
+                            let _ = &code_for_copy;
+                        }
                     }
                     aria-label="Copy code to clipboard"
                 >

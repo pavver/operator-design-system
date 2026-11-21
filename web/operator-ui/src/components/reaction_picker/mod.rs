@@ -7,113 +7,21 @@ use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("reaction_picker.css");
 
-/// Category filter for reaction emojis.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum ReactionCategory {
-    #[default]
-    Popular,
-    Smileys,
-    Gestures,
-    Symbols,
-    Tactical,
+/// Pluggable reaction category or section provided by the application.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ReactionSection {
+    pub id: String,
+    pub title: String,
+    pub emojis: Vec<String>,
 }
 
-impl ReactionCategory {
-    pub fn all() -> &'static [Self] {
-        &[
-            Self::Popular,
-            Self::Smileys,
-            Self::Gestures,
-            Self::Symbols,
-            Self::Tactical,
-        ]
-    }
-
-    pub fn key(self) -> &'static str {
-        match self {
-            Self::Popular => "popular",
-            Self::Smileys => "smileys",
-            Self::Gestures => "gestures",
-            Self::Symbols => "symbols",
-            Self::Tactical => "tactical",
+impl ReactionSection {
+    pub fn new(id: impl Into<String>, title: impl Into<String>, emojis: Vec<String>) -> Self {
+        Self {
+            id: id.into(),
+            title: title.into(),
+            emojis,
         }
-    }
-}
-
-pub fn emojis_for_category(cat: ReactionCategory) -> &'static [&'static str] {
-    match cat {
-        ReactionCategory::Popular => &[
-            "👍", "👎", "❤️", "🔥", "👏", "🎉", "⚡", "🤔", "🤯", "💩", "🙏", "💯", "🎯", "🚀",
-        ],
-        ReactionCategory::Smileys => &[
-            "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "🥲", "🥹", "😊", "😇", "🙂", "🙃",
-            "😉", "😌", "😍", "🥰", "😘", "😗", "😋", "😛", "😜", "🤪", "🤨", "🧐", "🤓", "😎",
-            "🥸", "🤩", "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫",
-            "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨",
-        ],
-        ReactionCategory::Gestures => &[
-            "👍",
-            "👎",
-            "👊",
-            "✊",
-            "🤛",
-            "🤜",
-            "👏",
-            "🙌",
-            "👐",
-            "🤲",
-            "🤝",
-            "🙏",
-            "✍️",
-            "💅",
-            "🤳",
-            "💪",
-            "🦾",
-            "🦿",
-            "🦵",
-            "🦶",
-            "👂",
-            "👃",
-            "🧠",
-            "👀",
-            "👁️",
-            "🧑‍💻",
-            "👨‍💻",
-        ],
-        ReactionCategory::Symbols => &[
-            "❤️",
-            "🧡",
-            "💛",
-            "💚",
-            "💙",
-            "💜",
-            "🖤",
-            "🤍",
-            "🤎",
-            "💔",
-            "❤️‍🔥",
-            "❤️‍🩹",
-            "❣️",
-            "💕",
-            "💞",
-            "💓",
-            "💗",
-            "💖",
-            "💘",
-            "💝",
-            "⚡",
-            "🔥",
-            "✨",
-            "⭐",
-            "🌟",
-            "💫",
-            "💥",
-            "💯",
-        ],
-        ReactionCategory::Tactical => &[
-            "🎯", "🚀", "🛡️", "⚔️", "📡", "📻", "💻", "🕹️", "🔋", "💡", "🔧", "🔨", "📦", "🏆",
-            "🥇", "🥈", "🥉", "🎲", "🎰", "🔔",
-        ],
     }
 }
 
@@ -123,9 +31,12 @@ pub fn emojis_for_category(cat: ReactionCategory) -> &'static [&'static str] {
 pub fn ReactionPicker(
     /// Callback when an emoji reaction is picked.
     on_select: Callback<String>,
-    /// Quick reactions displayed in the compact row. Defaults to TOP 7.
-    #[prop(optional)]
+    /// Quick reactions displayed in the compact row. Provided by the host app.
+    #[prop(optional, into)]
     quick_reactions: Option<Vec<String>>,
+    /// Pluggable reaction categories/sections provided by the host app.
+    #[prop(optional, into)]
+    categories: Option<Vec<ReactionSection>>,
     /// Whether the quick reactions bar is shown; defaults to true.
     #[prop(default = true)]
     show_quick_bar: bool,
@@ -150,26 +61,35 @@ pub fn ReactionPicker(
 ) -> impl IntoView {
     let local_open = RwSignal::new(false);
     let is_open = Signal::derive(move || open.get().unwrap_or_else(|| local_open.get()));
-    let selected_category = RwSignal::new(ReactionCategory::Popular);
+    let selected_section_idx = RwSignal::new(0_usize);
 
-    let default_quick = vec![
-        "👍".to_string(),
-        "👎".to_string(),
-        "❤️".to_string(),
-        "🔥".to_string(),
-        "👏".to_string(),
-        "🎉".to_string(),
-        "⚡".to_string(),
-    ];
-    let quick_list = quick_reactions.unwrap_or(default_quick);
+    let quick_list = quick_reactions.unwrap_or_default();
+    let sections = categories.unwrap_or_default();
 
     let header_title = ui_text(
         None::<String>.into(),
         "reaction-picker.title",
         "SELECT REACTION",
     );
-    let close_icon = ui_icon(None, "reaction-picker.close", icons::CLOSE);
-    let expand_icon = ui_icon(None, "reaction-picker.expand", icons::ADD);
+    let quick_reactions_aria = ui_text(
+        None::<String>.into(),
+        "reaction-picker.quick-reactions",
+        "Quick reactions",
+    );
+    let more_aria = ui_text(
+        None::<String>.into(),
+        "reaction-picker.more",
+        "More reactions",
+    );
+    let close_aria = ui_text(None::<String>.into(), "reaction-picker.close", "Close");
+    let empty_text = ui_text(
+        None::<String>.into(),
+        "reaction-picker.empty",
+        "No reactions available",
+    );
+
+    let close_icon = ui_icon(None, "reaction-picker.close-icon", icons::CLOSE);
+    let expand_icon = ui_icon(None, "reaction-picker.expand-icon", icons::ADD);
 
     let metrics = vec![
         Metric::du("--op-reaction-picker-width", width),
@@ -194,8 +114,10 @@ pub fn ReactionPicker(
         <div class=root_cls style=root_stl>
             {show_quick_bar.then(|| {
                 let q_list = quick_list.clone();
+                let aria_lbl = quick_reactions_aria.get();
+                let more_lbl = more_aria.get();
                 view! {
-                    <div class="op-quick-reactions-row" role="toolbar" aria-label="Quick reactions">
+                    <div class="op-quick-reactions-row" role="toolbar" aria-label=aria_lbl>
                         {q_list.into_iter().map(|emoji| {
                             let em = emoji.clone();
                             let em_pick = emoji.clone();
@@ -215,7 +137,7 @@ pub fn ReactionPicker(
                             type="button"
                             class="op-quick-reaction-expand"
                             on:click=move |_| local_open.update(|o| *o = !*o)
-                            aria-label="More reactions"
+                            aria-label=more_lbl
                         >
                             <Icon icon=expand_icon.get() />
                         </button>
@@ -224,6 +146,11 @@ pub fn ReactionPicker(
             })}
 
             {move || is_open.get().then(|| {
+                let sec_list = sections.clone();
+                let cur_idx = selected_section_idx.get();
+                let current_emojis = sec_list.get(cur_idx).map(|s| s.emojis.clone()).unwrap_or_default();
+                let is_sec_empty = sec_list.is_empty();
+
                 view! {
                     <div class="op-reaction-picker-dialog" role="dialog" aria-modal="true">
                         <div class="op-reaction-picker__header">
@@ -232,41 +159,45 @@ pub fn ReactionPicker(
                                 type="button"
                                 class="op-reaction-picker__close"
                                 on:click=move |_| close_dialog()
-                                aria-label="Close"
+                                aria-label=move || close_aria.get()
                             >
                                 <Icon icon=close_icon.get() />
                             </button>
                         </div>
 
-                        <div class="op-reaction-picker__tabs">
-                            {ReactionCategory::all().iter().map(|&cat| {
-                                let is_sel = move || selected_category.get() == cat;
-                                let label = match cat {
-                                    ReactionCategory::Popular => "TOP",
-                                    ReactionCategory::Smileys => "SMILEYS",
-                                    ReactionCategory::Gestures => "GESTURES",
-                                    ReactionCategory::Symbols => "SYMBOLS",
-                                    ReactionCategory::Tactical => "TACTICAL",
-                                };
-                                view! {
-                                    <button
-                                        type="button"
-                                        class="op-reaction-picker__tab"
-                                        data-selected=move || is_sel().then_some("true")
-                                        on:click=move |_| selected_category.set(cat)
-                                    >
-                                        {label}
-                                    </button>
-                                }
-                            }).collect::<Vec<_>>()}
-                        </div>
+                        {(!is_sec_empty).then(|| {
+                            let sec_tabs = sec_list.clone();
+                            view! {
+                                <div class="op-reaction-picker__tabs">
+                                    {sec_tabs.into_iter().enumerate().map(|(idx, sec)| {
+                                        let is_sel = move || selected_section_idx.get() == idx;
+                                        let title = sec.title.clone();
+                                        view! {
+                                            <button
+                                                type="button"
+                                                class="op-reaction-picker__tab"
+                                                data-selected=move || is_sel().then_some("true")
+                                                on:click=move |_| selected_section_idx.set(idx)
+                                            >
+                                                {title}
+                                            </button>
+                                        }
+                                    }).collect::<Vec<_>>()}
+                                </div>
+                            }
+                        })}
 
                         <div class="op-reaction-picker__grid">
-                            {move || {
-                                let emojis = emojis_for_category(selected_category.get());
-                                emojis.iter().map(|&emoji| {
-                                    let em = emoji.to_string();
-                                    let em_click = em.clone();
+                            {if current_emojis.is_empty() {
+                                view! {
+                                    <div class="op-reaction-picker__empty">
+                                        {empty_text.get()}
+                                    </div>
+                                }.into_any()
+                            } else {
+                                current_emojis.into_iter().map(|emoji| {
+                                    let em = emoji.clone();
+                                    let em_click = emoji.clone();
                                     view! {
                                         <button
                                             type="button"
@@ -277,7 +208,7 @@ pub fn ReactionPicker(
                                             {em.clone()}
                                         </button>
                                     }
-                                }).collect::<Vec<_>>()
+                                }).collect::<Vec<_>>().into_any()
                             }}
                         </div>
                     </div>

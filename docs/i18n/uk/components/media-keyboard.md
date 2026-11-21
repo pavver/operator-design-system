@@ -1,7 +1,7 @@
 # MediaKeyboard
 
-Уніфікована медіа-клавіатура, що відтворює структуру EmojiView в Android Telegram.
-Вона надсилає Емодзі, Стікери та GIF із підтримкою пошуку, мобільної закріпленої панелі та десктопного поповера.
+Універсальна медіа-клавіатура з перемиканням Емодзі, Стікерів та GIF.
+Вона сумісна з користувацькими наборами емодзі, стікерами та анімованими кліпами (зокрема паками Telegram), підтримує пошук, мобільну закріплену панель та десктопний поповер.
 
 Статус: **draft** на web.
 
@@ -41,9 +41,12 @@
 | `desktop` | `bool` | `true` | Десктопний поповер або закріплена мобільна панель. |
 | `anchor` | `Option<Signal<Option<PopoverAnchor>>>` | немає | Координати прив'язки для поповера. |
 | `initial_tab` | `Option<MediaKeyboardTab>` | `Emoji` | Початкова активна вкладка. |
+| `emoji_categories` | `Option<Vec<EmojiCategory>>` | немає | Категорії емодзі від застосунку. |
+| `recent_emojis` | `Option<Vec<EmojiItem>>` | немає | Список останніх емодзі від застосунку. |
 | `custom_emojis` | `Option<CustomEmojiMap>` | немає | Реєстр власних емодзі. |
 | `sticker_packs` | `Option<Vec<StickerPack>>` | немає | Набори стікерів. |
 | `gifs` | `Option<Vec<GifItem>>` | немає | Список анімацій GIF. |
+| `trending_tags` | `Option<Vec<String>>` | немає | Список популярних тегів GIF. |
 | `width` | `f32` | `85.0` | Ширина на комп'ютері в Design Units. |
 | `height` | `f32` | `70.0` | Висота в Design Units. |
 | `class` | `string` | немає | Додаткові класи CSS. |
@@ -62,9 +65,10 @@
 
 | Змінна | За замовчуванням | Роль |
 | :--- | :--- | :--- |
-| `--op-media-keyboard-bg` | `var(--op-color-surface)` | Фон клавіатури. |
-| `--op-media-keyboard-border` | `var(--op-color-border)` | Рамка клавіатури. |
-| `--op-media-keyboard-accent` | `var(--op-color-accent)` | Лінія активної вкладки та фокус. |
+| `--op-media-keyboard-bg` | `var(--op-surface)` | Фон клавіатури. |
+| `--op-media-keyboard-border` | `var(--op-border)` | Рамка клавіатури. |
+| `--op-media-keyboard-accent` | `var(--op-accent)` | Лінія активної вкладки та фокус. |
+| `--op-media-keyboard-text` | `var(--op-text-primary)` | Колір тексту клавіатури. |
 
 ## Рядки
 
@@ -73,14 +77,15 @@
 | `media-keyboard.emoji` | `"Emoji"` | Підпис вкладки емодзі. |
 | `media-keyboard.stickers` | `"Stickers"` | Підпис вкладки стікерів. |
 | `media-keyboard.gifs` | `"GIF"` | Підпис вкладки GIF. |
+| `media-keyboard.backspace` | `"Backspace"` | Доступна назва кнопки видалення символу. |
 
 ## Піктограми
 
 | Ключ | За замовчуванням | Опис |
 | :--- | :--- | :--- |
-| `media-keyboard.backspace` | `icons::CLOSE` | Піктограма видалення символу. |
+| `media-keyboard.backspace-icon` | `icons::CLOSE` | Піктограма видалення символу. |
 
 ## Доступність
 
-* Кнопки перемикання вкладок мають атрибути `role="tab"` та `aria-selected`.
-* Контейнер позначено орієнтиром `role="region"` із текстовою міткою.
+* Кнопки вкладок мають атрибути `role="tab"` та `aria-selected`.
+* Контейнер розмічений як орієнтир області з `role="region"`.

@@ -1,18 +1,24 @@
+/* Operator PttButton Styles */
+
+:where(.op-ptt-button) {
+  color: var(--op-ptt-button-color, inherit);
+}
+
 .op-ptt-button {
   --op-ptt-button-size: calc(var(--op-du) * 22.5);
   --op-ptt-button-border-width: calc(var(--op-du) * 0.5);
-  --op-ptt-button-bg: var(--op-color-surface);
-  --op-ptt-button-border: var(--op-color-border);
-  --op-ptt-button-color: var(--op-color-text);
-  --op-ptt-button-active-bg: color-mix(in srgb, var(--op-color-accent) 15%, var(--op-color-surface));
-  --op-ptt-button-active-border: var(--op-color-accent);
-  --op-ptt-button-active-color: var(--op-color-accent);
-  --op-ptt-button-locked-bg: color-mix(in srgb, var(--op-color-success) 15%, var(--op-color-surface));
-  --op-ptt-button-locked-border: var(--op-color-success);
-  --op-ptt-button-locked-color: var(--op-color-success);
-  --op-ptt-button-error-bg: color-mix(in srgb, var(--op-color-error) 15%, var(--op-color-surface));
-  --op-ptt-button-error-border: var(--op-color-error);
-  --op-ptt-button-error-color: var(--op-color-error);
+  --op-ptt-button-bg: var(--op-surface);
+  --op-ptt-button-border: var(--op-border);
+  --op-ptt-button-color: var(--op-text-primary);
+  --op-ptt-button-active-bg: color-mix(in srgb, var(--op-accent) 15%, var(--op-surface));
+  --op-ptt-button-active-border: var(--op-accent);
+  --op-ptt-button-active-color: var(--op-accent);
+  --op-ptt-button-locked-bg: color-mix(in srgb, var(--op-success) 15%, var(--op-surface));
+  --op-ptt-button-locked-border: var(--op-success);
+  --op-ptt-button-locked-color: var(--op-success);
+  --op-ptt-button-error-bg: color-mix(in srgb, var(--op-error) 15%, var(--op-surface));
+  --op-ptt-button-error-border: var(--op-error);
+  --op-ptt-button-error-color: var(--op-error);
 
   display: inline-flex;
   flex-direction: column;
@@ -42,7 +48,7 @@
 }
 
 .op-ptt-button:focus-visible {
-  outline: calc(var(--op-du) * 0.5) solid var(--op-color-focus);
+  outline: calc(var(--op-du) * 0.5) solid var(--op-focus-ring);
   outline-offset: calc(var(--op-du) * 0.5);
 }
 
@@ -97,7 +103,7 @@
 
 .op-ptt-button__hint {
   font-size: calc(var(--op-tu) * 9);
-  color: var(--op-color-text-secondary);
+  color: var(--op-text-secondary);
   text-align: center;
   line-height: 1.1;
 }

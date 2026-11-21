@@ -1,6 +1,7 @@
 //! Live examples for MediaKeyboard (unified Emoji, Sticker, and GIF dispatching).
 
 use crate::kit::Example;
+use crate::pages::emoji_picker::{sample_emoji_categories, sample_recent_emojis};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
 
@@ -31,12 +32,14 @@ pub fn media_keyboard() -> AnyView {
                 block=true
             >
                 <div style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 2);width:100%;max-width:calc(var(--op-du) * 95);margin:0 auto;">
-                    <div style="font-family:monospace;font-size:13px;color:var(--op-color-text);">
+                    <div style="font-family:monospace;font-size:calc(var(--op-tu) * 13);color:var(--op-text-primary);">
                         {move || format!("Last dispatched item: {}", picked_summary.get())}
                     </div>
 
                     <MediaKeyboard
                         desktop=false
+                        emoji_categories=sample_emoji_categories()
+                        recent_emojis=sample_recent_emojis()
                         sticker_packs=vec![pack]
                         on_select_emoji=Callback::new(move |em| picked_summary.set(format!("Emoji: {em}")))
                         on_select_sticker=Callback::new(move |st: StickerAttachment| picked_summary.set(format!("Sticker: {:?}", st.sticker_id)))

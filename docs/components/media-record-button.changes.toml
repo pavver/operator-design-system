@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+en = "Add locked label string hook, remove raw pixel references, and use design token variables."
+uk = "Додано хук рядка для стану фіксації, вилучено пікселі та використано стандартні токени дизайну."
+
+[[change]]
 date = "2026-11-22T00:12:17+02:00"
 status = "draft"
 en = "New component: media recording button with voice/video mode toggle, hold-to-record, slide-to-cancel, and lock gestures."

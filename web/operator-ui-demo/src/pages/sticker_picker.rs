@@ -49,7 +49,7 @@ pub fn sticker_picker() -> AnyView {
                 block=true
             >
                 <div style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 2);width:100%;max-width:calc(var(--op-du) * 90);margin:0 auto;">
-                    <div style="font-family:monospace;font-size:13px;color:var(--op-color-text);">
+                    <div style="font-family:monospace;font-size:calc(var(--op-tu) * 13);color:var(--op-text-primary);">
                         {move || format!("Selected sticker: {}", picked_info.get())}
                     </div>
 

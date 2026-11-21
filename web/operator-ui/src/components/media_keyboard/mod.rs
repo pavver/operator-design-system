@@ -1,7 +1,9 @@
-//! Unified Media Keyboard replicating Telegram Android's EmojiView with Emoji, Sticker, and GIF dispatching.
+//! Generic Media Keyboard with unified Emoji, Sticker, and GIF dispatching.
+//!
+//! Provides a tabbed panel compatible with custom emoji packs, sticker sets, and animated clips (including Telegram packs).
 
 use crate::components::chat_message::{CustomEmojiMap, StickerAttachment};
-use crate::components::emoji_picker::EmojiPicker;
+use crate::components::emoji_picker::{EmojiCategory, EmojiItem, EmojiPicker};
 use crate::components::gif_picker::{GifItem, GifPicker};
 use crate::components::popover::{Placement, Popover, PopoverAnchor};
 use crate::components::primitives::Icon;
@@ -61,6 +63,12 @@ pub fn MediaKeyboard(
     /// Initial active tab (Emoji, Stickers, or GIFs).
     #[prop(optional)]
     initial_tab: Option<MediaKeyboardTab>,
+    /// Pluggable emoji categories/packs.
+    #[prop(optional, into)]
+    emoji_categories: Option<Vec<EmojiCategory>>,
+    /// Recent emojis list provided by the host app.
+    #[prop(optional, into)]
+    recent_emojis: Option<Vec<EmojiItem>>,
     /// Pluggable registry of custom image emojis.
     #[prop(optional, into)]
     custom_emojis: Option<CustomEmojiMap>,
@@ -70,6 +78,9 @@ pub fn MediaKeyboard(
     /// Pluggable GIF collection.
     #[prop(optional, into)]
     gifs: Option<Vec<GifItem>>,
+    /// Trending tags list for GIFs.
+    #[prop(optional, into)]
+    trending_tags: Option<Vec<String>>,
     /// Width in DU (`--op-media-keyboard-width`). Defaults to 85 DU.
     #[prop(optional, into)]
     width: MaybeProp<f32>,
@@ -102,7 +113,12 @@ pub fn MediaKeyboard(
     let tab_emoji_text = ui_text(None::<String>.into(), "media-keyboard.emoji", "Emoji");
     let tab_stickers_text = ui_text(None::<String>.into(), "media-keyboard.stickers", "Stickers");
     let tab_gifs_text = ui_text(None::<String>.into(), "media-keyboard.gifs", "GIF");
-    let backspace_icon = ui_icon(None, "media-keyboard.backspace", icons::CLOSE);
+    let backspace_aria = ui_text(
+        None::<String>.into(),
+        "media-keyboard.backspace",
+        "Backspace",
+    );
+    let backspace_icon = ui_icon(None, "media-keyboard.backspace-icon", icons::CLOSE);
 
     let metrics = vec![
         Metric::du("--op-media-keyboard-width", width),
@@ -111,14 +127,20 @@ pub fn MediaKeyboard(
     let root_cls = StoredValue::new(root_class("op-media-keyboard", class));
     let root_stl = StoredValue::new(root_style(metrics, style));
 
+    let emoji_cats = StoredValue::new(emoji_categories);
+    let emoji_recents = StoredValue::new(recent_emojis);
     let emoji_map = StoredValue::new(custom_emojis);
     let packs = StoredValue::new(sticker_packs);
     let gif_items = StoredValue::new(gifs);
+    let gif_tags = StoredValue::new(trending_tags);
 
     let render_panel = move || {
+        let em_cats = emoji_cats.get_value().unwrap_or_default();
+        let em_rec = emoji_recents.get_value().unwrap_or_default();
         let em_map = emoji_map.get_value();
         let st_packs = packs.get_value();
         let gf_list = gif_items.get_value();
+        let gf_tags = gif_tags.get_value().unwrap_or_default();
         let cls = root_cls.with_value(|f| f());
         let stl = root_stl.with_value(|f| f());
 
@@ -136,6 +158,8 @@ pub fn MediaKeyboard(
                             view! {
                                 <EmojiPicker
                                     on_select=on_select_emoji
+                                    categories=em_cats.clone()
+                                    recent_emojis=em_rec.clone()
                                     custom_emojis=em_map.clone().unwrap_or_default()
                                 />
                             }.into_any()
@@ -153,6 +177,7 @@ pub fn MediaKeyboard(
                                 <GifPicker
                                     on_select=on_select_gif
                                     gifs=gf_list.clone().unwrap_or_default()
+                                    trending_tags=gf_tags.clone()
                                 />
                             }.into_any()
                         }
@@ -196,12 +221,13 @@ pub fn MediaKeyboard(
                     </div>
 
                     {on_backspace.map(|cb| {
+                        let aria_bs = backspace_aria.get();
                         view! {
                             <button
                                 type="button"
                                 class="op-media-keyboard__backspace-btn"
                                 on:click=move |_| cb.run(())
-                                aria-label="Backspace"
+                                aria-label=aria_bs
                             >
                                 <Icon icon=backspace_icon.get() />
                             </button>

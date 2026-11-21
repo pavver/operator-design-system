@@ -22,7 +22,7 @@ pub fn media_record_button() -> AnyView {
                 block=true
             >
                 <div style="display:flex;flex-direction:column;align-items:center;gap:calc(var(--op-du) * 3);padding:calc(var(--op-du) * 4);width:100%;">
-                    <div style="font-family:monospace;font-size:12px;color:var(--op-color-text-secondary);">
+                    <div style="font-family:monospace;font-size:calc(var(--op-tu) * 12);color:var(--op-text-secondary);">
                         {move || status_text.get()}
                     </div>
 

@@ -5,6 +5,7 @@ use crate::core::{Metric, root_class, root_style, ui_icon, ui_text};
 use leptos::ev;
 use leptos::prelude::*;
 use operator_ui_tokens::icons;
+use send_wrapper::SendWrapper;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::closure::Closure;
 use web_sys::{HtmlVideoElement, IntersectionObserver, IntersectionObserverEntry};
@@ -54,8 +55,8 @@ pub fn GifPicker(
     /// Available GIF items passed by the application.
     #[prop(optional, into)]
     gifs: Option<Vec<GifItem>>,
-    /// Trending search tags list.
-    #[prop(optional)]
+    /// Trending search tags list provided by the application.
+    #[prop(optional, into)]
     trending_tags: Option<Vec<String>>,
     /// Height in DU (`--op-gif-picker-height`). Defaults to 60 DU.
     #[prop(optional, into)]
@@ -71,21 +72,18 @@ pub fn GifPicker(
     style: MaybeProp<String>,
 ) -> impl IntoView {
     let all_gifs = gifs.unwrap_or_default();
-    let default_tags = vec![
-        "Trending".to_string(),
-        "Reaction".to_string(),
-        "Cats".to_string(),
-        "Yes".to_string(),
-        "No".to_string(),
-        "Party".to_string(),
-        "Wait".to_string(),
-    ];
-    let tags_list = trending_tags.unwrap_or(default_tags);
+    let tags_list = trending_tags.unwrap_or_default();
 
-    let selected_tag = RwSignal::new(String::from("Trending"));
+    let selected_tag = RwSignal::new(String::new());
     let search_query = RwSignal::new(String::new());
 
     let search_placeholder = ui_text(None::<String>.into(), "gif-picker.search", "Search GIFs...");
+    let tags_aria = ui_text(
+        None::<String>.into(),
+        "gif-picker.tags",
+        "Trending GIF tags",
+    );
+    let empty_text = ui_text(None::<String>.into(), "gif-picker.empty", "No GIFs found");
     let search_icon = ui_icon(None, "gif-picker.search-icon", icons::SEARCH);
 
     let metrics = vec![
@@ -94,6 +92,8 @@ pub fn GifPicker(
     ];
     let root_cls = root_class("op-gif-picker", class);
     let root_stl = root_style(metrics, style);
+
+    let has_tags = !tags_list.is_empty();
 
     let filtered_gifs = Memo::new({
         let all_gifs = all_gifs.clone();
@@ -109,7 +109,7 @@ pub fn GifPicker(
                     })
                     .cloned()
                     .collect()
-            } else if tag != "Trending" {
+            } else if !tag.is_empty() {
                 all_gifs
                     .iter()
                     .filter(|item| item.tags.iter().any(|t| t.eq_ignore_ascii_case(&tag)))
@@ -138,99 +138,114 @@ pub fn GifPicker(
                 />
             </div>
 
-            <div class="op-gif-picker__tags" role="toolbar" aria-label="Trending GIF tags">
-                {tags_list.into_iter().map(|tag| {
-                    let t_name = tag.clone();
-                    let t_click = tag.clone();
-                    let is_sel = move || selected_tag.get() == t_name;
-                    view! {
-                        <button
-                            type="button"
-                            class="op-gif-picker__tag-btn"
-                            data-selected=move || is_sel().then_some("true")
-                            on:click=move |_| {
-                                search_query.set(String::new());
-                                selected_tag.set(t_click.clone());
+            {has_tags.then(|| {
+                let tags = tags_list.clone();
+                let aria_lbl = tags_aria.get();
+                view! {
+                    <div class="op-gif-picker__tags" role="toolbar" aria-label=aria_lbl>
+                        {tags.into_iter().map(|tag| {
+                            let t_name = tag.clone();
+                            let t_click = tag.clone();
+                            let is_sel = move || selected_tag.get() == t_name;
+                            view! {
+                                <button
+                                    type="button"
+                                    class="op-gif-picker__tag-btn"
+                                    data-selected=move || is_sel().then_some("true")
+                                    on:click=move |_| {
+                                        if selected_tag.get() == t_click {
+                                            selected_tag.set(String::new());
+                                        } else {
+                                            selected_tag.set(t_click.clone());
+                                        }
+                                    }
+                                >
+                                    {tag}
+                                </button>
                             }
-                        >
-                            {tag}
-                        </button>
-                    }
-                }).collect::<Vec<_>>()}
-            </div>
+                        }).collect::<Vec<_>>()}
+                    </div>
+                }
+            })}
 
             <div class="op-gif-picker__grid">
                 {move || {
                     let items = filtered_gifs.get();
-                    items.into_iter().map(|item| {
-                        let it = item.clone();
+                    if items.is_empty() {
                         view! {
-                            <GifCell item=it on_select=on_select />
-                        }
-                    }).collect::<Vec<_>>()
+                            <div class="op-gif-picker__empty">
+                                {empty_text.get()}
+                            </div>
+                        }.into_any()
+                    } else {
+                        items.into_iter().map(|item| {
+                            render_gif_cell(item, on_select)
+                        }).collect::<Vec<_>>().into_any()
+                    }
                 }}
             </div>
         </div>
     }
 }
 
-#[component]
-fn GifCell(item: GifItem, on_select: Callback<GifItem>) -> impl IntoView {
+fn render_gif_cell(item: GifItem, on_select: Callback<GifItem>) -> impl IntoView {
     let video_ref = NodeRef::<leptos::html::Video>::new();
-    let it_click = item.clone();
+    let item_click = item.clone();
+    let aria_title = item.title.clone();
+    let display_title = item.title.clone();
+    let media_url = item.media_url.clone();
+    let preview_url = item.preview_url.clone();
 
-    // IntersectionObserver to pause video when scrolled out of view and resume when visible
+    // IntersectionObserver to pause video playback when scrolled outside the viewport
     Effect::new(move |_| {
-        let Some(video_el) = video_ref.get() else {
-            return;
-        };
-        let raw_video = video_el.unchecked_ref::<HtmlVideoElement>().clone();
+        if let Some(video_el) = video_ref.get() {
+            let raw_video: HtmlVideoElement = (*video_el).clone().unchecked_into();
+            let video_clone = raw_video.clone();
 
-        let closure = Closure::wrap(Box::new(
-            move |entries: js_sys::Array, _obs: IntersectionObserver| {
-                for entry_val in entries.iter() {
-                    if let Ok(entry) = entry_val.dyn_into::<IntersectionObserverEntry>() {
+            let callback = Closure::<dyn FnMut(js_sys::Array, IntersectionObserver)>::new(
+                move |entries: js_sys::Array, _obs: IntersectionObserver| {
+                    for i in 0..entries.length() {
+                        let entry: IntersectionObserverEntry = entries.get(i).unchecked_into();
                         if entry.is_intersecting() {
-                            let _ = raw_video.play();
+                            let _ = video_clone.play();
                         } else {
-                            let _ = raw_video.pause();
+                            let _ = video_clone.pause();
                         }
                     }
-                }
-            },
-        )
-            as Box<dyn FnMut(js_sys::Array, IntersectionObserver)>);
+                },
+            );
 
-        if let Ok(observer) = IntersectionObserver::new(closure.as_ref().unchecked_ref()) {
-            observer.observe(video_el.unchecked_ref());
-            closure.forget();
-            on_cleanup(move || {
-                observer.disconnect();
-            });
+            if let Ok(observer) = IntersectionObserver::new(callback.as_ref().unchecked_ref()) {
+                observer.observe(&raw_video);
+                let keep = SendWrapper::new((observer, callback));
+                on_cleanup(move || {
+                    keep.0.disconnect();
+                });
+            }
         }
     });
-
-    let it_title = item.title.clone();
 
     view! {
         <div
             class="op-gif-picker__cell"
-            on:click=move |_| on_select.run(it_click.clone())
+            on:click=move |_| on_select.run(item_click.clone())
             role="button"
             tabindex="0"
-            aria-label=it_title.clone()
+            aria-label=aria_title
         >
             <video
                 node_ref=video_ref
                 class="op-gif-picker__video"
-                src=item.media_url
-                poster=item.preview_url
-                autoplay
-                muted
-                loop
-                playsinline
+                src=media_url
+                poster=preview_url
+                autoplay=true
+                muted=true
+                loop=true
+                playsinline=true
             />
-            <div class="op-gif-picker__title-bar">{it_title.clone()}</div>
+            <div class="op-gif-picker__title-bar">
+                {display_title}
+            </div>
         </div>
     }
 }

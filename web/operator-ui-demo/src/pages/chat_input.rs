@@ -40,12 +40,12 @@ pub fn chat_input() -> AnyView {
                 block=true
             >
                 <div style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 3);width:100%;padding:calc(var(--op-du) * 2);">
-                    <div style="background:var(--op-color-surface-raised, #111);padding:calc(var(--op-du) * 2);min-height:calc(var(--op-du) * 15);font-family:monospace;font-size:12px;">
-                        <div style="color:var(--op-color-text-secondary);margin-bottom:calc(var(--op-du) * 1);">"Transmitted messages:"</div>
+                    <div style="background:var(--op-surface-raised);padding:calc(var(--op-du) * 2);min-height:calc(var(--op-du) * 15);font-family:monospace;font-size:calc(var(--op-tu) * 12);">
+                        <div style="color:var(--op-text-secondary);margin-bottom:calc(var(--op-du) * 1);">"Transmitted messages:"</div>
                         {move || {
                             let msgs = sent_log.get();
                             if msgs.is_empty() {
-                                view! { <div style="color:var(--op-color-text-secondary);font-style:italic;">"(None yet)"</div> }.into_any()
+                                view! { <div style="color:var(--op-text-secondary);font-style:italic;">"(None yet)"</div> }.into_any()
                             } else {
                                 msgs.into_iter().map(|m| view! { <div>{format!("> {m}")}</div> }).collect::<Vec<_>>().into_any()
                             }

@@ -51,7 +51,7 @@ pub fn MediaRecordButton(
     /// Render in circular shape (round exception); defaults to false (square geometry).
     #[prop(optional, into)]
     circular: MaybeProp<bool>,
-    /// Size in Design Units (`--op-media-record-button-size`). Default is 12 DU (48px).
+    /// Size in Design Units (`--op-media-record-button-size`). Default is 12 DU.
     #[prop(optional, into)]
     size: MaybeProp<f32>,
     /// Additional CSS classes.
@@ -111,6 +111,11 @@ pub fn MediaRecordButton(
 
     let voice_label = ui_text(None::<String>.into(), "media-record.audio", "Voice note");
     let video_label = ui_text(None::<String>.into(), "media-record.video", "Video note");
+    let locked_label = ui_text(
+        None::<String>.into(),
+        "media-record.locked-label",
+        "Locked recording (click to stop)",
+    );
     let cancel_hint = ui_text(
         None::<String>.into(),
         "media-record.cancel-hint",
@@ -277,7 +282,7 @@ pub fn MediaRecordButton(
                 on:pointercancel=on_pointercancel
                 aria-label=move || {
                     if is_locked.get() {
-                        "Locked recording (click to stop)".to_string()
+                        locked_label.get()
                     } else if current_mode.get() == MediaRecordMode::Video {
                         video_label.get()
                     } else {

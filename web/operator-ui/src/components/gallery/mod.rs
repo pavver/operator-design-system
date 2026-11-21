@@ -21,7 +21,7 @@ pub fn Gallery(
     /// Collection of media items to display.
     #[prop(into)]
     items: Signal<Vec<MediaItem>>,
-    /// Layout arrangement mode: `Grid` (default) or `Telegram`.
+    /// Layout arrangement mode: `Grid` (default) or `Compact`.
     #[prop(default = GalleryLayout::Grid)]
     layout: GalleryLayout,
     /// Minimum column width in DU for the responsive grid (`--op-gallery-column-min-width`, default 30 DU).
@@ -89,12 +89,12 @@ pub fn Gallery(
 
     let layout_class = move || match layout {
         GalleryLayout::Grid => "op-gallery-grid",
-        GalleryLayout::Telegram => {
+        GalleryLayout::Compact => {
             let count = items.with(Vec::len);
             if count <= 1 {
-                "op-gallery-telegram-single"
+                "op-gallery-compact-single"
             } else {
-                "op-gallery-telegram-multi"
+                "op-gallery-compact-multi"
             }
         }
     };
