@@ -8,20 +8,36 @@
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  background-color: var(--op-surface);
+  background-color: var(--op-side-panel-background, var(--op-surface));
   transition: width var(--op-motion-expand) var(--op-ease-standard);
 }
-.op-side-panel[data-side="start"] { box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-divider); }
-.op-side-panel[data-side="end"] { box-shadow: inset var(--op-dim-border) 0 0 var(--op-divider); }
+.op-side-panel[data-side="start"] {
+  box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-side-panel-divider, var(--op-divider));
+}
+.op-side-panel[data-side="end"] {
+  box-shadow: inset var(--op-dim-border) 0 0 var(--op-side-panel-divider, var(--op-divider));
+}
 .op-side-panel-head {
   display: flex;
   align-items: center;
-  gap: var(--op-dim-pad-tight);
-  height: var(--op-dim-row-standard);
-  padding: 0 var(--op-dim-gap-micro) 0 var(--op-dim-pad-card);
-  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-divider);
+  gap: var(--op-side-panel-header-gap, var(--op-dim-pad-tight));
+  height: var(--op-side-panel-header-height, var(--op-dim-row-standard));
+  padding: 0 var(--op-side-panel-header-padding-end, var(--op-dim-gap-micro)) 0 var(--op-side-panel-header-padding-start, var(--op-dim-pad-card));
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-side-panel-divider, var(--op-divider));
 }
 .op-side-panel[data-side="end"] .op-side-panel-head { flex-direction: row; }
-.op-side-panel-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.op-side-panel-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--op-side-panel-title-font-size, var(--op-type-section-title-size));
+  color: var(--op-side-panel-title-color, var(--op-text-primary));
+}
 .op-side-panel-body { flex: 1; min-height: 0; overflow: auto; }
-.op-side-panel-strip { display: flex; justify-content: center; padding-top: var(--op-dim-gap-micro); }
+.op-side-panel-strip {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--op-side-panel-strip-padding-top, var(--op-dim-gap-micro));
+}

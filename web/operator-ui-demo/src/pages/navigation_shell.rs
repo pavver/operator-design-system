@@ -52,6 +52,35 @@ pub fn navigation_shell() -> AnyView {
                 </div>
             </div>
         </Example>
+        <Example title="Customization" note="Metric props, header/footer slots and custom labels customize NavigationRail and SidePanel." block=true>
+            <div class="demo-shell">
+                <NavigationRail
+                    items=vec![
+                        RailItem::new("events", crate::i18n::t("Events").get_untracked(), icons::INFO),
+                        RailItem::new("settings", crate::i18n::t("Settings").get_untracked(), icons::SETTINGS),
+                    ]
+                    selected=RwSignal::new("events".to_string())
+                    width=20.0
+                    item_height=14.0
+                    header=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: 4px; text-align: center;">"App"</div> })
+                    footer=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: 4px; text-align: center;">"v1.0"</div> })
+                    label=crate::i18n::t("Navigation")
+                />
+                <SidePanel
+                    title=crate::i18n::t("Inspector")
+                    collapsed=RwSignal::new(false)
+                    width=60.0
+                    header_height=12.0
+                    collapse_label=crate::i18n::t("Collapse")
+                    footer=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: 8px;">"Ready"</div> })
+                >
+                    <div style="padding: 8px;">"Panel content"</div>
+                </SidePanel>
+                <div class="demo-shell-main op-t-caption demo-muted">
+                    "Main area"
+                </div>
+            </div>
+        </Example>
     }
     .into_any()
 }
