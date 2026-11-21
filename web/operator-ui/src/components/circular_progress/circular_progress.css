@@ -1,5 +1,5 @@
 :where(.op-circular-progress) {
-    font-size: var(--op-circular-progress-font-size, 10TU);
+    font-size: var(--op-circular-progress-font-size, 8TU);
     color: var(--op-circular-progress-color, var(--op-accent));
 }
 
@@ -52,6 +52,10 @@
     justify-content: center;
     font-size: inherit;
     font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
     color: var(--op-circular-progress-text, var(--op-text-primary));
     pointer-events: none;
 }

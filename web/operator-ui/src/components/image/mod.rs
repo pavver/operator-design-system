@@ -144,22 +144,36 @@ pub fn Image(
             />
             {move || is_loading.get().then(|| {
                 if loading_slot.is_set() {
-                    view! { <div class="op-image-placeholder">{loading_slot.run()}</div> }.into_any()
+                    view! {
+                        <div class="op-image-placeholder">
+                            {loading_slot.run()}
+                        </div>
+                    }.into_any()
                 } else {
                     view! {
                         <div class="op-image-placeholder">
-                            <Skeleton lines=1 height=height.get().unwrap_or(20.0) />
+                            <Skeleton
+                                lines=1
+                                height=height.get().unwrap_or(20.0)
+                            />
                         </div>
                     }.into_any()
                 }
             })}
             {move || has_error.get().then(|| {
                 if error_slot.is_set() {
-                    view! { <div class="op-image-error">{error_slot.run()}</div> }.into_any()
+                    view! {
+                        <div class="op-image-error">
+                            {error_slot.run()}
+                        </div>
+                    }.into_any()
                 } else {
                     view! {
                         <div class="op-image-error">
-                            <Icon icon=icons::ERROR size=6.0 />
+                            <Icon
+                                icon=icons::ERROR
+                                size=6.0
+                            />
                             <span>{resolved_error.get()}</span>
                         </div>
                     }.into_any()
@@ -167,7 +181,11 @@ pub fn Image(
             })}
             {move || (caption_slot.is_set() || caption.get().is_some()).then(|| view! {
                 <div class="op-image-caption">
-                    {if caption_slot.is_set() { caption_slot.run() } else { caption.get().map(|c| c.into_any()) }}
+                    {if caption_slot.is_set() {
+                        caption_slot.run()
+                    } else {
+                        caption.get().map(|c| c.into_any())
+                    }}
                 </div>
             })}
         </div>

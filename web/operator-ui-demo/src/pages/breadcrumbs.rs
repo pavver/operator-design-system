@@ -22,19 +22,37 @@ pub fn breadcrumbs() -> AnyView {
     ]);
 
     view! {
-        <Example title="Standard trail" note="Path with default separators." block=true>
+        <Example
+            title="Standard trail"
+            note="Path with default separators."
+            block=true
+        >
             <div class="demo-stack demo-narrow">
                 <Breadcrumbs items=standard_items />
             </div>
         </Example>
-        <Example title="Collapsed middle" note="Collapses middle items into a menu when exceeding max_items." block=true>
+        <Example
+            title="Collapsed middle"
+            note="Collapses middle items into a menu when exceeding max_items."
+            block=true
+        >
             <div class="demo-stack demo-narrow">
-                <Breadcrumbs items=long_items max_items=3 />
+                <Breadcrumbs
+                    items=long_items
+                    max_items=3
+                />
             </div>
         </Example>
-        <Example title="Custom icon separator" note="Uses a chevron icon separator." block=true>
+        <Example
+            title="Custom icon separator"
+            note="Uses a chevron icon separator."
+            block=true
+        >
             <div class="demo-stack demo-narrow">
-                <Breadcrumbs items=standard_items separator_icon=icons::CHEVRON_RIGHT />
+                <Breadcrumbs
+                    items=standard_items
+                    separator_icon=icons::CHEVRON_RIGHT
+                />
             </div>
         </Example>
     }

@@ -11,16 +11,19 @@
     position: absolute;
     inset: 0;
     z-index: 100;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--op-loading-overlay-background, var(--op-overlay-scrim, rgba(0, 0, 0, 0.6)));
-    pointer-events: auto;
+    background-color: var(--op-loading-overlay-background, var(--op-overlay-scrim, rgb(0 0 0 / 55%)));
+    pointer-events: none;
     user-select: none;
+    opacity: 0;
+    transition: opacity var(--op-motion-fade, 150ms) ease;
 }
 
 .op-loading-overlay[data-showing] {
-    display: flex;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .op-loading-overlay-content {

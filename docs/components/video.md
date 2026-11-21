@@ -20,7 +20,8 @@ Do not use `Video` for local static images; use [Image](image.md) instead.
 ## Behavior
 
 * The video container uses CSS `aspect-ratio` to reserve space and prevent layout shifts while the iframe initializes.
-* The inner `iframe` stretches seamlessly to fill the parent bounds.
+* When `src` is empty or `about:blank`, a visible placeholder with surface background, border, and centered camera icon is displayed.
+* The inner `iframe` stretches seamlessly to fill the parent bounds when an active source is loaded.
 
 ## API
 
@@ -46,6 +47,8 @@ Do not use `Video` for local static images; use [Image](image.md) instead.
 | Color variable | Default |
 | :--- | :--- |
 | `--op-video-background` | `var(--op-surface-subtle)` |
+| `--op-video-border` | `var(--op-border)` |
+| `--op-video-icon-color` | `var(--op-text-secondary)` |
 
 `class` and `style` apply to the root `div`.
 
@@ -57,8 +60,9 @@ Do not use `Video` for local static images; use [Image](image.md) instead.
 
 ### Icons
 
-`Video` does not use icons.
+`Video` displays the `VIDEOCAM` icon in its offline/empty placeholder.
 
 ## Accessibility
 
 The embedded `<iframe>` receives an accessible `title` via the `title` prop or `video.title` translation.
+The empty state placeholder is marked decorative with `aria-hidden="true"`.

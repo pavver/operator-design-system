@@ -1,6 +1,6 @@
 //! Circular progress indicator: CircularProgress.
 
-use crate::core::{ControlState, Metric, Slot, du, root_class, root_style, ui_text};
+use crate::core::{ControlState, Metric, Slot, du, root_class, root_style, tu, ui_text};
 use leptos::prelude::*;
 
 pub(crate) const CSS: &str = include_str!("circular_progress.css");
@@ -11,7 +11,7 @@ pub enum CircularProgressFormat {
     /// Percentage e.g. `75%`.
     #[default]
     Percent,
-    /// Absolute value and maximum e.g. `75 / 100`.
+    /// Absolute value e.g. `75`.
     Count,
 }
 
@@ -54,6 +54,11 @@ pub fn CircularProgress(
     let resolved_label = ui_text(label, "circular-progress.label", "Progress");
     let size_val = move || size.get().unwrap_or(10.0);
     let thickness_val = move || thickness.get().unwrap_or(0.75);
+    let font_size_val = move || {
+        font_size
+            .get()
+            .unwrap_or_else(|| (size_val() * 0.75).clamp(6.0, 32.0))
+    };
 
     let max_val = move || {
         let m = max.get();
@@ -67,10 +72,11 @@ pub fn CircularProgress(
         Some(match format {
             CircularProgressFormat::Percent => format!("{:.0}%", (v / m).clamp(0.0, 1.0) * 100.0),
             CircularProgressFormat::Count => {
-                if (v - v.round()).abs() < 0.005 && (m - m.round()).abs() < 0.005 {
-                    format!("{:.0} / {:.0}", v.clamp(0.0, m), m)
+                let clamped = v.clamp(0.0, m);
+                if (clamped - clamped.round()).abs() < 0.005 {
+                    format!("{:.0}", clamped)
                 } else {
-                    format!("{:.1} / {:.1}", v.clamp(0.0, m), m)
+                    format!("{:.1}", clamped)
                 }
             }
         })
@@ -94,7 +100,12 @@ pub fn CircularProgress(
     let full_style = move || {
         let rest = base_style().unwrap_or_default();
         let s = du(size_val());
-        Some(format!("width:{s};height:{s};{rest}"))
+        let fs = if font_size.get().is_none() {
+            format!("--op-circular-progress-font-size:{};", tu(font_size_val()))
+        } else {
+            String::new()
+        };
+        Some(format!("width:{s};height:{s};{fs}{rest}"))
     };
 
     let stroke_pct = move || (thickness_val() / size_val() * 100.0).clamp(2.0, 40.0);
@@ -138,7 +149,13 @@ pub fn CircularProgress(
                     r=r
                     stroke-width=stroke_pct
                     stroke-dasharray=move || format!("{:.2}", c())
-                    stroke-dashoffset=move || if is_determinate { format!("{:.2}", offset()) } else { format!("{:.2}", c() * 0.25) }
+                    stroke-dashoffset=move || {
+                        if is_determinate {
+                            format!("{:.2}", offset())
+                        } else {
+                            format!("{:.2}", c() * 0.25)
+                        }
+                    }
                 />
             </svg>
             {(show_value || center_slot.is_set()).then(|| view! {

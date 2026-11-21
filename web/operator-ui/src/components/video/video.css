@@ -1,7 +1,3 @@
-:where(.op-video) {
-    background-color: var(--op-video-background, var(--op-surface-subtle));
-}
-
 .op-video {
     position: relative;
     width: 100%;
@@ -17,4 +13,15 @@
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.op-video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--op-video-background, var(--op-surface-subtle));
+    border: var(--op-border-standard, calc(var(--op-du) * 0.25)) solid var(--op-video-border, var(--op-border));
+    color: var(--op-video-icon-color, var(--op-text-secondary));
 }

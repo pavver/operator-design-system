@@ -6,7 +6,11 @@ use operator_ui::prelude::*;
 
 pub fn timeline() -> AnyView {
     view! {
-        <Example title="Standard timeline" note="Milestones with tones and icons." block=true>
+        <Example
+            title="Standard timeline"
+            note="Milestones with tones and icons."
+            block=true
+        >
             <div class="demo-stack demo-narrow">
                 <Timeline>
                     <TimelineEntry
@@ -36,12 +40,31 @@ pub fn timeline() -> AnyView {
                 </Timeline>
             </div>
         </Example>
-        <Example title="Dense mode" note="Reduced vertical spacing." block=true>
+        <Example
+            title="Dense mode"
+            note="Reduced vertical spacing."
+            block=true
+        >
             <div class="demo-stack demo-narrow">
                 <Timeline dense=true>
-                    <TimelineEntry title="Event 1" date="10:00" tone="success" icon=icons::CHECK />
-                    <TimelineEntry title="Event 2" date="11:30" tone="warning" icon=icons::WARNING />
-                    <TimelineEntry title="Event 3" date="12:15" tone="error" icon=icons::ERROR />
+                    <TimelineEntry
+                        title="Event 1"
+                        date="10:00"
+                        tone="success"
+                        icon=icons::CHECK
+                    />
+                    <TimelineEntry
+                        title="Event 2"
+                        date="11:30"
+                        tone="warning"
+                        icon=icons::WARNING
+                    />
+                    <TimelineEntry
+                        title="Event 3"
+                        date="12:15"
+                        tone="error"
+                        icon=icons::ERROR
+                    />
                 </Timeline>
             </div>
         </Example>

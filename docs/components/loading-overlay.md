@@ -20,8 +20,9 @@ Do not use `LoadingOverlay` for brief micro-interactions inside buttons; use [Ac
 
 ## Behavior
 
-* When `showing` is `true`, the overlay appears immediately and captures all pointer events.
+* When `showing` is `true`, the overlay appears and captures all pointer events.
 * It renders a centered [ProgressIndicator](primitives.md) and an optional descriptive label.
+* The overlay fades in and out smoothly with the motion tokens (`--op-motion-fade`).
 * If used with children, it wraps the children in a relatively positioned container automatically.
 
 ## API
@@ -48,7 +49,7 @@ Do not use `LoadingOverlay` for brief micro-interactions inside buttons; use [Ac
 
 | Color variable | Default |
 | :--- | :--- |
-| `--op-loading-overlay-background` | `var(--op-overlay-scrim, rgba(0, 0, 0, 0.6))` |
+| `--op-loading-overlay-background` | `var(--op-overlay-scrim, rgb(0 0 0 / 55%))` |
 | `--op-loading-overlay-spinner` | `var(--op-accent)` |
 | `--op-loading-overlay-text` | `var(--op-text-primary)` |
 

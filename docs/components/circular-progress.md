@@ -14,14 +14,15 @@ Do not use `CircularProgress` for full-page loading bars; use [LoadingBar](loadi
 
 | Property | Value |
 | :--- | :--- |
-| Default size | `10 DU` (`40px`, `--op-circular-progress-size`). |
-| Thickness | `0.75 DU` (`3px`, `--op-circular-progress-thickness`). |
+| Default size | `10 DU` (`--op-circular-progress-size`). |
+| Thickness | `0.75 DU` (`--op-circular-progress-thickness`). |
 
 ## Behavior
 
 * When `value` is provided, the ring renders deterministically from 0% to 100%.
 * When `value` is omitted, the ring spins continuously in indeterminate mode.
 * The ring color reflects the semantic `state` (`Pending`, `Success`, `Error`).
+* Center numeric label scales proportionally with ring size or can be explicitly overridden via `font_size`.
 
 ## API
 
@@ -46,7 +47,7 @@ Do not use `CircularProgress` for full-page loading bars; use [LoadingBar](loadi
 | :--- | :--- | :--- | :--- |
 | `size` | DU | `--op-circular-progress-size` | `10 DU` |
 | `thickness` | DU | `--op-circular-progress-thickness` | `0.75 DU` |
-| `font_size` | TU | `--op-circular-progress-font-size` | `10 TU` |
+| `font_size` | TU | `--op-circular-progress-font-size` | `0.75 * size` |
 
 | Color variable | Default |
 | :--- | :--- |

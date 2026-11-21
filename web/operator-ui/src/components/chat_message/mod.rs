@@ -65,7 +65,12 @@ pub fn ChatMessage(
                             avatar_slot.run()
                         } else {
                             avatar.get().map(|src| view! {
-                                <img class="op-chat-message-avatar" src=src alt="" aria-hidden="true" />
+                                <img
+                                    class="op-chat-message-avatar"
+                                    src=src
+                                    alt=""
+                                    aria-hidden="true"
+                                />
                             }.into_any())
                         }}
                     </div>
@@ -73,21 +78,31 @@ pub fn ChatMessage(
                 <div class="op-chat-message-body-wrap">
                     {(name_slot.is_set() || name.get().is_some()).then(|| view! {
                         <div class="op-chat-message-name">
-                            {if name_slot.is_set() { name_slot.run() } else { name.get().map(|n| n.into_any()) }}
+                            {if name_slot.is_set() {
+                                name_slot.run()
+                            } else {
+                                name.get().map(|n| n.into_any())
+                            }}
                         </div>
                     })}
                     <div class="op-chat-message-bubble">
                         {if let Some(c) = children {
                             c().into_any()
                         } else if let Some(t) = text.get() {
-                            view! { <span>{t}</span> }.into_any()
+                            view! {
+                                <span>{t}</span>
+                            }.into_any()
                         } else {
                             ().into_any()
                         }}
                     </div>
                     {(stamp_slot.is_set() || stamp.get().is_some()).then(|| view! {
                         <div class="op-chat-message-stamp">
-                            {if stamp_slot.is_set() { stamp_slot.run() } else { stamp.get().map(|s| s.into_any()) }}
+                            {if stamp_slot.is_set() {
+                                stamp_slot.run()
+                            } else {
+                                stamp.get().map(|s| s.into_any())
+                            }}
                         </div>
                     })}
                 </div>

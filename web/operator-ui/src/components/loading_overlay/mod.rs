@@ -52,18 +52,19 @@ pub fn LoadingOverlay(
             role="status"
             aria-live="polite"
             aria-busy=move || showing.get().then_some("true")
+            aria-hidden=move || (!showing.get()).then_some("true")
             data-showing=move || showing.get().then_some("")
         >
-            {move || showing.get().then(|| view! {
-                <div class="op-loading-overlay-content">
-                    <ProgressIndicator
-                        size=spinner_size_val()
-                        stroke=spinner_stroke_val()
-                        color="var(--op-loading-overlay-spinner, var(--op-accent))"
-                    />
-                    <span class="op-loading-overlay-label">{resolved_label.get()}</span>
-                </div>
-            })}
+            <div class="op-loading-overlay-content">
+                <ProgressIndicator
+                    size=spinner_size_val()
+                    stroke=spinner_stroke_val()
+                    color="var(--op-loading-overlay-spinner, var(--op-accent))"
+                />
+                <span class="op-loading-overlay-label">
+                    {move || resolved_label.get()}
+                </span>
+            </div>
         </div>
     };
 

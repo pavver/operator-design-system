@@ -6,17 +6,15 @@
 .op-chat-message {
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: var(--op-chat-message-gap, calc(var(--op-du) * 1));
-    max-width: 85%;
 }
 
 .op-chat-message[data-sent] {
-    align-self: flex-end;
     align-items: flex-end;
 }
 
 .op-chat-message:not([data-sent]) {
-    align-self: flex-start;
     align-items: flex-start;
 }
 
@@ -24,10 +22,17 @@
     display: flex;
     align-items: flex-end;
     gap: calc(var(--op-du) * 2);
+    max-width: 85%;
 }
 
 .op-chat-message[data-sent] .op-chat-message-container {
     flex-direction: row-reverse;
+    margin-left: auto;
+}
+
+.op-chat-message:not([data-sent]) .op-chat-message-container {
+    flex-direction: row;
+    margin-right: auto;
 }
 
 .op-chat-message-avatar-wrap {
@@ -60,6 +65,14 @@
     margin-bottom: calc(var(--op-du) * 0.5);
 }
 
+.op-chat-message[data-sent] .op-chat-message-name {
+    text-align: right;
+}
+
+.op-chat-message:not([data-sent]) .op-chat-message-name {
+    text-align: left;
+}
+
 .op-chat-message-bubble {
     padding: var(--op-chat-message-padding, calc(var(--op-du) * 2));
     border: var(--op-border-standard, calc(var(--op-du) * 0.25)) solid var(--op-chat-message-border, var(--op-border));
@@ -80,4 +93,12 @@
     font-size: var(--op-type-caption-size, 10TU);
     color: var(--op-chat-message-stamp-color, var(--op-text-secondary));
     margin-top: calc(var(--op-du) * 0.5);
+}
+
+.op-chat-message[data-sent] .op-chat-message-stamp {
+    text-align: right;
+}
+
+.op-chat-message:not([data-sent]) .op-chat-message-stamp {
+    text-align: left;
 }

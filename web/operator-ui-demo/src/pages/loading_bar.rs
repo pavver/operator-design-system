@@ -16,13 +16,20 @@ pub fn loading_bar() -> AnyView {
     });
 
     view! {
-        <Example title="Page or container loading bar" note="Thin top indicator showing background page activity." block=true>
+        <Example
+            title="Page or container loading bar"
+            note="Thin top indicator showing background page activity."
+            block=true
+        >
             <div class="demo-stack demo-narrow">
                 <div>
-                    <ActionButton text="Simulate Page Fetch" on_click=AsyncAction::from(move |()| async move {
-                        trigger.run(());
-                        ActionResult::Success
-                    }) />
+                    <ActionButton
+                        text="Simulate Page Fetch"
+                        on_click=AsyncAction::from(move |()| async move {
+                            trigger.run(());
+                            ActionResult::Success
+                        })
+                    />
                 </div>
                 <div style="position:relative;height:calc(var(--op-du) * 20);border:calc(var(--op-du) * 0.25) solid var(--op-border);padding:calc(var(--op-du) * 3);background-color:var(--op-surface);">
                     <LoadingBar pending=pending />

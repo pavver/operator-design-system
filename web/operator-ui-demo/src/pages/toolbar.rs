@@ -44,7 +44,11 @@ pub fn toolbar() -> AnyView {
                     label="Recordings"
                     title="Recordings"
                     items=items()
-                    end=ViewFn::from(move || view! { <div style:width=du(45.0)><SearchField value=query placeholder="Filter"/></div> })
+                    end=ViewFn::from(move || view! {
+                        <div style:width=du(45.0)>
+                            <SearchField value=query placeholder="Filter"/>
+                        </div>
+                    })
                 />
             </div>
         </Example>
@@ -60,7 +64,11 @@ pub fn toolbar() -> AnyView {
                 />
             </div>
         </Example>
-        <Example title="Customization" note="Custom metrics, start/end slots, and translated strings." block=true>
+        <Example
+            title="Customization"
+            note="Custom metrics, start/end slots, and translated strings."
+            block=true
+        >
             <div class="demo-resize">
                 <Toolbar
                     label=crate::i18n::t("Toolbar")
@@ -71,7 +79,14 @@ pub fn toolbar() -> AnyView {
                     height=12.0
                     gap=2.0
                     padding_x=2.0
-                    start=Slot::from(|| view! { <span class="op-t-caption demo-muted" style="padding-right: 8px;">"Tools"</span> })
+                    start=Slot::from(|| view! {
+                        <span
+                            class="op-t-caption demo-muted"
+                            style="padding-right: calc(var(--op-du) * 2);"
+                        >
+                            "Tools"
+                        </span>
+                    })
                     more_label=crate::i18n::t("More commands")
                 />
             </div>

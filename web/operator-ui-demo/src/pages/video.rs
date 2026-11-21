@@ -8,8 +8,15 @@ pub fn video() -> AnyView {
     let src = RwSignal::new("about:blank".to_string());
 
     view! {
-        <Example title="Responsive video embed" note="Maintains 16:9 widescreen ratio." block=true>
-            <div class="demo-stack demo-narrow" style="max-width:calc(var(--op-du) * 80);">
+        <Example
+            title="Responsive video embed"
+            note="Maintains 16:9 widescreen ratio with visible offline placeholder."
+            block=true
+        >
+            <div
+                class="demo-stack demo-narrow"
+                style="max-width:calc(var(--op-du) * 80);"
+            >
                 <Video
                     src=src
                     title="Demo playback video"

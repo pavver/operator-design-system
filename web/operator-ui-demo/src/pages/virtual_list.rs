@@ -11,9 +11,16 @@ pub fn virtual_list() -> AnyView {
     let rows = Signal::stored(rows);
     let handle = VirtualListHandle::new(operator_ui::tokens::dim::ROW_COMPACT);
     view! {
-        <Example title="20 000 rows" note="Only the visible rows and a few above and below exist in the DOM." block=true>
+        <Example
+            title="20 000 rows"
+            note="Only the visible rows and a few above and below exist in the DOM."
+            block=true
+        >
             <div class="demo-row">
-                <ActionButton text="Jump to row 15 000" on_click=instant(move || handle.reveal(14_999, true))/>
+                <ActionButton
+                    text="Jump to row 15 000"
+                    on_click=instant(move || handle.reveal(14_999, true))
+                />
             </div>
             <VirtualList
                 items=rows
@@ -29,14 +36,35 @@ pub fn virtual_list() -> AnyView {
                 </div>
             </VirtualList>
         </Example>
-        <Example title="Customization" note="Metric props and header/footer slots customize VirtualList." block=true>
-            <div class="demo-resize" style="height: 200px;">
+        <Example
+            title="Customization"
+            note="Metric props and header/footer slots customize VirtualList."
+            block=true
+        >
+            <div
+                class="demo-resize"
+                style="height: calc(var(--op-du) * 50);"
+            >
                 <VirtualList
                     items=rows
                     handle=VirtualListHandle::new(operator_ui::tokens::dim::ROW_STANDARD)
                     height=45.0
-                    header=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: 4px;">"Header"</div> })
-                    footer=Slot::from(|| view! { <div class="op-t-caption demo-muted" style="padding: 4px;">"Footer"</div> })
+                    header=Slot::from(|| view! {
+                        <div
+                            class="op-t-caption demo-muted"
+                            style="padding: calc(var(--op-du) * 1);"
+                        >
+                            "Header"
+                        </div>
+                    })
+                    footer=Slot::from(|| view! {
+                        <div
+                            class="op-t-caption demo-muted"
+                            style="padding: calc(var(--op-du) * 1);"
+                        >
+                            "Footer"
+                        </div>
+                    })
                     key=|row: &String| row.clone()
                     let:row
                 >

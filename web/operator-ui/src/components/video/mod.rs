@@ -1,7 +1,9 @@
 //! Embedded video with responsive aspect ratio: Video.
 
+use crate::components::primitives::Icon;
 use crate::core::{Metric, root_class, root_style, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("video.css");
 
@@ -50,18 +52,46 @@ pub fn Video(
         }
         (!out.is_empty()).then_some(out)
     };
+
+    let is_empty = move || {
+        let s = src.get();
+        s.is_empty() || s == "about:blank"
+    };
+
     view! {
         <div
             class=root_class("op-video", class)
             style=full_style
         >
-            <iframe
-                class="op-video-frame"
-                src=move || src.get()
-                title=move || resolved_title.get()
-                allow=move || allow.get().unwrap_or_else(|| "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture".to_string())
-                allowfullscreen=allow_fullscreen.then_some("true")
-            ></iframe>
+            {move || {
+                if is_empty() {
+                    view! {
+                        <div
+                            class="op-video-placeholder"
+                            aria-hidden="true"
+                        >
+                            <Icon
+                                icon=icons::VIDEOCAM
+                                size=8.0
+                            />
+                        </div>
+                    }.into_any()
+                } else {
+                    view! {
+                        <iframe
+                            class="op-video-frame"
+                            src=move || src.get()
+                            title=move || resolved_title.get()
+                            allow=move || {
+                                allow.get().unwrap_or_else(|| {
+                                    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture".to_string()
+                                })
+                            }
+                            allowfullscreen=allow_fullscreen.then_some("true")
+                        ></iframe>
+                    }.into_any()
+                }
+            }}
         </div>
     }
 }

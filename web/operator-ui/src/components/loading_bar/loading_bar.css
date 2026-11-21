@@ -1,7 +1,3 @@
-:where(.op-loading-bar) {
-    background-color: var(--op-surface-raised);
-}
-
 .op-loading-bar {
     position: absolute;
     left: 0;

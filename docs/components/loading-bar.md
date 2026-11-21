@@ -14,7 +14,7 @@ Do not use `LoadingBar` when user interaction must be blocked; use [LoadingOverl
 
 | Property | Value |
 | :--- | :--- |
-| Thickness | `0.5 DU` (`2px`, `--op-loading-bar-thickness`). |
+| Thickness | `0.5 DU` (`--op-loading-bar-thickness`). |
 | Position | Attached to the `top` or `bottom` edge of the nearest positioned ancestor. |
 
 ## Behavior

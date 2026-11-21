@@ -6,8 +6,15 @@ use operator_ui::prelude::*;
 
 pub fn chat_message() -> AnyView {
     view! {
-        <Example title="Conversation thread" note="Sent and received messages with sender names and stamps." block=true>
-            <div class="demo-stack demo-narrow" style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 3);">
+        <Example
+            title="Conversation thread"
+            note="Sent and received messages with sender names and stamps."
+            block=true
+        >
+            <div
+                class="demo-stack demo-narrow"
+                style="display:flex;flex-direction:column;gap:calc(var(--op-du) * 3);width:100%;"
+            >
                 <ChatMessage
                     name="Operator Dispatch"
                     stamp="10:14 AM"

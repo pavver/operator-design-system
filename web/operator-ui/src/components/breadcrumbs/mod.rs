@@ -90,9 +90,22 @@ pub fn Breadcrumbs(
         if separator_slot.is_set() {
             separator_slot.run()
         } else if let Some(icon) = separator_icon {
-            Some(view! { <Icon icon=icon size=4.0 /> }.into_any())
+            Some(
+                view! {
+                    <Icon
+                        icon=icon
+                        size=4.0
+                    />
+                }
+                .into_any(),
+            )
         } else {
-            Some(view! { <span>{sep_text()}</span> }.into_any())
+            Some(
+                view! {
+                    <span>{sep_text()}</span>
+                }
+                .into_any(),
+            )
         }
     });
 
@@ -168,18 +181,50 @@ pub fn Breadcrumbs(
 
                         view! {
                             <li class="op-breadcrumbs-item">
-                                {first.icon.map(|ic| view! { <Icon icon=ic size=4.0 /> })}
+                                {first.icon.map(|ic| view! {
+                                    <Icon
+                                        icon=ic
+                                        size=4.0
+                                    />
+                                })}
                                 {if let Some(href) = &first.href {
-                                    view! { <a class="op-breadcrumbs-link" href=href.clone()>{first.label.clone()}</a> }.into_any()
+                                    view! {
+                                        <a
+                                            class="op-breadcrumbs-link"
+                                            href=href.clone()
+                                        >
+                                            {first.label.clone()}
+                                        </a>
+                                    }.into_any()
                                 } else if let Some(cb) = first.on_click {
-                                    view! { <button type="button" class="op-breadcrumbs-link" on:click=move |_| cb.run(())>{first.label.clone()}</button> }.into_any()
+                                    view! {
+                                        <button
+                                            type="button"
+                                            class="op-breadcrumbs-link"
+                                            on:click=move |_| cb.run(())
+                                        >
+                                            {first.label.clone()}
+                                        </button>
+                                    }.into_any()
                                 } else {
-                                    view! { <span class="op-breadcrumbs-text">{first.label.clone()}</span> }.into_any()
+                                    view! {
+                                        <span class="op-breadcrumbs-text">
+                                            {first.label.clone()}
+                                        </span>
+                                    }.into_any()
                                 }}
                             </li>
-                            <li class="op-breadcrumbs-sep" aria-hidden="true">{render_separator.run(())}</li>
+                            <li
+                                class="op-breadcrumbs-sep"
+                                aria-hidden="true"
+                            >
+                                {render_separator.run(())}
+                            </li>
                             <li class="op-breadcrumbs-item">
-                                <div node_ref=more_btn_ref class="op-breadcrumbs-more-host">
+                                <div
+                                    node_ref=more_btn_ref
+                                    class="op-breadcrumbs-more-host"
+                                >
                                     <IconButton
                                         icon=icons::MORE_VERT
                                         label=resolved_more.get()
@@ -193,10 +238,25 @@ pub fn Breadcrumbs(
                                     on_select=on_select
                                 />
                             </li>
-                            <li class="op-breadcrumbs-sep" aria-hidden="true">{render_separator.run(())}</li>
-                            <li class="op-breadcrumbs-item op-breadcrumbs-current" aria-current="page">
-                                {last.icon.map(|ic| view! { <Icon icon=ic size=4.0 /> })}
-                                <span class="op-breadcrumbs-text">{last.label.clone()}</span>
+                            <li
+                                class="op-breadcrumbs-sep"
+                                aria-hidden="true"
+                            >
+                                {render_separator.run(())}
+                            </li>
+                            <li
+                                class="op-breadcrumbs-item op-breadcrumbs-current"
+                                aria-current="page"
+                            >
+                                {last.icon.map(|ic| view! {
+                                    <Icon
+                                        icon=ic
+                                        size=4.0
+                                    />
+                                })}
+                                <span class="op-breadcrumbs-text">
+                                    {last.label.clone()}
+                                </span>
                             </li>
                         }.into_any()
                     } else {
@@ -208,22 +268,59 @@ pub fn Breadcrumbs(
                             let icon = item.icon;
                             view! {
                                 <li
-                                    class=if is_last { "op-breadcrumbs-item op-breadcrumbs-current" } else { "op-breadcrumbs-item" }
+                                    class=if is_last {
+                                        "op-breadcrumbs-item op-breadcrumbs-current"
+                                    } else {
+                                        "op-breadcrumbs-item"
+                                    }
                                     aria-current=is_last.then_some("page")
                                 >
-                                    {icon.map(|ic| view! { <Icon icon=ic size=4.0 /> })}
+                                    {icon.map(|ic| view! {
+                                        <Icon
+                                            icon=ic
+                                            size=4.0
+                                        />
+                                    })}
                                     {if is_last {
-                                        view! { <span class="op-breadcrumbs-text">{label_text}</span> }.into_any()
+                                        view! {
+                                            <span class="op-breadcrumbs-text">
+                                                {label_text}
+                                            </span>
+                                        }.into_any()
                                     } else if let Some(href) = href_val {
-                                        view! { <a class="op-breadcrumbs-link" href=href>{label_text}</a> }.into_any()
+                                        view! {
+                                            <a
+                                                class="op-breadcrumbs-link"
+                                                href=href
+                                            >
+                                                {label_text}
+                                            </a>
+                                        }.into_any()
                                     } else if let Some(cb) = click_cb {
-                                        view! { <button type="button" class="op-breadcrumbs-link" on:click=move |_| cb.run(())>{label_text}</button> }.into_any()
+                                        view! {
+                                            <button
+                                                type="button"
+                                                class="op-breadcrumbs-link"
+                                                on:click=move |_| cb.run(())
+                                            >
+                                                {label_text}
+                                            </button>
+                                        }.into_any()
                                     } else {
-                                        view! { <span class="op-breadcrumbs-text">{label_text}</span> }.into_any()
+                                        view! {
+                                            <span class="op-breadcrumbs-text">
+                                                {label_text}
+                                            </span>
+                                        }.into_any()
                                     }}
                                 </li>
                                 {(!is_last).then(|| view! {
-                                    <li class="op-breadcrumbs-sep" aria-hidden="true">{render_separator.run(())}</li>
+                                    <li
+                                        class="op-breadcrumbs-sep"
+                                        aria-hidden="true"
+                                    >
+                                        {render_separator.run(())}
+                                    </li>
                                 })}
                             }
                         }).collect_view().into_any()

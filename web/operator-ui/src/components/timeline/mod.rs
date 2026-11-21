@@ -81,27 +81,50 @@ pub fn TimelineEntry(
             style=root_style(vec![], style)
         >
             <div class="op-timeline-rail">
-                <div class="op-timeline-line" aria-hidden="true"></div>
-                <div class="op-timeline-dot" aria-hidden="true">
+                <div
+                    class="op-timeline-line"
+                    aria-hidden="true"
+                ></div>
+                <div
+                    class="op-timeline-dot"
+                    aria-hidden="true"
+                >
                     {if icon_slot.is_set() {
                         icon_slot.run()
                     } else {
-                        icon.map(|ic| view! { <Icon icon=ic size=4.0 /> }.into_any())
+                        icon.map(|ic| view! {
+                            <Icon
+                                icon=ic
+                                size=4.0
+                            />
+                        }.into_any())
                     }}
                 </div>
             </div>
             <div class="op-timeline-content">
                 {(date_slot.is_set() || date.get().is_some()).then(|| view! {
                     <div class="op-timeline-date">
-                        {if date_slot.is_set() { date_slot.run() } else { date.get().map(|d| d.into_any()) }}
+                        {if date_slot.is_set() {
+                            date_slot.run()
+                        } else {
+                            date.get().map(|d| d.into_any())
+                        }}
                     </div>
                 })}
                 {(title_slot.is_set() || title.get().is_some()).then(|| view! {
                     <div class="op-timeline-title">
-                        {if title_slot.is_set() { title_slot.run() } else { title.get().map(|t| t.into_any()) }}
+                        {if title_slot.is_set() {
+                            title_slot.run()
+                        } else {
+                            title.get().map(|t| t.into_any())
+                        }}
                     </div>
                 })}
-                {children.map(|c| view! { <div class="op-timeline-body">{c()}</div> })}
+                {children.map(|c| view! {
+                    <div class="op-timeline-body">
+                        {c()}
+                    </div>
+                })}
             </div>
         </li>
     }

@@ -1,5 +1,4 @@
 :where(.op-image) {
-    background-color: var(--op-image-background, var(--op-surface-subtle));
     color: var(--op-image-text, var(--op-text-primary));
 }
 

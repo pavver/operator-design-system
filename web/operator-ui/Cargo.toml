@@ -170,6 +170,6 @@ time-field = ["field"]
 timeline = ["primitives"]
 tree = ["primitives", "virtual-list"]
 tooltip = ["popover"]
-video = []
+video = ["primitives"]
 virtual-list = ["scrollbar"]
 
