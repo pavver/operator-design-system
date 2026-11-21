@@ -1,7 +1,7 @@
 //! HoverCard: rich floating card for details of an element, opened by hover, focus or a press.
 
 use crate::components::popover::{Placement, Popover, PopoverAnchor};
-use crate::core::{JobToken, du};
+use crate::core::{JobToken, Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use std::time::Duration;
 
@@ -33,18 +33,60 @@ pub fn HoverCard(
     card: ViewFn,
     #[prop(default = hover_card::SHOW_DELAY_MS)] delay_ms: u32,
     /// Card width in DU.
-    #[prop(default = hover_card::WIDTH_DU)]
-    width: f32,
+    #[prop(optional, into)]
+    width: MaybeProp<f32>,
     #[prop(optional)] placement: Placement,
     /// Accessible name of the card.
     #[prop(optional, into)]
     label: Option<String>,
+    #[prop(optional, into)] aria_label: MaybeProp<String>,
     /// Opens the card on keyboard focus of the anchor.
     #[prop(default = true)]
     open_on_focus: bool,
+    #[prop(optional, into)] shadow_y: MaybeProp<f32>,
+    #[prop(optional, into)] shadow_blur: MaybeProp<f32>,
+    #[prop(optional, into)] viewport_margin: MaybeProp<f32>,
+    #[prop(optional, into)] padding: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] max_height: MaybeProp<f32>,
+    #[prop(optional, into)] offset: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] max_width: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] actions: Slot,
+    #[prop(optional, into)] footer: Slot,
     /// The anchor.
     children: Children,
 ) -> impl IntoView {
+    let legacy_label = label.clone();
+    let label = ui_text(
+        Signal::derive(move || aria_label.get().or_else(|| legacy_label.clone())).into(),
+        "hover-card.label",
+        "",
+    );
+    let header = StoredValue::new(header);
+    let actions = StoredValue::new(actions);
+    let footer = StoredValue::new(footer);
+    let layer_class = Signal::derive(root_class("op-hover-card", class));
+    let layer_style = Signal::derive(root_style(
+        vec![
+            Metric::du("--op-hover-card-max-width", max_width),
+            Metric::du("--op-hover-card-shadow-y", shadow_y),
+            Metric::du("--op-hover-card-shadow-blur", shadow_blur),
+            Metric::du("--op-hover-card-viewport-margin", viewport_margin),
+            Metric::du("--op-hover-card-padding", padding),
+            Metric::du("--op-hover-card-gap", gap),
+            Metric::du("--op-hover-card-width", width),
+            Metric::du("--op-hover-card-max-height", max_height),
+            Metric::du("--op-hover-card-offset", offset),
+            Metric::tu("--op-hover-card-font-size", font_size),
+            Metric::tu("--op-hover-card-line-height", line_height),
+        ],
+        style,
+    ));
     let host = NodeRef::<leptos::html::Span>::new();
     let open = RwSignal::new(false);
     let anchor = RwSignal::new(PopoverAnchor::Point { x: 0.0, y: 0.0 });
@@ -120,16 +162,14 @@ pub fn HoverCard(
             open=open
             anchor=anchor
             placement=placement
-            gap=hover_card::GAP_DU
             restore_focus=false
-            class="op-hover-card"
+            class=layer_class
+            style=layer_style
             role="dialog"
-            label=label.unwrap_or_default()
+            aria_label=label
         >
             <div
                 class="op-hover-card-body"
-                style:width=du(width)
-                style:max-height=du(hover_card::MAX_HEIGHT_DU)
                 on:pointerenter=move |_| keep()
                 on:pointerleave=move |e| {
                     if e.pointer_type() == "mouse" {
@@ -137,7 +177,10 @@ pub fn HoverCard(
                     }
                 }
             >
+                {header.with_value(Slot::run)}
                 {card.with_value(ViewFn::run)}
+                {actions.with_value(Slot::run)}
+                {footer.with_value(Slot::run)}
             </div>
         </Popover>
     }

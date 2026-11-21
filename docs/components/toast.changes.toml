@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+en = "Customization hooks: `class`/`style`, metric props (`shift`, `viewport_margin`, `gap`, `width`, `min_height`, `padding_y`, `padding_start`, `shadow_blur`, `label_font_size`, `label_line_height`, `text_padding_end`, `button_size`, `font_size`, `line_height`, `icon_size`, `close_icon_size`, `letter_spacing`, `padding_end`, `shadow_y`), `--op-toast-*` metric and color variables, slots (`header`, `actions`, `footer`), translatable strings and replaceable icons. Added the public Toast visual; ToastHost forwards the same appearance hooks."
+uk = "Точки кастомізації: `class`/`style`, пропи розмірів (`shift`, `viewport_margin`, `gap`, `width`, `min_height`, `padding_y`, `padding_start`, `shadow_blur`, `label_font_size`, `label_line_height`, `text_padding_end`, `button_size`, `font_size`, `line_height`, `icon_size`, `close_icon_size`, `letter_spacing`, `padding_end`, `shadow_y`), змінні розмірів і кольорів `--op-toast-*`, слоти (`header`, `actions`, `footer`), перекладні тексти й замінні іконки. Додано публічний компонент Toast; ToastHost передає ті самі точки налаштування вигляду."
+
+[[change]]
 date = "2026-11-11T15:18:35+02:00"
 status = "approved"
 commit = "a27d1f0"

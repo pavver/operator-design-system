@@ -4,11 +4,12 @@ use crate::components::action_button::ActionButton;
 use crate::components::icon_button::IconButton;
 use crate::components::scrollbar::ScrollView;
 use crate::core::{
-    ActionResult, AsyncAction, ControlState, PendingRun, du, sleep_ms, use_state_visual,
+    ActionResult, AsyncAction, ControlState, Metric, PendingRun, Slot, root_class, root_style,
+    sleep_ms, ui_icon, ui_text, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::icons;
+use operator_ui_tokens::{Icon as IconData, icons};
 
 pub(crate) const CSS: &str = include_str!("dialog.css");
 
@@ -30,25 +31,67 @@ pub fn Dialog(
     #[prop(into)] title: Signal<String>,
     /// Extra buttons at the bottom, right-aligned, before Cancel and confirm.
     #[prop(optional, into)]
-    actions: Option<ViewFn>,
+    actions: Slot,
     /// Closes on Escape, scrim click, and the close button.
     #[prop(default = true.into(), into)]
     dismissible: Signal<bool>,
-    #[prop(default = 75.0)] min_width: f32,
-    #[prop(default = 140.0)] max_width: f32,
+
     /// Async confirm action; adds Cancel and confirm buttons.
     #[prop(optional, into)]
     on_confirm: Option<AsyncAction>,
-    #[prop(default = "OK".into(), into)] confirm_text: Signal<String>,
-    #[prop(default = "Cancel".into(), into)] cancel_text: Signal<String>,
+    #[prop(optional, into)] confirm_text: MaybeProp<String>,
+    #[prop(optional, into)] cancel_text: MaybeProp<String>,
     /// Shows the confirm button as dangerous.
     #[prop(optional)]
     destructive: bool,
     /// Uses the `alertdialog` role for a confirmation that interrupts the user.
     #[prop(optional)]
     alert: bool,
+    #[prop(optional, into)] padding: MaybeProp<f32>,
+    #[prop(optional, into)] header_padding: MaybeProp<f32>,
+    #[prop(optional, into)] title_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] title_line_height: MaybeProp<f32>,
+    #[prop(optional, into)] gap: MaybeProp<f32>,
+    #[prop(optional, into)] button_height: MaybeProp<f32>,
+    #[prop(optional, into)] min_width: MaybeProp<f32>,
+    #[prop(optional, into)] max_width: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] close_size: MaybeProp<f32>,
+    #[prop(optional, into)] close_icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] max_height: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] footer: Slot,
+    #[prop(optional, into)] close_label: MaybeProp<String>,
+    #[prop(optional)] close_icon: Option<IconData>,
     children: ChildrenFn,
 ) -> impl IntoView {
+    let confirm_text = ui_text(confirm_text, "dialog.confirm", "OK");
+    let cancel_text = ui_text(cancel_text, "dialog.cancel", "Cancel");
+    let close_label = ui_text(close_label, "dialog.close", "Close");
+    let close_icon = ui_icon(close_icon, "dialog.close", icons::CLOSE);
+    let header = StoredValue::new(header);
+    let footer = StoredValue::new(footer);
+    let root_style = Signal::derive(root_style(
+        vec![
+            Metric::du("--op-dialog-max-height", max_height),
+            Metric::du("--op-dialog-padding", padding),
+            Metric::du("--op-dialog-header-padding", header_padding),
+            Metric::tu("--op-dialog-title-font-size", title_font_size),
+            Metric::tu("--op-dialog-title-line-height", title_line_height),
+            Metric::du("--op-dialog-gap", gap),
+            Metric::du("--op-dialog-button-height", button_height),
+            Metric::du("--op-dialog-min-width", min_width),
+            Metric::du("--op-dialog-max-width", max_width),
+            Metric::tu("--op-dialog-font-size", font_size),
+            Metric::tu("--op-dialog-line-height", line_height),
+            Metric::du("--op-dialog-close-size", close_size),
+            Metric::du("--op-dialog-close-icon-size", close_icon_size),
+        ],
+        style,
+    ));
     let panel = NodeRef::<leptos::html::Div>::new();
     let children = StoredValue::new(children);
     // `confirming` locks the buttons and dismissal from the click until the unlock delay ends;
@@ -82,10 +125,10 @@ pub fn Dialog(
         }
     });
 
-    let has_footer = actions.is_some() || has_confirm;
+    let has_footer = actions.is_set() || has_confirm;
     // Rebuilt every time the dialog opens, so it captures cloneable parts only.
-    let footer = move || {
-        let extra = actions.clone().map(|a| a.run());
+    let action_bar = move || {
+        let extra = actions.run();
         let buttons = on_confirm.clone().map(|action| {
             let cancel = AsyncAction::new(move |()| async move {
                 open.set(false);
@@ -129,7 +172,8 @@ pub fn Dialog(
     view! {
         <Show when=move || open.get()>
             <div
-                class="op-dialog-scrim"
+                class=root_class("op-dialog-scrim", class)
+                style=move || root_style.get()
                 on:click=move |_| dismiss()
                 on:keydown=move |ev| {
                     if ev.key() == "Escape" {
@@ -147,21 +191,17 @@ pub fn Dialog(
                     data-state=move || visual.state.get()
                     data-result=move || visual.result.get()
                     data-fading=move || visual.fading.get().then_some("")
-                    style:width=format!(
-                        "clamp(min({}, 100%), 90vw, {})",
-                        du(min_width),
-                        du(max_width),
-                    )
                     on:click=|ev| ev.stop_propagation()
                 >
                     <div class="op-dialog-head">
-                        <div class="op-dialog-title">{move || title.get()}</div>
+                        <div class="op-dialog-title">{if header.with_value(Slot::is_set) { header.with_value(Slot::run).into_any() } else { (move || title.get()).into_any() }}</div>
                         <Show when=move || dismissible.get() && !has_confirm>
-                            <IconButton icon=icons::CLOSE label="Close" on_click=Callback::new(move |()| open.set(false))/>
+                            {move || view! { <IconButton icon=close_icon.get() label=close_label on_click=Callback::new(move |()| open.set(false))/> }}
                         </Show>
                     </div>
                     <ScrollView class="op-dialog-body" viewport_class="op-dialog-content op-scroll-contain">{move || children.with_value(|c| c())}</ScrollView>
-                    {footer()}
+                    {action_bar()}
+                    {footer.with_value(Slot::is_set).then(|| view! { <div class="op-dialog-footer">{footer.with_value(Slot::run)}</div> })}
                     <PendingRun/>
                 </div>
             </div>
