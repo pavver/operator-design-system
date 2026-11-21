@@ -1,18 +1,63 @@
 //! Documentation pages rendered from `docs/**/*.md` by `build.rs`.
 
-/// One Markdown document from `docs/`.
+use crate::i18n::Lang;
+
+pub struct Change {
+    pub date: &'static str,
+    pub status: &'static str,
+    pub commit: Option<&'static str>,
+    pub en_html: &'static str,
+    pub uk_html: &'static str,
+}
+
+/// One English document and its optional Ukrainian mirror.
 pub struct Doc {
-    /// Path under `docs/` without the extension, for example `components/switch`.
     pub slug: &'static str,
     pub title: &'static str,
-    /// `reviewed` or `draft` from the `Status:` line.
+    /// The English `Status:` line remains the source of truth.
     pub status: Option<&'static str>,
-    /// HTML of the paragraphs between the title and the first section.
     pub lead: &'static str,
-    /// HTML from the first `##` section to the end.
     pub body: &'static str,
-    /// Second-level headings as `(id, text)`.
     pub toc: &'static [(&'static str, &'static str)],
+    pub uk_title: Option<&'static str>,
+    pub uk_lead: Option<&'static str>,
+    pub uk_body: Option<&'static str>,
+    pub uk_toc: Option<&'static [(&'static str, &'static str)]>,
+    pub changes: &'static [Change],
+}
+
+impl Doc {
+    pub fn title(&self, lang: Lang) -> &'static str {
+        match lang {
+            Lang::Uk => self.uk_title.unwrap_or(self.title),
+            Lang::En => self.title,
+        }
+    }
+
+    pub fn lead(&self, lang: Lang) -> &'static str {
+        match lang {
+            Lang::Uk => self.uk_lead.unwrap_or(self.lead),
+            Lang::En => self.lead,
+        }
+    }
+
+    pub fn body(&self, lang: Lang) -> &'static str {
+        match lang {
+            Lang::Uk => self.uk_body.unwrap_or(self.body),
+            Lang::En => self.body,
+        }
+    }
+
+    pub fn toc(&self, lang: Lang) -> &'static [(&'static str, &'static str)] {
+        match lang {
+            Lang::Uk => self.uk_toc.unwrap_or(self.toc),
+            Lang::En => self.toc,
+        }
+    }
+
+    pub fn draft_changes(&self) -> usize {
+        self.changes.iter().filter(|c| c.status == "draft").count()
+    }
 }
 
 include!(concat!(env!("OUT_DIR"), "/docs.rs"));

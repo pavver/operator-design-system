@@ -2,6 +2,7 @@
 //! Markdown share one source.
 
 use pulldown_cmark::{CowStr, Event, HeadingLevel, Options, Parser, Tag, TagEnd, html};
+use serde::Deserialize;
 use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 use std::{env, fs};
@@ -148,6 +149,7 @@ fn parse(slug: &str, source: &str, file_dir: &Path) -> Doc {
     let mut status = None;
     if let Some((start, len)) = lead
         .find("<p>Status: ")
+        .or_else(|| lead.find("<p>Статус: "))
         .and_then(|start| lead[start..].find("</p>").map(|len| (start, len)))
     {
         let para = lead[start..start + len].to_string();
@@ -167,12 +169,99 @@ fn parse(slug: &str, source: &str, file_dir: &Path) -> Doc {
     }
 }
 
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct History {
+    change: Vec<Change>,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Change {
+    date: String,
+    status: ChangeStatus,
+    commit: Option<String>,
+    en: String,
+    uk: String,
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "lowercase")]
+enum ChangeStatus {
+    Approved,
+    Draft,
+}
+
+fn history(file: &Path, dir: &Path) -> Result<String, Box<dyn std::error::Error>> {
+    if !file.exists() {
+        return Ok(String::new());
+    }
+    let load = || -> Result<String, Box<dyn std::error::Error>> {
+        let history: History = toml::from_str(&fs::read_to_string(file)?)?;
+        let mut code = String::new();
+        for change in history.change {
+            let date: toml::value::Datetime = change.date.parse()?;
+            if date.date.is_none() || date.time.is_none() || date.offset.is_none() {
+                return Err("change date must include a date, time and UTC offset".into());
+            }
+            if change.commit.as_ref().is_some_and(|hash| {
+                !(7..=40).contains(&hash.len()) || !hash.bytes().all(|c| c.is_ascii_hexdigit())
+            }) {
+                return Err("change commit must be a 7 to 40 character hexadecimal hash".into());
+            }
+            let status = match change.status {
+                ChangeStatus::Approved => "approved",
+                ChangeStatus::Draft => "draft",
+            };
+            let markdown = |source: &str| {
+                let events = Parser::new(source)
+                    .map(|event| match event {
+                        Event::Start(Tag::Link {
+                            link_type,
+                            dest_url,
+                            title,
+                            id,
+                        }) => Event::Start(Tag::Link {
+                            link_type,
+                            dest_url: rewrite_link(&dest_url, dir).into(),
+                            title,
+                            id,
+                        }),
+                        other => other,
+                    })
+                    .collect();
+                render(events)
+            };
+            writeln!(
+                code,
+                "Change {{ date: {:?}, status: {status:?}, commit: {:?}, en_html: {:?}, uk_html: {:?} }},",
+                change.date,
+                change.commit,
+                markdown(&change.en),
+                markdown(&change.uk)
+            )?;
+        }
+        Ok(code)
+    };
+    load().map_err(|error| format!("{}: {error}", file.display()).into())
+}
+
+fn toc_code(doc: &Doc) -> String {
+    doc.toc
+        .iter()
+        .map(|(id, title)| format!("({id:?}, {title:?}),"))
+        .collect()
+}
+
 fn collect(dir: &Path, out: &mut Vec<PathBuf>) {
     let Ok(entries) = fs::read_dir(dir) else {
         return;
     };
     for entry in entries.flatten() {
         let path = entry.path();
+        if path.is_dir() && path.file_name().is_some_and(|name| name == "i18n") {
+            continue;
+        }
         if path.is_dir() {
             collect(&path, out);
         } else if path.extension().is_some_and(|e| e == "md") {
@@ -206,18 +295,114 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .strip_prefix(&repo)?
             .to_path_buf();
         let doc = parse(&slug, &fs::read_to_string(&file)?, &dir);
-        let toc: String = doc
-            .toc
-            .iter()
-            .map(|(id, t)| format!("({id:?}, {t:?}),"))
-            .collect();
+        let toc = toc_code(&doc);
+        let mirror = docs.join("i18n/uk").join(file.strip_prefix(&docs)?);
+        let uk = if mirror.exists() {
+            Some(parse(&slug, &fs::read_to_string(&mirror)?, &dir))
+        } else {
+            None
+        };
+        let uk_title = uk.as_ref().map(|d| d.title.as_str());
+        let uk_lead = uk.as_ref().map(|d| d.lead.as_str());
+        let uk_body = uk.as_ref().map(|d| d.body.as_str());
+        let uk_toc = uk.as_ref().map_or_else(
+            || "None".to_string(),
+            |d| format!("Some(&[{}])", toc_code(d)),
+        );
+        let changes = if slug.starts_with("components/") {
+            history(&file.with_extension("changes.toml"), &dir)?
+        } else {
+            String::new()
+        };
         writeln!(
             code,
-            "    Doc {{ slug: {:?}, title: {:?}, status: {:?}, lead: {:?}, body: {:?}, toc: &[{toc}] }},",
+            "    Doc {{ slug: {:?}, title: {:?}, status: {:?}, lead: {:?}, body: {:?}, toc: &[{toc}], uk_title: {uk_title:?}, uk_lead: {uk_lead:?}, uk_body: {uk_body:?}, uk_toc: {uk_toc}, changes: &[{changes}] }},",
             doc.slug, doc.title, doc.status, doc.lead, doc.body
         )?;
     }
     code.push_str("];\n");
     fs::write(PathBuf::from(env::var("OUT_DIR")?).join("docs.rs"), code)?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ukrainian_content_uses_english_link_base_and_removes_status() {
+        let doc = parse(
+            "components/search-field",
+            "# Пошук\n\nВступ.\n\nСтатус: **draft** у вебреалізації.\n\n## Поведінка\n\n[Стани](../foundations/states.md#controlstate).\n",
+            Path::new("docs/components"),
+        );
+        assert_eq!(doc.title, "Пошук");
+        assert_eq!(doc.status.as_deref(), Some("draft"));
+        assert!(!doc.lead.contains("Статус"));
+        assert_eq!(
+            doc.toc,
+            [("поведінка".to_string(), "Поведінка".to_string())]
+        );
+        assert!(
+            doc.body
+                .contains("href=\"#/foundations/states/controlstate\"")
+        );
+        assert_eq!(
+            rewrite_link(
+                "../../../docs/components/search-field.md",
+                Path::new("docs/components")
+            ),
+            "#/components/search-field"
+        );
+    }
+
+    #[test]
+    fn mirrors_are_not_routes_and_history_markdown_is_rendered()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs");
+        let mut files = Vec::new();
+        collect(&repo, &mut files);
+        assert!(
+            files
+                .iter()
+                .any(|p| p.ends_with("components/search-field.md"))
+        );
+        assert!(
+            !files
+                .iter()
+                .any(|p| p.components().any(|c| c.as_os_str() == "i18n"))
+        );
+        let changes = history(
+            &repo.join("components/search-field.changes.toml"),
+            Path::new("docs/components"),
+        )?;
+        assert!(changes.contains("<code>clear_label</code>"));
+        assert!(changes.contains("status: \"draft\""));
+        assert!(changes.contains("status: \"approved\""));
+        assert!(changes.contains("e59d5b4"));
+        Ok(())
+    }
+
+    #[test]
+    fn malformed_history_reports_its_file_name() -> Result<(), Box<dyn std::error::Error>> {
+        let file = env::temp_dir().join(format!(
+            "ods-invalid-history-{}.changes.toml",
+            std::process::id()
+        ));
+        for source in [
+            "this is not TOML",
+            "[[change]]\ndate = '2026-11-21T12:00:00Z'\nstatus = 'rejected'\nen = 'Text'\nuk = 'Текст'",
+            "[[change]]\ndate = '2026-11-21'\nstatus = 'draft'\nen = 'Text'\nuk = 'Текст'",
+            "[[change]]\ndate = '2026-11-21T12:00:00Z'\nstatus = 'draft'\nen = 'Text'",
+        ] {
+            fs::write(&file, source)?;
+            let result = history(&file, Path::new("docs/components"));
+            fs::remove_file(&file)?;
+            let Err(error) = result else {
+                return Err("malformed history was accepted".into());
+            };
+            assert!(error.to_string().contains(&file.display().to_string()));
+        }
+        Ok(())
+    }
 }

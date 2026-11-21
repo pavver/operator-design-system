@@ -1,5 +1,6 @@
 //! Shared pieces of the documentation pages: the simulated backend and example blocks.
 
+use crate::i18n::{lang, t, tr};
 use leptos::prelude::*;
 use operator_ui::prelude::*;
 
@@ -113,13 +114,13 @@ pub fn SimBar() -> impl IntoView {
     });
     view! {
         <div class="docs-sim">
-            <div class="docs-sim-title op-t-caption">"Simulated backend"</div>
+            <div class="docs-sim-title op-t-caption">{t("Simulated backend")}</div>
             <div class="docs-sim-controls">
                 <div class="docs-sim-outcome">
-                    <SegmentedControl
-                        items=vec![SegmentItem::text("Success"), SegmentItem::text("Error"), SegmentItem::text("Alternate")]
+                    {move || view! { <SegmentedControl
+                        items=vec![SegmentItem::text(tr(lang(), "Success")), SegmentItem::text(tr(lang(), "Error")), SegmentItem::text(tr(lang(), "Alternate"))]
                         selected=outcome_index
-                    />
+                    /> }}
                 </div>
                 <div class="docs-sim-latency">
                     <DropdownMenu
