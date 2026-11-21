@@ -15,7 +15,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "With href the button renders a real link: crawlers follow it, and middle-click, Ctrl+click, and the context menu work. Only Idle, Pressed, and Disabled apply." => {
             "З href кнопка стає справжнім посиланням: пошукові роботи переходять за ним, працюють середня кнопка миші, Ctrl+клацання та контекстне меню. Доступні лише стани Idle, Pressed і Disabled."
         }
-        "Maintains standard widescreen proportions." => "Зберігає стандартні широкоформатні пропорції.",
+        "Maintains standard widescreen proportions." => {
+            "Зберігає стандартні широкоформатні пропорції."
+        }
         "Square aspect ratio." => "Квадратне співвідношення сторін.",
         "Color is derived from the id with the same hash on every platform." => {
             "Колір визначається за ідентифікатором з однаковим хешуванням на всіх платформах."
@@ -28,10 +30,14 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
             "Згортає середні елементи в меню, коли їхня кількість перевищує max_items."
         }
         "Uses a chevron icon separator." => "Використовує піктограму шеврона як роздільник.",
-        "Adjacent buttons share borders seamlessly." => "Сусідні кнопки мають спільні рамки без розривів.",
+        "Adjacent buttons share borders seamlessly." => {
+            "Сусідні кнопки мають спільні рамки без розривів."
+        }
         "Joined icon actions." => "З’єднані кнопки дій із піктограмами.",
         "Stretches buttons to fill available width." => "Розтягує кнопки на всю доступну ширину.",
-        "Vertical stack sharing horizontal borders." => "Вертикальний стос зі спільними горизонтальними рамками.",
+        "Vertical stack sharing horizontal borders." => {
+            "Вертикальний стос зі спільними горизонтальними рамками."
+        }
         "Consecutive message grouping, sender roles, timestamps, and delivery verification." => {
             "Групування послідовних повідомлень, ролі відправників, позначки часу та підтвердження доставки."
         }
@@ -101,7 +107,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Log metrics, a header slot and an application accessible name." => {
             "Розміри журналу, слот заголовка та власна назва для допоміжних технологій."
         }
-        "Click the inbox to mark everything read." => "Натисніть вхідні, щоб позначити все прочитаним.",
+        "Click the inbox to mark everything read." => {
+            "Натисніть вхідні, щоб позначити все прочитаним."
+        }
         "Metric props (min_width, height, font_size) and custom label." => {
             "Параметри розмірів (min_width, height, font_size) і власний підпис."
         }
@@ -155,7 +163,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Modifier and editing keys are wider; arrow names print as arrows." => {
             "Клавіші-модифікатори та клавіші редагування ширші; назви стрілок відображаються як стрілки."
         }
-        "Metric props and custom separator slot." => "Параметри розмірів і власний слот роздільника.",
+        "Metric props and custom separator slot." => {
+            "Параметри розмірів і власний слот роздільника."
+        }
         "Full built-in language list with flags and standard BCP 47 codes. Type to filter by native name, English name, or language code." => {
             "Повний вбудований список мов із прапорами та стандартними кодами BCP 47. Вводьте текст для пошуку за рідною чи англійською назвою або кодом мови."
         }
@@ -237,7 +247,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Hover the right edge to widen the bar; drag the thumb or press the track to page." => {
             "Наведіть вказівник на правий край, щоб розширити смугу; перетягуйте повзунок або натискайте доріжку для посторінкового прокручування."
         }
-        "Each bar stops short of the shared corner." => "Кожна смуга не доходить до спільного кута.",
+        "Each bar stops short of the shared corner." => {
+            "Кожна смуга не доходить до спільного кута."
+        }
         "Custom track size, thumb thickness, and header/footer slots." => {
             "Власні розмір доріжки, товщина повзунка та слоти заголовка й підвала."
         }
@@ -257,8 +269,12 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Drag or click the track; arrow keys work when focused. The commit after release runs async; on error the value rolls back." => {
             "Перетягуйте повзунок або натискайте доріжку; у фокусі працюють стрілки. Збереження після відпускання виконується асинхронно; у разі помилки значення відновлюється."
         }
-        "Pushes buttons to opposite ends of a container." => "Розсуває кнопки до протилежних країв контейнера.",
-        "Reserves minimum space before expanding." => "Резервує мінімальний простір перед розширенням.",
+        "Pushes buttons to opposite ends of a container." => {
+            "Розсуває кнопки до протилежних країв контейнера."
+        }
+        "Reserves minimum space before expanding." => {
+            "Резервує мінімальний простір перед розширенням."
+        }
         "Drag the divider, use the arrow keys when it is focused, or double-click to reset." => {
             "Перетягуйте роздільник, використовуйте стрілки, коли він у фокусі, або двічі клацніть для скидання."
         }
@@ -278,7 +294,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Custom metrics, before/after slots, and custom label." => {
             "Власні розміри, слоти before/after і власний підпис."
         }
-        "Grows from 3 to 8 lines, then scrolls." => "Зростає від 3 до 8 рядків, а потім прокручується.",
+        "Grows from 3 to 8 lines, then scrolls." => {
+            "Зростає від 3 до 8 рядків, а потім прокручується."
+        }
         "Edit the first value to reveal the async SAVE button. It hides after a successful save." => {
             "Змініть перше значення, щоб показати кнопку асинхронного збереження. Вона зникає після успішного збереження."
         }

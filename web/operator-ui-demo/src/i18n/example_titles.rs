@@ -27,7 +27,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Bubble-less Elements: Stickers, Video Notes & Big Emojis" => {
             "Елементи без бульбашки: наліпки, відеоповідомлення та великі емодзі"
         }
-        "Chat Status Badges & Delivery Indicators" => "Позначки статусу чату та індикатори доставки",
+        "Chat Status Badges & Delivery Indicators" => {
+            "Позначки статусу чату та індикатори доставки"
+        }
         "Armed zones" => "Зони під охороною",
         "Filter chips" => "Мітки фільтрів",
         "Input chips" => "Мітки введення",
