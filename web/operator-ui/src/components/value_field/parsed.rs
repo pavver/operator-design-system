@@ -142,7 +142,8 @@ where
                 aria-invalid=move || (error.get().is_some() || flash.get() == Some(ControlState::Error)).then_some("true")
                 placeholder=move || placeholder.get()
                 prop:value=move || text.get()
-                disabled=blocked
+                disabled=move || current.get() == ControlState::Disabled
+                readonly=move || current.get() == ControlState::Pending
                 on:input=move |ev| text.set(event_target_value(&ev))
                 on:focus=move |_| focused.set(true)
                 on:blur=move |_| {

@@ -203,7 +203,8 @@ pub fn TextArea(
                     placeholder=move || placeholder.get()
                     maxlength=max_length.map(|m| m.to_string())
                     prop:value=move || value.get()
-                    disabled=blocked
+                    disabled=move || current.get() == ControlState::Disabled
+                    readonly=move || current.get() == ControlState::Pending
                     on:input=move |ev| value.set(event_target_value(&ev))
                     on:focus=move |_| focused.set(true)
                     on:blur=move |_| focused.set(false)

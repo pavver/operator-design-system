@@ -230,7 +230,9 @@ pub fn TextField(
                 aria-invalid=move || error.get().is_some().then_some("true")
                 placeholder=move || placeholder.get()
                 prop:value=move || value.get()
-                disabled=blocked
+                // Pending blocks typing without the disabled look.
+                disabled=move || current.get() == ControlState::Disabled
+                readonly=move || current.get() == ControlState::Pending
                 on:input=move |ev| value.set(event_target_value(&ev))
                 on:focus=move |_| focused.set(true)
                 on:blur=move |_| focused.set(false)

@@ -272,7 +272,8 @@ pub fn Combobox(
                         aria-invalid=move || error.get().is_some().then_some("true")
                         placeholder=move || placeholder.get()
                         prop:value=move || query.get()
-                        disabled=blocked
+                        disabled=move || current.get() == ControlState::Disabled
+                        readonly=move || current.get() == ControlState::Pending
                         on:input=move |ev| {
                             query.set(event_target_value(&ev));
                             filtering.set(true);
