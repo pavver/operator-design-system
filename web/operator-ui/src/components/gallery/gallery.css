@@ -1,0 +1,113 @@
+/* Operator Gallery: responsive media photo and video grid */
+
+:where(.op-gallery) {
+    color: var(--op-gallery-text, inherit);
+}
+
+.op-gallery {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Grid layout mode */
+.op-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--op-gallery-column-min-width, calc(var(--op-du) * 30)), 1fr));
+    gap: var(--op-gallery-gap, calc(var(--op-du) * 0.5));
+}
+
+/* Telegram layout mode */
+.op-gallery-telegram-single {
+    width: 100%;
+    min-height: calc(var(--op-du) * 35);
+    max-height: calc(var(--op-du) * 55);
+}
+
+.op-gallery-telegram-multi {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--op-gallery-gap, calc(var(--op-du) * 0.25));
+}
+
+.op-gallery-telegram-multi .op-gallery-item {
+    height: calc(var(--op-du) * 27.5);
+}
+
+/* Gallery Item cell */
+.op-gallery-item {
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--op-gallery-item-bg, var(--op-surface));
+    border: var(--op-gallery-border-width, var(--op-border-width)) solid var(--op-gallery-border, var(--op-border));
+    border-radius: 0;
+    transition: border-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-gallery-item:hover {
+    border-color: var(--op-gallery-item-hover-border, var(--op-border-strong));
+}
+
+.op-gallery-item[data-selected="true"] {
+    border-color: var(--op-accent);
+}
+
+.op-gallery-item-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Video badge */
+.op-gallery-play-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(var(--op-du) * 11);
+    height: calc(var(--op-du) * 11);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+    transition: transform var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-gallery-item:hover .op-gallery-play-badge {
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Caption bar */
+.op-gallery-caption-bar {
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+    padding: calc(var(--op-du) * 1) calc(var(--op-du) * 1.5);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    color: #ffffff;
+    font-size: calc(var(--op-tu) * 11);
+    font-weight: 500;
+    line-height: calc(var(--op-tu) * 14);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Selection checkbox corner */
+.op-gallery-selection-checkbox {
+    position: absolute;
+    top: calc(var(--op-du) * 1);
+    left: calc(var(--op-du) * 1);
+    z-index: 3;
+}

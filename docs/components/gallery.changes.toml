@@ -1,0 +1,15 @@
+# Change history of Gallery. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-21T23:50:00+02:00"
+status = "draft"
+en = "Unify media item model with GalleryViewer into MediaItem, and open GalleryViewer on tile click by default."
+uk = "Об'єднано модель медіаелементів із GalleryViewer у єдиний MediaItem та додано відкриття переглядача GalleryViewer при натисканні за замовчуванням."
+
+[[change]]
+date = "2026-11-21T21:02:31+02:00"
+status = "draft"
+en = "Initial implementation of the Gallery component with responsive grid and Telegram-style layout, selection, and viewport lazy loading."
+uk = "Початкова реалізація компонента Gallery з адаптивною сіткою та розкладкою у стилі Telegram, вибором елементів та лінивим завантаженням."

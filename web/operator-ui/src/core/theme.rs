@@ -179,6 +179,16 @@ fn stylesheet() -> &'static str {
             crate::components::split_button::CSS,
             #[cfg(feature = "uploader")]
             crate::components::uploader::CSS,
+            #[cfg(feature = "gallery")]
+            crate::components::gallery::CSS,
+            #[cfg(feature = "gallery-viewer")]
+            crate::components::gallery_viewer::CSS,
+            #[cfg(feature = "launcher-tile")]
+            crate::components::launcher_tile::CSS,
+            #[cfg(feature = "ptz-pad")]
+            crate::components::ptz_pad::CSS,
+            #[cfg(feature = "video-stream")]
+            crate::components::video_stream::CSS,
             HOVER_CSS,
         ];
         // One cascade layer: unlayered application CSS always wins over component styles,

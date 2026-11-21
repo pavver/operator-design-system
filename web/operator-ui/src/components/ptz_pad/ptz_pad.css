@@ -1,0 +1,192 @@
+/* Operator PtzPad: camera pan/tilt/zoom controller */
+
+:where(.op-ptz-wrapper),
+:where(.op-ptz-pad) {
+    color: var(--op-ptz-pad-text, inherit);
+}
+
+.op-ptz-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--op-du) * 2);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.op-ptz-pad {
+    position: relative;
+    box-sizing: border-box;
+    width: var(--op-ptz-pad-size, calc(var(--op-du) * 40));
+    height: var(--op-ptz-pad-size, calc(var(--op-du) * 40));
+    border-radius: 50%;
+    background: var(--op-ptz-pad-bg, var(--op-surface-alt));
+    border: var(--op-ptz-pad-border-width, var(--op-border-width)) solid var(--op-ptz-pad-border, var(--op-border));
+    touch-action: none;
+    cursor: grab;
+    overflow: hidden;
+    outline: none;
+    transition: background var(--op-motion-state-color) var(--op-ease-standard),
+                border-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-ptz-pad:active {
+    cursor: grabbing;
+}
+
+.op-ptz-pad:focus-visible {
+    outline: calc(var(--op-du) * 0.5) solid var(--op-focus-ring, var(--op-accent));
+    outline-offset: calc(var(--op-du) * 0.5);
+}
+
+.op-ptz-pad[data-state="disabled"] {
+    background: var(--op-ptz-pad-disabled-bg, var(--op-disabled-surface));
+    border-color: var(--op-ptz-pad-disabled-border, var(--op-disabled-border));
+    cursor: not-allowed;
+}
+
+.op-ptz-pad[data-state="pending"] {
+    border-color: var(--op-pending);
+}
+
+.op-ptz-pad[data-state="success"] {
+    border-color: var(--op-success);
+}
+
+.op-ptz-pad[data-state="error"] {
+    border-color: var(--op-error);
+}
+
+/* Cardinal arrows */
+.op-ptz-arrow {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--op-ptz-pad-inactive-color, rgba(255, 255, 255, 0.4));
+    pointer-events: none;
+    transition: color var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-ptz-arrow[data-active="true"] {
+    color: var(--op-ptz-pad-active-color, var(--op-accent));
+}
+
+.op-ptz-pad[data-state="disabled"] .op-ptz-arrow {
+    color: var(--op-text-disabled);
+    opacity: 0.3;
+}
+
+.op-ptz-arrow-up {
+    top: calc(var(--op-du) * 2);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.op-ptz-arrow-down {
+    bottom: calc(var(--op-du) * 2);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.op-ptz-arrow-left {
+    left: calc(var(--op-du) * 2);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.op-ptz-arrow-right {
+    right: calc(var(--op-du) * 2);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Diagonal arrows */
+.op-ptz-arrow-up-left {
+    top: calc(var(--op-du) * 4.5);
+    left: calc(var(--op-du) * 4.5);
+}
+
+.op-ptz-arrow-up-right {
+    top: calc(var(--op-du) * 4.5);
+    right: calc(var(--op-du) * 4.5);
+}
+
+.op-ptz-arrow-down-left {
+    bottom: calc(var(--op-du) * 4.5);
+    left: calc(var(--op-du) * 4.5);
+}
+
+.op-ptz-arrow-down-right {
+    bottom: calc(var(--op-du) * 4.5);
+    right: calc(var(--op-du) * 4.5);
+}
+
+/* Inner rings and guidelines */
+.op-ptz-ring-outer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    border: var(--op-border-width) dashed var(--op-ptz-pad-ring-color, rgba(255, 255, 255, 0.1));
+    pointer-events: none;
+}
+
+.op-ptz-ring-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    border: var(--op-border-width) solid var(--op-ptz-pad-ring-color, rgba(255, 255, 255, 0.15));
+    pointer-events: none;
+}
+
+/* Joystick thumb */
+.op-ptz-thumb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.op-ptz-dot {
+    width: calc(var(--op-du) * 3.5);
+    height: calc(var(--op-du) * 3.5);
+    border-radius: 50%;
+    background: var(--op-ptz-pad-active-color, var(--op-accent));
+    transition: background var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-ptz-pad[data-state="disabled"] .op-ptz-dot {
+    background: var(--op-text-disabled);
+}
+
+.op-ptz-pad[data-state="error"] .op-ptz-dot {
+    background: var(--op-error);
+}
+
+.op-ptz-pad[data-state="success"] .op-ptz-dot {
+    background: var(--op-success);
+}
+
+.op-ptz-pad[data-state="pending"] .op-ptz-dot {
+    background: var(--op-pending);
+}
+
+/* Zoom controls bar */
+.op-ptz-zoom-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--op-du) * 1);
+}

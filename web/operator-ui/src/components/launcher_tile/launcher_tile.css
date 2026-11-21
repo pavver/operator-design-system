@@ -1,0 +1,115 @@
+/* Operator LauncherTile: square launcher tile for dashboards and app grids. */
+
+:where(.op-launcher-tile) {
+    font-size: var(--op-launcher-tile-font-size, inherit);
+    line-height: var(--op-launcher-tile-line-height, inherit);
+    color: var(--op-launcher-tile-color, inherit);
+}
+
+.op-launcher-tile {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    width: var(--op-launcher-tile-size, calc(var(--op-du) * 24));
+    height: var(--op-launcher-tile-size, calc(var(--op-du) * 24));
+    padding: var(--op-launcher-tile-padding, calc(var(--op-du) * 2));
+    background: var(--op-launcher-tile-bg, var(--op-surface));
+    color: var(--op-launcher-tile-color, var(--op-text-primary));
+    border: var(--op-launcher-tile-border-width, var(--op-border-width)) solid var(--op-launcher-tile-border, var(--op-border));
+    border-radius: 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    outline: none;
+    overflow: hidden;
+    transition: background var(--op-motion-state-color) var(--op-ease-standard),
+                border-color var(--op-motion-state-color) var(--op-ease-standard),
+                color var(--op-motion-state-color) var(--op-ease-standard);
+}
+
+.op-launcher-tile:hover:not([data-state="disabled"]):not([aria-disabled="true"]) {
+    background: var(--op-launcher-tile-hover-bg, var(--op-surface-hover));
+    border-color: var(--op-launcher-tile-hover-border, var(--op-border-strong));
+}
+
+.op-launcher-tile:focus-visible {
+    outline: calc(var(--op-du) * 0.5) solid var(--op-focus-ring, var(--op-accent));
+    outline-offset: calc(var(--op-du) * 0.5);
+}
+
+.op-launcher-tile[data-state="pressed"] {
+    background: var(--op-launcher-tile-pressed-bg, var(--op-surface-active));
+}
+
+.op-launcher-tile[data-state="selected"] {
+    background: var(--op-launcher-tile-selected-bg, var(--op-surface-selected));
+    border-color: var(--op-accent);
+}
+
+.op-launcher-tile[data-state="disabled"],
+.op-launcher-tile[aria-disabled="true"] {
+    background: var(--op-launcher-tile-disabled-bg, var(--op-disabled-surface));
+    border-color: var(--op-launcher-tile-disabled-border, var(--op-disabled-border));
+    color: var(--op-launcher-tile-disabled-color, var(--op-text-disabled));
+    cursor: not-allowed;
+}
+
+.op-launcher-tile-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: var(--op-launcher-tile-gap, calc(var(--op-du) * 2.5));
+    pointer-events: none;
+}
+
+.op-launcher-tile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--op-launcher-tile-icon-size, calc(var(--op-du) * 8));
+    height: var(--op-launcher-tile-icon-size, calc(var(--op-du) * 8));
+    color: var(--op-launcher-tile-icon-color, var(--op-icon));
+    flex-shrink: 0;
+}
+
+.op-launcher-tile[data-state="disabled"] .op-launcher-tile-icon,
+.op-launcher-tile[aria-disabled="true"] .op-launcher-tile-icon {
+    color: var(--op-launcher-tile-disabled-icon-color, var(--op-text-disabled));
+}
+
+.op-launcher-tile-label {
+    font-size: var(--op-launcher-tile-font-size, calc(var(--op-tu) * 11));
+    line-height: var(--op-launcher-tile-line-height, calc(var(--op-tu) * 14));
+    font-weight: 500;
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.op-launcher-tile-badge {
+    position: absolute;
+    top: calc(var(--op-du) * 1);
+    right: calc(var(--op-du) * 1);
+    pointer-events: none;
+}
+
+.op-launcher-tile-pending {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--op-launcher-tile-pending-bg, rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+}

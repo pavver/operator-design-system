@@ -3,7 +3,7 @@
 use crate::components::chat_message::delivery_status::DeliveryStatusView;
 use crate::components::chat_message::ttl_indicator::TtlIndicator;
 use crate::components::chat_message::types::{
-    AudioAttachment, DeliveryStatus, MediaItem, StickerAttachment, StickerFormat,
+    AudioAttachment, ChatMediaItem, DeliveryStatus, StickerAttachment, StickerFormat,
     VideoNoteAttachment, VoiceAttachment,
 };
 use leptos::prelude::*;
@@ -25,7 +25,7 @@ pub fn format_bytes(bytes: u64) -> String {
 #[component]
 pub fn MediaGridView(
     /// Collection of visual media attachments.
-    items: Vec<MediaItem>,
+    items: Vec<ChatMediaItem>,
     /// Callback when a media item is clicked (passes media index).
     #[prop(optional, into)]
     on_media_click: Option<Callback<usize>>,

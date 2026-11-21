@@ -106,7 +106,7 @@ impl ForwardHeader {
 
 /// Visual media item (photo or video) inside a media grid.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct MediaItem {
+pub struct ChatMediaItem {
     pub url: String,
     pub is_video: bool,
     pub thumbnail_url: Option<String>,
@@ -116,7 +116,7 @@ pub struct MediaItem {
     pub ttl: Option<MessageTtlInfo>,
 }
 
-impl MediaItem {
+impl ChatMediaItem {
     pub fn photo(url: impl Into<String>) -> Self {
         Self {
             url: url.into(),
@@ -300,7 +300,7 @@ pub enum MessageContent {
     /// Stylized blockquote with accent bar and collapsible toggle.
     Blockquote { text: String, is_collapsible: bool },
     /// Visual media items arranged in a compact grid.
-    MediaGrid(Vec<MediaItem>),
+    MediaGrid(Vec<ChatMediaItem>),
     /// Document or file download attachment.
     File(FileAttachment),
     /// Audio track attachment.

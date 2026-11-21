@@ -462,13 +462,13 @@ pub(crate) fn copy_action(text: Signal<String>) -> AsyncAction {
     AsyncAction::new(move |()| copy_text(text.get_untracked()))
 }
 
-#[cfg(any(feature = "dialog", feature = "sheet"))]
+#[cfg(any(feature = "dialog", feature = "sheet", feature = "gallery-viewer"))]
 thread_local! {
     static SCROLL_LOCKS: std::cell::Cell<u32> = const { std::cell::Cell::new(0) };
 }
 
 /// Sets or clears the page scroll lock attribute on the document element.
-#[cfg(any(feature = "dialog", feature = "sheet"))]
+#[cfg(any(feature = "dialog", feature = "sheet", feature = "gallery-viewer"))]
 fn set_page_scroll_lock(locked: bool) {
     let Some(window) = web_sys::window() else {
         return;
@@ -492,7 +492,7 @@ fn set_page_scroll_lock(locked: bool) {
 
 /// Stops the page behind a modal overlay from scrolling while `open` is true.
 /// Locks are counted, so stacked overlays release the page only when the last one closes.
-#[cfg(any(feature = "dialog", feature = "sheet"))]
+#[cfg(any(feature = "dialog", feature = "sheet", feature = "gallery-viewer"))]
 pub(crate) fn use_page_scroll_lock(open: RwSignal<bool>) {
     let held = StoredValue::new(false);
     let apply = move |want: bool| {

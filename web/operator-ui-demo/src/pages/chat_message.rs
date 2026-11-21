@@ -160,8 +160,8 @@ pub fn chat_message() -> AnyView {
                         stamp="10:28 AM"
                         delivery_status=DeliveryStatus::Delivered
                         content=MessageContent::MediaGrid(vec![
-                            MediaItem::photo(SVG_PHOTO_1).with_spoiler(true),
-                            MediaItem::video(SVG_PHOTO_2, 45),
+                            ChatMediaItem::photo(SVG_PHOTO_1).with_spoiler(true),
+                            ChatMediaItem::video(SVG_PHOTO_2, 45),
                         ])
                     />
 

@@ -1,0 +1,9 @@
+# Change history of VideoStream. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-21T21:02:31+02:00"
+status = "draft"
+en = "Initial implementation of the VideoStream component for live camera and WebRTC/MediaStream playback."
+uk = "Початкова реалізація компонента VideoStream для відтворення живих відеопотоків із камер та WebRTC/MediaStream."
