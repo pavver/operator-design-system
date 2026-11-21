@@ -1,0 +1,16 @@
+# Change history of SearchField. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+[[change]]
+date = "2026-11-17T03:22:23+02:00"
+status = "draft"
+commit = "e59d5b4"
+en = "The clear button label is translatable (`clear_label`)."
+uk = "Підпис кнопки очищення можна перекласти (`clear_label`)."
+
+[[change]]
+date = "2026-11-11T15:18:35+02:00"
+status = "approved"
+commit = "a27d1f0"
+en = "Added the initial SearchField component module and stylesheet."
+uk = "Додано початковий модуль компонента SearchField і його таблицю стилів."
