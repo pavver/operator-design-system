@@ -31,6 +31,20 @@ pub fn accordion() -> AnyView {
                 </Collapsible>
             </div>
         </Example>
+
+        <Example title="Customization" note="Shared metrics, header content and application expansion strings." block=true>
+            <ThemeRoot strings=Callback::new(|key| match key {
+                "accordion.expand" => Some("Show details".to_string()),
+                "accordion.collapse" => Some("Hide details".to_string()),
+                _ => None,
+            })>
+                <Accordion header_height=14.0 gap=4.0 content_padding_bottom=5.0>
+                    <Collapsible title="Details" header=|| view! { <strong>"Device details"</strong> }>
+                        <p class="demo-p">"Application content."</p>
+                    </Collapsible>
+                </Accordion>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

@@ -14,3 +14,17 @@
   .op-marquee-track[data-run] { animation: none; }
   .op-marquee[data-overflow] .op-marquee-track { display: block; overflow: hidden; text-overflow: ellipsis; }
 }
+
+.op-marquee { font-size: var(--op-marquee-text-font-size, inherit); line-height: var(--op-marquee-text-line-height, inherit); color: var(--op-marquee-text-text, inherit); }
+.op-marquee-gap, .op-marquee-measure { width: var(--op-marquee-text-spacing, calc(var(--op-du) * 6)); }
+.op-marquee-measure { position: absolute; visibility: hidden; pointer-events: none; height: 0; }
+.op-marquee-tip-measure { position: absolute; visibility: hidden; pointer-events: none; height: 0; width: var(--op-marquee-text-tooltip-gap, calc(var(--op-du) * 1.5)); }
+.op-marquee-tooltip {
+  padding: var(--op-marquee-text-tooltip-padding-y, var(--op-dim-pad-tight)) var(--op-marquee-text-tooltip-padding-x, var(--op-dim-gutter));
+  font-size: var(--op-marquee-text-tooltip-font-size, var(--op-type-caption-size));
+  line-height: var(--op-marquee-text-tooltip-line-height, var(--op-type-caption-line));
+  background-color: var(--op-marquee-text-tooltip-background, var(--op-surface-alt));
+  color: var(--op-marquee-text-tooltip-text, var(--op-text-primary));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-marquee-text-tooltip-border, var(--op-border-strong)), 0 var(--op-marquee-text-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-marquee-text-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-marquee-text-tooltip-shadow, rgb(0 0 0 / 35%));
+}
+.op-marquee-tooltip-content { max-width: var(--op-marquee-text-tooltip-max-width, calc(var(--op-du) * 75)); }

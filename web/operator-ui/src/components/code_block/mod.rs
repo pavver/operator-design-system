@@ -2,10 +2,10 @@
 
 use crate::components::icon_button::IconButton;
 use crate::components::scrollbar::{ScrollAxis, ScrollView};
-use crate::core::copy_action;
 use crate::core::styled_text::line_view;
+use crate::core::{Metric, Slot, copy_action, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
-use operator_ui_tokens::{dim, icons};
+use operator_ui_tokens::icons;
 
 #[cfg(feature = "arborium")]
 mod arborium;
@@ -31,7 +31,30 @@ pub fn CodeBlock(
     /// Maximum height in DU before the block scrolls.
     #[prop(optional)]
     max_height: Option<f32>,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] actions: Slot,
+    #[prop(optional, into)] footer: Slot,
+    #[prop(optional, into)] content: Slot,
+    #[prop(optional, into)] copy_label: MaybeProp<String>,
+    #[prop(optional)] copy_icon: Option<operator_ui_tokens::Icon>,
+    #[prop(optional, into)] header_height: MaybeProp<f32>,
+    #[prop(optional, into)] header_gap: MaybeProp<f32>,
+    #[prop(optional, into)] header_padding_start: MaybeProp<f32>,
+    #[prop(optional, into)] header_padding_end: MaybeProp<f32>,
+    #[prop(optional, into)] padding: MaybeProp<f32>,
+    #[prop(optional, into)] number_width: MaybeProp<f32>,
+    #[prop(optional, into)] number_padding: MaybeProp<f32>,
+    #[prop(optional, into)] copy_size: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] header_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] header_letter_spacing: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
+    let copy_label = ui_text(copy_label, "code-block.copy", "Copy code");
+    let copy_icon = ui_icon(copy_icon, "code-block.copy", icons::CONTENT_COPY);
     let lang = language.as_deref().and_then(highlight::find);
     #[cfg(feature = "arborium")]
     let lines = {
@@ -50,22 +73,43 @@ pub fn CodeBlock(
     };
     #[cfg(not(feature = "arborium"))]
     let lines = move || code.with(|c| highlight::highlight(c, lang));
-    let has_head = language.is_some() || copy;
+    let has_head = language.is_some() || copy || header.is_set() || actions.is_set();
+    let metrics = vec![
+        Metric::du("--op-code-block-max-height", max_height.into()),
+        Metric::du("--op-code-block-header-height", header_height),
+        Metric::du("--op-code-block-header-gap", header_gap),
+        Metric::du("--op-code-block-header-padding-start", header_padding_start),
+        Metric::du("--op-code-block-header-padding-end", header_padding_end),
+        Metric::du("--op-code-block-padding", padding),
+        Metric::du("--op-code-block-number-width", number_width),
+        Metric::du("--op-code-block-number-padding", number_padding),
+        Metric::du("--op-code-block-copy-size", copy_size),
+        Metric::du("--op-code-block-icon-size", icon_size),
+        Metric::tu("--op-code-block-font-size", font_size),
+        Metric::tu("--op-code-block-line-height", line_height),
+        Metric::tu("--op-code-block-header-font-size", header_font_size),
+        Metric::tu(
+            "--op-code-block-header-letter-spacing",
+            header_letter_spacing,
+        ),
+    ];
     view! {
-        <div class="op-code" data-wrap=wrap.then_some("")>
+        <div class=root_class("op-code", class) style=root_style(metrics, style) data-wrap=wrap.then_some("")>
             {has_head
                 .then(|| {
                     view! {
                         <div class="op-code-head">
-                            <span class="op-code-lang">{language.clone().unwrap_or_default()}</span>
+                            {if header.is_set() { header.run().into_any() } else {
+                                view! { <span class="op-code-lang">{language.clone().unwrap_or_default()}</span> }.into_any()
+                            }}
+                            {actions.run()}
                             {copy
-                                .then(|| {
-                                    view! {
+                                .then_some({
+                                    move || view! {
                                         <IconButton
-                                            icon=icons::CONTENT_COPY
-                                            label="Copy code"
-                                            size=dim::ROW_DENSE
-                                            icon_size=3.5
+                                            icon=copy_icon.get()
+                                            label=copy_label
+                                            style="--op-button-size:var(--op-code-block-copy-size, var(--op-dim-row-dense));--op-button-icon-size:var(--op-code-block-icon-size, calc(var(--op-du) * 3.5))"
                                             on_async_click=copy_action(code)
                                         />
                                     }
@@ -73,7 +117,8 @@ pub fn CodeBlock(
                         </div>
                     }
                 })}
-            <ScrollView axis=ScrollAxis::Both max_height=max_height>
+            {if content.is_set() { content.run().into_any() } else { view! {
+            <ScrollView axis=ScrollAxis::Both class="op-code-scroll">
             <pre class="op-code-body">
                 <code>
                     {move || {
@@ -93,6 +138,8 @@ pub fn CodeBlock(
                 </code>
             </pre>
             </ScrollView>
+            }.into_any() }}
+            {footer.run()}
         </div>
     }
 }

@@ -52,6 +52,17 @@ pub fn navigation_shell() -> AnyView {
                 </div>
             </div>
         </Example>
+
+        <Example title="Customization" note="Tree row metrics, a scoped node label and an application accessible name." block=true>
+            <ThemeRoot strings=Callback::new(|key| (key == "tree.label").then(|| "Browse devices".to_string()))>
+                <Tree nodes=vec![TreeNode::new("custom", "Devices").children(vec![TreeNode::new("camera", "Camera")])]
+                    expanded=RwSignal::new(std::collections::HashSet::from(["custom".to_string()]))
+                    selected=RwSignal::new(None::<String>) height=Some(30.0)
+                    row_height=12.0 indent=6.0 gap=2.0
+                    option=Callback::new(|row: TreeRow| view! { <strong>{row.label}</strong> }.into_any())
+                    footer=|| view! { <span class="op-t-caption">"Application footer"</span> }/>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

@@ -25,6 +25,15 @@ pub fn property_list() -> AnyView {
                 </div>
             </div>
         </Example>
+
+        <Example title="Customization" note="A scoped value slot retains the original value for copying." block=true>
+            <ThemeRoot strings=Callback::new(|key| (key == "property-list.copy").then(|| "Copy property".to_string()))>
+                <PropertyList gap=5.0 padding_y=3.0 row_height=14.0
+                    value_slot=Callback::new(|data: PropertyValue| view! { <strong>{data.value.unwrap_or_default()}</strong> }.into_any())>
+                    <Property label="Address" value="192.168.1.40" copyable=true/>
+                </PropertyList>
+            </ThemeRoot>
+        </Example>
     }
     .into_any()
 }

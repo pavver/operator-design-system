@@ -1,9 +1,10 @@
 //! Sortable data table: DataTable, Column, TableRow, Align.
 
-use crate::components::linear_progress::LinearProgress;
 use crate::components::primitives::Icon;
 use crate::components::scrollbar::{ScrollAxis, ScrollView};
-use crate::core::{du, spawn_ripple};
+use crate::core::{
+    Metric, ScopedSlot, Slot, du, root_class, root_style, spawn_ripple, ui_icon, ui_text,
+};
 use leptos::prelude::*;
 use operator_ui_tokens::icons;
 use std::cmp::Ordering;
@@ -90,6 +91,22 @@ impl TableRow {
     }
 }
 
+/// Data passed to the scoped body-cell slot.
+#[derive(Clone, Debug, PartialEq)]
+pub struct TableCell {
+    pub row: TableRow,
+    pub column_index: usize,
+    pub column: Option<Column>,
+    pub value: String,
+}
+
+/// Data passed to the scoped header-cell slot.
+#[derive(Clone, Debug, PartialEq)]
+pub struct TableHeaderCell {
+    pub column_index: usize,
+    pub column: Column,
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum SortDir {
     Asc,
@@ -136,9 +153,63 @@ pub fn DataTable(
     max_height: Option<f32>,
     /// Content for an empty table.
     #[prop(optional, into)]
-    empty: Option<ViewFn>,
-    #[prop(optional, into)] label: Option<String>,
+    empty: Slot,
+    #[prop(optional, into)] label: MaybeProp<String>,
+    #[prop(optional, into)] header: Slot,
+    #[prop(optional, into)] footer: Slot,
+    #[prop(optional, into)] before_options: Slot,
+    #[prop(optional, into)] after_options: Slot,
+    #[prop(optional, into)] empty_text: MaybeProp<String>,
+    #[prop(optional, into)] loading_label: MaybeProp<String>,
+    #[prop(optional, into)] sort_ascending_label: MaybeProp<String>,
+    #[prop(optional, into)] sort_descending_label: MaybeProp<String>,
+    #[prop(optional, into)] sort_clear_label: MaybeProp<String>,
+    #[prop(optional)] sort_ascending_icon: Option<operator_ui_tokens::Icon>,
+    #[prop(optional)] sort_descending_icon: Option<operator_ui_tokens::Icon>,
+    #[prop(optional)] row: Option<ScopedSlot<TableRow>>,
+    #[prop(optional)] cell: Option<ScopedSlot<TableCell>>,
+    #[prop(optional)] header_cell: Option<ScopedSlot<TableHeaderCell>>,
+    #[prop(optional, into)] row_height: MaybeProp<f32>,
+    #[prop(optional, into)] dense_row_height: MaybeProp<f32>,
+    #[prop(optional, into)] header_height: MaybeProp<f32>,
+    #[prop(optional, into)] padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] sort_gap: MaybeProp<f32>,
+    #[prop(optional, into)] sort_padding: MaybeProp<f32>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] loading_thickness: MaybeProp<f32>,
+    #[prop(optional, into)] empty_padding: MaybeProp<f32>,
+    #[prop(optional, into)] font_size: MaybeProp<f32>,
+    #[prop(optional, into)] line_height: MaybeProp<f32>,
+    #[prop(optional, into)] header_font_size: MaybeProp<f32>,
+    #[prop(optional, into)] header_letter_spacing: MaybeProp<f32>,
+    #[prop(optional, into)] class: MaybeProp<String>,
+    #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
+    let empty_text = ui_text(empty_text, "data-table.empty", "No data");
+    let loading_label = ui_text(loading_label, "data-table.loading", "Loading rows");
+    let label = ui_text(label, "data-table.label", "");
+    let ascending_label = ui_text(
+        sort_ascending_label,
+        "data-table.sort-ascending",
+        "Sort ascending",
+    );
+    let descending_label = ui_text(
+        sort_descending_label,
+        "data-table.sort-descending",
+        "Sort descending",
+    );
+    let clear_label = ui_text(sort_clear_label, "data-table.sort-clear", "Clear sorting");
+    let ascending_icon = ui_icon(
+        sort_ascending_icon,
+        "data-table.sort-ascending",
+        icons::ARROW_UPWARD,
+    );
+    let descending_icon = ui_icon(
+        sort_descending_icon,
+        "data-table.sort-descending",
+        icons::ARROW_DOWNWARD,
+    );
+    let row_slot = row;
     let columns = StoredValue::new(columns);
     let sort = RwSignal::new(None::<(usize, SortDir)>);
     let col_count = columns.with_value(Vec::len);
@@ -178,7 +249,11 @@ pub fn DataTable(
                 Some(SortDir::Desc) => "descending",
                 None => "none",
             };
-            let title = col.title.clone();
+            let sort_title = col.title.clone();
+            let title = header_cell.map_or_else(
+                || col.title.clone().into_any(),
+                |slot| slot.run(TableHeaderCell { column_index: i, column: col.clone() }),
+            );
             view! {
                 <th
                     scope="col"
@@ -192,14 +267,19 @@ pub fn DataTable(
                                 type="button"
                                 class="op-rippled op-table-sort"
                                 data-sorted=move || dir().is_some().then_some("")
+                                aria-label=move || format!("{}: {}", sort_title, match dir() {
+                                    None => ascending_label.get(),
+                                    Some(SortDir::Asc) => descending_label.get(),
+                                    Some(SortDir::Desc) => clear_label.get(),
+                                })
                                 on:pointerdown=move |ev| spawn_ripple(&ev)
                                 on:click=move |_| cycle(i)
                             >
                                 <span>{title}</span>
                                 <span class="op-table-sort-icon">
                                     {move || {
-                                        let icon = if dir() == Some(SortDir::Desc) { icons::ARROW_DOWNWARD } else { icons::ARROW_UPWARD };
-                                        view! { <Icon icon=icon size=3.5/> }
+                                        let icon = if dir() == Some(SortDir::Desc) { descending_icon.get() } else { ascending_icon.get() };
+                                        view! { <Icon icon=icon style="--op-icon-size:var(--op-data-table-icon-size, calc(var(--op-du) * 3.5))"/> }
                                     }}
                                 </span>
                             </button>
@@ -217,10 +297,12 @@ pub fn DataTable(
     let body = move || {
         let list = sorted.get();
         if list.is_empty() {
-            let content = empty.clone().map_or_else(
-                || view! { <span class="op-table-empty-text">"No data"</span> }.into_any(),
-                |e| e.run(),
-            );
+            let content = if empty.is_set() {
+                empty.run().into_any()
+            } else {
+                view! { <span class="op-table-empty-text">{move || empty_text.get()}</span> }
+                    .into_any()
+            };
             return view! {
                 <tr class="op-table-empty">
                     <td colspan=col_count.to_string()>{content}</td>
@@ -246,15 +328,22 @@ pub fn DataTable(
                     }
                 };
                 let click_key = click.clone();
-                let cells = row
+                let cells = if let Some(slot) = row_slot { slot.run(row.clone()) } else { row
                     .cells
-                    .into_iter()
+                    .iter().cloned()
                     .enumerate()
-                    .map(|(i, cell)| {
+                    .map(|(i, value)| {
                         let align = columns.with_value(|c| c.get(i).map_or(Align::Start, |c| c.align));
-                        view! { <td data-align=align.as_str()>{cell}</td> }
+                        let content = cell.map_or_else(
+                            || value.clone().into_any(),
+                            |slot| slot.run(TableCell {
+                                row: row.clone(), column_index: i,
+                                column: columns.with_value(|c| c.get(i).cloned()), value: value.clone(),
+                            }),
+                        );
+                        view! { <td data-align=align.as_str()>{content}</td> }
                     })
-                    .collect_view();
+                    .collect_view().into_any() };
                 view! {
                     <tr
                         data-selected=move || is_selected.get().then_some("")
@@ -281,23 +370,52 @@ pub fn DataTable(
             .into_any()
     };
 
+    let metrics = vec![
+        Metric::du("--op-data-table-max-height", max_height.into()),
+        Metric::du("--op-data-table-row-height", row_height),
+        Metric::du("--op-data-table-dense-row-height", dense_row_height),
+        Metric::du("--op-data-table-header-height", header_height),
+        Metric::du("--op-data-table-padding-x", padding_x),
+        Metric::du("--op-data-table-sort-gap", sort_gap),
+        Metric::du("--op-data-table-sort-padding", sort_padding),
+        Metric::du("--op-data-table-icon-size", icon_size),
+        Metric::du("--op-data-table-loading-thickness", loading_thickness),
+        Metric::du("--op-data-table-empty-padding", empty_padding),
+        Metric::tu("--op-data-table-font-size", font_size),
+        Metric::tu("--op-data-table-line-height", line_height),
+        Metric::tu("--op-data-table-header-font-size", header_font_size),
+        Metric::tu(
+            "--op-data-table-header-letter-spacing",
+            header_letter_spacing,
+        ),
+    ];
     view! {
-        <div class="op-table-wrap" style:max-height=max_height.map(du)>
+        <div class=root_class("op-table-wrap", class) style=root_style(metrics, style) >
+            {header.run()}
             <ScrollView axis=ScrollAxis::Both>
-            <table class="op-table" data-dense=dense.then_some("") aria-label=label>
+            <table class="op-table" data-dense=dense.then_some("") aria-label=move || { let name = label.get(); (!name.is_empty()).then_some(name) }>
                 <thead>
                     <tr>{head}</tr>
                     <Show when=move || loading.get()>
                         <tr class="op-table-progress">
                             <td colspan=col_count.to_string()>
-                                <LinearProgress label="Loading rows" thickness=0.5/>
+                                <div class="op-progress" style="--op-linear-progress-thickness:var(--op-data-table-loading-thickness, calc(var(--op-du) * 0.5));--op-linear-progress-bar:var(--op-data-table-loading, var(--op-pending));--op-linear-progress-track:var(--op-data-table-loading-track, color-mix(in srgb, var(--op-data-table-loading, var(--op-pending)) 20%, var(--op-surface-alt)))">
+                                    <div class="op-progress-track" role="progressbar" aria-label=move || loading_label.get() aria-valuemin="0" aria-valuemax="1" data-tone="pending" data-indeterminate="">
+                                        <div class="op-progress-fill"></div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </Show>
                 </thead>
-                <tbody>{body}</tbody>
+                <tbody>
+                    {before_options.is_set().then(|| view! { <tr><td colspan=col_count.to_string()>{before_options.run()}</td></tr> })}
+                    {body}
+                    {after_options.is_set().then(|| view! { <tr><td colspan=col_count.to_string()>{after_options.run()}</td></tr> })}
+                </tbody>
             </table>
             </ScrollView>
+            {footer.run()}
         </div>
     }
 }
