@@ -1,5 +1,6 @@
 //! Operator UI documentation, generated from the shared Markdown specifications.
 
+mod component_strings;
 mod doc_page;
 mod docs;
 mod history;
@@ -47,6 +48,11 @@ fn NotFound(slug: String) -> impl IntoView {
 fn App() -> impl IntoView {
     let language = RwSignal::new(i18n::initial_language());
     provide_context(language);
+    // Read the signal inside the lookup so mounted components follow the language picker.
+    let strings = Callback::new(move |key: &'static str| match language.get() {
+        i18n::Lang::En => None,
+        i18n::Lang::Uk => component_strings::ukrainian(key).map(str::to_string),
+    });
     let theme = RwSignal::new(TokenTheme::Operator);
     let dark = RwSignal::new(true);
     provide_context(Backend::new());
@@ -90,7 +96,7 @@ fn App() -> impl IntoView {
     };
 
     view! {
-        <ThemeRoot theme=theme dark=dark class="docs-root">
+        <ThemeRoot theme=theme dark=dark strings=strings class="docs-root">
             <ToastHost>
                 <TopBar dark=dark menu_open=menu_open/>
                 <div class="docs-layout" data-home=move || slug.with(String::is_empty).then_some("")>

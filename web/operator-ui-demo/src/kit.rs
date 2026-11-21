@@ -149,8 +149,8 @@ pub fn Example(
 ) -> impl IntoView {
     view! {
         <div class="docs-example-block">
-            {title.map(|t| view! { <h3 class="docs-example-title">{t}</h3> })}
-            {note.map(|n| view! { <p class="docs-example-note">{n}</p> })}
+            {title.map(|title| view! { <h3 class="docs-example-title">{t(title)}</h3> })}
+            {note.map(|note| view! { <p class="docs-example-note">{t(note)}</p> })}
             <div class="docs-example" data-block=block.then_some("")>{children()}</div>
         </div>
     }

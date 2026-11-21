@@ -1,5 +1,8 @@
 //! Site translations and the language context shared with examples.
 
+mod example_notes;
+mod example_titles;
+
 use leptos::prelude::*;
 use operator_ui::prelude::*;
 
@@ -168,7 +171,9 @@ pub fn tr(language: Lang, key: &'static str) -> &'static str {
         "Success" => "Успіх",
         "Error" => "Помилка",
         "Alternate" => "Почергово",
-        _ => key,
+        _ => example_titles::ukrainian(key)
+            .or_else(|| example_notes::ukrainian(key))
+            .unwrap_or(key),
     }
 }
 
