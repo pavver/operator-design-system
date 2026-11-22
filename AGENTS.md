@@ -25,7 +25,8 @@ Rules for AI agents contributing to this repository.
 * Each commit that changes a component adds one file in `docs/changes/<component>/<YYYY-MM-DD>-<HHMM>-<short-kebab-slug>.toml`, where `<component>` matches its specification filename.
 * A new change file starts with `status = "draft"` in the same commit as the component change.
 * Each file requires `date` (RFC 3339 with a UTC offset), `status` (`draft` or `approved`), and `kind` (`new`, `feature`, `fix`, `breaking`, `docs`, or `refactor`).
-* `commit` is optional and accepts 7–40 hexadecimal characters; the documentation build may derive the commit that added the file when complete Git history is available.
+* `commit` is optional and accepts 7–40 hexadecimal characters; with complete Git history, the documentation build may derive the commit that added the file only if that commit also touched the component implementation directory or its specification.
+  Grouped pages use an obvious mapping to the implementation they document, such as `value-fields` to `value_field`; otherwise no implementation mapping is inferred.
 * Both `[en]` and `[uk]` require a Markdown `summary`, may include `check` describing the examples, states, or props a tester should inspect, and require `migration` explaining user actions when `kind = "breaking"`.
 * Supply Ukrainian text for every supplied English summary, check, and migration instruction.
 * During review, the maintainer approves a file by setting `status = "approved"`, replaces it to describe the final revision, or deletes it if the change was dropped.

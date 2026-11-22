@@ -3,6 +3,7 @@
 use super::{render, rewrite_link};
 use pulldown_cmark::{Event, Parser, Tag};
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::fmt::Write as _;
 use std::path::Path;
 use std::process::{Command, Stdio};
@@ -131,17 +132,66 @@ fn git(repo: &Path, args: &[&str]) -> Option<String> {
         .then(|| String::from_utf8_lossy(&output.stdout).trim().to_string())
 }
 
-fn added_commit(repo: &Path, file: &Path) -> Option<String> {
+pub(super) type AddedCommits = HashMap<String, Option<String>>;
+
+pub(super) fn added_commits(repo: &Path) -> AddedCommits {
+    let mut commits = AddedCommits::new();
     // A shallow boundary can masquerade as the addition of every file in that commit.
-    if git(repo, &["rev-parse", "--is-shallow-repository"])? != "false" {
-        return None;
+    if git(repo, &["rev-parse", "--is-shallow-repository"]).as_deref() != Some("false") {
+        return commits;
     }
-    let path = file.strip_prefix(repo).ok()?.to_str()?;
-    git(
+    // Read all additions and component edits together, once for the entire build.
+    let Some(log) = git(
         repo,
-        &["log", "--diff-filter=A", "--format=%h", "-1", "--", path],
-    )
-    .filter(|hash| valid_commit(hash))
+        &[
+            "log",
+            "--full-history",
+            "--no-color",
+            "--no-ext-diff",
+            "--no-renames",
+            "--format=%x00%h",
+            "--name-status",
+            "--",
+            "docs/changes",
+            "docs/components",
+            "web/operator-ui/src/components",
+        ],
+    ) else {
+        return commits;
+    };
+    for entry in log.split('\0') {
+        let mut lines = entry.lines();
+        let Some(hash) = lines.next().filter(|hash| valid_commit(hash)) else {
+            continue;
+        };
+        let paths: Vec<_> = lines.filter_map(|line| line.split_once('\t')).collect();
+        for &(status, path) in &paths {
+            if status != "A" {
+                continue;
+            }
+            let Some((component, _)) = path
+                .strip_prefix("docs/changes/")
+                .and_then(|path| path.split_once('/'))
+            else {
+                continue;
+            };
+            // This grouped page documents the value_field module; primitives has its own folder.
+            let module = match component {
+                "value-fields" => "value_field".to_string(),
+                name => name.replace('-', "_"),
+            };
+            let implementation = format!("web/operator-ui/src/components/{module}/");
+            let specification = format!("docs/components/{component}.md");
+            let touched = paths
+                .iter()
+                .any(|(_, path)| path.starts_with(&implementation) || *path == specification);
+            // Keep even rejected additions so an older incarnation cannot supply a link.
+            commits
+                .entry(path.to_string())
+                .or_insert_with(|| touched.then(|| hash.to_string()));
+        }
+    }
+    commits
 }
 
 pub(super) fn watch_git(repo: &Path) {
@@ -197,7 +247,12 @@ pub(super) fn validate_components(docs: &Path) -> Result<(), Error> {
 }
 
 /// Relative Markdown links keep the component specification as their base.
-pub(super) fn history(dir: &Path, link_base: &Path, repo: &Path) -> Result<String, Error> {
+pub(super) fn history(
+    dir: &Path,
+    link_base: &Path,
+    repo: &Path,
+    commits: &AddedCommits,
+) -> Result<String, Error> {
     let entries = match fs::read_dir(dir) {
         Ok(entries) => entries,
         Err(error) if error.kind() == io::ErrorKind::NotFound => return Ok(String::new()),
@@ -212,7 +267,13 @@ pub(super) fn history(dir: &Path, link_base: &Path, repo: &Path) -> Result<Strin
         let load = || -> Result<_, Error> {
             let (mut change, key) = parse_change(&fs::read_to_string(&file)?)?;
             if change.commit.is_none() {
-                change.commit = added_commit(repo, &file);
+                change.commit = file
+                    .strip_prefix(repo)
+                    .ok()
+                    .and_then(Path::to_str)
+                    .and_then(|path| commits.get(path))
+                    .cloned()
+                    .flatten();
             }
             Ok((key, file.clone(), change))
         };

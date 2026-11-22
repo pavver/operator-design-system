@@ -204,6 +204,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let docs = repo.join("docs");
     build_history::validate_components(&docs)?;
     build_history::watch_git(&repo);
+    let commits = build_history::added_commits(&repo);
     println!("cargo:rerun-if-changed={}", docs.display());
 
     let mut files = Vec::new();
@@ -242,6 +243,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .join(slug.trim_start_matches("components/")),
                 &dir,
                 &repo,
+                &commits,
             )?
         } else {
             String::new()
@@ -308,6 +310,7 @@ mod tests {
             &repo.join("changes/search-field"),
             Path::new("docs/components"),
             &repo.join(".."),
+            &build_history::added_commits(&repo.join("..")),
         )?;
         assert!(changes.contains("<code>clear_label</code>"));
         assert!(changes.contains("status: \"draft\""));

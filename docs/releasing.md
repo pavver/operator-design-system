@@ -69,7 +69,10 @@ Add a localized `check` to tell testers which example, state, or prop to inspect
 Relative Markdown links in all change texts resolve from `docs/components/`, so `[Field](field.md)` links to the Field specification.
 Unknown fields are errors.
 An optional `commit` accepts 7–40 hexadecimal characters.
-When omitted, the build may link the commit that added the file using Git history; it silently omits that link if Git is unavailable or the checkout is shallow.
+When omitted, the build may link the commit that added the file only if that commit also touched `web/operator-ui/src/components/<snake_name>/` or `docs/components/<kebab-name>.md`.
+The implementation directory uses the page name with hyphens replaced by underscores; grouped pages use an obvious mapping to the implementation they document, such as `value-fields` to `value_field`.
+If no implementation mapping is clear, only the specification path qualifies.
+The build silently omits the derived link if the adding commit changed neither path, Git is unavailable, or the checkout is shallow.
 
 ## Redeploying the Site
 
