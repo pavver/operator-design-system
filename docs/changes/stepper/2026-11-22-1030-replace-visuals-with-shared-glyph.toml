@@ -1,0 +1,12 @@
+date = "2026-11-22T10:30:36+02:00"
+status = "draft"
+kind = "refactor"
+commit = "12d84a9"
+
+[en]
+summary = "Replace private visuals module with shared core::glyph helper for stepper step indicators."
+check = "Inspect stepper step circles, completed checkmarks, error indicators, and active step."
+
+[uk]
+summary = "Замінено приватний модуль visuals на спільний помічник core::glyph для індикаторів кроків степера."
+check = "Перевірте кола кроків степера, позначки виконання, індикатори помилок та активний крок."

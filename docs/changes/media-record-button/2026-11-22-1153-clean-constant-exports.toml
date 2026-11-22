@@ -1,0 +1,12 @@
+date = "2026-11-22T11:53:47+02:00"
+status = "draft"
+kind = "fix"
+commit = "d79808d"
+
+[en]
+summary = "Remove duplicate constant exports to avoid glob re-export ambiguities."
+check = "Check prelude imports and constant access for media record button."
+
+[uk]
+summary = "Вилучено дубльовані експорти констант для уникнення конфліктів при re-export."
+check = "Перевірте імпорт через prelude та доступ до констант кнопки запису."

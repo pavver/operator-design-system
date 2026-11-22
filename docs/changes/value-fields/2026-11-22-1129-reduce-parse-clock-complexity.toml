@@ -1,0 +1,12 @@
+date = "2026-11-22T11:29:37+02:00"
+status = "draft"
+kind = "refactor"
+commit = "0b03b48"
+
+[en]
+summary = "Decompose clock time parser into helpers for 12/24-hour formats and period indicators."
+check = "Test time input parsing with various clock strings (e.g. 12-hour AM/PM, 24-hour)."
+
+[uk]
+summary = "Декомпозовано парсер часу на окремі допоміжні функції для 12/24-годинних форматів та індикаторів періоду."
+check = "Перевірте парсинг значень у полях часу з різними форматами (12-годинний AM/PM, 24-годинний)."

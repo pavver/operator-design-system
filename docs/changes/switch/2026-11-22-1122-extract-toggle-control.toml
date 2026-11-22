@@ -1,0 +1,12 @@
+date = "2026-11-22T11:22:24+02:00"
+status = "draft"
+kind = "refactor"
+commit = "065c1fa"
+
+[en]
+summary = "Extract shared ToggleControl core abstraction for toggle gestures and state transitions."
+check = "Inspect switch click interactions, async transitions, and disabled states."
+
+[uk]
+summary = "Виділено спільну базову абстракцію ToggleControl для жестів перемикання та переходів станів."
+check = "Перевірте взаємодію з перемикачем, асинхронні переходи та заблоковані стани."

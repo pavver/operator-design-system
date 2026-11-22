@@ -1,0 +1,12 @@
+date = "2026-11-22T11:42:18+02:00"
+status = "draft"
+kind = "refactor"
+commit = "4f9141b"
+
+[en]
+summary = "Extract RecordGestureState and separate gesture tracking from button presentation."
+check = "Test hold-to-record, tap-to-lock, cancel gestures, and timer indicators."
+
+[uk]
+summary = "Виділено RecordGestureState та відокремлено обробку жестів від візуального відображення кнопки."
+check = "Перевірте утримання для запису, блокування жестом, скасування та індикатор таймера."

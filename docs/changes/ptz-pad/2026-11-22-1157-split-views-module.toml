@@ -1,0 +1,12 @@
+date = "2026-11-22T11:57:52+02:00"
+status = "draft"
+kind = "refactor"
+commit = "a040097"
+
+[en]
+summary = "Split views into separate submodules to maintain concise module boundaries."
+check = "Verify PTZ pad rendering and layout across all button presets."
+
+[uk]
+summary = "Розділено модуль views на окремі підмодулі для збереження компактного розміру файлів."
+check = "Перевірте рендеринг та розташування пульта PTZ для всіх наборів кнопок."

@@ -1,0 +1,12 @@
+date = "2026-11-22T11:42:34+02:00"
+status = "draft"
+kind = "refactor"
+commit = "e5e45fc"
+
+[en]
+summary = "Extract CarouselArrows and CarouselDots controls and slide navigation helpers."
+check = "Inspect carousel slide progression, arrow controls, dot indicators, and autoplay."
+
+[uk]
+summary = "Виділено елементи CarouselArrows, CarouselDots та помічники навігації слайдами."
+check = "Перевірте перегортання слайдів каруселі, кнопки-стрілки, індикатори-крапки та автопрогравання."

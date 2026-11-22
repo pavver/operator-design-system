@@ -1,0 +1,12 @@
+date = "2026-11-22T11:55:36+02:00"
+status = "draft"
+kind = "refactor"
+commit = "971f198"
+
+[en]
+summary = "Extract StatusBadgeGlyph, StatusBadgeText, and accessible name resolution."
+check = "Inspect status badge tones, icons, numeric counts, and screen reader labels."
+
+[uk]
+summary = "Виділено StatusBadgeGlyph, StatusBadgeText та формування доступного імені."
+check = "Перевірте тони статусів, іконки, лічильники та доступні підписи для читачів екрана."

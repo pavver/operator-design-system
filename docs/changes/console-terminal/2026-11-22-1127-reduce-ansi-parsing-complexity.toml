@@ -1,0 +1,12 @@
+date = "2026-11-22T11:27:19+02:00"
+status = "draft"
+kind = "refactor"
+commit = "56a47e6"
+
+[en]
+summary = "Decompose ANSI escape code parsing and line processing into focused helper functions."
+check = "Verify ANSI terminal output colors, bold/dim text, and cursor control."
+
+[uk]
+summary = "Декомпозовано парсинг керуючих послідовностей ANSI та обробку рядків на окремі помічники."
+check = "Перевірте кольоровий вивід термінала ANSI, жирний та приглушений текст."

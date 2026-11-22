@@ -1,0 +1,12 @@
+date = "2026-11-22T11:11:55+02:00"
+status = "draft"
+kind = "fix"
+commit = "bf9d26a"
+
+[en]
+summary = "Treat unmatched double asterisk delimiter as literal text instead of opening an italic span."
+check = "Check markdown rendering with unclosed `**` in chat messages."
+
+[uk]
+summary = "Незбіжний роздільник із двох зірочок тепер обробляється як звичайний текст замість відкриття курсиву."
+check = "Перевірте рендеринг markdown із незакритими `**` у повідомленнях чату."

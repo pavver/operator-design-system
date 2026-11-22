@@ -1,0 +1,12 @@
+date = "2026-11-22T10:30:36+02:00"
+status = "draft"
+kind = "refactor"
+commit = "12d84a9"
+
+[en]
+summary = "Replace private visuals module with shared core::glyph helper for group item checkmarks."
+check = "Verify checkbox group items across checked, unchecked, and error states."
+
+[uk]
+summary = "Замінено приватний модуль visuals на спільний помічник core::glyph для позначок елементів групи."
+check = "Перевірте елементи групи прапорців у відміченому, невідміченому станах та стані помилки."

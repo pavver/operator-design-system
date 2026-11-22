@@ -1,0 +1,12 @@
+date = "2026-11-22T11:51:25+02:00"
+status = "draft"
+kind = "refactor"
+commit = "3586c73"
+
+[en]
+summary = "Extract MarqueeTrack, MarqueeTooltip, and text measurement helpers."
+check = "Check marquee text scrolling animation, pause on hover, and tooltip display."
+
+[uk]
+summary = "Виділено MarqueeTrack, MarqueeTooltip та допоміжну логіку вимірювання ширини тексту."
+check = "Перевірте анімацію біжучого рядка, паузу при наведенні та спливну підказку."

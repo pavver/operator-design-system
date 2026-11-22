@@ -1,0 +1,12 @@
+date = "2026-11-22T11:25:51+02:00"
+status = "draft"
+kind = "refactor"
+commit = "fbe94e6"
+
+[en]
+summary = "Simplify emoji parsing helpers and cover modifier sequences and shortcodes with unit tests."
+check = "Check custom emoji, unicode sequences, and large isolated emoji rendering."
+
+[uk]
+summary = "Спрощено допоміжні функції парсингу емодзі та покрито тестами послідовності модифікаторів і короткі коди."
+check = "Перевірте відображення кастомних емодзі, юнікод-послідовностей та великих окремих емодзі."

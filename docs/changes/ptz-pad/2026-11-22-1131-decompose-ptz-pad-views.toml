@@ -1,0 +1,12 @@
+date = "2026-11-22T11:31:15+02:00"
+status = "draft"
+kind = "refactor"
+commit = "69094ff"
+
+[en]
+summary = "Decompose PTZ pad into directional buttons, zoom controls, and focused views."
+check = "Test pan, tilt, zoom controls, and responsive sizing."
+
+[uk]
+summary = "Декомпозовано пульт PTZ на стрілки напрямку, регулятори масштабування та окремі подання."
+check = "Перевірте панорамування, нахил, масштабування та адаптивні розміри."

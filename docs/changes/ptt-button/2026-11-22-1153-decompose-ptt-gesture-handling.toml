@@ -1,0 +1,12 @@
+date = "2026-11-22T11:53:44+02:00"
+status = "draft"
+kind = "refactor"
+commit = "98bf52e"
+
+[en]
+summary = "Decompose push-to-talk button state resolution, labels, icons, and gesture tracking."
+check = "Verify press-and-hold activation, release to transmit, and busy/disabled states."
+
+[uk]
+summary = "Декомпозовано стани кнопки push-to-talk, підписи, іконки та відстеження жестів."
+check = "Перевірте утримання для виходу в ефір, відпускання та стани зайнятості/блокування."

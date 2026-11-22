@@ -1,0 +1,12 @@
+date = "2026-11-22T11:22:17+02:00"
+status = "draft"
+kind = "refactor"
+commit = "6965856"
+
+[en]
+summary = "Draw striped flags from declarative metadata and table-drive supported language options."
+check = "Verify national flags in language picker dropdown and active selection."
+
+[uk]
+summary = "Малювання смугастих прапорів на основі декларативних даних та табличні метадані мов."
+check = "Перевірте відображення національних прапорів у списку та активному виборі мовного селектора."

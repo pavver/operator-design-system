@@ -1,0 +1,12 @@
+date = "2026-11-22T11:28:20+02:00"
+status = "draft"
+kind = "refactor"
+commit = "4726da8"
+
+[en]
+summary = "Split Rust syntax scanner into focused helpers for lifetimes, prefixes, and macro attributes."
+check = "Verify syntax highlighting of Rust code blocks, particularly lifetimes and macros."
+
+[uk]
+summary = "Розбито сканер синтаксису Rust на спеціалізовані помічники для часів життя, префіксів та макроатрибутів."
+check = "Перевірте підсвічування синтаксису блоків коду Rust, зокрема часів життя та макросів."

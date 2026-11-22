@@ -1,0 +1,12 @@
+date = "2026-11-22T10:30:36+02:00"
+status = "draft"
+kind = "refactor"
+commit = "12d84a9"
+
+[en]
+summary = "Replace private visuals module with shared core::glyph helper for status and async state rendering."
+check = "Inspect visual states (idle, pending, success, error) and glyph alignment."
+
+[uk]
+summary = "Замінено приватний модуль visuals на спільний помічник core::glyph для рендерингу статусів та асинхронних станів."
+check = "Перевірте візуальні стани (очікування, успіх, помилка) та вирівнювання гліфів."

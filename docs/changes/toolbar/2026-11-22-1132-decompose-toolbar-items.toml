@@ -1,0 +1,12 @@
+date = "2026-11-22T11:32:57+02:00"
+status = "draft"
+kind = "refactor"
+commit = "51cadb9"
+
+[en]
+summary = "Extract ToolbarItemView component and separate menu overflow handling."
+check = "Inspect toolbar items, separators, and overflow menu behavior when constrained."
+
+[uk]
+summary = "Виділено компонент ToolbarItemView та відокремлено логіку переповнення в меню."
+check = "Перевірте елементи панелі інструментів, розділювачі та поведінку меню переповнення при стисненні."

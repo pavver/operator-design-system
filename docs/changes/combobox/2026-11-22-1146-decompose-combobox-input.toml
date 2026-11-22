@@ -1,0 +1,12 @@
+date = "2026-11-22T11:46:23+02:00"
+status = "draft"
+kind = "refactor"
+commit = "68aea3f"
+
+[en]
+summary = "Extract ComboboxInput and keyboard navigation and value settling helpers."
+check = "Test text typing, arrow navigation, Enter/Tab selection, and dropdown positioning."
+
+[uk]
+summary = "Виділено ComboboxInput та помічники клавіатурної навігації і фіксації значення."
+check = "Перевірте введення тексту, клавіатурні стрілки, вибір через Enter/Tab та відкриття списку."

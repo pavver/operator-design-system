@@ -1,0 +1,12 @@
+date = "2026-11-22T11:42:26+02:00"
+status = "draft"
+kind = "refactor"
+commit = "9d433c1"
+
+[en]
+summary = "Extract popover focus traps, positioning styles, and global dismissal listeners."
+check = "Verify popover alignment, focus trapping, Escape key handling, and outside clicks."
+
+[uk]
+summary = "Виділено захоплення фокусу, стилі позиціонування та слухачі закриття спливного вікна."
+check = "Перевірте вирівнювання поповера, утримання фокусу, закриття за Escape та клік поза межами."

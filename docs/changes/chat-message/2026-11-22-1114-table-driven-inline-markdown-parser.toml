@@ -1,0 +1,12 @@
+date = "2026-11-22T11:14:14+02:00"
+status = "draft"
+kind = "refactor"
+commit = "97d9521"
+
+[en]
+summary = "Table-driven inline markdown parser with unified delimiter scanning."
+check = "Check bold, italic, code, and strikethrough formatting in chat messages."
+
+[uk]
+summary = "Табличний парсер вбудованого markdown з уніфікованим скануванням роздільників."
+check = "Перевірте жирний, курсивний, моноширинний та закреслений текст у повідомленнях чату."
