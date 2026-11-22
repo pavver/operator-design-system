@@ -149,6 +149,117 @@ fn place_side(rect: &web_sys::DomRect, w: f64, h: f64, gap: f32) -> FloatPos {
     FloatPos { left, top }
 }
 
+fn compute_popover_style(
+    position: Option<FloatPos>,
+    width: Option<f64>,
+    custom_style: Option<String>,
+) -> String {
+    let visibility = if position.is_some() {
+        "visible"
+    } else {
+        "hidden"
+    };
+    let coordinates = position
+        .map(|p| {
+            format!(
+                "--op-popover-left:{}px;--op-popover-top:{}px;",
+                p.left, p.top
+            )
+        })
+        .unwrap_or_default();
+    let width = width.map(|w| format!("width:{w}px;")).unwrap_or_default();
+    format!(
+        "visibility:{visibility};{coordinates}{width}{}",
+        custom_style.unwrap_or_default()
+    )
+}
+
+fn restore_popover_focus(
+    layer_el: Option<web_sys::HtmlDivElement>,
+    previous: Option<&web_sys::HtmlElement>,
+) {
+    let active = document().active_element();
+    let on_body = match (&active, document().body()) {
+        (None, _) => true,
+        (Some(a), Some(body)) => a.is_same_node(Some(body.as_ref())),
+        (Some(_), None) => false,
+    };
+    let in_layer = layer_el
+        .zip(active.as_ref())
+        .is_some_and(|(el, a)| el.contains(Some(a.as_ref())));
+    if (on_body || in_layer)
+        && let Some(prev) = previous
+    {
+        let _ = prev.focus();
+    }
+}
+
+#[cfg(target_arch = "wasm32")]
+fn setup_popover_window_listeners(
+    open: RwSignal<bool>,
+    anchor: Signal<PopoverAnchor>,
+    layer_id: u64,
+    dismiss_on_outside: bool,
+    dismiss_on_escape: bool,
+    dismiss_on_resize: bool,
+    measure: impl Fn() + Copy + 'static,
+) {
+    use crate::core::overlay::event_in_layer_tree;
+    use leptos::ev;
+    let down = window_event_listener(ev::pointerdown, move |e| {
+        if !dismiss_on_outside || !open.get_untracked() {
+            return;
+        }
+        let in_layer = event_in_layer_tree(&e, layer_id);
+        let in_anchor = anchor
+            .get_untracked()
+            .contains(f64::from(e.client_x()), f64::from(e.client_y()));
+        if !in_layer && !in_anchor {
+            open.set(false);
+        }
+    });
+    let key = window_event_listener(ev::keydown, move |e| {
+        if dismiss_on_escape && open.get_untracked() && e.key() == "Escape" {
+            open.set(false);
+        }
+    });
+    let resize = window_event_listener(ev::resize, move |_| {
+        if !open.get_untracked() {
+            return;
+        }
+        if dismiss_on_resize {
+            open.set(false);
+        } else {
+            measure();
+        }
+    });
+    let on_scroll = wasm_bindgen::prelude::Closure::<dyn FnMut()>::new(move || {
+        if open.get_untracked() {
+            measure();
+        }
+    });
+    if let Some(w) = web_sys::window() {
+        let _ = w.add_event_listener_with_callback_and_bool(
+            "scroll",
+            on_scroll.as_ref().unchecked_ref(),
+            true,
+        );
+    }
+    let scroll = SendWrapper::new(on_scroll);
+    on_cleanup(move || {
+        down.remove();
+        key.remove();
+        resize.remove();
+        if let Some(w) = web_sys::window() {
+            let _ = w.remove_event_listener_with_callback_and_bool(
+                "scroll",
+                scroll.as_ref().unchecked_ref(),
+                true,
+            );
+        }
+    });
+}
+
 /// Floating layer mounted in the [`ThemeRoot`](crate::core::ThemeRoot) overlay host.
 ///
 /// It measures itself, places itself next to `anchor`, follows the anchor while the page
@@ -260,23 +371,10 @@ pub fn Popover(
             width.set(None);
             request_animation_frame(measure);
         } else if !is_open && was_open == Some(true) && restore_focus {
-            // Focus was lost with the removed layer (now on body) or is still inside it.
-            let active = document().active_element();
-            let on_body = match (&active, document().body()) {
-                (None, _) => true,
-                (Some(a), Some(body)) => a.is_same_node(Some(body.as_ref())),
-                (Some(_), None) => false,
-            };
-            let in_layer = layer
-                .try_get_untracked()
-                .flatten()
-                .zip(active.as_ref())
-                .is_some_and(|(el, a)| el.contains(Some(a.as_ref())));
-            if (on_body || in_layer)
-                && let Some(prev) = previous_focus.get_value()
-            {
-                let _ = prev.focus();
-            }
+            restore_popover_focus(
+                layer.try_get_untracked().flatten(),
+                previous_focus.get_value().as_deref(),
+            );
         }
         is_open
     });
@@ -310,63 +408,15 @@ pub fn Popover(
 
     // Window listeners exist only in a browser: rendering on a server has no window.
     #[cfg(target_arch = "wasm32")]
-    {
-        use crate::core::overlay::event_in_layer_tree;
-        use leptos::ev;
-        let down = window_event_listener(ev::pointerdown, move |e| {
-            if !dismiss_on_outside || !open.get_untracked() {
-                return;
-            }
-            let in_layer = event_in_layer_tree(&e, layer_id);
-            let in_anchor = anchor
-                .get_untracked()
-                .contains(f64::from(e.client_x()), f64::from(e.client_y()));
-            if !in_layer && !in_anchor {
-                open.set(false);
-            }
-        });
-        let key = window_event_listener(ev::keydown, move |e| {
-            if dismiss_on_escape && open.get_untracked() && e.key() == "Escape" {
-                open.set(false);
-            }
-        });
-        let resize = window_event_listener(ev::resize, move |_| {
-            if !open.get_untracked() {
-                return;
-            }
-            if dismiss_on_resize {
-                open.set(false);
-            } else {
-                measure();
-            }
-        });
-        // Scrolling of any ancestor moves the anchor; capture catches scrolls of inner containers.
-        let on_scroll = wasm_bindgen::prelude::Closure::<dyn FnMut()>::new(move || {
-            if open.get_untracked() {
-                measure();
-            }
-        });
-        if let Some(w) = web_sys::window() {
-            let _ = w.add_event_listener_with_callback_and_bool(
-                "scroll",
-                on_scroll.as_ref().unchecked_ref(),
-                true,
-            );
-        }
-        let scroll = SendWrapper::new(on_scroll);
-        on_cleanup(move || {
-            down.remove();
-            key.remove();
-            resize.remove();
-            if let Some(w) = web_sys::window() {
-                let _ = w.remove_event_listener_with_callback_and_bool(
-                    "scroll",
-                    scroll.as_ref().unchecked_ref(),
-                    true,
-                );
-            }
-        });
-    }
+    setup_popover_window_listeners(
+        open,
+        anchor,
+        layer_id,
+        dismiss_on_outside,
+        dismiss_on_escape,
+        dismiss_on_resize,
+        measure,
+    );
     #[cfg(not(target_arch = "wasm32"))]
     let _ = (
         measure,
@@ -385,30 +435,8 @@ pub fn Popover(
         ],
         style,
     );
-    let full_style = Signal::derive(move || {
-        let position = pos.get();
-        let visibility = if position.is_some() {
-            "visible"
-        } else {
-            "hidden"
-        };
-        let coordinates = position
-            .map(|p| {
-                format!(
-                    "--op-popover-left:{}px;--op-popover-top:{}px;",
-                    p.left, p.top
-                )
-            })
-            .unwrap_or_default();
-        let width = width
-            .get()
-            .map(|w| format!("width:{w}px;"))
-            .unwrap_or_default();
-        format!(
-            "visibility:{visibility};{coordinates}{width}{}",
-            custom_style().unwrap_or_default()
-        )
-    });
+    let full_style =
+        Signal::derive(move || compute_popover_style(pos.get(), width.get(), custom_style()));
     let role = StoredValue::new(role);
 
     view! {
