@@ -111,6 +111,8 @@ pub fn tr(language: Lang, key: &'static str) -> &'static str {
         "Navigation" => "Навігація",
         "Data display" => "Відображення даних",
         "Layout" => "Компонування",
+        "Media extension" => "Розширення медіа",
+        "Media" => "Медіа",
         "Project extensions" => "Розширення для проєктів",
         "draft" => "чернетка",
         "reviewed" => "перевірено",

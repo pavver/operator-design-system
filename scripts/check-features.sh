@@ -2,7 +2,7 @@
 # Runs cargo clippy for operator-ui:
 # 1. core only (--no-default-features)
 # 2. each single component feature (--no-default-features --features <f>)
-# 3. group features: reviewed, draft, full, extensions
+# 3. group features: reviewed, draft, full, media, extensions
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 # Features excluded from the per-feature loop:
 # - Group and meta features (tested separately or alias).
 # - arborium: requires clang/LLVM with wasm target support, which CI and most users do not have.
-EXCLUDE_FEATURES=("default" "reviewed" "draft" "full" "extensions" "arborium")
+EXCLUDE_FEATURES=("default" "reviewed" "draft" "full" "media" "extensions" "arborium")
 
 echo "==> Running CSS checks..."
 ./scripts/check-css.sh
@@ -33,7 +33,7 @@ for f in $features; do
     cargo clippy -q --target wasm32-unknown-unknown -p operator-ui --no-default-features --features "$f" -- -D warnings
 done
 
-for g in reviewed draft full extensions; do
+for g in reviewed draft full media extensions; do
     echo "==> Checking group feature: $g..."
     cargo clippy -q --target wasm32-unknown-unknown -p operator-ui --no-default-features --features "$g" -- -D warnings
 done

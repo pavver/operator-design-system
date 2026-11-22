@@ -267,9 +267,15 @@ fn grouped_pages_use_the_implementation_they_document() -> Result<(), Error> {
     let unknown = repo.join("docs/changes/unknown-group");
     fs::create_dir_all(&unknown)?;
     fs::write(unknown.join("feature.toml"), VALID)?;
+    let media_dir = repo.join("docs/changes/chat-message");
+    let media_impl = repo.join("web/operator-ui/src/components/media/chat_message");
+    fs::create_dir_all(&media_dir)?;
+    fs::create_dir_all(&media_impl)?;
+    fs::write(media_dir.join("feature.toml"), VALID)?;
+    fs::write(media_impl.join("mod.rs"), "implementation")?;
     let commit = commit_fixture(repo)?;
     let commits = added_commits(repo);
-    for page in ["value-fields", "primitives"] {
+    for page in ["value-fields", "primitives", "chat-message"] {
         assert_eq!(
             commits.get(&format!("docs/changes/{page}/feature.toml")),
             Some(&Some(commit.clone()))

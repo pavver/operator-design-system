@@ -181,10 +181,13 @@ pub(super) fn added_commits(repo: &Path) -> AddedCommits {
                 name => name.replace('-', "_"),
             };
             let implementation = format!("web/operator-ui/src/components/{module}/");
+            let media_impl = format!("web/operator-ui/src/components/media/{module}/");
             let specification = format!("docs/components/{component}.md");
-            let touched = paths
-                .iter()
-                .any(|(_, path)| path.starts_with(&implementation) || *path == specification);
+            let touched = paths.iter().any(|(_, path)| {
+                path.starts_with(&implementation)
+                    || path.starts_with(&media_impl)
+                    || *path == specification
+            });
             // Keep even rejected additions so an older incarnation cannot supply a link.
             commits
                 .entry(path.to_string())
