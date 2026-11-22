@@ -7,7 +7,11 @@ use leptos::prelude::*;
 use operator_ui_tokens::Icon as IconData;
 
 /// Draws an icon; with a `label` it is announced as an image, otherwise it is hidden from screen readers.
-pub fn symbol(icon: Signal<IconData>, size: &'static str, label: Option<Signal<String>>) -> AnyView {
+pub fn symbol(
+    icon: Signal<IconData>,
+    size: &'static str,
+    label: Option<Signal<String>>,
+) -> AnyView {
     view! {
         <svg class="op-icon" viewBox=move || icon.get().view_box
             role=label.map(|_| "img") aria-hidden=label.is_none().then_some("true")

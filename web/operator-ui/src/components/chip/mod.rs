@@ -7,7 +7,7 @@ use crate::core::{
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, icons};
 
-use crate::core::glyph::{symbol};
+use crate::core::glyph::symbol;
 
 const ICON_SIZE: &str = "var(--op-chip-icon-size, calc(var(--op-du) * 3.5))";
 

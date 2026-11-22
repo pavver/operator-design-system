@@ -6,7 +6,10 @@ fn text(s: &str) -> InlineToken {
 
 #[test]
 fn plain_text_is_one_token() {
-    assert_eq!(parse_inline_markdown("hello world"), vec![text("hello world")]);
+    assert_eq!(
+        parse_inline_markdown("hello world"),
+        vec![text("hello world")]
+    );
 }
 
 #[test]
@@ -51,20 +54,32 @@ fn a_double_star_without_its_pair_is_not_italic() {
 
 #[test]
 fn an_unclosed_triple_star_falls_back_to_bold() {
-    assert_eq!(parse_inline_markdown("***a**"), vec![InlineToken::Bold("*a".into())]);
+    assert_eq!(
+        parse_inline_markdown("***a**"),
+        vec![InlineToken::Bold("*a".into())]
+    );
 }
 
 #[test]
 fn links_are_parsed_and_unsafe_urls_neutralized() {
     assert_eq!(
         parse_inline_markdown("[docs](https://example.com)"),
-        vec![InlineToken::Link { label: "docs".into(), url: "https://example.com".into() }]
+        vec![InlineToken::Link {
+            label: "docs".into(),
+            url: "https://example.com".into()
+        }]
     );
     assert_eq!(
         parse_inline_markdown("[x]( JavaScript:alert(1)"),
-        vec![InlineToken::Link { label: "x".into(), url: "#".into() }]
+        vec![InlineToken::Link {
+            label: "x".into(),
+            url: "#".into()
+        }]
     );
-    assert_eq!(parse_inline_markdown("[label] (url)"), vec![text("[label] (url)")]);
+    assert_eq!(
+        parse_inline_markdown("[label] (url)"),
+        vec![text("[label] (url)")]
+    );
 }
 
 #[test]

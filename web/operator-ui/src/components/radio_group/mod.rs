@@ -10,7 +10,7 @@ use leptos::task::spawn_local;
 use operator_ui_tokens::motion;
 use wasm_bindgen::JsCast;
 
-use crate::core::glyph::{pending_spinner};
+use crate::core::glyph::pending_spinner;
 
 const SPINNER_SIZE: &str = "var(--op-radio-group-spinner-size, calc(var(--op-du) * 3))";
 

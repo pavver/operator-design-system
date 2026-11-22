@@ -76,6 +76,14 @@ pub fn parse_inline_markdown(input: &str) -> Vec<InlineToken> {
             continue;
         }
 
+        // Unclosed double-star delimiter cannot open an italic span
+        if i + 1 < len && chars[i] == '*' && chars[i + 1] == '*' {
+            plain_buf.push('*');
+            plain_buf.push('*');
+            i += 2;
+            continue;
+        }
+
         // 3. Italic: *text* (ensure not immediately followed by star)
         if chars[i] == '*'
             && (i + 1 >= len || chars[i + 1] != '*')
