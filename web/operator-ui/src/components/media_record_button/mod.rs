@@ -3,7 +3,6 @@
 mod gesture;
 
 use gesture::RecordGestureState;
-pub use gesture::{DRAG_CANCEL_THRESHOLD_PX, DRAG_LOCK_THRESHOLD_PX, HOLD_TIMEOUT_MS};
 
 use crate::components::primitives::Icon;
 use crate::core::{Metric, root_class, root_style, ui_icon, ui_text};
