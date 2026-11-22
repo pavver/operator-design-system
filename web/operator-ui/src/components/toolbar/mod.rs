@@ -43,6 +43,91 @@ fn px(value: &str) -> f64 {
     value.trim().trim_end_matches("px").parse().unwrap_or(0.0)
 }
 
+fn build_menu_items(
+    shown: usize,
+    in_bar: &[ToolbarItem],
+    in_menu: &[ToolbarItem],
+) -> Vec<MenuItem> {
+    let mut out: Vec<MenuItem> = Vec::new();
+    for item in in_bar.iter().skip(shown) {
+        out.push(item.menu_item(item.separated && !out.is_empty()));
+    }
+    let had_bar_items = !out.is_empty();
+    for (i, item) in in_menu.iter().enumerate() {
+        let separated = (i == 0 && had_bar_items) || (item.separated && !out.is_empty());
+        out.push(item.menu_item(separated));
+    }
+    out
+}
+
+fn step_focus(bar: &web_sys::Element, delta: i64) {
+    let Ok(list) = bar.query_selector_all(
+        "button:not([disabled]):not([aria-disabled=true]), input:not([disabled]), [tabindex='0']",
+    ) else {
+        return;
+    };
+    let targets: Vec<web_sys::HtmlElement> = (0..list.length())
+        .filter_map(|i| list.item(i))
+        .filter_map(|n| n.dyn_into::<web_sys::HtmlElement>().ok())
+        .filter(|e| e.closest("[hidden]").ok().flatten().is_none())
+        .collect();
+    let Ok(len) = i64::try_from(targets.len()) else {
+        return;
+    };
+    if len == 0 {
+        return;
+    }
+    let active = web_sys::window()
+        .and_then(|w| w.document())
+        .and_then(|d| d.active_element());
+    let current = targets
+        .iter()
+        .rposition(|t| {
+            active
+                .as_ref()
+                .is_some_and(|a| t.contains(Some(a.as_ref())))
+        })
+        .and_then(|i| i64::try_from(i).ok())
+        .unwrap_or(0);
+    let next = usize::try_from((current + delta).rem_euclid(len)).unwrap_or(0);
+    if let Some(target) = targets.get(next) {
+        let _ = target.focus();
+    }
+}
+
+#[component]
+fn ToolbarItemView(
+    item: ToolbarItem,
+    index: usize,
+    visible: RwSignal<usize>,
+    button_sz: f32,
+) -> impl IntoView {
+    let hidden = move || visible.get() <= index;
+    let sep = (item.separated && index > 0).then(|| {
+        view! { <span class="op-toolbar-sep" role="separator" aria-orientation="vertical"></span> }
+    });
+    let button = match item.run.clone() {
+        Some(Run::Async(action)) => view! {
+            <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=item.enabled on_async_click=action/>
+        }
+        .into_any(),
+        Some(Run::Click(callback)) => view! {
+            <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=item.enabled on_click=callback/>
+        }
+        .into_any(),
+        None => view! {
+            <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=false/>
+        }
+        .into_any(),
+    };
+    view! {
+        <span class="op-toolbar-item" hidden=hidden>
+            {sep}
+            <Tooltip text=item.label.clone()>{button}</Tooltip>
+        </span>
+    }
+}
+
 /// Horizontal bar of commands for the view below it.
 ///
 /// Commands that do not fit move, from the end, into the overflow menu.
@@ -247,90 +332,19 @@ pub fn Toolbar(
     });
     let menu_items = Memo::new(move |_| {
         let shown = visible.get();
-        let mut out: Vec<MenuItem> = Vec::new();
-        in_bar.with_value(|items| {
-            for item in items.iter().skip(shown) {
-                out.push(item.menu_item(item.separated && !out.is_empty()));
-            }
-        });
-        let had_bar_items = !out.is_empty();
-        in_menu.with_value(|items| {
-            for (i, item) in items.iter().enumerate() {
-                let separated = (i == 0 && had_bar_items) || (item.separated && !out.is_empty());
-                out.push(item.menu_item(separated));
-            }
-        });
-        out
+        in_bar.with_value(|bar_items| {
+            in_menu.with_value(|menu_items| build_menu_items(shown, bar_items, menu_items))
+        })
     });
     let has_more = move || always_more || visible.get() < bar_len;
-
-    // Arrow keys move focus between visible, enabled controls.
-    let step = move |delta: i64| {
-        let Some(el) = bar.try_get_untracked().flatten() else {
-            return;
-        };
-        let Ok(list) = el.query_selector_all(
-            "button:not([disabled]):not([aria-disabled=true]), input:not([disabled]), [tabindex='0']",
-        ) else {
-            return;
-        };
-        let targets: Vec<web_sys::HtmlElement> = (0..list.length())
-            .filter_map(|i| list.item(i))
-            .filter_map(|n| n.dyn_into::<web_sys::HtmlElement>().ok())
-            .filter(|e| e.closest("[hidden]").ok().flatten().is_none())
-            .collect();
-        let Ok(len) = i64::try_from(targets.len()) else {
-            return;
-        };
-        if len == 0 {
-            return;
-        }
-        let active = web_sys::window()
-            .and_then(|w| w.document())
-            .and_then(|d| d.active_element());
-        let current = targets
-            .iter()
-            .rposition(|t| {
-                active
-                    .as_ref()
-                    .is_some_and(|a| t.contains(Some(a.as_ref())))
-            })
-            .and_then(|i| i64::try_from(i).ok())
-            .unwrap_or(0);
-        let next = usize::try_from((current + delta).rem_euclid(len)).unwrap_or(0);
-        if let Some(target) = targets.get(next) {
-            let _ = target.focus();
-        }
-    };
 
     let bar_buttons = in_bar
         .get_value()
         .into_iter()
         .enumerate()
         .map(|(i, item)| {
-            let hidden = move || visible.get() <= i;
-            let sep = (item.separated && i > 0).then(|| {
-                view! { <span class="op-toolbar-sep" role="separator" aria-orientation="vertical"></span> }
-            });
-            let button = match item.run.clone() {
-                Some(Run::Async(action)) => view! {
-                    <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=item.enabled on_async_click=action/>
-                }
-                .into_any(),
-                Some(Run::Click(callback)) => view! {
-                    <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=item.enabled on_click=callback/>
-                }
-                .into_any(),
-                None => view! {
-                    <IconButton icon=item.icon label=item.label.clone() size=button_sz enabled=false/>
-                }
-                .into_any(),
-            };
             view! {
-                <span class="op-toolbar-item" hidden=hidden>
-                    {sep}
-                    <Tooltip text=item.label.clone()>{button}</Tooltip>
-                </span>
+                <ToolbarItemView item=item index=i visible=visible button_sz=button_sz />
             }
         })
         .collect_view();
@@ -368,11 +382,15 @@ pub fn Toolbar(
                 match ev.key().as_str() {
                     "ArrowRight" => {
                         ev.prevent_default();
-                        step(1);
+                        if let Some(el) = bar.try_get_untracked().flatten() {
+                            step_focus(&el, 1);
+                        }
                     }
                     "ArrowLeft" => {
                         ev.prevent_default();
-                        step(-1);
+                        if let Some(el) = bar.try_get_untracked().flatten() {
+                            step_focus(&el, -1);
+                        }
                     }
                     _ => {}
                 }
