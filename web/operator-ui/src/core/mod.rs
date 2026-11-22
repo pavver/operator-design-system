@@ -2,6 +2,7 @@
 
 mod action;
 pub mod custom;
+pub mod glyph;
 #[cfg(feature = "observers")]
 pub mod observers;
 pub mod overlay;

@@ -8,8 +8,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, icons, motion};
 
-mod visuals;
-use visuals::{pending, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const ICON_SIZE: &str = "var(--op-button-icon-size, var(--op-dim-icon-small))";
 
@@ -222,7 +221,7 @@ pub fn ActionButton(
                     {move || {
                         let s = current.get();
                         if show_spinner.get() {
-                            pending(ICON_SIZE, loading_label)
+                            pending_spinner("button", ICON_SIZE, loading_label)
                         } else if s.is_result() && show_flash.get() {
                             if s == ControlState::Success { symbol(success_icon, ICON_SIZE, Some(success_label)) } else { symbol(error_icon, ICON_SIZE, Some(error_label)) }
                         } else {

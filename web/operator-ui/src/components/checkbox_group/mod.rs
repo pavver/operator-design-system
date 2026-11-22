@@ -9,8 +9,7 @@ use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, dim, icons, motion};
 use std::collections::HashMap;
 
-mod visuals;
-use visuals::{pending, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const MARK_SIZE: &str = "var(--op-checkbox-group-mark-size, var(--op-dim-icon-small))";
 const ITEM_ICON_SIZE: &str = "var(--op-checkbox-group-item-icon-size, var(--op-checkbox-group-default-icon-size, var(--op-dim-icon-small)))";
@@ -217,7 +216,7 @@ pub fn CheckboxGroup(
                         >
                             {move || {
                                 if show_spinner.get() {
-                                    pending(MARK_SIZE, loading_label)
+                                    pending_spinner("checkbox-group", MARK_SIZE, loading_label)
                                 } else if is_selected.get() {
                                     symbol(checked_icon, MARK_SIZE, None)
                                 } else {

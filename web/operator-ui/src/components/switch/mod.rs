@@ -8,8 +8,7 @@ use crate::core::{
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, icons};
 
-mod visuals;
-use visuals::{pending, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const ICON_SIZE: &str = "var(--op-switch-icon-size, calc(var(--op-du) * 3))";
 const SPINNER_SIZE: &str = "var(--op-switch-spinner-size, calc(var(--op-du) * 3.5))";
@@ -119,7 +118,7 @@ pub fn AsyncSwitch(
             <span class="op-switch-thumb">
                 {move || {
                     if show_spinner.get() {
-                        pending(SPINNER_SIZE, loading_label)
+                        pending_spinner("switch", SPINNER_SIZE, loading_label)
                     } else {
                         if content.is_set() { content.run().into_any() } else {
                             let icon = if value.get() { checked_icon } else { unchecked_icon };

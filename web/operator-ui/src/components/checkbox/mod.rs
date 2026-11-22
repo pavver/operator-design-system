@@ -8,8 +8,7 @@ use crate::core::{
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, icons};
 
-mod visuals;
-use visuals::{pending, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const ICON_SIZE: &str = "var(--op-checkbox-icon-size, calc(var(--op-du) * 3.5))";
 const SPINNER_SIZE: &str = "var(--op-checkbox-spinner-size, calc(var(--op-du) * 3))";
@@ -140,7 +139,7 @@ pub fn AsyncCheckbox(
                 >
                     {move || {
                         if show_spinner.get() {
-                            pending(SPINNER_SIZE, loading_label)
+                            pending_spinner("checkbox", SPINNER_SIZE, loading_label)
                         } else if value.get() {
                             symbol(checked_icon, ICON_SIZE, None)
                         } else {

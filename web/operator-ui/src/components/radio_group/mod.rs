@@ -10,8 +10,7 @@ use leptos::task::spawn_local;
 use operator_ui_tokens::motion;
 use wasm_bindgen::JsCast;
 
-mod visuals;
-use visuals::pending;
+use crate::core::glyph::{pending_spinner};
 
 const SPINNER_SIZE: &str = "var(--op-radio-group-spinner-size, calc(var(--op-du) * 3))";
 
@@ -191,7 +190,7 @@ pub fn RadioGroup(
                     >
                         {move || {
                             if show_spinner.get() {
-                                pending(SPINNER_SIZE, loading_label)
+                                pending_spinner("radio-group", SPINNER_SIZE, loading_label)
                             } else {
                                 view! { <span class="op-radio-dot"></span> }.into_any()
                             }

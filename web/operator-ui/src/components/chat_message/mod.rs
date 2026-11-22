@@ -5,6 +5,8 @@ pub mod content_views;
 pub mod delivery_status;
 pub mod emoji_text;
 pub mod markdown;
+#[cfg(test)]
+mod markdown_tests;
 pub mod media_views;
 pub mod reactions;
 pub mod ttl_indicator;
