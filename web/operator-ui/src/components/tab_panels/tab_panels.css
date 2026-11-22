@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* TabPanels                                                           */
 /* ------------------------------------------------------------------ */
+:where(.op-tab-panels) {
+  color: var(--op-tab-panels-text, inherit);
+}
+
 .op-tab-panels {
   position: relative;
   width: 100%;
@@ -16,7 +20,7 @@
 }
 
 .op-tab-panels[data-animated] .op-tab-panel {
-  animation: op-tab-panel-enter var(--op-motion-fade) var(--op-ease-standard);
+  animation: op-tab-panel-enter var(--op-motion-dialog-enter) var(--op-ease-standard);
 }
 
 @keyframes op-tab-panel-enter {

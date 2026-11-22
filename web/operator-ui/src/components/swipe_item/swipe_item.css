@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* SwipeItem                                                           */
 /* ------------------------------------------------------------------ */
+:where(.op-swipe-item) {
+  color: var(--op-swipe-item-text, inherit);
+}
+
 .op-swipe-item {
   position: relative;
   width: 100%;

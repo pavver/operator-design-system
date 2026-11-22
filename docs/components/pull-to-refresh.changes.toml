@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T02:26:00+02:00"
+status = "draft"
+en = "Show pending spinner and Success/Error result states adhering to states.md."
+uk = "Відображення індикатора очікування та станів результату Success/Error згідно зі states.md."
+
+[[change]]
 date = "2026-11-22T01:39:14+02:00"
 status = "draft"
 en = "New component providing touch pull-down gesture refresh with Operator states."

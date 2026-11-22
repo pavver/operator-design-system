@@ -9,16 +9,20 @@ pub fn wizard() -> AnyView {
     let name = RwSignal::new(String::new());
 
     let steps = vec![
-        WizardStep::new("account", "Account").subtitle("User details"),
+        WizardStep::new("account", "Account").subtitle("Operator handle"),
         WizardStep::new("security", "Security").subtitle("Credentials"),
         WizardStep::new("confirm", "Confirm").subtitle("Review & apply"),
     ];
 
     let validator = Callback::new(move |step_idx: usize| {
         if step_idx == 0 {
-            !name.get().trim().is_empty()
+            if name.get().trim().is_empty() {
+                Err("Operator handle cannot be empty to proceed".to_string())
+            } else {
+                Ok(())
+            }
         } else {
-            true
+            Ok(())
         }
     });
 
@@ -31,31 +35,26 @@ pub fn wizard() -> AnyView {
 
     view! {
         <Example title="Multi-step Wizard" note="Step header with validation per step, navigation buttons, and asynchronous finish with Operator states." block=true>
-            <div style="max-width: 600px; width: 100%; border: var(--op-dim-border) solid var(--op-border);">
+            <div style="max-width: calc(var(--op-du) * 150); width: 100%; border: var(--op-dim-border) solid var(--op-border);">
                 <Wizard
                     steps=steps
                     current=current
                     on_validate_step=validator
                     on_finish=on_finish
                 >
-                    <div style="padding: 16px 0; min-height: 120px;">
+                    <div style="padding: calc(var(--op-du) * 4) 0; min-height: calc(var(--op-du) * 30);">
                         {move || match current.get() {
                             0 => view! {
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <label style="font-size: var(--op-type-caption-size); color: var(--op-text-secondary);">
-                                        "Enter operator handle (required to proceed):"
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="e.g. pavver"
-                                        style="padding: 8px; background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border); color: var(--op-text-primary);"
-                                        prop:value=move || name.get()
-                                        on:input=move |ev| name.set(event_target_value(&ev))
+                                <div style="display: flex; flex-direction: column; gap: calc(var(--op-du) * 2);">
+                                    <TextField
+                                        label="Operator handle (required to proceed)"
+                                        placeholder="operator-01"
+                                        value=name
                                     />
                                 </div>
                             }.into_any(),
                             1 => view! {
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; flex-direction: column; gap: calc(var(--op-du) * 2);">
                                     <span style="font-weight: 500;">"Step 2: Security Keys"</span>
                                     <p style="color: var(--op-text-secondary); font-size: var(--op-type-caption-size);">
                                         "SSH ed25519 public key successfully verified against hardware security module."
@@ -63,7 +62,7 @@ pub fn wizard() -> AnyView {
                                 </div>
                             }.into_any(),
                             _ => view! {
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; flex-direction: column; gap: calc(var(--op-du) * 2);">
                                     <span style="font-weight: 500;">"Step 3: Confirmation"</span>
                                     <p style="color: var(--op-text-secondary); font-size: var(--op-type-caption-size);">
                                         "Click Finish to initialize operator session. The button will transition through running and success states."

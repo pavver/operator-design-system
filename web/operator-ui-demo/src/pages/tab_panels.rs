@@ -9,7 +9,7 @@ pub fn tab_panels() -> AnyView {
 
     view! {
         <Example title="Animated Tab Panels" note="TabPanels driven by an existing Tabs component selection signal." block=true>
-            <div style="display: flex; flex-direction: column; width: 100%; gap: 12px;">
+            <div style="display: flex; flex-direction: column; width: 100%; gap: calc(var(--op-du) * 3);">
                 <Tabs
                     variant=TabsVariant::Folder
                     items=vec![
@@ -21,25 +21,25 @@ pub fn tab_panels() -> AnyView {
                 />
                 <TabPanels value=selected padding=3.0>
                     <TabPanel index=0>
-                        <div style="padding: 16px; background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border);">
+                        <div style="padding: calc(var(--op-du) * 4); background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border);">
                             <span style="font-weight: 700;">"Overview Panel"</span>
-                            <p style="color: var(--op-text-secondary); margin-top: 8px;">
+                            <p style="color: var(--op-text-secondary); margin-top: calc(var(--op-du) * 2);">
                                 "System running smoothly. All services operational."
                             </p>
                         </div>
                     </TabPanel>
                     <TabPanel index=1>
-                        <div style="padding: 16px; background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border);">
+                        <div style="padding: calc(var(--op-du) * 4); background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border);">
                             <span style="font-weight: 700;">"Metrics Panel"</span>
-                            <p style="color: var(--op-text-secondary); margin-top: 8px;">
+                            <p style="color: var(--op-text-secondary); margin-top: calc(var(--op-du) * 2);">
                                 "CPU: 14% · Memory: 2.1 GB / 8 GB · Network: 420 KB/s."
                             </p>
                         </div>
                     </TabPanel>
                     <TabPanel index=2>
-                        <div style="padding: 16px; background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border);">
+                        <div style="padding: calc(var(--op-du) * 4); background: var(--op-surface-alt); border: var(--op-dim-border) solid var(--op-border);">
                             <span style="font-weight: 700;">"Logs Panel"</span>
-                            <p style="color: var(--op-text-secondary); margin-top: 8px;">
+                            <p style="color: var(--op-text-secondary); margin-top: calc(var(--op-du) * 2);">
                                 "[01:34:22] Cluster synchronized with leader node."
                             </p>
                         </div>

@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* Carousel                                                            */
 /* ------------------------------------------------------------------ */
+:where(.op-carousel) {
+  color: var(--op-carousel-text, inherit);
+}
+
 .op-carousel {
   position: relative;
   display: flex;
@@ -55,7 +59,7 @@
   border: none;
   cursor: pointer;
   box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
-  transition: background-color var(--op-motion-fade) var(--op-ease-standard);
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-carousel-arrow:hover {
@@ -96,8 +100,8 @@
   padding: 0;
   cursor: pointer;
   background-color: var(--op-carousel-dot-color, var(--op-text-secondary));
-  transition: background-color var(--op-motion-fade) var(--op-ease-standard),
-              transform var(--op-motion-fade) var(--op-ease-standard);
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard),
+              transform var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-carousel-dot[data-active] {

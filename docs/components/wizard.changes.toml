@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T02:26:00+02:00"
+status = "draft"
+en = "Support step validation error messaging, error slot, and Next button error state flashing."
+uk = "Підтримка відображення помилок валідації кроку, слота помилки та індикації помилки на кнопці «Далі»."
+
+[[change]]
 date = "2026-11-22T01:39:14+02:00"
 status = "draft"
 en = "New component providing multi-step wizard flows with validation and async finish."

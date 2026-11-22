@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* PullToRefresh                                                       */
 /* ------------------------------------------------------------------ */
+:where(.op-pull-to-refresh) {
+  color: inherit;
+}
+
 .op-pull-to-refresh {
   position: relative;
   width: 100%;
@@ -22,13 +26,23 @@
   box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-border);
 }
 
-.op-pull-to-refresh[data-refreshing] .op-pull-to-refresh-puller {
+.op-pull-to-refresh[data-state="pending"] .op-pull-to-refresh-puller,
+.op-pull-to-refresh[data-state="success"] .op-pull-to-refresh-puller,
+.op-pull-to-refresh[data-state="error"] .op-pull-to-refresh-puller {
   height: var(--op-pull-to-refresh-threshold, calc(var(--op-du) * 15)) !important;
+}
+
+.op-pull-to-refresh[data-state="success"] .op-pull-to-refresh-puller {
+  color: var(--op-success);
+}
+
+.op-pull-to-refresh[data-state="error"] .op-pull-to-refresh-puller {
+  color: var(--op-error);
 }
 
 .op-pull-to-refresh-icon {
   display: inline-flex;
-  transition: transform var(--op-motion-fade) var(--op-ease-standard);
+  transition: transform var(--op-motion-segment-slide) var(--op-ease-standard);
 }
 
 .op-pull-to-refresh-icon[data-flipped] {
@@ -40,7 +54,7 @@
   height: calc(var(--op-du) * 4);
   border: var(--op-dim-spinner-stroke) solid var(--op-border);
   border-top-color: var(--op-accent);
-  animation: op-pull-spin 0.8s linear infinite;
+  animation: op-pull-spin var(--op-motion-spinner-lap) linear infinite;
 }
 
 @keyframes op-pull-spin {

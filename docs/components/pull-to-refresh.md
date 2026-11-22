@@ -21,7 +21,8 @@ It detects downward swipes originating from the top of the container, shows dire
 * Pulling downward expands the top puller area with damping resistance.
 * If pulled past the threshold, the indicator flips and informs the user to release.
 * Upon release past the threshold, the `on_refresh` action runs.
-* While refreshing, a spinner appears and the puller remains fixed until the action completes.
+* While refreshing, a spinner appears and input gestures are blocked.
+* Upon completion, the result state (Success or Error) is displayed during the result hold period before collapsing back to idle.
 
 ## API
 
@@ -48,12 +49,16 @@ It detects downward swipes originating from the top of the container, shows dire
 | `pull-to-refresh.pull` | `Pull to refresh` | Initial pull instruction. |
 | `pull-to-refresh.release` | `Release to refresh` | Instruction when pull threshold is reached. |
 | `pull-to-refresh.refreshing` | `Refreshing…` | Loading status indicator. |
+| `pull-to-refresh.success` | `Refreshed` | Successful refresh completion message. |
+| `pull-to-refresh.error` | `Refresh failed` | Refresh failure message. |
 
 ## Icons
 
 | Key | Default | Description |
 | :--- | :--- | :--- |
 | `icons::ARROW_DOWNWARD` | Material arrow downward | Arrow indicating pull direction. |
+| `icons::CHECK` | Material check | Icon displayed upon successful refresh. |
+| `icons::ERROR` | Material error | Icon displayed upon refresh failure. |
 
 ## Accessibility
 

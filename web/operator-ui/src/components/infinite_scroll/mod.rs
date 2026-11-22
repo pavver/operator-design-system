@@ -1,8 +1,9 @@
 //! InfiniteScroll component: loads more items when a sentinel enters the viewport.
 
+use crate::components::action_button::ActionButton;
 use crate::components::primitives::Icon;
 use crate::core::observers::{IntersectionOptions, use_intersection};
-use crate::core::{Metric, Slot, root_class, root_style, ui_text};
+use crate::core::{ActionResult, AsyncAction, Metric, Slot, root_class, root_style, ui_text};
 use leptos::html::Div;
 use leptos::prelude::*;
 use operator_ui_tokens::icons;
@@ -66,6 +67,7 @@ pub fn InfiniteScroll(
 
     let has_loading_slot = loading_slot.is_set();
     let has_error_slot = error_slot.is_set();
+    let retry_cb = on_retry.unwrap_or(on_load);
 
     view! {
         <div class=class_fn style=style_fn>
@@ -84,16 +86,14 @@ pub fn InfiniteScroll(
                             <div class="op-infinite-scroll-error" role="alert">
                                 <Icon icon=icons::ERROR size=18.0 />
                                 <span>{if err_msg.is_empty() { error_str.get() } else { err_msg }}</span>
-                                {on_retry.map(|retry_cb| view! {
-                                    <button
-                                        type="button"
-                                        class="op-infinite-scroll-retry"
-                                        on:click=move |_| retry_cb.run(())
-                                    >
-                                        <Icon icon=icons::REFRESH size=16.0 />
-                                        <span>{retry_str.get()}</span>
-                                    </button>
-                                })}
+                                <ActionButton
+                                    icon=icons::REFRESH
+                                    text=retry_str.get()
+                                    on_click=AsyncAction::new(move |()| {
+                                        retry_cb.run(());
+                                        Box::pin(async { ActionResult::Success })
+                                    })
+                                />
                             </div>
                         }.into_any()
                     }

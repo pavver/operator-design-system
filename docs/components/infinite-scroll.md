@@ -32,7 +32,7 @@ It automatically triggers fetch requests before the user reaches the bottom, and
 | `has_more` | bool signal | `true` | Indicates whether more items remain to be loaded. |
 | `loading` | bool signal | `false` | True while an asynchronous fetch is in progress. |
 | `error` | `Option<String>` signal | `None` | Optional error message to display in the error row. |
-| `on_retry` | callback `()` | none | Callback executed when the retry button is clicked. |
+| `on_retry` | callback `()` | none | Callback executed when the retry button is clicked; falls back to on_load. |
 | `offset` | DU metric | `10 DU` | Distance in DU from bottom before triggering `on_load`. |
 | `pending_height` | DU metric | `12 DU` | Height of the loading or error message row. |
 | `loading_label` | string | `infinite-scroll.loading` | Text displayed during loading. |

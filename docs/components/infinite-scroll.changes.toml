@@ -3,6 +3,12 @@
 # Rejected changes are deleted from this file.
 
 [[change]]
+date = "2026-11-22T02:26:00+02:00"
+status = "draft"
+en = "Always provide retry action on error using ActionButton."
+uk = "Завжди надавати дію повтору при помилці за допомогою ActionButton."
+
+[[change]]
 date = "2026-11-22T01:39:14+02:00"
 status = "draft"
 en = "New component providing incremental list loading via viewport intersection sentinel."

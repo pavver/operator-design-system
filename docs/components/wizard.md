@@ -23,6 +23,8 @@ Do not confuse with the numeric [Stepper](stepper.md) component, which handles `
 * Steps display numbers or completed check icons connected by lines.
 * Users can click directly on completed steps to return to earlier sections.
 * Clicking Next triggers the optional `on_validate_step` callback for the current step.
+* If validation fails, the error message is displayed below the step content, the Next button flashes the Error result state, and the wizard remains on the current step.
+* The validation error clears when the step becomes valid or when the active step changes.
 * If validation succeeds or is absent, the wizard advances to the next step.
 * The final step shows a Finish button driven by an asynchronous action with Operator pending and result states.
 
@@ -32,7 +34,9 @@ Do not confuse with the numeric [Stepper](stepper.md) component, which handles `
 | :--- | :--- | :--- | :--- |
 | `steps` | `Vec<WizardStep>` | required | List of step definitions with id, title, and optional subtitle. |
 | `current` | usize rw-signal | required | Active step index (0-based). |
-| `on_validate_step` | callback `(usize) -> bool` | none | Validates current step before allowing navigation forward. |
+| `on_validate_step` | callback `(usize) -> Result<(), String>` | none | Validates current step before allowing navigation forward; returns Ok(()) or Err(message). |
+| `error` | `Option<String>` rw-signal | none | Optional external signal holding the current validation error message. |
+| `error_slot` | slot | none | Custom slot to replace default step error display. |
 | `on_finish` | `AsyncAction` | none | Asynchronous handler invoked on final step submission. |
 | `next_label` | string | `wizard.next` | Accessible label for the Next button. |
 | `back_label` | string | `wizard.back` | Accessible label for the Back button. |
@@ -58,6 +62,7 @@ Do not confuse with the numeric [Stepper](stepper.md) component, which handles `
 | `--op-wizard-text` | `text_primary` |
 | `--op-wizard-divider` | `divider` |
 | `--op-wizard-accent` | `accent` |
+| `--op-wizard-error` | `error` |
 
 ## Strings
 

@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* Layout                                                              */
 /* ------------------------------------------------------------------ */
+:where(.op-layout) {
+  color: var(--op-layout-text, inherit);
+}
+
 .op-layout {
   display: flex;
   flex-direction: column;
@@ -141,8 +145,8 @@
 
 /* PageScroller */
 .op-page-scroller {
-  transition: opacity var(--op-motion-fade) var(--op-ease-standard),
-              visibility var(--op-motion-fade) var(--op-ease-standard);
+  transition: opacity var(--op-motion-dialog-enter) var(--op-ease-standard),
+              visibility var(--op-motion-dialog-enter) var(--op-ease-standard);
 }
 
 .op-page-scroller[data-hidden] {

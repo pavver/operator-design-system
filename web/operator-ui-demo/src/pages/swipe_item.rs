@@ -17,14 +17,14 @@ pub fn swipe_item() -> AnyView {
 
     view! {
         <Example title="Swipeable List Item" note="Swipe left or right to reveal contextual actions." block=true>
-            <div style="max-width: 500px; width: 100%; display: flex; flex-direction: column; gap: 12px;">
+            <div style="max-width: calc(var(--op-du) * 125); width: 100%; display: flex; flex-direction: column; gap: calc(var(--op-du) * 3);">
                 <SwipeItem
                     left=Slot::from(move || view! { <span>"ARCHIVE"</span> })
                     right=Slot::from(move || view! { <span>"DELETE"</span> })
                     on_left=on_left
                     on_right=on_right
                 >
-                    <div style="padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="padding: calc(var(--op-du) * 4); display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-weight: 500;">"Alert notification #402"</span>
                         <span style="font-size: var(--op-type-caption-size); color: var(--op-text-secondary);">"01:28"</span>
                     </div>

@@ -17,9 +17,9 @@ pub fn pull_to_refresh() -> AnyView {
 
     view! {
         <Example title="Pull to Refresh" note="Touch gesture that triggers an async refresh with visual indicators." block=true>
-            <div style="max-width: 500px; width: 100%; border: var(--op-dim-border) solid var(--op-border);">
+            <div style="max-width: calc(var(--op-du) * 125); width: 100%; border: var(--op-dim-border) solid var(--op-border);">
                 <PullToRefresh on_refresh=on_refresh>
-                    <div style="padding: 24px; text-align: center; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+                    <div style="padding: calc(var(--op-du) * 6); text-align: center; min-height: calc(var(--op-du) * 45); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--op-du) * 2);">
                         <span style="font-weight: 700;">"Swipe or drag down from the top"</span>
                         <span style="color: var(--op-text-secondary); font-size: var(--op-type-caption-size);">
                             {move || last_refreshed.get()}

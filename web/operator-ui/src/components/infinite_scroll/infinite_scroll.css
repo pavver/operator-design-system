@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* InfiniteScroll                                                      */
 /* ------------------------------------------------------------------ */
+:where(.op-infinite-scroll) {
+  color: inherit;
+}
+
 .op-infinite-scroll {
   position: relative;
   width: 100%;
@@ -27,7 +31,7 @@
   height: calc(var(--op-du) * 4);
   border: var(--op-dim-spinner-stroke) solid var(--op-border);
   border-top-color: var(--op-accent);
-  animation: op-infinite-scroll-spin 0.8s linear infinite;
+  animation: op-infinite-scroll-spin var(--op-motion-spinner-lap) linear infinite;
 }
 
 @keyframes op-infinite-scroll-spin {

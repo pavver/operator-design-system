@@ -2,7 +2,7 @@
 
 use crate::components::action_button::ActionButton;
 use crate::components::primitives::Icon;
-use crate::core::{AsyncAction, Metric, Slot, root_class, root_style, ui_text};
+use crate::core::{ActionResult, AsyncAction, Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, icons};
 
@@ -43,7 +43,9 @@ impl WizardStep {
 pub fn Wizard(
     steps: Vec<WizardStep>,
     current: RwSignal<usize>,
-    #[prop(optional)] on_validate_step: Option<Callback<usize, bool>>,
+    #[prop(optional)] on_validate_step: Option<Callback<usize, Result<(), String>>>,
+    #[prop(optional, into)] error: Option<RwSignal<Option<String>>>,
+    #[prop(optional, into)] error_slot: Slot,
     #[prop(optional, into)] on_finish: Option<AsyncAction>,
     #[prop(optional, into)] next_label: MaybeProp<String>,
     #[prop(optional, into)] back_label: MaybeProp<String>,
@@ -73,6 +75,23 @@ pub fn Wizard(
 
     let total_steps = steps.len();
     let has_custom_nav = navigation.is_set();
+    let has_error_slot = error_slot.is_set();
+
+    let step_error = error.unwrap_or_else(|| RwSignal::new(None));
+
+    // Clear error when step changes or becomes valid
+    Effect::new(move |_| {
+        let curr = current.get();
+        if step_error.get().is_some() {
+            if let Some(validator) = on_validate_step {
+                if validator.run(curr).is_ok() {
+                    step_error.set(None);
+                }
+            } else {
+                step_error.set(None);
+            }
+        }
+    });
 
     let metrics = vec![
         Metric::du("--op-wizard-header-gap", header_gap),
@@ -83,21 +102,40 @@ pub fn Wizard(
     let class_fn = root_class("op-wizard", class);
     let style_fn = root_style(metrics, style);
 
-    let handle_next = move |_| {
+    let handle_next_action = AsyncAction::new(move |()| async move {
         let curr = current.get();
         if curr + 1 < total_steps {
-            if let Some(validator) = on_validate_step
-                && !validator.run(curr)
-            {
-                return;
+            if let Some(validator) = on_validate_step {
+                match validator.run(curr) {
+                    Ok(()) => {
+                        step_error.set(None);
+                        current.set(curr + 1);
+                        ActionResult::Success
+                    }
+                    Err(err_msg) => {
+                        let msg = if err_msg.trim().is_empty() {
+                            "Validation failed".to_string()
+                        } else {
+                            err_msg
+                        };
+                        step_error.set(Some(msg.clone()));
+                        ActionResult::Error(Some(msg))
+                    }
+                }
+            } else {
+                step_error.set(None);
+                current.set(curr + 1);
+                ActionResult::Success
             }
-            current.set(curr + 1);
+        } else {
+            ActionResult::Success
         }
-    };
+    });
 
     let handle_back = move |_| {
         let curr = current.get();
         if curr > 0 {
+            step_error.set(None);
             current.set(curr - 1);
         }
     };
@@ -112,6 +150,7 @@ pub fn Wizard(
 
                     let on_step_click = move |_| {
                         if current.get() > idx {
+                            step_error.set(None);
                             current.set(idx);
                         }
                     };
@@ -166,6 +205,22 @@ pub fn Wizard(
 
             <div class="op-wizard-body">
                 {children()}
+                {move || step_error.get().map(|msg| {
+                    if has_error_slot {
+                        view! {
+                            <div class="op-wizard-error" role="alert">
+                                {error_slot.run()}
+                            </div>
+                        }.into_any()
+                    } else {
+                        view! {
+                            <div class="op-wizard-error" role="alert">
+                                <Icon icon=icons::ERROR size=14.0 />
+                                <span>{msg}</span>
+                            </div>
+                        }.into_any()
+                    }
+                })}
             </div>
 
             {if has_custom_nav {
@@ -181,9 +236,9 @@ pub fn Wizard(
                             {move || (current.get() > 0).then(|| view! {
                                 <ActionButton
                                     text=back_str.get()
-                                    on_click=AsyncAction::new(move |()| {
+                                    on_click=AsyncAction::new(move |()| async move {
                                         handle_back(());
-                                        Box::pin(async { crate::core::ActionResult::Success })
+                                        ActionResult::Success
                                     })
                                 />
                             })}
@@ -195,10 +250,7 @@ pub fn Wizard(
                                     view! {
                                         <ActionButton
                                             text=next_str.get()
-                                            on_click=AsyncAction::new(move |()| {
-                                                handle_next(());
-                                                Box::pin(async { crate::core::ActionResult::Success })
-                                            })
+                                            on_click=handle_next_action.clone()
                                         />
                                     }.into_any()
                                 } else if let Some(finish_action) = on_finish.clone() {

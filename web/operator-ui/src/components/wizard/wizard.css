@@ -1,6 +1,10 @@
 /* ------------------------------------------------------------------ */
 /* Wizard                                                              */
 /* ------------------------------------------------------------------ */
+:where(.op-wizard) {
+  color: var(--op-wizard-text, inherit);
+}
+
 .op-wizard {
   display: flex;
   flex-direction: column;
@@ -98,6 +102,15 @@
 .op-wizard-body {
   flex: 1;
   min-height: 0;
+}
+
+.op-wizard-error {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 1.5);
+  margin-top: calc(var(--op-du) * 2);
+  color: var(--op-wizard-error, var(--op-error));
+  font-size: var(--op-type-caption-size);
 }
 
 .op-wizard-nav {
