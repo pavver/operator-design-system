@@ -102,6 +102,75 @@ pub(super) fn toml_key_len(s: &str) -> Option<usize> {
     (len > 0 && after.starts_with('=') && !after.starts_with("==")).then_some(len)
 }
 
+fn rust_raw_string(s: &str, body: &str, prefix: usize) -> Option<(Kind, usize)> {
+    let raw = body.strip_prefix('r')?;
+    let hashes = raw.len() - raw.trim_start_matches('#').len();
+    if !raw[hashes..].starts_with('"') {
+        return None;
+    }
+    let close = format!("\"{}", "#".repeat(hashes));
+    let start = prefix + 1 + hashes + 1;
+    let end = s[start..]
+        .find(&close)
+        .map_or(s.len(), |i| start + i + close.len());
+    Some((Kind::String, end))
+}
+
+fn rust_byte_string(body: &str, prefix: usize) -> Option<(Kind, usize)> {
+    if prefix != 1 || !body.starts_with('"') {
+        return None;
+    }
+    let q = Quote {
+        open: "\"",
+        close: "\"",
+        escapes: true,
+        multiline: true,
+    };
+    Some((Kind::String, 1 + quoted_len(body, &q)))
+}
+
+fn rust_char_or_lifetime(body: &str, prefix: usize) -> Option<(Kind, usize)> {
+    let after_quote = body.strip_prefix('\'')?;
+    let q = Quote {
+        open: "'",
+        close: "'",
+        escapes: true,
+        multiline: false,
+    };
+    let len = quoted_len(body, &q);
+    let inner = body.get(1..len.saturating_sub(1)).unwrap_or("");
+    let is_char = body[..len].ends_with('\'')
+        && len > 2
+        && (inner.starts_with('\\') || inner.chars().count() == 1);
+    if is_char {
+        return Some((Kind::String, prefix + len));
+    }
+    if prefix == 0 && after_quote.starts_with(is_ident_start) {
+        return Some((Kind::Meta, 1 + ident_len(after_quote)));
+    }
+    None
+}
+
+fn rust_attribute(s: &str, prefix: usize) -> Option<(Kind, usize)> {
+    if prefix != 0 || (!s.starts_with("#[") && !s.starts_with("#![")) {
+        return None;
+    }
+    let mut depth = 0usize;
+    for (i, c) in s.char_indices() {
+        match c {
+            '[' => depth += 1,
+            ']' => {
+                depth = depth.saturating_sub(1);
+                if depth == 0 {
+                    return Some((Kind::Meta, i + 1));
+                }
+            }
+            _ => {}
+        }
+    }
+    Some((Kind::Meta, s.len()))
+}
+
 /// Rust-only tokens: raw and byte strings, char literals, lifetimes, attributes.
 pub(super) fn rust_special(s: &str, prev: Option<char>) -> Option<(Kind, usize)> {
     if prev.is_some_and(is_ident) {
@@ -109,60 +178,9 @@ pub(super) fn rust_special(s: &str, prev: Option<char>) -> Option<(Kind, usize)>
     }
     let body = s.strip_prefix('b').unwrap_or(s);
     let prefix = s.len() - body.len();
-    if let Some(raw) = body.strip_prefix('r') {
-        let hashes = raw.len() - raw.trim_start_matches('#').len();
-        if raw[hashes..].starts_with('"') {
-            let close = format!("\"{}", "#".repeat(hashes));
-            let start = prefix + 1 + hashes + 1;
-            let end = s[start..]
-                .find(&close)
-                .map_or(s.len(), |i| start + i + close.len());
-            return Some((Kind::String, end));
-        }
-    }
-    if prefix == 1 && body.starts_with('"') {
-        let q = Quote {
-            open: "\"",
-            close: "\"",
-            escapes: true,
-            multiline: true,
-        };
-        return Some((Kind::String, 1 + quoted_len(body, &q)));
-    }
-    if let Some(after_quote) = body.strip_prefix('\'') {
-        let q = Quote {
-            open: "'",
-            close: "'",
-            escapes: true,
-            multiline: false,
-        };
-        let len = quoted_len(body, &q);
-        let inner = body.get(1..len.saturating_sub(1)).unwrap_or("");
-        let is_char = body[..len].ends_with('\'')
-            && len > 2
-            && (inner.starts_with('\\') || inner.chars().count() == 1);
-        if is_char {
-            return Some((Kind::String, prefix + len));
-        }
-        if prefix == 0 && after_quote.starts_with(is_ident_start) {
-            return Some((Kind::Meta, 1 + ident_len(after_quote)));
-        }
-    }
-    if prefix == 0 && (s.starts_with("#[") || s.starts_with("#![")) {
-        let mut depth = 0usize;
-        for (i, c) in s.char_indices() {
-            match c {
-                '[' => depth += 1,
-                ']' => {
-                    depth = depth.saturating_sub(1);
-                    if depth == 0 {
-                        return Some((Kind::Meta, i + 1));
-                    }
-                }
-                _ => {}
-            }
-        }
-        return Some((Kind::Meta, s.len()));
-    }
-    None
+
+    rust_raw_string(s, body, prefix)
+        .or_else(|| rust_byte_string(body, prefix))
+        .or_else(|| rust_char_or_lifetime(body, prefix))
+        .or_else(|| rust_attribute(s, prefix))
 }
