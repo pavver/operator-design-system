@@ -37,7 +37,10 @@ fn schema_rejects_unknown_fields_and_incomplete_changes() {
         VALID.replace("[en]", "extra = true\n[en]"),
         VALID.replace("[en]", "commit = 'xyz1234'\n[en]"),
         VALID.replace("[en]", "commit = 'abcdef'\n[en]"),
-        VALID.replace("[en]", "commit = '12345678901234567890123456789012345678901ab'\n[en]"),
+        VALID.replace(
+            "[en]",
+            "commit = '12345678901234567890123456789012345678901ab'\n[en]",
+        ),
         VALID.replace("[en]", "[en]\nextra = true"),
         VALID.replace("[uk]", "[uk]\nextra = true"),
         VALID.replace("feature", "breaking"),
@@ -78,7 +81,8 @@ fn dates_are_sorted_by_instant_including_fractional_seconds() -> Result<(), Erro
 }
 
 #[test]
-fn directory_history_sorts_renders_details_and_tolerates_missing_git_history() -> Result<(), Error> {
+fn directory_history_sorts_renders_details_and_tolerates_missing_git_history() -> Result<(), Error>
+{
     let fixture = Fixture::new("directory")?;
     let dir = fixture.0.join("changes/search-field");
     let base = Path::new("docs/components");
@@ -89,11 +93,18 @@ fn directory_history_sorts_renders_details_and_tolerates_missing_git_history() -
         .replace("2026-11-21T12:00:00+02:00", "2026-11-21T11:00:00Z")
         .replace("feature", "breaking")
         .replace("[en]", "[en]\nmigration = 'Rename `old` to `new`'")
-        .replace("[uk]", "[uk]\ncheck = 'Перевірте поле'\nmigration = 'Змініть виклик'");
+        .replace(
+            "[uk]",
+            "[uk]\ncheck = 'Перевірте поле'\nmigration = 'Змініть виклик'",
+        );
     fs::write(dir.join("2026-11-21-1100-new.toml"), source)?;
     let code = history(&dir, base, &fixture.0)?;
-    let new = code.find("2026-11-21T11:00:00Z").ok_or("missing newest change")?;
-    let old = code.find("2026-11-21T12:00:00+02:00").ok_or("missing oldest change")?;
+    let new = code
+        .find("2026-11-21T11:00:00Z")
+        .ok_or("missing newest change")?;
+    let old = code
+        .find("2026-11-21T12:00:00+02:00")
+        .ok_or("missing oldest change")?;
     assert!(new < old);
     assert!(code.contains("commit: None"));
     assert!(code.contains("kind: \"breaking\""));
@@ -130,11 +141,24 @@ fn optional_commit_uses_the_adding_commit_and_skips_shallow_history() -> Result<
     fs::write(&file, VALID)?;
     git(repo, &["add", "."]).ok_or("git add failed")?;
     let commit = || -> Result<(), Error> {
-        git(repo, &[
-            "-c", "user.name=History fixture", "-c", "user.email=history@example.invalid",
-            "-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false",
-            "commit", "--quiet", "-am", "fixture",
-        ]).ok_or("git commit failed")?;
+        git(
+            repo,
+            &[
+                "-c",
+                "user.name=History fixture",
+                "-c",
+                "user.email=history@example.invalid",
+                "-c",
+                "core.hooksPath=/dev/null",
+                "-c",
+                "commit.gpgsign=false",
+                "commit",
+                "--quiet",
+                "-am",
+                "fixture",
+            ],
+        )
+        .ok_or("git commit failed")?;
         Ok(())
     };
     commit()?;

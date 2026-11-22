@@ -1,6 +1,6 @@
 //! Localized component history, with browser-local dates and relative times.
 
-use crate::docs::{Change, Doc, DOCS};
+use crate::docs::{Change, DOCS, Doc};
 use crate::i18n::{Lang, lang, t, tr};
 use crate::shell::StatusPill;
 use leptos::prelude::*;
@@ -96,11 +96,13 @@ fn ChangeDetail(
             Lang::En => en,
             Lang::Uk => uk,
         };
-        html.map(|html| view! {
-            <div class="docs-history-detail">
-                <strong>{t(title)}</strong>
-                <div class="docs-md" inner_html=html></div>
-            </div>
+        html.map(|html| {
+            view! {
+                <div class="docs-history-detail">
+                    <strong>{t(title)}</strong>
+                    <div class="docs-md" inner_html=html></div>
+                </div>
+            }
         })
     }
 }
@@ -203,7 +205,9 @@ pub fn ChangesToReview() -> impl IntoView {
         })
         .collect();
     changes.sort_by(|a, b| {
-        b.1.sort_key.cmp(&a.1.sort_key).then_with(|| a.0.slug.cmp(b.0.slug))
+        b.1.sort_key
+            .cmp(&a.1.sort_key)
+            .then_with(|| a.0.slug.cmp(b.0.slug))
     });
     if changes.is_empty() {
         return view! { <p role="status">{t("No changes awaiting review.")}</p> }.into_any();
@@ -214,7 +218,8 @@ pub fn ChangesToReview() -> impl IntoView {
                 <HistoryRow change=change doc=doc/>
             }).collect_view()}
         </ol>
-    }.into_any()
+    }
+    .into_any()
 }
 
 #[cfg(test)]

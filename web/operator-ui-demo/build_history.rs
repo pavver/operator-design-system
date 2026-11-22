@@ -73,7 +73,8 @@ fn date_key(source: &str) -> Result<(i64, u32), Error> {
     let year = i64::from(date.year);
     let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
     let months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let days = 365 * year + (year + 3) / 4 - (year + 99) / 100 + (year + 399) / 400
+    let days = 365 * year + (year + 3) / 4 - (year + 99) / 100
+        + (year + 399) / 400
         + months[..usize::from(date.month - 1)].iter().sum::<i64>()
         + i64::from(date.day - 1)
         + i64::from(leap && date.month > 2);
@@ -184,9 +185,7 @@ pub(super) fn validate_components(docs: &Path) -> Result<(), Error> {
             .file_name()
             .and_then(|s| s.to_str())
             .ok_or("invalid component name")?;
-        if !path.is_dir()
-            || !docs.join("components").join(format!("{name}.md")).is_file()
-        {
+        if !path.is_dir() || !docs.join("components").join(format!("{name}.md")).is_file() {
             return Err(format!(
                 "{}: expected a component change directory with a specification",
                 path.display()
@@ -236,8 +235,16 @@ pub(super) fn history(dir: &Path, link_base: &Path, repo: &Path) -> Result<Strin
             markdown(&change.uk.summary, link_base),
             change.en.check.as_deref().map(|s| markdown(s, link_base)),
             change.uk.check.as_deref().map(|s| markdown(s, link_base)),
-            change.en.migration.as_deref().map(|s| markdown(s, link_base)),
-            change.uk.migration.as_deref().map(|s| markdown(s, link_base)),
+            change
+                .en
+                .migration
+                .as_deref()
+                .map(|s| markdown(s, link_base)),
+            change
+                .uk
+                .migration
+                .as_deref()
+                .map(|s| markdown(s, link_base)),
         )?;
     }
     Ok(code)

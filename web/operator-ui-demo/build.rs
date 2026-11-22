@@ -237,7 +237,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
         let changes = if slug.starts_with("components/") {
             build_history::history(
-                &docs.join("changes").join(slug.trim_start_matches("components/")),
+                &docs
+                    .join("changes")
+                    .join(slug.trim_start_matches("components/")),
                 &dir,
                 &repo,
             )?
