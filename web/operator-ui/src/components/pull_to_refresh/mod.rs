@@ -1,6 +1,6 @@
 //! PullToRefresh component: touch pull-down gesture triggering an asynchronous refresh.
 
-use crate::components::primitives::Icon;
+use crate::components::primitives::{Icon, ProgressIndicator};
 use crate::core::{
     ActionResult, AsyncAction, ControlState, JobToken, Metric, Slot, root_class, root_style,
     sleep_ms, ui_text,
@@ -164,7 +164,7 @@ pub fn PullToRefresh(
                         {move || {
                             match state.get() {
                                 ControlState::Pending => view! {
-                                    <span class="op-pull-to-refresh-spinner" />
+                                    <ProgressIndicator size=4.0 />
                                     <span>{refreshing_str.get()}</span>
                                 }.into_any(),
                                 ControlState::Success => view! {

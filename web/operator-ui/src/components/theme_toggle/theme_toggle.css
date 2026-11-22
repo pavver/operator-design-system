@@ -11,7 +11,7 @@
   border-radius: calc(var(--op-theme-toggle-height, calc(var(--op-du) * 7.5)) / 2);
 }
 .op-tt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.op-tt-sky { fill: var(--op-theme-toggle-day-sky, var(--op-toggle-day-sky)); transition: fill 400ms var(--op-ease-standard); }
+.op-tt-sky { fill: var(--op-theme-toggle-day-sky, var(--op-toggle-day-sky)); transition: fill var(--op-motion-result-pulse-half) var(--op-ease-standard); }
 .op-theme-toggle[data-dark] .op-tt-sky { fill: var(--op-theme-toggle-night-sky, var(--op-toggle-night-sky)); }
 .op-tt-star {
   fill: var(--op-theme-toggle-star, var(--op-toggle-star));

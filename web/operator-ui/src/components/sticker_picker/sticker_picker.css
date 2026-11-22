@@ -144,8 +144,8 @@
   cursor: pointer;
   padding: calc(var(--op-du) * 1);
   box-sizing: border-box;
-  transition: transform var(--op-motion-expressive, 100ms ease),
-              background var(--op-motion-expressive, 100ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-sticker-picker__cell:hover {
@@ -165,7 +165,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.85);
+  background: var(--op-overlay-scrim);
   border: calc(var(--op-du) * 0.25) solid var(--op-sticker-picker-accent);
   padding: calc(var(--op-du) * 4);
   display: flex;
@@ -183,7 +183,7 @@
 }
 
 .op-sticker-preview-name {
-  color: #fff;
+  color: var(--op-on-media);
   font-size: calc(var(--op-tu) * 12);
   font-weight: 600;
 }

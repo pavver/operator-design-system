@@ -20,7 +20,7 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--kbd-body) 80%, var(--op-text-primary)), var(--kbd-body));
   box-shadow:
     inset 0 0 0 var(--op-dim-border) color-mix(in srgb, var(--op-background) 60%, transparent),
-    0 var(--op-dim-border) var(--op-dim-gap-micro) rgb(0 0 0 / 35%);
+    0 var(--op-dim-border) var(--op-dim-gap-micro) var(--op-shadow);
   color: var(--op-kbd-text, var(--op-text-primary));
   font: inherit;
   font-size: var(--op-kbd-font-size, var(--op-type-caption-size));

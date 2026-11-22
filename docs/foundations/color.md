@@ -23,6 +23,7 @@ That file is the single source of truth; this document explains the roles.
 | `pressed` | `#2A2A2A` | `#EBEBEB` | Pressed background. |
 | `selection` | `#3A2F1F` | `#F5E6D0` | Selected background. |
 | `disabled_surface` | `#1B1B1B` | `#F3F3F3` | Disabled background. |
+| `overlay_scrim` | `#0000008C` | `#0000008C` | Dimmed backdrop behind modals and media. |
 
 ### Lines
 
@@ -41,6 +42,7 @@ That file is the single source of truth; this document explains the roles.
 | `text_secondary` | `#9D9D9D` | `#616161` | Secondary text, unselected options. |
 | `text_disabled` | `#5A5A5A` | `#A0A0A0` | Disabled text, placeholders. |
 | `icon` | `#C5C5C5` | `#424242` | Default icons. |
+| `on_media` | `#FFFFFF` | `#FFFFFF` | Text and icons over media and scrims. |
 
 ### Signals
 
@@ -52,6 +54,7 @@ That file is the single source of truth; this document explains the roles.
 | `error` | `#E8664F` | `#B3361F` | Failed result, destructive action. |
 | `warning` | `#DCC36A` | `#8A6D00` | Attention without failure. |
 | `info` | `#6FB3C8` | `#2C7489` | Neutral information. |
+| `status_live` | `#DC2626` | `#DC2626` | Active broadcast or recording indicator. |
 
 ## Rules
 

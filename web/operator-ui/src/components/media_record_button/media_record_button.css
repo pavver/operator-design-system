@@ -35,10 +35,10 @@
   cursor: pointer;
   position: relative;
   outline: none;
-  transition: transform var(--op-motion-expressive, 150ms ease),
-              background var(--op-motion-expressive, 150ms ease),
-              border-color var(--op-motion-expressive, 150ms ease),
-              color var(--op-motion-expressive, 150ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard),
+              border-color var(--op-motion-state-color) var(--op-ease-standard),
+              color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-media-record-button[data-circular="true"] {
@@ -112,7 +112,7 @@
   height: calc(var(--op-du) * 1.5);
   background: var(--op-error);
   border-radius: 50%;
-  animation: op-media-record-blink 1s ease-in-out infinite;
+  animation: op-media-record-blink var(--op-motion-spinner-lap) ease-in-out infinite;
 }
 
 .op-media-record-hint {

@@ -30,7 +30,7 @@
   box-shadow:
     inset var(--op-dim-border-thick) 0 0 var(--op-toast-tone, var(--tone)),
     inset 0 0 0 var(--op-dim-border) var(--op-toast-border, var(--op-border)),
-    0 var(--op-toast-shadow-y, calc(var(--op-du) * 2)) var(--op-toast-shadow-blur, calc(var(--op-du) * 6)) var(--op-toast-shadow, rgb(0 0 0 / 35%));
+    0 var(--op-toast-shadow-y, calc(var(--op-du) * 2)) var(--op-toast-shadow-blur, calc(var(--op-du) * 6)) var(--op-toast-shadow, var(--op-shadow));
   color: var(--op-toast-text, var(--op-text-primary));
   pointer-events: auto;
   animation: op-toast-in var(--op-motion-dialog-enter) var(--op-ease-standard);

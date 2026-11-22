@@ -14,7 +14,7 @@
 .op-chat-file-icon-box {
     width: calc(var(--op-du) * 8);
     height: calc(var(--op-du) * 8);
-    background-color: rgba(var(--op-accent-rgb, 0, 160, 255), 0.15);
+    background-color: color-mix(in srgb, var(--op-chat-accent, var(--op-accent)) 15%, transparent);
     border: calc(var(--op-du) * 0.25) solid var(--op-chat-accent, var(--op-accent));
     display: flex;
     align-items: center;
@@ -58,7 +58,7 @@
 .op-chat-contact-avatar-box {
     width: calc(var(--op-du) * 8);
     height: calc(var(--op-du) * 8);
-    background-color: rgba(var(--op-accent-rgb, 0, 160, 255), 0.2);
+    background-color: color-mix(in srgb, var(--op-chat-accent, var(--op-accent)) 20%, transparent);
     border: calc(var(--op-du) * 0.25) solid var(--op-chat-accent, var(--op-accent));
     display: flex;
     align-items: center;
@@ -258,7 +258,7 @@
     width: 100%;
     padding: calc(var(--op-du) * 1.5);
     background-color: var(--op-chat-accent, var(--op-accent));
-    color: var(--op-surface, #ffffff);
+    color: var(--op-surface);
     font-weight: 700;
     font-size: calc(var(--op-tu) * 11);
     border: none;
@@ -269,9 +269,9 @@
     width: 100%;
     text-align: center;
     padding: calc(var(--op-du) * 1);
-    background-color: rgba(34, 197, 94, 0.18);
-    border: calc(var(--op-du) * 0.25) solid #22c55e;
-    color: #22c55e;
+    background-color: color-mix(in srgb, var(--op-success) 18%, transparent);
+    border: calc(var(--op-du) * 0.25) solid var(--op-success);
+    color: var(--op-success);
     font-weight: 700;
     font-size: calc(var(--op-tu) * 11);
     box-sizing: border-box;
@@ -297,7 +297,7 @@
 .op-chat-story-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.6) 100%);
+    background: linear-gradient(180deg, var(--op-overlay-scrim) 0%, transparent 40%, var(--op-overlay-scrim) 100%);
 }
 
 .op-chat-story-header {
@@ -329,7 +329,7 @@
 }
 
 .op-chat-story-author {
-    color: #ffffff;
+    color: var(--op-on-media);
     font-weight: 700;
     font-size: calc(var(--op-tu) * 10);
 }
@@ -346,7 +346,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: var(--op-on-media);
     font-size: calc(var(--op-tu) * 20);
 }
 

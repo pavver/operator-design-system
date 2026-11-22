@@ -26,18 +26,6 @@
   font-size: var(--op-type-caption-size);
 }
 
-.op-infinite-scroll-spinner {
-  width: calc(var(--op-du) * 4);
-  height: calc(var(--op-du) * 4);
-  border: var(--op-dim-spinner-stroke) solid var(--op-border);
-  border-top-color: var(--op-accent);
-  animation: op-infinite-scroll-spin var(--op-motion-spinner-lap) linear infinite;
-}
-
-@keyframes op-infinite-scroll-spin {
-  to { transform: rotate(360deg); }
-}
-
 .op-infinite-scroll-error {
   display: flex;
   align-items: center;

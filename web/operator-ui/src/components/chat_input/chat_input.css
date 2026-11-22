@@ -91,7 +91,7 @@
   border: var(--op-chat-input-border-width) solid var(--op-chat-input-border);
   box-sizing: border-box;
   position: relative;
-  transition: border-color var(--op-motion-expressive, 150ms ease);
+  transition: border-color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-chat-input:focus-within {
@@ -156,8 +156,8 @@
   cursor: pointer;
   box-sizing: border-box;
   flex-shrink: 0;
-  transition: transform var(--op-motion-expressive, 100ms ease),
-              background var(--op-motion-expressive, 100ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-chat-input__send-btn:hover {

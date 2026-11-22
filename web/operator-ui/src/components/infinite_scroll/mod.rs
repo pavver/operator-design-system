@@ -1,7 +1,7 @@
 //! InfiniteScroll component: loads more items when a sentinel enters the viewport.
 
 use crate::components::action_button::ActionButton;
-use crate::components::primitives::Icon;
+use crate::components::primitives::{Icon, ProgressIndicator};
 use crate::core::observers::{IntersectionOptions, use_intersection};
 use crate::core::{ActionResult, AsyncAction, Metric, Slot, root_class, root_style, ui_text};
 use leptos::html::Div;
@@ -107,7 +107,7 @@ pub fn InfiniteScroll(
                     } else {
                         view! {
                             <div class="op-infinite-scroll-loading" role="status" aria-busy="true">
-                                <span class="op-infinite-scroll-spinner" />
+                                <ProgressIndicator size=4.0 />
                                 <span>{loading_str.get()}</span>
                             </div>
                         }.into_any()

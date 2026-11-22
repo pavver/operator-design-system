@@ -29,8 +29,8 @@
 .op-badge-led[data-kind="offline"] { background-color: var(--op-status-badge-offline, var(--op-status-offline)); }
 .op-badge-led[data-kind="error"] { background-color: var(--op-status-badge-error, var(--op-status-error)); }
 .op-badge-led[data-kind="fallback"] { background-color: var(--op-status-badge-fallback, var(--op-status-fallback)); }
-.op-badge-led[data-kind="alarm"] { animation: op-alarm var(--op-motion-alarm-flash-half) linear infinite alternate; }
-@keyframes op-alarm {
+.op-badge-led[data-kind="alarm"] { animation: op-status-badge-alarm var(--op-motion-alarm-flash-half) linear infinite alternate; }
+@keyframes op-status-badge-alarm {
   from { background-color: color-mix(in srgb, var(--op-status-badge-alarm, var(--op-status-alarm)) 20%, transparent); }
   to { background-color: var(--op-status-badge-alarm, var(--op-status-alarm)); }
 }
@@ -48,11 +48,11 @@
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--op-status-badge-activity, var(--op-status-activity));
-  animation: op-typing 800ms linear infinite;
+  animation: op-status-badge-typing var(--op-motion-result-hold) linear infinite;
 }
-.op-badge-typing i:nth-child(2) { animation-delay: 200ms; }
-.op-badge-typing i:nth-child(3) { animation-delay: 400ms; }
-@keyframes op-typing {
+.op-badge-typing i:nth-child(2) { animation-delay: var(--op-motion-pending-indicator-fade); }
+.op-badge-typing i:nth-child(3) { animation-delay: var(--op-motion-result-pulse-half); }
+@keyframes op-status-badge-typing {
   0% { transform: translateY(0); }
   25% { transform: translateY(-3px); }
   50%, 100% { transform: translateY(0); }
@@ -68,7 +68,7 @@
   fill: var(--op-status-badge-activity, var(--op-status-activity));
   transform-box: view-box;
   transform-origin: 18px 50px;
-  animation: op-wave-src 900ms ease-in-out infinite;
+  animation: op-status-badge-wave-src var(--op-motion-spinner-lap) ease-in-out infinite;
 }
 .op-wave {
   fill: none;
@@ -77,15 +77,15 @@
   stroke-linecap: round;
   transform-box: view-box;
   transform-origin: 18px 50px;
-  animation: op-wave 900ms ease-in-out infinite;
+  animation: op-status-badge-wave var(--op-motion-spinner-lap) ease-in-out infinite;
 }
-.op-wave-1 { animation-delay: -738ms; }
-.op-wave-2 { animation-delay: -576ms; }
-@keyframes op-wave {
+.op-wave-1 { animation-delay: calc(var(--op-motion-spinner-lap) * -0.82); }
+.op-wave-2 { animation-delay: calc(var(--op-motion-spinner-lap) * -0.64); }
+@keyframes op-status-badge-wave {
   0%, 100% { opacity: 0.25; transform: scale(0.9); }
   50% { opacity: 1; transform: scale(1); }
 }
-@keyframes op-wave-src {
+@keyframes op-status-badge-wave-src {
   0%, 50%, 100% { transform: scale(0.95); }
   25% { transform: scale(1); }
   75% { transform: scale(0.9); }
@@ -97,11 +97,11 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0.28;
-  animation: op-chev 900ms var(--op-ease-smooth) infinite;
+  animation: op-status-badge-chev var(--op-motion-spinner-lap) var(--op-ease-smooth) infinite;
 }
-.op-chev-1 { animation-delay: -600ms; }
-.op-chev-2 { animation-delay: -300ms; }
-@keyframes op-chev {
+.op-chev-1 { animation-delay: calc(var(--op-motion-spinner-lap) * -2 / 3); }
+.op-chev-2 { animation-delay: calc(var(--op-motion-spinner-lap) * -1 / 3); }
+@keyframes op-status-badge-chev {
   0% { opacity: 1; }
   16.67%, 83.33% { opacity: 0.28; }
   100% { opacity: 1; }

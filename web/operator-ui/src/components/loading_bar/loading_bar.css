@@ -31,7 +31,7 @@
         var(--op-loading-bar-color, var(--op-accent)) 50%,
         transparent 100%
     );
-    animation: op-loading-bar-sweep 1.5s infinite linear;
+    animation: op-loading-bar-sweep var(--op-motion-skeleton-lap) infinite linear;
 }
 
 @keyframes op-loading-bar-sweep {

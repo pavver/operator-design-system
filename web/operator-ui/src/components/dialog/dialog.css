@@ -8,7 +8,7 @@
   display: grid;
   place-items: center;
   padding: var(--op-dialog-padding, var(--op-dim-margin-screen));
-  background: var(--op-dialog-scrim, rgb(0 0 0 / 55%));
+  background: var(--op-dialog-scrim, var(--op-overlay-scrim));
   animation: op-fade-in var(--op-motion-dialog-enter) var(--op-ease-standard);
 }
 .op-dialog {
