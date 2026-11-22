@@ -140,10 +140,6 @@
   to { border-color: var(--op-rating-status); }
 }
 
-@keyframes op-spin {
-  to { transform: rotate(360deg); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .op-rating-spinner {
     animation-duration: 2s !important;

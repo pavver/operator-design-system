@@ -59,11 +59,6 @@
     margin-bottom: calc(var(--op-du) * 2);
 }
 
-@keyframes op-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
 .op-video-stream-status-text {
     font-size: calc(var(--op-tu) * 12);
     font-weight: 600;
@@ -146,12 +141,13 @@
     height: calc(var(--op-du) * 1.5);
     border-radius: 50%;
     background: #ffffff;
-    animation: op-pulse 1.5s ease-in-out infinite;
+    animation: op-video-stream-live-pulse var(--op-motion-spinner-lap) var(--op-ease-standard) infinite alternate;
 }
 
-@keyframes op-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
+/* Own name: a global op-pulse would replace the state-border pulse of every control. */
+@keyframes op-video-stream-live-pulse {
+    from { opacity: 1; }
+    to { opacity: 0.4; }
 }
 
 .op-video-stream-actions {
