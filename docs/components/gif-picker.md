@@ -3,6 +3,8 @@
 Looping animated GIF and video clip picker with IntersectionObserver viewport playback.
 GIFs are delivered as looping MP4/WebM videos and automatically paused when scrolled outside the viewport.
 
+It ships in the media extension: the `gif-picker` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

@@ -3,6 +3,8 @@
 Message bubble for chat, discussion threads, and tactical communication streams.
 It supports avatar pictures, sender attribution and roles, timestamp stamps, delivery confirmation, TTL self-destruct timers, quoted replies, forwarded attribution, reactions, and polymorphic attachments (media grids, voice waveforms, audio, circular video notes, stickers, contacts, polls, web page previews, invoices, and stories).
 
+It ships in the media extension: the `chat-message` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

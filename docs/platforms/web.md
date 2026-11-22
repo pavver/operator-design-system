@@ -53,6 +53,15 @@ fn Settings() -> impl IntoView {
 The application provides Cascadia Code through `@font-face`.
 The documentation site shows how in [demo.css](../../web/operator-ui-demo/demo.css).
 
+## Extensions
+
+Specialized or application-specific components ship in extensions rather than `full`:
+* `graph`: node-graph editing canvas and nodes.
+* `code-field`: code editor field with highlighting and completion.
+* `media`: chat messaging, media keyboard, pickers, gallery, video stream, and camera controls.
+
+Applications enable individual features, the `media` group, or all extensions via `extensions`.
+
 ## Implementation Notes
 
 * The base outline is an inset `box-shadow`, which keeps the stroke inside the bounds without changing the element size.

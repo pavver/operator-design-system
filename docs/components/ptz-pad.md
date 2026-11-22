@@ -2,6 +2,8 @@
 
 Directional camera pan/tilt/zoom controller with interactive joystick drag, arrow navigation, and Operator state feedback.
 
+It ships in the media extension: the `ptz-pad` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

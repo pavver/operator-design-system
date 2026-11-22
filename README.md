@@ -96,6 +96,8 @@ Unused components ship neither code nor CSS in the final build.
 | `reviewed` | Every reviewed component (default). |
 | `draft` | Components still in progress. |
 | `full` | `reviewed` and `draft`. |
+| `extensions` | All extensions (`code-field`, `graph`, and `media`). |
+| `media` | Media extension components (`chat-message`, `chat-input`, `video-stream`, etc.). |
 | `<component>` | One component and the components it uses, for example `action-button` or `toast`. |
 | `arborium` | Tree-sitter highlighting for `CodeBlock` (opt-in, see below). |
 

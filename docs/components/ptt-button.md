@@ -3,6 +3,8 @@
 Tactical push-to-talk button with press-to-talk transmission, upward slide hands-free lock, and Operator states.
 Provides explicit visual feedback for transmitting, locked, error, and disabled conditions.
 
+It ships in the media extension: the `ptt-button` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

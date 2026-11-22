@@ -3,6 +3,8 @@
 Tactical media recording button that captures audio voice notes and video notes.
 It features hold-to-record, slide-left-to-cancel, and slide-up-to-lock gestures.
 
+It ships in the media extension: the `media-record-button` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

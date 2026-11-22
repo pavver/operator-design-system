@@ -2,6 +2,8 @@
 
 Responsive media grid of photos and videos with selection, captions, and viewport-lazy loading via `IntersectionObserver`.
 
+It ships in the media extension: the `gallery` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

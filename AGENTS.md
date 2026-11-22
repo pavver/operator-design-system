@@ -13,6 +13,7 @@ Rules for AI agents contributing to this repository.
 * A new component gets its own folder in `web/operator-ui/src/components/` and its own feature in [web/operator-ui/Cargo.toml](web/operator-ui/Cargo.toml).
 * Its feature lists the component features it uses.
 * It joins `draft` and moves to `reviewed` when its spec status changes.
+* Components belonging to an extension (such as `graph` or the `media` suite) live under their extension folder (e.g. `web/operator-ui/src/components/media/<component>/`) and join the extension feature and `extensions` rather than `draft`/`reviewed`/`full`.
 
 ## Customization
 

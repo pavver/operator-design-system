@@ -3,6 +3,8 @@
 Pluggable emoji picker with category tabs, live query filtering, and custom emoji packs.
 It supports Unicode emojis, application-installed custom graphics via `CustomEmojiMap`, and recent emoji memory.
 
+It ships in the media extension: the `emoji-picker` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

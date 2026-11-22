@@ -3,6 +3,8 @@
 Generic media keyboard with unified Emoji, Stickers, and GIF dispatching.
 It is compatible with custom emoji packs, sticker sets, and animated clips (including Telegram packs), with search filtering, phone docked replacement, and desktop anchored popover support.
 
+It ships in the media extension: the `media-keyboard` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

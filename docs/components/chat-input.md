@@ -3,6 +3,8 @@
 High-density chat input bar with multi-line auto-growing textarea, quoted reply/edit header, and media record button switcher.
 It integrates smoothly with the Operator async state machine (`Idle`, `Pending`, `Success`, `Error`).
 
+It ships in the media extension: the `chat-input` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

@@ -2,6 +2,8 @@
 
 Live camera and media stream playback shell around an HTML `<video>` element.
 
+It ships in the media extension: the `video-stream` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

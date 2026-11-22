@@ -2,6 +2,8 @@
 
 Full-screen media viewer dialog with multi-touch zoom, pan, thumbnail navigation, video playback, and action slots.
 
+It ships in the media extension: the `gallery-viewer` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

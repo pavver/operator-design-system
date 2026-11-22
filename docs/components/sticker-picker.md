@@ -3,6 +3,8 @@
 Pluggable vector and animated sticker picker with pack navigation and preview support.
 Supports static PNG/WebP graphics, vector SVGs, and animated vector formats.
 
+It ships in the media extension: the `sticker-picker` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use

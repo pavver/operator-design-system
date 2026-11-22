@@ -3,6 +3,8 @@
 Tactical reaction picker with quick reactions row and expandable category dialog.
 It provides instant one-tap reactions as well as a full popover dialog with categories.
 
+It ships in the media extension: the `reaction-picker` feature is in the `media` and `extensions` groups, not in `full`.
+
 Status: **draft** on web.
 
 ## Use
