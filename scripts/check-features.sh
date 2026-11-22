@@ -12,6 +12,9 @@ cd "$(dirname "$0")/.."
 # - arborium: requires clang/LLVM with wasm target support, which CI and most users do not have.
 EXCLUDE_FEATURES=("default" "reviewed" "draft" "full" "extensions" "arborium")
 
+echo "==> Running CSS checks..."
+./scripts/check-css.sh
+
 echo "==> Checking core (no features)..."
 cargo clippy -q --target wasm32-unknown-unknown -p operator-ui --no-default-features -- -D warnings
 

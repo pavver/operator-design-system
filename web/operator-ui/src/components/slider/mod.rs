@@ -10,8 +10,7 @@ use operator_ui_tokens::{Icon as IconData, icons, motion};
 use std::time::Duration;
 use wasm_bindgen::JsCast;
 
-mod visuals;
-use visuals::{pending, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const ICON_SIZE: &str = "var(--op-slider-icon-size, calc(var(--op-du) * 3.5))";
 const SPINNER_SIZE: &str = "var(--op-slider-spinner-size, calc(var(--op-du) * 3))";
@@ -345,7 +344,7 @@ pub fn Slider(
                         >
                             {move || match current.get() {
                                 ControlState::Pending if show_spinner.get() => {
-                                    pending(SPINNER_SIZE, loading_label)
+                                    pending_spinner("slider", SPINNER_SIZE, loading_label)
                                 }
                                 ControlState::Success => symbol(success_icon, ICON_SIZE, Some(success_label)),
                                 ControlState::Error => symbol(error_icon, ICON_SIZE, Some(error_label)),

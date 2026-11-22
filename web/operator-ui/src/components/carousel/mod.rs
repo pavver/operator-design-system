@@ -44,23 +44,8 @@ pub fn Carousel(
     let is_paused = RwSignal::new(false);
     let touch_start_x = RwSignal::new(0.0f64);
 
-    let go_prev = move || {
-        let curr = current.get();
-        if curr > 0 {
-            current.set(curr - 1);
-        } else if infinite.get() && count > 0 {
-            current.set(count - 1);
-        }
-    };
-
-    let go_next = move || {
-        let curr = current.get();
-        if curr + 1 < count {
-            current.set(curr + 1);
-        } else if infinite.get() {
-            current.set(0);
-        }
-    };
+    let go_prev = move || current.set(prev_index(current.get(), count, infinite.get()));
+    let go_next = move || current.set(next_index(current.get(), count, infinite.get()));
 
     // Autoplay timer loop
     Effect::new(move |_| {
@@ -78,16 +63,14 @@ pub fn Carousel(
         });
     });
 
-    let on_keydown = move |ev: ev::KeyboardEvent| match ev.key().as_str() {
-        "ArrowLeft" => {
+    let on_keydown = move |ev: ev::KeyboardEvent| {
+        if let Some(dir) = handle_carousel_key(ev.key().as_str()) {
             ev.prevent_default();
-            go_prev();
+            match dir {
+                SwipeDir::Prev => go_prev(),
+                SwipeDir::Next => go_next(),
+            }
         }
-        "ArrowRight" => {
-            ev.prevent_default();
-            go_next();
-        }
-        _ => {}
     };
 
     let on_touchstart = move |ev: ev::TouchEvent| {
@@ -104,11 +87,10 @@ pub fn Carousel(
             return;
         }
         if let Some(touch) = ev.changed_touches().get(0) {
-            let diff = touch_start_x.get() - touch.client_x() as f64;
-            if diff > 40.0 {
-                go_next();
-            } else if diff < -40.0 {
-                go_prev();
+            match detect_swipe(touch_start_x.get(), touch.client_x() as f64) {
+                Some(SwipeDir::Next) => go_next(),
+                Some(SwipeDir::Prev) => go_prev(),
+                None => {}
             }
         }
     };
@@ -123,6 +105,9 @@ pub fn Carousel(
 
     let can_prev = Signal::derive(move || infinite.get() || current.get() > 0);
     let can_next = Signal::derive(move || infinite.get() || current.get() + 1 < count);
+
+    let on_prev = Callback::new(move |()| go_prev());
+    let on_next = Callback::new(move |()| go_next());
 
     view! {
         <div
@@ -149,14 +134,85 @@ pub fn Carousel(
                 </div>
             </div>
 
-            {move || arrows.get().then(|| view! {
+            <CarouselArrows
+                arrows=arrows
+                prev_label=prev_str
+                next_label=next_str
+                can_prev=can_prev
+                can_next=can_next
+                on_prev=on_prev
+                on_next=on_next
+            />
+
+            <CarouselDots dots=dots count=count current=current />
+        </div>
+    }
+}
+
+enum SwipeDir {
+    Next,
+    Prev,
+}
+
+fn prev_index(curr: usize, count: usize, infinite: bool) -> usize {
+    if curr > 0 {
+        curr - 1
+    } else if infinite && count > 0 {
+        count - 1
+    } else {
+        curr
+    }
+}
+
+fn next_index(curr: usize, count: usize, infinite: bool) -> usize {
+    if curr + 1 < count {
+        curr + 1
+    } else if infinite {
+        0
+    } else {
+        curr
+    }
+}
+
+fn handle_carousel_key(key: &str) -> Option<SwipeDir> {
+    match key {
+        "ArrowLeft" => Some(SwipeDir::Prev),
+        "ArrowRight" => Some(SwipeDir::Next),
+        _ => None,
+    }
+}
+
+fn detect_swipe(start_x: f64, end_x: f64) -> Option<SwipeDir> {
+    let diff = start_x - end_x;
+    if diff > 40.0 {
+        Some(SwipeDir::Next)
+    } else if diff < -40.0 {
+        Some(SwipeDir::Prev)
+    } else {
+        None
+    }
+}
+
+#[component]
+fn CarouselArrows(
+    arrows: Signal<bool>,
+    prev_label: Signal<String>,
+    next_label: Signal<String>,
+    can_prev: Signal<bool>,
+    can_next: Signal<bool>,
+    on_prev: Callback<()>,
+    on_next: Callback<()>,
+) -> impl IntoView {
+    move || {
+        arrows.get().then(|| {
+            view! {
                 <button
                     type="button"
                     class="op-carousel-arrow"
                     data-direction="prev"
-                    aria-label=move || prev_str.get()
+                    aria-label=move || prev_label.get()
                     disabled=move || !can_prev.get()
-                    on:click=move |_| go_prev()
+                    on:click=move |_| on_prev.run(())
                 >
                     <Icon icon=icons::CHEVRON_LEFT size=20.0 />
                 </button>
@@ -164,33 +220,42 @@ pub fn Carousel(
                     type="button"
                     class="op-carousel-arrow"
                     data-direction="next"
-                    aria-label=move || next_str.get()
+                    aria-label=move || next_label.get()
                     disabled=move || !can_next.get()
-                    on:click=move |_| go_next()
+                    on:click=move |_| on_next.run(())
                 >
                     <Icon icon=icons::CHEVRON_RIGHT size=20.0 />
                 </button>
-            })}
+            }
+        })
+    }
+}
 
-            {move || (dots.get() && count > 1).then(|| view! {
+#[component]
+fn CarouselDots(dots: Signal<bool>, count: usize, current: RwSignal<usize>) -> impl IntoView {
+    move || {
+        (dots.get() && count > 1).then(|| {
+            view! {
                 <div class="op-carousel-dots" role="tablist">
-                    {(0..count).map(|idx| {
-                        let is_active = Signal::derive(move || current.get() == idx);
-                        view! {
-                            <button
-                                type="button"
-                                class="op-carousel-dot"
-                                data-active=move || is_active.get().then_some("")
-                                role="tab"
-                                aria-selected=move || is_active.get().then_some("true")
-                                aria-label=format!("Slide {}", idx + 1)
-                                on:click=move |_| current.set(idx)
-                            />
-                        }
-                    }).collect_view()}
+                    {(0..count)
+                        .map(|idx| {
+                            let is_active = Signal::derive(move || current.get() == idx);
+                            view! {
+                                <button
+                                    type="button"
+                                    class="op-carousel-dot"
+                                    data-active=move || is_active.get().then_some("")
+                                    role="tab"
+                                    aria-selected=move || is_active.get().then_some("true")
+                                    aria-label=format!("Slide {}", idx + 1)
+                                    on:click=move |_| current.set(idx)
+                                />
+                            }
+                        })
+                        .collect_view()}
                 </div>
-            })}
-        </div>
+            }
+        })
     }
 }
 
@@ -213,5 +278,41 @@ pub fn CarouselSlide(
         >
             {children()}
         </div>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_prev_next_index() {
+        assert_eq!(prev_index(2, 5, false), 1);
+        assert_eq!(prev_index(0, 5, false), 0);
+        assert_eq!(prev_index(0, 5, true), 4);
+
+        assert_eq!(next_index(2, 5, false), 3);
+        assert_eq!(next_index(4, 5, false), 4);
+        assert_eq!(next_index(4, 5, true), 0);
+    }
+
+    #[test]
+    fn test_detect_swipe() {
+        assert!(matches!(detect_swipe(100.0, 50.0), Some(SwipeDir::Next)));
+        assert!(matches!(detect_swipe(50.0, 100.0), Some(SwipeDir::Prev)));
+        assert!(matches!(detect_swipe(50.0, 60.0), None));
+    }
+
+    #[test]
+    fn test_handle_carousel_key() {
+        assert!(matches!(
+            handle_carousel_key("ArrowLeft"),
+            Some(SwipeDir::Prev)
+        ));
+        assert!(matches!(
+            handle_carousel_key("ArrowRight"),
+            Some(SwipeDir::Next)
+        ));
+        assert!(matches!(handle_carousel_key("Space"), None));
     }
 }

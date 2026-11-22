@@ -75,7 +75,7 @@
     filter: blur(var(--op-du));
     cursor: pointer;
     user-select: none;
-    transition: filter 0.15s ease;
+    transition: filter var(--op-motion-state-color) var(--op-ease-standard);
     padding: 0 calc(var(--op-du) * 0.5);
 }
 
@@ -155,20 +155,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: color-mix(in srgb, var(--op-overlay-scrim) 50%, transparent);
 }
 
 .op-chat-play-icon {
     font-size: calc(var(--op-tu) * 20);
-    color: #ffffff;
+    color: var(--op-on-media);
 }
 
 .op-chat-duration-badge {
     position: absolute;
     bottom: calc(var(--op-du) * 1);
     left: calc(var(--op-du) * 1);
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #ffffff;
+    background-color: var(--op-overlay-scrim);
+    color: var(--op-on-media);
     font-family: var(--op-font-mono, monospace);
     font-size: calc(var(--op-tu) * 9);
     padding: calc(var(--op-du) * 0.25) calc(var(--op-du) * 1);
@@ -177,7 +177,7 @@
 .op-chat-media-spoiler-overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.88);
+    background-color: var(--op-overlay-scrim);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,7 +188,7 @@
 }
 
 .op-chat-spoiler-badge {
-    background-color: rgba(var(--op-accent-rgb, 0, 160, 255), 0.2);
+    background-color: color-mix(in srgb, var(--op-chat-accent, var(--op-accent)) 20%, transparent);
     border: calc(var(--op-du) * 0.25) solid var(--op-chat-accent, var(--op-accent));
     color: var(--op-chat-accent, var(--op-accent));
     font-size: calc(var(--op-tu) * 9);
@@ -296,7 +296,7 @@
     overflow: hidden;
     position: relative;
     border: calc(var(--op-du) * 0.5) solid var(--op-chat-accent, var(--op-accent));
-    background-color: #000000;
+    background-color: var(--op-surface-alt);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -311,15 +311,15 @@
 
 .op-chat-video-note-play {
     position: absolute;
-    color: #ffffff;
+    color: var(--op-on-media);
     font-size: calc(var(--op-tu) * 20);
 }
 
 .op-chat-video-note-duration {
     position: absolute;
     top: calc(var(--op-du) * 2);
-    background-color: rgba(0, 0, 0, 0.65);
-    color: #ffffff;
+    background-color: var(--op-overlay-scrim);
+    color: var(--op-on-media);
     font-family: var(--op-font-mono, monospace);
     font-size: calc(var(--op-tu) * 9);
     font-weight: 700;

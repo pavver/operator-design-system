@@ -1,17 +1,16 @@
 //! Media record button supporting hold-to-record, drag-left-to-cancel, drag-up-to-lock, and mode toggle.
 
+mod gesture;
+
+use gesture::RecordGestureState;
+
 use crate::components::primitives::Icon;
 use crate::core::{Metric, root_class, root_style, ui_icon, ui_text};
 use leptos::ev;
 use leptos::prelude::*;
-use operator_ui_tokens::icons;
+use operator_ui_tokens::{Icon as IconData, icons};
 
 pub(crate) const CSS: &str = include_str!("media_record_button.css");
-
-/// Drag distances in pixels.
-const DRAG_LOCK_THRESHOLD_PX: f64 = 60.0;
-const DRAG_CANCEL_THRESHOLD_PX: f64 = 60.0;
-const HOLD_TIMEOUT_MS: i32 = 200;
 
 /// Media recording mode: voice audio note or round video note.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -27,6 +26,124 @@ impl MediaRecordMode {
             Self::Voice => "voice",
             Self::Video => "video",
         }
+    }
+}
+
+fn format_record_time(secs: u32) -> String {
+    let m = secs / 60;
+    let s = secs % 60;
+    format!("{m}:{s:02}")
+}
+
+#[component]
+fn MediaRecordTimer(is_active: Signal<bool>, seconds: RwSignal<u32>) -> impl IntoView {
+    view! {
+        {move || {
+            if is_active.get() {
+                view! {
+                    <div class="op-media-record-timer">
+                        <span class="op-media-record-timer__dot"></span>
+                        <span>{move || format_record_time(seconds.get())}</span>
+                    </div>
+                }.into_any()
+            } else {
+                ().into_any()
+            }
+        }}
+    }
+}
+
+#[component]
+fn MediaRecordHints(
+    show: Signal<bool>,
+    cancel_hint: Signal<String>,
+    lock_hint: Signal<String>,
+) -> impl IntoView {
+    view! {
+        {move || {
+            if show.get() {
+                view! {
+                    <span class="op-media-record-hint">{cancel_hint.get()}</span>
+                    <span class="op-media-record-hint">{lock_hint.get()}</span>
+                }.into_any()
+            } else {
+                ().into_any()
+            }
+        }}
+    }
+}
+
+fn record_button_label(
+    is_locked: bool,
+    mode: MediaRecordMode,
+    locked_label: &str,
+    video_label: &str,
+    voice_label: &str,
+) -> String {
+    if is_locked {
+        locked_label.to_string()
+    } else if mode == MediaRecordMode::Video {
+        video_label.to_string()
+    } else {
+        voice_label.to_string()
+    }
+}
+
+fn record_button_icon(
+    is_locked: bool,
+    mode: MediaRecordMode,
+    icon_lock: IconData,
+    icon_video: IconData,
+    icon_voice: IconData,
+) -> IconData {
+    if is_locked {
+        icon_lock
+    } else if mode == MediaRecordMode::Video {
+        icon_video
+    } else {
+        icon_voice
+    }
+}
+
+#[component]
+fn MediaRecordActionButton(
+    class: Signal<String>,
+    style: Signal<Option<String>>,
+    is_circular: Signal<bool>,
+    current_mode: Signal<MediaRecordMode>,
+    is_recording: Signal<bool>,
+    is_locked: Signal<bool>,
+    is_canceling: RwSignal<bool>,
+    is_disabled: Signal<bool>,
+    on_pointerdown: Callback<ev::PointerEvent>,
+    on_pointermove: Callback<ev::PointerEvent>,
+    on_pointerup: Callback<ev::PointerEvent>,
+    on_pointercancel: Callback<ev::PointerEvent>,
+    aria_label: Signal<String>,
+    icon_data: Signal<IconData>,
+) -> impl IntoView {
+    view! {
+        <button
+            type="button"
+            class=class
+            style=style
+            data-circular=move || is_circular.get().then_some("true")
+            data-mode=move || current_mode.get().as_str()
+            data-recording=move || is_recording.get().then_some("true")
+            data-locked=move || is_locked.get().then_some("true")
+            data-canceling=move || is_canceling.get().then_some("true")
+            data-disabled=move || is_disabled.get().then_some("true")
+            disabled=move || is_disabled.get()
+            on:pointerdown=move |ev| on_pointerdown.run(ev)
+            on:pointermove=move |ev| on_pointermove.run(ev)
+            on:pointerup=move |ev| on_pointerup.run(ev)
+            on:pointercancel=move |ev| on_pointercancel.run(ev)
+            aria-label=move || aria_label.get()
+        >
+            <span class="op-media-record-button__icon">
+                {move || view! { <Icon icon=icon_data.get() /> }}
+            </span>
+        </button>
     }
 }
 
@@ -76,11 +193,8 @@ pub fn MediaRecordButton(
     #[prop(optional, into)]
     on_record_locked: Option<Callback<()>>,
 ) -> impl IntoView {
-    let start_x = RwSignal::new(0.0_f64);
-    let start_y = RwSignal::new(0.0_f64);
-    let pointer_down_time = RwSignal::new(0.0_f64);
-    let is_holding = RwSignal::new(false);
-    let is_canceling = RwSignal::new(false);
+    let gesture = RecordGestureState::new();
+    let is_canceling = gesture.is_canceling;
     let timer_seconds = RwSignal::new(0_u32);
 
     let current_mode = Signal::derive(move || mode.get().unwrap_or_default());
@@ -132,177 +246,87 @@ pub fn MediaRecordButton(
     let icon_lock = ui_icon(None, "media-record.lock", icons::LOCK);
 
     let on_pointerdown = move |ev: ev::PointerEvent| {
-        if is_disabled.get() {
-            return;
-        }
-        if is_locked.get() {
-            // Tap while locked concludes recording
-            if let Some(cb) = on_record_stop {
-                cb.run(());
-            }
-            return;
-        }
-        start_x.set(f64::from(ev.client_x()));
-        start_y.set(f64::from(ev.client_y()));
-        pointer_down_time.set(js_sys::Date::now());
-        is_holding.set(true);
-        is_canceling.set(false);
-
-        // Schedule transition to recording if held
-        let mode_val = current_mode.get();
-        set_timeout(
-            move || {
-                if let (true, false, Some(cb)) =
-                    (is_holding.get(), is_locked.get(), on_record_start)
-                {
-                    cb.run(mode_val);
-                }
-            },
-            std::time::Duration::from_millis(HOLD_TIMEOUT_MS as u64),
+        gesture.on_down(
+            ev,
+            is_disabled.get(),
+            is_locked.get(),
+            current_mode.get(),
+            on_record_stop,
+            on_record_start,
         );
     };
 
     let on_pointermove = move |ev: ev::PointerEvent| {
-        if !is_holding.get() || is_locked.get() || is_disabled.get() {
-            return;
-        }
-        let cur_x = f64::from(ev.client_x());
-        let cur_y = f64::from(ev.client_y());
-        let delta_x = start_x.get() - cur_x;
-        let delta_y = start_y.get() - cur_y;
-
-        // Slide left to cancel
-        if delta_x > DRAG_CANCEL_THRESHOLD_PX {
-            is_canceling.set(true);
-            is_holding.set(false);
-            if let Some(cb) = on_record_cancel {
-                cb.run(());
-            }
-            return;
-        }
-
-        // Slide up to lock hands-free
-        if delta_y > DRAG_LOCK_THRESHOLD_PX {
-            is_holding.set(false);
-            if let Some(cb) = on_record_locked {
-                cb.run(());
-            }
-        }
+        gesture.on_move(
+            ev,
+            is_disabled.get(),
+            is_locked.get(),
+            on_record_cancel,
+            on_record_locked,
+        );
     };
 
     let on_pointerup = move |_ev: ev::PointerEvent| {
-        if is_disabled.get() {
-            return;
-        }
-        let elapsed = js_sys::Date::now() - pointer_down_time.get();
-        if is_canceling.get() {
-            is_canceling.set(false);
-            is_holding.set(false);
-            return;
-        }
-        if is_holding.get() {
-            is_holding.set(false);
-            if elapsed < f64::from(HOLD_TIMEOUT_MS) && !is_recording.get() {
-                // Short tap toggles mode
-                let next_mode = match current_mode.get() {
-                    MediaRecordMode::Voice => MediaRecordMode::Video,
-                    MediaRecordMode::Video => MediaRecordMode::Voice,
-                };
-                if let Some(cb) = on_mode_change {
-                    cb.run(next_mode);
-                }
-            } else if !is_locked.get() {
-                // Released without locking: stop recording
-                if let Some(cb) = on_record_stop {
-                    cb.run(());
-                }
-            }
-        }
+        gesture.on_up(
+            is_disabled.get(),
+            is_recording.get(),
+            is_locked.get(),
+            current_mode.get(),
+            on_mode_change,
+            on_record_stop,
+        );
     };
 
     let on_pointercancel = move |_ev: ev::PointerEvent| {
-        if is_holding.get() && !is_locked.get() {
-            is_holding.set(false);
-            if let Some(cb) = on_record_cancel {
-                cb.run(());
-            }
-        }
+        gesture.on_cancel(is_locked.get(), on_record_cancel);
     };
 
     let metrics = vec![Metric::du("--op-media-record-button-size", size)];
-    let root_cls = root_class("op-media-record-button", class);
-    let root_stl = root_style(metrics, style);
+    let root_cls = Signal::derive(root_class("op-media-record-button", class));
+    let root_stl = Signal::derive(root_style(metrics, style));
 
-    let format_time = move |secs: u32| {
-        let m = secs / 60;
-        let s = secs % 60;
-        format!("{m}:{s:02}")
-    };
+    let is_active_timer = Signal::derive(move || is_recording.get() || is_locked.get());
+    let is_show_hints = Signal::derive(move || is_recording.get() && !is_locked.get());
+
+    let aria_label = Signal::derive(move || {
+        record_button_label(
+            is_locked.get(),
+            current_mode.get(),
+            &locked_label.get(),
+            &video_label.get(),
+            &voice_label.get(),
+        )
+    });
+    let icon_data = Signal::derive(move || {
+        record_button_icon(
+            is_locked.get(),
+            current_mode.get(),
+            icon_lock.get(),
+            icon_video.get(),
+            icon_voice.get(),
+        )
+    });
 
     view! {
         <div class="op-media-record-container">
-            {move || {
-                if is_recording.get() || is_locked.get() {
-                    view! {
-                        <div class="op-media-record-timer">
-                            <span class="op-media-record-timer__dot"></span>
-                            <span>{move || format_time(timer_seconds.get())}</span>
-                        </div>
-                    }.into_any()
-                } else {
-                    ().into_any()
-                }
-            }}
-
-            {move || {
-                if is_recording.get() && !is_locked.get() {
-                    view! {
-                        <span class="op-media-record-hint">{cancel_hint.get()}</span>
-                        <span class="op-media-record-hint">{lock_hint.get()}</span>
-                    }.into_any()
-                } else {
-                    ().into_any()
-                }
-            }}
-
-            <button
-                type="button"
+            <MediaRecordTimer is_active=is_active_timer seconds=timer_seconds />
+            <MediaRecordHints show=is_show_hints cancel_hint=cancel_hint lock_hint=lock_hint />
+            <MediaRecordActionButton
                 class=root_cls
                 style=root_stl
-                data-circular=move || is_circular.get().then_some("true")
-                data-mode=move || current_mode.get().as_str()
-                data-recording=move || is_recording.get().then_some("true")
-                data-locked=move || is_locked.get().then_some("true")
-                data-canceling=move || is_canceling.get().then_some("true")
-                data-disabled=move || is_disabled.get().then_some("true")
-                disabled=move || is_disabled.get()
-                on:pointerdown=on_pointerdown
-                on:pointermove=on_pointermove
-                on:pointerup=on_pointerup
-                on:pointercancel=on_pointercancel
-                aria-label=move || {
-                    if is_locked.get() {
-                        locked_label.get()
-                    } else if current_mode.get() == MediaRecordMode::Video {
-                        video_label.get()
-                    } else {
-                        voice_label.get()
-                    }
-                }
-            >
-                <span class="op-media-record-button__icon">
-                    {move || {
-                        let icon_data = if is_locked.get() {
-                            icon_lock.get()
-                        } else if current_mode.get() == MediaRecordMode::Video {
-                            icon_video.get()
-                        } else {
-                            icon_voice.get()
-                        };
-                        view! { <Icon icon=icon_data /> }
-                    }}
-                </span>
-            </button>
+                is_circular=is_circular
+                current_mode=current_mode
+                is_recording=is_recording
+                is_locked=is_locked
+                is_canceling=is_canceling
+                is_disabled=is_disabled
+                on_pointerdown=Callback::new(on_pointerdown)
+                on_pointermove=Callback::new(on_pointermove)
+                on_pointerup=Callback::new(on_pointerup)
+                on_pointercancel=Callback::new(on_pointercancel)
+                aria_label=aria_label
+                icon_data=icon_data
+            />
         </div>
     }
 }

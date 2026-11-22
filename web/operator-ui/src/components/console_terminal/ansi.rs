@@ -161,14 +161,35 @@ impl Sgr {
     }
 
     fn apply_code(&mut self, code: u16) {
+        if !self.apply_style_code(code) {
+            self.apply_color_code(code);
+        }
+    }
+
+    fn apply_style_code(&mut self, code: u16) -> bool {
         match code {
             0 => *self = Sgr::default(),
+            1..=21 => self.enable_style(code),
+            22..=29 => self.disable_style(code),
+            _ => return false,
+        }
+        true
+    }
+
+    fn enable_style(&mut self, code: u16) {
+        match code {
             1 => self.bold = true,
             2 => self.dim = true,
             3 => self.italic = true,
             4 | 21 => self.underline = true,
             7 => self.inverse = true,
             9 => self.strike = true,
+            _ => {}
+        }
+    }
+
+    fn disable_style(&mut self, code: u16) {
+        match code {
             22 => {
                 self.bold = false;
                 self.dim = false;
@@ -177,6 +198,12 @@ impl Sgr {
             24 => self.underline = false,
             27 => self.inverse = false,
             29 => self.strike = false,
+            _ => {}
+        }
+    }
+
+    fn apply_color_code(&mut self, code: u16) {
+        match code {
             30..=37 => self.fg = Some(Color::Indexed(index(code - 30))),
             39 => self.fg = None,
             40..=47 => self.bg = Some(Color::Indexed(index(code - 40))),
@@ -204,6 +231,48 @@ fn extended_color(rest: &[u16]) -> (Option<Color>, usize) {
     }
 }
 
+fn handle_escape(chars: &mut std::iter::Peekable<std::str::Chars>, sgr: &mut Sgr) {
+    match chars.next() {
+        Some('[') => handle_csi(chars, sgr),
+        Some(']') => skip_osc(chars),
+        Some(i) if ('\u{20}'..='\u{2f}').contains(&i) => skip_nf(chars),
+        _ => {}
+    }
+}
+
+fn handle_csi(chars: &mut std::iter::Peekable<std::str::Chars>, sgr: &mut Sgr) {
+    let mut params = String::new();
+    for p in chars.by_ref() {
+        if ('\u{40}'..='\u{7e}').contains(&p) {
+            if p == 'm' {
+                sgr.apply(&params);
+            }
+            break;
+        }
+        params.push(p);
+    }
+}
+
+fn skip_osc(chars: &mut std::iter::Peekable<std::str::Chars>) {
+    while let Some(p) = chars.next() {
+        if p == BEL {
+            break;
+        }
+        if p == ESC {
+            chars.next_if_eq(&'\\');
+            break;
+        }
+    }
+}
+
+fn skip_nf(chars: &mut std::iter::Peekable<std::str::Chars>) {
+    for p in chars.by_ref() {
+        if !('\u{20}'..='\u{2f}').contains(&p) {
+            break;
+        }
+    }
+}
+
 /// Parses log entries into styled lines; an entry with `\n` becomes several lines.
 pub(crate) fn parse_lines<S: AsRef<str>>(entries: &[S]) -> Vec<StyledLine> {
     let mut sgr = Sgr::default();
@@ -217,41 +286,7 @@ pub(crate) fn parse_lines<S: AsRef<str>>(entries: &[S]) -> Vec<StyledLine> {
                 ESC => {
                     push_text(&mut line, &text, &sgr.style());
                     text.clear();
-                    match chars.next() {
-                        Some('[') => {
-                            let mut params = String::new();
-                            for p in chars.by_ref() {
-                                if ('\u{40}'..='\u{7e}').contains(&p) {
-                                    if p == 'm' {
-                                        sgr.apply(&params);
-                                    }
-                                    break;
-                                }
-                                params.push(p);
-                            }
-                        }
-                        Some(']') => {
-                            // OSC: ends with BEL or ESC \.
-                            while let Some(p) = chars.next() {
-                                if p == BEL {
-                                    break;
-                                }
-                                if p == ESC {
-                                    chars.next_if_eq(&'\\');
-                                    break;
-                                }
-                            }
-                        }
-                        // nF escapes such as `ESC ( B`: intermediates, then one final byte.
-                        Some(i) if ('\u{20}'..='\u{2f}').contains(&i) => {
-                            for p in chars.by_ref() {
-                                if !('\u{20}'..='\u{2f}').contains(&p) {
-                                    break;
-                                }
-                            }
-                        }
-                        _ => {}
-                    }
+                    handle_escape(&mut chars, &mut sgr);
                 }
                 '\n' => {
                     push_text(&mut line, &text, &sgr.style());

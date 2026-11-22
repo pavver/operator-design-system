@@ -335,7 +335,7 @@ pub fn GalleryViewer(
                             }
                         } else {
                             view! {
-                                <div style="color:white;">{move || resolved_empty.get()}</div>
+                                <div style="color:var(--op-on-media);">{move || resolved_empty.get()}</div>
                             }.into_any()
                         }
                     }}

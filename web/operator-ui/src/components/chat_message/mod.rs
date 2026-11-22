@@ -4,7 +4,11 @@ pub mod chat_status_badge;
 pub mod content_views;
 pub mod delivery_status;
 pub mod emoji_text;
+#[cfg(test)]
+mod emoji_text_tests;
 pub mod markdown;
+#[cfg(test)]
+mod markdown_tests;
 pub mod media_views;
 pub mod reactions;
 pub mod ttl_indicator;

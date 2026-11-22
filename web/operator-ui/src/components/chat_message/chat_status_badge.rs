@@ -2,10 +2,9 @@
 
 use crate::components::chat_message::delivery_status::DeliveryStatusView;
 use crate::components::chat_message::types::DeliveryStatus;
-use crate::components::primitives::Icon;
+use crate::components::primitives::ProgressIndicator;
 use crate::core::{root_class, root_style};
 use leptos::prelude::*;
-use operator_ui_tokens::icons;
 
 /// High-level conversation thread status.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -83,9 +82,12 @@ pub fn ChatStatusBadge(
                     <DeliveryStatusView status=st />
                 }.into_any(),
                 ChatStatus::Syncing => view! {
-                    <span class="op-chat-status-syncing" role="status" aria-label="Syncing">
-                        <Icon icon=icons::REFRESH size=3.75 />
-                    </span>
+                    <ProgressIndicator
+                        size=3.75
+                        stroke=0.375
+                        color="var(--op-chat-accent, var(--op-accent))"
+                        label="Syncing"
+                    />
                 }.into_any(),
                 ChatStatus::Pinned => view! {
                     <span class="op-chat-status-pinned" role="status" aria-label="Pinned">

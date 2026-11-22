@@ -8,8 +8,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, icons, motion};
 
-mod visuals;
-use visuals::{pending as pending_indicator, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const ICON_SIZE: &str = "var(--op-stepper-icon-size, var(--op-dim-icon-small))";
 const SPINNER_SIZE: &str = "var(--op-stepper-spinner-size, calc(var(--op-du) * 3))";
@@ -176,7 +175,7 @@ pub fn Stepper(
                 >
                     {move || {
                         if show_spinner.get() {
-                            pending_indicator(SPINNER_SIZE, loading_label)
+                            pending_spinner("stepper", SPINNER_SIZE, loading_label)
                         } else if mine() && current.get() == ControlState::Success {
                             symbol(success_icon, ICON_SIZE, Some(success_label))
                         } else if mine() && current.get() == ControlState::Error {

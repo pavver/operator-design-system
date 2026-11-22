@@ -141,8 +141,8 @@
   font-size: calc(var(--op-tu) * 20);
   cursor: pointer;
   user-select: none;
-  transition: transform var(--op-motion-expressive, 100ms ease),
-              background var(--op-motion-expressive, 100ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-emoji-picker__cell:hover {

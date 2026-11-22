@@ -20,7 +20,7 @@
   border: calc(var(--op-du) * 0.25) solid var(--op-media-keyboard-border);
   box-sizing: border-box;
   overflow: hidden;
-  box-shadow: 0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgba(0, 0, 0, 0.35);
+  box-shadow: 0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) var(--op-shadow);
   z-index: 9999;
 }
 

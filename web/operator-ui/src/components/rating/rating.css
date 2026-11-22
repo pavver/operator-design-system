@@ -40,8 +40,8 @@
   width: 70%;
   height: 70%;
   transition:
-    color var(--op-motion-state-color, 150ms) var(--op-ease-standard),
-    opacity var(--op-motion-state-color, 150ms) var(--op-ease-standard);
+    color var(--op-motion-state-color) var(--op-ease-standard),
+    opacity var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-rating-item[data-selected] .op-icon {
@@ -77,16 +77,7 @@
   width: 45%;
   height: 45%;
   color: var(--op-rating-pending, var(--op-pending));
-  animation: op-spin var(--op-motion-spinner-lap, 900ms) linear infinite;
   pointer-events: none;
-}
-
-.op-rating-spinner circle {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: var(--op-dim-border-thick, calc(var(--op-du) * 0.5));
-  stroke-linecap: round;
-  stroke-dasharray: 75 25;
 }
 
 /* Result pulse on the chosen star */
@@ -99,7 +90,7 @@
   pointer-events: none;
   border: calc(var(--op-dim-border, calc(var(--op-du) * 0.25)) * 2) solid var(--op-rating-status, transparent);
   opacity: 0;
-  transition: opacity var(--op-motion-result-fade, 500ms) var(--op-ease-smooth);
+  transition: opacity var(--op-motion-result-fade) var(--op-ease-smooth);
 }
 
 .op-rating-item[data-result="success"] {
@@ -114,7 +105,7 @@
 .op-rating-item[data-state="error"]::after {
   opacity: 1;
   transition: none;
-  animation: op-rating-pulse var(--op-motion-result-pulse-half, 400ms) var(--op-ease-standard) infinite alternate;
+  animation: op-rating-pulse var(--op-motion-result-pulse-half) var(--op-ease-standard) infinite alternate;
 }
 
 .op-rating-item[data-fading]::after {
@@ -132,7 +123,7 @@
 }
 
 .op-rating-item[data-fading] .op-icon {
-  transition: color var(--op-motion-result-fade, 500ms) var(--op-ease-smooth);
+  transition: color var(--op-motion-result-fade) var(--op-ease-smooth);
 }
 
 @keyframes op-rating-pulse {
@@ -142,12 +133,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .op-rating-spinner {
-    animation-duration: 2s !important;
+    animation-duration: var(--op-motion-pending-lap) !important;
     animation-iteration-count: infinite !important;
   }
   .op-rating-item[data-state="success"]::after,
   .op-rating-item[data-state="error"]::after {
-    animation-duration: 1ms !important;
+    animation-duration: 0s !important;
     animation-iteration-count: 1 !important;
   }
 }

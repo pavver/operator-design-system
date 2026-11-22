@@ -110,6 +110,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--op-launcher-tile-pending-bg, rgba(0, 0, 0, 0.4));
+    background: var(--op-launcher-tile-pending-bg, var(--op-overlay-scrim));
     pointer-events: none;
 }

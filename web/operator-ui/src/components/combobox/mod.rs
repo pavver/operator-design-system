@@ -1,5 +1,6 @@
 //! Text input with suggestions: Combobox, and the pointer-anchored ComboboxPopup.
 
+mod input;
 mod list;
 mod options;
 mod popup;
@@ -18,6 +19,7 @@ use crate::components::primitives::Icon;
 use crate::core::{
     ControlState, Metric, ScopedSlot, Slot, field_state, root_class, root_style, ui_icon, ui_text,
 };
+use input::ComboboxInput;
 use leptos::prelude::*;
 pub(crate) use list::ComboList;
 use operator_ui_tokens::{Icon as IconData, icons};
@@ -185,17 +187,8 @@ pub fn Combobox(
         }
         filtering.set(false);
         let current = selected.get_untracked();
-        let q = query.get_untracked().to_lowercase();
-        let pos = options.with_untracked(|o| {
-            o.iter()
-                .position(|s| !current.is_empty() && s.value == current)
-                .or_else(|| {
-                    (!q.is_empty())
-                        .then(|| o.iter().position(|s| s.matches(&q)))
-                        .flatten()
-                })
-                .unwrap_or(0)
-        });
+        let q = query.get_untracked();
+        let pos = options.with_untracked(|o| find_initial_active(o, &current, &q));
         active.set(pos);
         open.set(true);
         reveal_active(true);
@@ -221,23 +214,12 @@ pub fn Combobox(
         open.set(false);
         filtering.set(false);
         let q = query.get_untracked();
-        if q == shown() {
-            return;
-        }
-        if let Some(o) = options.with_untracked(|o| find_exact(o, &q)) {
-            commit_value(o.value);
-            return;
-        }
-        let parsed = if !custom || q.is_empty() {
-            None
-        } else if let Some(parse) = parse_custom {
-            parse.run(q)
-        } else {
-            Some(q)
-        };
-        match parsed {
-            Some(v) => commit_value(v),
-            None => query.set(shown()),
+        let sh = shown();
+        let action = options.with_untracked(|o| resolve_settle(o, &q, &sh, custom, parse_custom));
+        match action {
+            SettleAction::Unchanged => {}
+            SettleAction::Commit(v) => commit_value(v),
+            SettleAction::ResetToShown => query.set(sh),
         }
     };
     let empty = Signal::derive(move || {
@@ -263,69 +245,23 @@ pub fn Combobox(
                     prepend=prepend append=append before=before after=after label_slot=label_slot hint_slot=hint_slot
                     trailing=true pending_run=true
                 >
-                    <input
-                        class="op-field-input"
-                        role="combobox"
-                        aria-label=move || accessible_name.get()
-                        aria-expanded=move || open.get().to_string()
-                        aria-autocomplete="list"
-                        aria-invalid=move || error.get().is_some().then_some("true")
-                        placeholder=move || placeholder.get()
-                        prop:value=move || query.get()
-                        disabled=move || current.get() == ControlState::Disabled
-                        readonly=move || current.get() == ControlState::Pending
-                        on:input=move |ev| {
-                            query.set(event_target_value(&ev));
-                            filtering.set(true);
-                            active.set(0);
-                            open.set(true);
-                            reveal_active(false);
-                        }
-                        on:focus=move |_| {
-                            focused.set(true);
-                            open_list();
-                        }
-                        on:click=move |_| open_list()
-                        on:blur=move |_| {
-                            focused.set(false);
-                            settle();
-                        }
-                        on:keydown=move |ev| {
-                            if blocked() { return; }
-                            let n = rows.with_untracked(|r| option_count(r));
-                            match ev.key().as_str() {
-                                "ArrowDown" => {
-                                    ev.prevent_default();
-                                    if !open.get_untracked() {
-                                        open_list();
-                                    } else {
-                                        active.update(|a| *a = step(*a, n, 1));
-                                        reveal_active(false);
-                                    }
-                                }
-                                "ArrowUp" => {
-                                    ev.prevent_default();
-                                    if open.get_untracked() {
-                                        active.update(|a| *a = step(*a, n, -1));
-                                        reveal_active(false);
-                                    }
-                                }
-                                "Enter" => {
-                                    ev.prevent_default();
-                                    let option = rows.with_untracked(|r| option_at(r, active.get_untracked()));
-                                    match option {
-                                        Some(o) if open.get_untracked() => commit_value(o.value),
-                                        _ => settle(),
-                                    }
-                                }
-                                "Escape" => {
-                                    open.set(false);
-                                    filtering.set(false);
-                                    query.set(shown());
-                                }
-                                _ => {}
-                            }
-                        }
+                    <ComboboxInput
+                        query=query
+                        open=open
+                        active=active
+                        filtering=filtering
+                        focused=focused
+                        current=current
+                        error=error
+                        placeholder=placeholder
+                        accessible_name=accessible_name
+                        rows=rows
+                        on_open_list=Callback::new(move |()| open_list())
+                        on_reveal_active=Callback::new(reveal_active)
+                        on_commit_value=Callback::new(commit_value)
+                        on_settle=Callback::new(move |()| settle())
+                        shown_text=Callback::new(move |()| shown())
+                        blocked=Signal::derive(blocked)
                     />
                 </Field>
                 <Popover node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox" restore_focus=false>
@@ -344,6 +280,51 @@ pub fn Combobox(
                 </Popover>
             </div>
         </div>
+    }
+}
+
+fn find_initial_active(options: &[ComboOption], current: &str, query: &str) -> usize {
+    let q = query.to_lowercase();
+    options
+        .iter()
+        .position(|s| !current.is_empty() && s.value == current)
+        .or_else(|| {
+            (!q.is_empty())
+                .then(|| options.iter().position(|s| s.matches(&q)))
+                .flatten()
+        })
+        .unwrap_or(0)
+}
+
+enum SettleAction {
+    Unchanged,
+    Commit(String),
+    ResetToShown,
+}
+
+fn resolve_settle(
+    options: &[ComboOption],
+    query: &str,
+    shown: &str,
+    custom: bool,
+    parse_custom: Option<Callback<String, Option<String>>>,
+) -> SettleAction {
+    if query == shown {
+        return SettleAction::Unchanged;
+    }
+    if let Some(o) = find_exact(options, query) {
+        return SettleAction::Commit(o.value);
+    }
+    let parsed = if !custom || query.is_empty() {
+        None
+    } else if let Some(parse) = parse_custom {
+        parse.run(query.to_string())
+    } else {
+        Some(query.to_string())
+    };
+    match parsed {
+        Some(v) => SettleAction::Commit(v),
+        None => SettleAction::ResetToShown,
     }
 }
 

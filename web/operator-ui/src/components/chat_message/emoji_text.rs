@@ -24,6 +24,52 @@ pub fn is_emoji_char(c: char) -> bool {
     )
 }
 
+fn parse_shortcode(chars: &[char], i: usize) -> Option<(String, usize)> {
+    if chars[i] != ':' {
+        return None;
+    }
+    let len = chars.len();
+    let mut j = i + 1;
+    while j < len && chars[j] != ':' && !chars[j].is_whitespace() {
+        j += 1;
+    }
+    if j < len && chars[j] == ':' && j > i + 1 {
+        let code: String = chars[i..=j].iter().collect();
+        Some((code, j + 1))
+    } else {
+        None
+    }
+}
+
+fn parse_unicode_emoji(chars: &[char], i: usize) -> (String, usize) {
+    let start = i;
+    let len = chars.len();
+    let mut j = i + 1;
+    while j < len {
+        let c = chars[j];
+        if c == '\u{200D}'
+            || c == '\u{FE0F}'
+            || ('\u{1F3FB}'..='\u{1F3FF}').contains(&c)
+            || is_emoji_char(c)
+        {
+            j += 1;
+        } else {
+            break;
+        }
+    }
+    (chars[start..j].iter().collect(), j)
+}
+
+fn parse_single_emoji(chars: &[char], i: usize) -> Option<(String, usize)> {
+    if chars[i] == ':' {
+        parse_shortcode(chars, i)
+    } else if is_emoji_char(chars[i]) {
+        Some(parse_unicode_emoji(chars, i))
+    } else {
+        None
+    }
+}
+
 /// Tests whether text consists exclusively of 1 to 3 isolated emojis.
 pub fn get_isolated_emojis(text: &str) -> Option<Vec<String>> {
     let trimmed = text.trim();
@@ -31,61 +77,22 @@ pub fn get_isolated_emojis(text: &str) -> Option<Vec<String>> {
         return None;
     }
 
-    let mut emojis = Vec::new();
     let chars: Vec<char> = trimmed.chars().collect();
-    let len = chars.len();
+    let mut emojis = Vec::new();
     let mut i = 0;
 
-    while i < len {
+    while i < chars.len() {
         if chars[i].is_whitespace() {
             i += 1;
             continue;
         }
 
-        // Custom shortcode emoji like :fire: or :star:
-        if chars[i] == ':' {
-            let mut j = i + 1;
-            while j < len && chars[j] != ':' && !chars[j].is_whitespace() {
-                j += 1;
-            }
-            if j < len && chars[j] == ':' && j > i + 1 {
-                let code: String = chars[i..=j].iter().collect();
-                emojis.push(code);
-                i = j + 1;
-                if emojis.len() > 3 {
-                    return None;
-                }
-                continue;
-            } else {
-                return None;
-            }
-        }
-
-        // Unicode emoji (supports ZWJ and skin tone modifiers)
-        if is_emoji_char(chars[i]) {
-            let start = i;
-            i += 1;
-            while i < len {
-                let c = chars[i];
-                // Zero-width joiner, variation selector 16, or skin tone modifier
-                if c == '\u{200D}'
-                    || c == '\u{FE0F}'
-                    || ('\u{1F3FB}'..='\u{1F3FF}').contains(&c)
-                    || is_emoji_char(c)
-                {
-                    i += 1;
-                } else {
-                    break;
-                }
-            }
-            let emoji_str: String = chars[start..i].iter().collect();
-            emojis.push(emoji_str);
-            if emojis.len() > 3 {
-                return None;
-            }
-        } else {
+        let (emoji, next_i) = parse_single_emoji(&chars, i)?;
+        emojis.push(emoji);
+        if emojis.len() > 3 {
             return None;
         }
+        i = next_i;
     }
 
     if (1..=3).contains(&emojis.len()) {
@@ -104,6 +111,45 @@ pub enum EmojiToken {
     CustomEmoji { url: String, label: String },
 }
 
+fn match_custom_emoji(
+    chars: &[char],
+    i: usize,
+    map: &CustomEmojiMap,
+) -> Option<(EmojiToken, usize)> {
+    if chars[i] == ':' {
+        let (code, end) = parse_shortcode(chars, i)?;
+        let name = &code[1..code.len() - 1];
+        if let Some(url) = map.get(name) {
+            return Some((
+                EmojiToken::CustomEmoji {
+                    url: url.clone(),
+                    label: code,
+                },
+                end,
+            ));
+        }
+    } else if is_emoji_char(chars[i]) {
+        let start = i;
+        let mut k = i + 1;
+        while k < chars.len()
+            && (chars[k] == '\u{FE0F}' || ('\u{1F3FB}'..='\u{1F3FF}').contains(&chars[k]))
+        {
+            k += 1;
+        }
+        let glyph: String = chars[start..k].iter().collect();
+        if let Some(url) = map.get(&glyph) {
+            return Some((
+                EmojiToken::CustomEmoji {
+                    url: url.clone(),
+                    label: glyph,
+                },
+                k,
+            ));
+        }
+    }
+    None
+}
+
 /// Splits text into normal text and custom emoji tokens using the provided map.
 pub fn parse_emoji_tokens(text: &str, map: Option<&CustomEmojiMap>) -> Vec<EmojiToken> {
     let Some(map) = map else {
@@ -112,54 +158,17 @@ pub fn parse_emoji_tokens(text: &str, map: Option<&CustomEmojiMap>) -> Vec<Emoji
 
     let mut tokens = Vec::new();
     let chars: Vec<char> = text.chars().collect();
-    let len = chars.len();
-    let mut i = 0;
     let mut plain_buf = String::new();
+    let mut i = 0;
 
-    while i < len {
-        // Shortcode matching: :code:
-        if chars[i] == ':' {
-            let mut j = i + 1;
-            while j < len && chars[j] != ':' && !chars[j].is_whitespace() {
-                j += 1;
+    while i < chars.len() {
+        if let Some((tok, next_i)) = match_custom_emoji(&chars, i, map) {
+            if !plain_buf.is_empty() {
+                tokens.push(EmojiToken::Text(std::mem::take(&mut plain_buf)));
             }
-            if j < len && chars[j] == ':' {
-                let shortcode: String = chars[i + 1..j].iter().collect();
-                if let Some(url) = map.get(&shortcode) {
-                    if !plain_buf.is_empty() {
-                        tokens.push(EmojiToken::Text(std::mem::take(&mut plain_buf)));
-                    }
-                    tokens.push(EmojiToken::CustomEmoji {
-                        url: url.clone(),
-                        label: format!(":{shortcode}:"),
-                    });
-                    i = j + 1;
-                    continue;
-                }
-            }
-        }
-
-        // Unicode emoji matching directly in map
-        if is_emoji_char(chars[i]) {
-            let start = i;
-            let mut k = i + 1;
-            while k < len
-                && (chars[k] == '\u{FE0F}' || ('\u{1F3FB}'..='\u{1F3FF}').contains(&chars[k]))
-            {
-                k += 1;
-            }
-            let glyph: String = chars[start..k].iter().collect();
-            if let Some(url) = map.get(&glyph) {
-                if !plain_buf.is_empty() {
-                    tokens.push(EmojiToken::Text(std::mem::take(&mut plain_buf)));
-                }
-                tokens.push(EmojiToken::CustomEmoji {
-                    url: url.clone(),
-                    label: glyph,
-                });
-                i = k;
-                continue;
-            }
+            tokens.push(tok);
+            i = next_i;
+            continue;
         }
 
         plain_buf.push(chars[i]);

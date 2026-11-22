@@ -133,9 +133,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--op-overlay-scrim);
   padding: calc(var(--op-du) * 0.5) calc(var(--op-du) * 1);
-  color: #fff;
+  color: var(--op-on-media);
   font-size: calc(var(--op-tu) * 9);
   white-space: nowrap;
   overflow: hidden;

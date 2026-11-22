@@ -8,7 +8,7 @@
   background-color: var(--op-tooltip-background, var(--op-surface-alt));
   box-shadow:
     inset 0 0 0 var(--op-dim-border) var(--op-tooltip-border, var(--op-border-strong)),
-    0 var(--op-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-tooltip-shadow, rgb(0 0 0 / 35%));
+    0 var(--op-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-tooltip-shadow, var(--op-shadow));
   color: var(--op-tooltip-text, var(--op-text-primary));
   white-space: normal;
   overflow-wrap: anywhere;

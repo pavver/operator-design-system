@@ -37,10 +37,10 @@
   cursor: pointer;
   position: relative;
   outline: none;
-  transition: transform var(--op-motion-expressive, 150ms ease),
-              background var(--op-motion-expressive, 150ms ease),
-              border-color var(--op-motion-expressive, 150ms ease),
-              color var(--op-motion-expressive, 150ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard),
+              border-color var(--op-motion-state-color) var(--op-ease-standard),
+              color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-ptt-button[data-circular="true"] {

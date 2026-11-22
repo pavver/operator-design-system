@@ -2,6 +2,7 @@
 
 mod action;
 pub mod custom;
+pub mod glyph;
 #[cfg(feature = "observers")]
 pub mod observers;
 pub mod overlay;
@@ -15,11 +16,11 @@ pub mod theme;
 mod units;
 mod visual;
 
+#[cfg(any(feature = "checkbox", feature = "switch"))]
+pub(crate) use action::ToggleControl;
 #[cfg(any(feature = "code-block", feature = "property-list"))]
 pub(crate) use action::copy_action;
 pub use action::{ActionResult, AsyncAction, JobToken, copy_text, sleep_ms};
-#[cfg(any(feature = "checkbox", feature = "switch"))]
-pub(crate) use action::{mirrored, run_toggle};
 pub use custom::*;
 #[cfg(feature = "observers")]
 pub use observers::*;

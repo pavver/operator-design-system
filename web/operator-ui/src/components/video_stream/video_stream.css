@@ -13,7 +13,7 @@
     width: 100%;
     max-width: var(--op-video-stream-max-width, 100%);
     max-height: var(--op-video-stream-max-height, 100%);
-    background: var(--op-video-stream-bg, #000000);
+    background: var(--op-video-stream-bg, var(--op-surface-alt));
     border: var(--op-video-stream-border-width, var(--op-border-width)) solid var(--op-video-stream-border, var(--op-border));
     border-radius: 0;
     overflow: hidden;
@@ -43,20 +43,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.75);
+    background: var(--op-overlay-scrim);
     color: var(--op-text-primary);
     padding: calc(var(--op-du) * 4);
     text-align: center;
     pointer-events: auto;
     z-index: 2;
-}
-
-.op-video-stream-spinner {
-    width: calc(var(--op-du) * 8);
-    height: calc(var(--op-du) * 8);
-    animation: op-spin 1s linear infinite;
-    color: var(--op-accent);
-    margin-bottom: calc(var(--op-du) * 2);
 }
 
 .op-video-stream-status-text {
@@ -94,7 +86,7 @@
     opacity: 0;
     transition: opacity var(--op-motion-state-color) var(--op-ease-standard);
     z-index: 3;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.7) 100%);
+    background: linear-gradient(180deg, var(--op-overlay-scrim) 0%, transparent 25%, transparent 75%, var(--op-overlay-scrim) 100%);
 }
 
 .op-video-stream:hover .op-video-stream-chrome,
@@ -116,7 +108,7 @@
 .op-video-stream-title {
     font-size: calc(var(--op-tu) * 13);
     font-weight: 600;
-    color: #ffffff;
+    color: var(--op-on-media);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -127,8 +119,8 @@
     align-items: center;
     gap: calc(var(--op-du) * 1.5);
     padding: calc(var(--op-du) * 0.5) calc(var(--op-du) * 1.5);
-    background: rgba(220, 38, 38, 0.85);
-    color: #ffffff;
+    background: color-mix(in srgb, var(--op-status-live) 85%, transparent);
+    color: var(--op-on-media);
     font-size: calc(var(--op-tu) * 10);
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -140,7 +132,7 @@
     width: calc(var(--op-du) * 1.5);
     height: calc(var(--op-du) * 1.5);
     border-radius: 50%;
-    background: #ffffff;
+    background: var(--op-on-media);
     animation: op-video-stream-live-pulse var(--op-motion-spinner-lap) var(--op-ease-standard) infinite alternate;
 }
 

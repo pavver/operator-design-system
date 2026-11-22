@@ -35,13 +35,16 @@ fn find_uses_aliases_and_ignores_case() {
 
 #[test]
 fn rust_tokens() {
-    let code = "#[derive(Debug)]\npub fn main() -> Result<u8, E> {\n    let s = r#\"raw \"q\"\"#; // note\n    let c = '\\n'; let l: &'a str = \"x\";\n    println!(\"{}\", MAX_LEN + 0x1F + 1.5e-3);\n}";
+    let code = "#![no_std]\n#[derive(Debug)]\npub fn main() -> Result<u8, E> {\n    let s = r#\"raw \"q\"\"#; // note\n    let b = b\"byte\"; let bc = b'k';\n    let c = '\\n'; let l: &'a str = \"x\";\n    println!(\"{}\", MAX_LEN + 0x1F + 1.5e-3);\n}";
+    assert_eq!(kind_of("rust", code, "#![no_std]"), "op-syn-meta");
     assert_eq!(kind_of("rust", code, "#[derive(Debug)]"), "op-syn-meta");
     assert_eq!(kind_of("rust", code, "pub"), "op-syn-keyword");
     assert_eq!(kind_of("rust", code, "main"), "op-syn-function");
     assert_eq!(kind_of("rust", code, "Result"), "op-syn-type");
     assert_eq!(kind_of("rust", code, "u8"), "op-syn-type");
     assert_eq!(kind_of("rust", code, "r#\"raw \"q\"\"#"), "op-syn-string");
+    assert_eq!(kind_of("rust", code, "b\"byte\""), "op-syn-string");
+    assert_eq!(kind_of("rust", code, "b'k'"), "op-syn-string");
     assert_eq!(kind_of("rust", code, "// note"), "op-syn-comment");
     assert_eq!(kind_of("rust", code, "'\\n'"), "op-syn-string");
     assert_eq!(kind_of("rust", code, "'a"), "op-syn-meta");

@@ -8,8 +8,7 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::Icon as IconData;
 
-mod visuals;
-use visuals::{pending, symbol};
+use crate::core::glyph::{pending_spinner, symbol};
 
 const ICON_SIZE: &str = "var(--op-segmented-control-icon-size, var(--op-dim-icon-small))";
 
@@ -183,7 +182,7 @@ pub fn SegmentedControl(
                 >
                     {move || {
                         if show_spinner.get() {
-                            pending(ICON_SIZE, loading_label)
+                            pending_spinner("segmented-control", ICON_SIZE, loading_label)
                         } else {
                             let item = item.clone();
                             if let Some(slot) = option { return slot.run(item); }

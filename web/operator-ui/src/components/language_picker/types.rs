@@ -54,23 +54,42 @@ impl LanguageOption {
 
 /// Built-in languages with standard codes, native and English names, and flags.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[repr(usize)]
 pub enum Language {
-    En,
-    Uk,
-    De,
-    Fr,
-    Es,
-    It,
-    Pl,
-    Pt,
-    Nl,
-    Cs,
-    Sv,
-    Ja,
-    Zh,
-    Ko,
-    Tr,
+    En = 0,
+    Uk = 1,
+    De = 2,
+    Fr = 3,
+    Es = 4,
+    It = 5,
+    Pl = 6,
+    Pt = 7,
+    Nl = 8,
+    Cs = 9,
+    Sv = 10,
+    Ja = 11,
+    Zh = 12,
+    Ko = 13,
+    Tr = 14,
 }
+
+const LANGUAGE_TABLE: &[(Language, &str, &str, &str, &str)] = &[
+    (Language::En, "en", "English", "English", "GB"),
+    (Language::Uk, "uk", "Українська", "Ukrainian", "UA"),
+    (Language::De, "de", "Deutsch", "German", "DE"),
+    (Language::Fr, "fr", "Français", "French", "FR"),
+    (Language::Es, "es", "Español", "Spanish", "ES"),
+    (Language::It, "it", "Italiano", "Italian", "IT"),
+    (Language::Pl, "pl", "Polski", "Polish", "PL"),
+    (Language::Pt, "pt", "Português", "Portuguese", "PT"),
+    (Language::Nl, "nl", "Nederlands", "Dutch", "NL"),
+    (Language::Cs, "cs", "Čeština", "Czech", "CZ"),
+    (Language::Sv, "sv", "Svenska", "Swedish", "SE"),
+    (Language::Ja, "ja", "日本語", "Japanese", "JP"),
+    (Language::Zh, "zh", "中文", "Chinese", "CN"),
+    (Language::Ko, "ko", "한국어", "Korean", "KR"),
+    (Language::Tr, "tr", "Türkçe", "Turkish", "TR"),
+];
 
 impl Language {
     /// All built-in languages in standard order.
@@ -94,95 +113,31 @@ impl Language {
 
     /// Returns the BCP 47 language code.
     pub const fn code(&self) -> &'static str {
-        match self {
-            Self::En => "en",
-            Self::Uk => "uk",
-            Self::De => "de",
-            Self::Fr => "fr",
-            Self::Es => "es",
-            Self::It => "it",
-            Self::Pl => "pl",
-            Self::Pt => "pt",
-            Self::Nl => "nl",
-            Self::Cs => "cs",
-            Self::Sv => "sv",
-            Self::Ja => "ja",
-            Self::Zh => "zh",
-            Self::Ko => "ko",
-            Self::Tr => "tr",
-        }
+        LANGUAGE_TABLE[*self as usize].1
     }
 
     /// Returns the native name of the language.
     pub const fn native(&self) -> &'static str {
-        match self {
-            Self::En => "English",
-            Self::Uk => "Українська",
-            Self::De => "Deutsch",
-            Self::Fr => "Français",
-            Self::Es => "Español",
-            Self::It => "Italiano",
-            Self::Pl => "Polski",
-            Self::Pt => "Português",
-            Self::Nl => "Nederlands",
-            Self::Cs => "Čeština",
-            Self::Sv => "Svenska",
-            Self::Ja => "日本語",
-            Self::Zh => "中文",
-            Self::Ko => "한국어",
-            Self::Tr => "Türkçe",
-        }
+        LANGUAGE_TABLE[*self as usize].2
     }
 
     /// Returns the English name of the language.
     pub const fn english(&self) -> &'static str {
-        match self {
-            Self::En => "English",
-            Self::Uk => "Ukrainian",
-            Self::De => "German",
-            Self::Fr => "French",
-            Self::Es => "Spanish",
-            Self::It => "Italian",
-            Self::Pl => "Polish",
-            Self::Pt => "Portuguese",
-            Self::Nl => "Dutch",
-            Self::Cs => "Czech",
-            Self::Sv => "Swedish",
-            Self::Ja => "Japanese",
-            Self::Zh => "Chinese",
-            Self::Ko => "Korean",
-            Self::Tr => "Turkish",
-        }
+        LANGUAGE_TABLE[*self as usize].3
     }
 
     /// Returns the default flag for this language.
     pub const fn flag(&self) -> Option<Flag> {
-        match self {
-            Self::En => Some(Flag::Builtin("GB")),
-            Self::Uk => Some(Flag::Builtin("UA")),
-            Self::De => Some(Flag::Builtin("DE")),
-            Self::Fr => Some(Flag::Builtin("FR")),
-            Self::Es => Some(Flag::Builtin("ES")),
-            Self::It => Some(Flag::Builtin("IT")),
-            Self::Pl => Some(Flag::Builtin("PL")),
-            Self::Pt => Some(Flag::Builtin("PT")),
-            Self::Nl => Some(Flag::Builtin("NL")),
-            Self::Cs => Some(Flag::Builtin("CZ")),
-            Self::Sv => Some(Flag::Builtin("SE")),
-            Self::Ja => Some(Flag::Builtin("JP")),
-            Self::Zh => Some(Flag::Builtin("CN")),
-            Self::Ko => Some(Flag::Builtin("KR")),
-            Self::Tr => Some(Flag::Builtin("TR")),
-        }
+        Some(Flag::Builtin(LANGUAGE_TABLE[*self as usize].4))
     }
 
     /// Matches a BCP 47 code case-insensitively to a built-in Language.
     pub fn from_code(code: &str) -> Option<Self> {
         let trimmed = code.trim();
-        Self::ALL
+        LANGUAGE_TABLE
             .iter()
-            .find(|&&lang| lang.code().eq_ignore_ascii_case(trimmed))
-            .copied()
+            .find(|(_, c, _, _, _)| c.eq_ignore_ascii_case(trimmed))
+            .map(|(lang, _, _, _, _)| *lang)
     }
 }
 

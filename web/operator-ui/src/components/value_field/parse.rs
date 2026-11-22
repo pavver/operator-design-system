@@ -102,19 +102,27 @@ pub fn parse_duration(text: &str, default_unit_ms: i64) -> Option<i64> {
     Some(if negative { -ms } else { ms })
 }
 
+fn validate_clock_parts(h: i64, m: i64, s: f64, max_m: i64) -> Option<(i64, i64, f64)> {
+    if h >= 0 && (0..=max_m).contains(&m) && (0.0..60.0).contains(&s) {
+        Some((h, m, s))
+    } else {
+        None
+    }
+}
+
+fn parse_clock_components(parts: &[&str]) -> Option<(i64, i64, f64)> {
+    match parts {
+        [m, s] => validate_clock_parts(0, (*m).parse().ok()?, parse_number(s)?, i64::MAX),
+        [h, m, s] => {
+            validate_clock_parts((*h).parse().ok()?, (*m).parse().ok()?, parse_number(s)?, 59)
+        }
+        _ => None,
+    }
+}
+
 fn parse_clock(body: &str) -> Option<i64> {
     let parts: Vec<&str> = body.split(':').map(str::trim).collect();
-    let (h, m, s) = match parts.as_slice() {
-        [m, s] => ("0", *m, *s),
-        [h, m, s] => (*h, *m, *s),
-        _ => return None,
-    };
-    let h: i64 = h.parse().ok()?;
-    let m: i64 = m.parse().ok()?;
-    let s = parse_number(s)?;
-    if h < 0 || m < 0 || s < 0.0 || (parts.len() == 3 && m >= 60) || s >= 60.0 {
-        return None;
-    }
+    let (h, m, s) = parse_clock_components(&parts)?;
     let whole = h
         .checked_mul(MS_HOUR)?
         .checked_add(m.checked_mul(MS_MINUTE)?)?;

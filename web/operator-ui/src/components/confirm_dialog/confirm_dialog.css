@@ -16,7 +16,7 @@
   --op-dialog-text: var(--op-confirm-dialog-title-text, var(--op-text-primary));
   --op-dialog-background: var(--op-confirm-dialog-background, var(--op-surface));
   --op-dialog-divider: var(--op-confirm-dialog-divider, var(--op-divider));
-  --op-dialog-scrim: var(--op-confirm-dialog-scrim, rgb(0 0 0 / 55%));
+  --op-dialog-scrim: var(--op-confirm-dialog-scrim, var(--op-overlay-scrim));
   --op-dialog-max-height: var(--op-confirm-dialog-max-height, calc(100vh - var(--op-confirm-dialog-padding, var(--op-dim-margin-screen)) * 2));
   --op-dialog-border: var(--op-confirm-dialog-border, var(--op-border));
   --op-dialog-pending: var(--op-confirm-dialog-pending, var(--op-pending));

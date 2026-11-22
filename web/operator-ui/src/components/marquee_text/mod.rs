@@ -1,12 +1,15 @@
 //! MarqueeText: single-line text that scrolls when it overflows and shows the full text in a tooltip.
 
-use crate::components::popover::{Placement, Popover, PopoverAnchor};
+mod tooltip;
+
+use crate::components::popover::PopoverAnchor;
 use crate::core::{JobToken, Metric, Slot, root_class, root_style};
 use leptos::ev;
 use leptos::prelude::*;
 use operator_ui_tokens::DU_POINTS;
 use send_wrapper::SendWrapper;
 use std::time::Duration;
+use tooltip::{MarqueeTooltip, PointerKind, forward_tooltip_style};
 use wasm_bindgen::JsCast;
 use wasm_bindgen::closure::Closure;
 
@@ -95,45 +98,20 @@ pub fn MarqueeText(
 
     // Measures the text against the host and (re)starts the marquee cycle.
     let measure = move || {
-        let (Some(h), Some(p)) = (
-            host.try_get_untracked().flatten(),
-            probe.try_get_untracked().flatten(),
-        ) else {
-            return;
-        };
-        if let Some(marker) = tip_probe.get_untracked() {
-            #[allow(clippy::cast_possible_truncation)]
-            let gap = marker.get_bounding_client_rect().width() as f32 / DU_POINTS;
-            if (gap - tip_gap.get_untracked()).abs() > f32::EPSILON {
-                tip_gap.set(gap);
-            }
-        }
-        let width = f64::from(p.offset_width());
-        let available = f64::from(h.client_width());
-        let over = width > available + 0.5;
-        let gap = gap_probe.get_untracked().map_or(
-            f64::from(spacing.get_untracked().unwrap_or(marquee::SPACING_DU) * DU_POINTS),
-            |g| g.get_bounding_client_rect().width(),
+        measure_marquee(
+            host,
+            probe,
+            tip_probe,
+            gap_probe,
+            tip_gap,
+            overflow,
+            distance,
+            run,
+            loops,
+            job,
+            spacing,
+            initial_delay_ms,
         );
-        let next = width + gap;
-        if over == overflow.get_untracked() && (next - distance.get_untracked()).abs() < 0.5 {
-            return;
-        }
-        overflow.set(over);
-        distance.set(next);
-        run.set(0);
-        loops.set_value(0);
-        let id = job.next();
-        if over {
-            set_timeout(
-                move || {
-                    if job.is_current(id) {
-                        run.set(1);
-                    }
-                },
-                Duration::from_millis(u64::from(initial_delay_ms)),
-            );
-        }
     };
 
     Effect::new(move |_| {
@@ -142,45 +120,16 @@ pub fn MarqueeText(
     });
 
     // Re-measure when the host is resized by its container.
-    Effect::new(move |_| {
-        let Some(el) = host.get() else {
-            return;
-        };
-        let callback = Closure::<dyn FnMut()>::new(measure);
-        let Ok(observer) = web_sys::ResizeObserver::new(callback.as_ref().unchecked_ref()) else {
-            return;
-        };
-        observer.observe(&el);
-        if let Some(marker) = tip_probe.get_untracked() {
-            observer.observe(&marker);
-        }
-        if let Some(probe) = probe.get_untracked() {
-            observer.observe(&probe);
-        }
-        if let Some(gap) = gap_probe.get_untracked() {
-            observer.observe(&gap);
-        }
-        let keep = SendWrapper::new((observer, callback));
-        on_cleanup(move || keep.0.disconnect());
-    });
+    setup_resize_observer(
+        host,
+        tip_probe,
+        probe,
+        gap_probe,
+        Callback::new(move |()| measure()),
+    );
 
     let on_animation_end = move |_| {
-        let id = job.next();
-        loops.update_value(|n| *n += 1);
-        if iterations.is_some_and(|max| loops.get_value() >= max) {
-            run.set(0);
-            return;
-        }
-        let next = run.get_untracked() + 1;
-        run.set(0);
-        set_timeout(
-            move || {
-                if job.is_current(id) {
-                    run.set(next);
-                }
-            },
-            Duration::from_millis(u64::from(delay_ms)),
-        );
+        handle_animation_end(loops, iterations, run, job, delay_ms);
     };
 
     let open_tip = move || {
@@ -214,20 +163,7 @@ pub fn MarqueeText(
 
     // Any press outside the anchor closes the tooltip.
     if tooltip {
-        let handle = window_event_listener(ev::pointerdown, move |e| {
-            if !tip_open.get_untracked() {
-                return;
-            }
-            let inside = host.try_get_untracked().flatten().is_some_and(|h| {
-                e.target()
-                    .and_then(|t| t.dyn_into::<web_sys::Node>().ok())
-                    .is_some_and(|n| h.contains(Some(&n)))
-            });
-            if !inside {
-                close_tip();
-            }
-        });
-        on_cleanup(move || handle.remove());
+        setup_outside_pointer_listener(host, tip_open, Callback::new(move |()| close_tip()));
     }
 
     Effect::new(move |_| {
@@ -328,98 +264,229 @@ pub fn MarqueeText(
                 }
             }
             on:click=move |_| {
-                if long_pressed.get_value() {
-                    long_pressed.set_value(false);
-                    return;
-                }
-                if tip_open.get_untracked() && !hovered.get_untracked() {
-                    close_tip();
-                    return;
-                }
-                if let Some(cb) = on_click {
-                    cb.run(());
-                }
+                handle_marquee_click(long_pressed, tip_open, hovered, close_tip, on_click);
             }
         >
-            <span
-                class="op-marquee-track"
-                data-run=move || match run.get() {
-                    0 => None,
-                    n if n % 2 == 1 => Some("a"),
-                    _ => Some("b"),
-                }
-                style:--op-marquee-distance=move || format!("{}px", distance.get())
-                style:animation-duration=move || {
-                    let px_per_s = f64::from(velocity * DU_POINTS).max(1.0);
-                    format!("{}ms", (distance.get() / px_per_s * 1000.0).round())
-                }
-                on:animationend=on_animation_end
-            >
-                <span node_ref=probe class="op-marquee-text">{move || content.run(())}</span>
-                <span node_ref=tip_probe class="op-marquee-tip-measure" aria-hidden="true"></span>
-                <span node_ref=gap_probe class="op-marquee-measure" aria-hidden="true"></span>
-                <Show when=move || overflow.get()>
-                    <span class="op-marquee-gap"></span>
-                    <span class="op-marquee-text" aria-hidden="true" inert="">{move || content.run(())}</span>
-                </Show>
-            </span>
+            <MarqueeTrack
+                run=run.into()
+                distance=distance.into()
+                velocity=velocity
+                overflow=overflow.into()
+                probe=probe
+                tip_probe=tip_probe
+                gap_probe=gap_probe
+                content=content
+                on_animation_end=Callback::new(on_animation_end)
+            />
             {move || view! {
-            <Popover
-                node_ref=tip_layer
-                open=tip_open
-                anchor=tip_anchor
-                placement=Placement::Above
-                gap=tip_gap.get()
-                passive=true
-                dismiss_on_outside=false
-                restore_focus=false
-                class="op-tooltip op-t-caption op-marquee-tooltip"
-                role="tooltip"
-            >
-                <div class="op-marquee-tooltip-content">
-                    {tooltip_slot.with_value(|slot| if slot.is_set() { slot.run().into_any() } else { (move || tooltip_text.get()).into_any() })}
-                </div>
-            </Popover>
+                <MarqueeTooltip
+                    tip_layer=tip_layer
+                    tip_open=tip_open
+                    tip_anchor=tip_anchor
+                    tip_gap=tip_gap.into()
+                    tooltip_slot=tooltip_slot
+                    tooltip_text=tooltip_text
+                />
             }}
         </span>
     }
 }
 
-trait PointerKind {
-    fn pointer_type_is_touch(&self) -> bool;
+fn animation_duration_ms(distance: f64, velocity: f32) -> String {
+    let px_per_s = f64::from(velocity * DU_POINTS).max(1.0);
+    format!("{}ms", (distance / px_per_s * 1000.0).round())
 }
 
-impl PointerKind for web_sys::MouseEvent {
-    fn pointer_type_is_touch(&self) -> bool {
-        self.dyn_ref::<web_sys::PointerEvent>()
-            .is_some_and(|p| p.pointer_type() == "touch")
+fn track_run_attr(run: u32) -> Option<&'static str> {
+    match run {
+        0 => None,
+        n if n % 2 == 1 => Some("a"),
+        _ => Some("b"),
     }
 }
 
-/// The overlay host is outside the subtree, so forward only public tooltip variables.
-fn forward_tooltip_style(host: NodeRef<leptos::html::Span>, layer: &web_sys::HtmlElement) {
-    let Some(host) = host.get_untracked() else {
+fn handle_marquee_click(
+    long_pressed: StoredValue<bool>,
+    tip_open: RwSignal<bool>,
+    hovered: RwSignal<bool>,
+    close_tip: impl Fn(),
+    on_click: Option<Callback<()>>,
+) {
+    if long_pressed.get_value() {
+        long_pressed.set_value(false);
+        return;
+    }
+    if tip_open.get_untracked() && !hovered.get_untracked() {
+        close_tip();
+        return;
+    }
+    if let Some(cb) = on_click {
+        cb.run(());
+    }
+}
+
+#[component]
+fn MarqueeTrack(
+    run: Signal<u32>,
+    distance: Signal<f64>,
+    velocity: f32,
+    overflow: Signal<bool>,
+    probe: NodeRef<leptos::html::Span>,
+    tip_probe: NodeRef<leptos::html::Span>,
+    gap_probe: NodeRef<leptos::html::Span>,
+    content: Callback<(), AnyView>,
+    on_animation_end: Callback<ev::AnimationEvent>,
+) -> impl IntoView {
+    view! {
+        <span
+            class="op-marquee-track"
+            data-run=move || track_run_attr(run.get())
+            style:--op-marquee-distance=move || format!("{}px", distance.get())
+            style:animation-duration=move || animation_duration_ms(distance.get(), velocity)
+            on:animationend=move |e| on_animation_end.run(e)
+        >
+            <span node_ref=probe class="op-marquee-text">{move || content.run(())}</span>
+            <span node_ref=tip_probe class="op-marquee-tip-measure" aria-hidden="true"></span>
+            <span node_ref=gap_probe class="op-marquee-measure" aria-hidden="true"></span>
+            <Show when=move || overflow.get()>
+                <span class="op-marquee-gap"></span>
+                <span class="op-marquee-text" aria-hidden="true" inert="">{move || content.run(())}</span>
+            </Show>
+        </span>
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn measure_marquee(
+    host: NodeRef<leptos::html::Span>,
+    probe: NodeRef<leptos::html::Span>,
+    tip_probe: NodeRef<leptos::html::Span>,
+    gap_probe: NodeRef<leptos::html::Span>,
+    tip_gap: RwSignal<f32>,
+    overflow: RwSignal<bool>,
+    distance: RwSignal<f64>,
+    run: RwSignal<u32>,
+    loops: StoredValue<u32>,
+    job: JobToken,
+    spacing: MaybeProp<f32>,
+    initial_delay_ms: u32,
+) {
+    let (Some(h), Some(p)) = (
+        host.try_get_untracked().flatten(),
+        probe.try_get_untracked().flatten(),
+    ) else {
         return;
     };
-    let Some(style) = window().get_computed_style(&host).ok().flatten() else {
-        return;
-    };
-    for name in [
-        "max-width",
-        "padding-x",
-        "padding-y",
-        "font-size",
-        "line-height",
-        "background",
-        "border",
-        "text",
-        "shadow",
-        "shadow-y",
-        "shadow-blur",
-    ] {
-        let var = format!("--op-marquee-text-tooltip-{name}");
-        if let Ok(value) = style.get_property_value(&var) {
-            let _ = layer.style().set_property(&var, &value);
+    if let Some(marker) = tip_probe.get_untracked() {
+        #[allow(clippy::cast_possible_truncation)]
+        let gap = marker.get_bounding_client_rect().width() as f32 / DU_POINTS;
+        if (gap - tip_gap.get_untracked()).abs() > f32::EPSILON {
+            tip_gap.set(gap);
         }
     }
+    let width = f64::from(p.offset_width());
+    let available = f64::from(h.client_width());
+    let over = width > available + 0.5;
+    let gap = gap_probe.get_untracked().map_or(
+        f64::from(spacing.get_untracked().unwrap_or(marquee::SPACING_DU) * DU_POINTS),
+        |g| g.get_bounding_client_rect().width(),
+    );
+    let next = width + gap;
+    if over == overflow.get_untracked() && (next - distance.get_untracked()).abs() < 0.5 {
+        return;
+    }
+    overflow.set(over);
+    distance.set(next);
+    run.set(0);
+    loops.set_value(0);
+    let id = job.next();
+    if over {
+        set_timeout(
+            move || {
+                if job.is_current(id) {
+                    run.set(1);
+                }
+            },
+            Duration::from_millis(u64::from(initial_delay_ms)),
+        );
+    }
 }
+
+fn setup_resize_observer(
+    host: NodeRef<leptos::html::Span>,
+    tip_probe: NodeRef<leptos::html::Span>,
+    probe: NodeRef<leptos::html::Span>,
+    gap_probe: NodeRef<leptos::html::Span>,
+    measure: Callback<()>,
+) {
+    Effect::new(move |_| {
+        let Some(el) = host.get() else {
+            return;
+        };
+        let callback = Closure::<dyn FnMut()>::new(move || measure.run(()));
+        let Ok(observer) = web_sys::ResizeObserver::new(callback.as_ref().unchecked_ref()) else {
+            return;
+        };
+        observer.observe(&el);
+        if let Some(marker) = tip_probe.get_untracked() {
+            observer.observe(&marker);
+        }
+        if let Some(probe) = probe.get_untracked() {
+            observer.observe(&probe);
+        }
+        if let Some(gap) = gap_probe.get_untracked() {
+            observer.observe(&gap);
+        }
+        let keep = SendWrapper::new((observer, callback));
+        on_cleanup(move || keep.0.disconnect());
+    });
+}
+
+fn handle_animation_end(
+    loops: StoredValue<u32>,
+    iterations: Option<u32>,
+    run: RwSignal<u32>,
+    job: JobToken,
+    delay_ms: u32,
+) {
+    let id = job.next();
+    loops.update_value(|n| *n += 1);
+    if iterations.is_some_and(|max| loops.get_value() >= max) {
+        run.set(0);
+        return;
+    }
+    let next = run.get_untracked() + 1;
+    run.set(0);
+    set_timeout(
+        move || {
+            if job.is_current(id) {
+                run.set(next);
+            }
+        },
+        Duration::from_millis(u64::from(delay_ms)),
+    );
+}
+
+fn setup_outside_pointer_listener(
+    host: NodeRef<leptos::html::Span>,
+    tip_open: RwSignal<bool>,
+    close_tip: Callback<()>,
+) {
+    let handle = window_event_listener(ev::pointerdown, move |e| {
+        if !tip_open.get_untracked() {
+            return;
+        }
+        let inside = host.try_get_untracked().flatten().is_some_and(|h| {
+            e.target()
+                .and_then(|t| t.dyn_into::<web_sys::Node>().ok())
+                .is_some_and(|n| h.contains(Some(&n)))
+        });
+        if !inside {
+            close_tip.run(());
+        }
+    });
+    on_cleanup(move || handle.remove());
+}
+
+#[cfg(test)]
+mod tests;

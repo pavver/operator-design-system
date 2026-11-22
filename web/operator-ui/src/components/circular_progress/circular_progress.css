@@ -18,7 +18,7 @@
 }
 
 .op-circular-progress[data-indeterminate] .op-circular-progress-svg {
-    animation: op-circular-spin 1.4s linear infinite;
+    animation: op-spin var(--op-motion-spinner-lap) linear infinite;
 }
 
 .op-circular-progress-track {
@@ -58,9 +58,4 @@
     overflow: hidden;
     color: var(--op-circular-progress-text, var(--op-text-primary));
     pointer-events: none;
-}
-
-@keyframes op-circular-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }

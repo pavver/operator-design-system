@@ -69,3 +69,34 @@ fn display_and_exact_lookup_use_labels() {
     );
     assert!(find_exact(&o, "kit").is_none());
 }
+
+#[test]
+fn test_handle_combobox_key() {
+    use super::input::{ComboKeyAction, handle_combobox_key};
+    assert_eq!(handle_combobox_key("ArrowDown"), Some(ComboKeyAction::Down));
+    assert_eq!(handle_combobox_key("ArrowUp"), Some(ComboKeyAction::Up));
+    assert_eq!(handle_combobox_key("Enter"), Some(ComboKeyAction::Enter));
+    assert_eq!(handle_combobox_key("Escape"), Some(ComboKeyAction::Escape));
+    assert_eq!(handle_combobox_key("Tab"), None);
+}
+
+#[test]
+fn test_resolve_settle() {
+    let o = opts();
+    assert!(matches!(
+        resolve_settle(&o, "Hall", "Hall", false, None),
+        SettleAction::Unchanged
+    ));
+    assert!(matches!(
+        resolve_settle(&o, "Kitchen", "unknown", false, None),
+        SettleAction::Commit(v) if v == "light.kitchen"
+    ));
+    assert!(matches!(
+        resolve_settle(&o, "custom_val", "unknown", true, None),
+        SettleAction::Commit(v) if v == "custom_val"
+    ));
+    assert!(matches!(
+        resolve_settle(&o, "nonexistent", "Kitchen", false, None),
+        SettleAction::ResetToShown
+    ));
+}

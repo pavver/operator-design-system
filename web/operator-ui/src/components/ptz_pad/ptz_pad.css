@@ -63,7 +63,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--op-ptz-pad-inactive-color, rgba(255, 255, 255, 0.4));
+    color: var(--op-ptz-pad-inactive-color, var(--op-text-secondary));
     pointer-events: none;
     transition: color var(--op-motion-state-color) var(--op-ease-standard);
 }
@@ -131,7 +131,7 @@
     width: 60%;
     height: 60%;
     border-radius: 50%;
-    border: var(--op-border-width) dashed var(--op-ptz-pad-ring-color, rgba(255, 255, 255, 0.1));
+    border: var(--op-border-width) dashed var(--op-ptz-pad-ring-color, var(--op-divider));
     pointer-events: none;
 }
 
@@ -143,7 +143,7 @@
     width: 30%;
     height: 30%;
     border-radius: 50%;
-    border: var(--op-border-width) solid var(--op-ptz-pad-ring-color, rgba(255, 255, 255, 0.15));
+    border: var(--op-border-width) solid var(--op-ptz-pad-ring-color, var(--op-border));
     pointer-events: none;
 }
 

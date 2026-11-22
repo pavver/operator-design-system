@@ -140,6 +140,69 @@ pub(crate) fn mirrored(source: Signal<bool>) -> RwSignal<bool> {
     local
 }
 
+/// Reactive controller for two-state toggles (AsyncCheckbox, AsyncSwitch).
+#[cfg(any(feature = "checkbox", feature = "switch"))]
+#[derive(Clone, Copy)]
+pub(crate) struct ToggleControl {
+    pub value: RwSignal<bool>,
+    pub current: Signal<ControlState>,
+    pub press: super::Press,
+    local: RwSignal<ControlState>,
+    job: JobToken,
+    has_action: bool,
+}
+
+#[cfg(any(feature = "checkbox", feature = "switch"))]
+impl ToggleControl {
+    pub fn new(
+        checked: Signal<bool>,
+        state: Signal<Option<ControlState>>,
+        enabled: Signal<bool>,
+        has_action: bool,
+    ) -> Self {
+        let local = RwSignal::new(ControlState::Idle);
+        let value = mirrored(checked);
+        let job = JobToken::new();
+        let press = super::Press::new();
+
+        let current = Signal::derive(move || {
+            let managed = state.get().unwrap_or_else(|| local.get());
+            if !enabled.get() {
+                ControlState::Disabled
+            } else if managed != ControlState::Idle {
+                managed
+            } else if press.pressed.get() {
+                ControlState::Pressed
+            } else {
+                ControlState::Idle
+            }
+        });
+
+        Self {
+            value,
+            current,
+            press,
+            local,
+            job,
+            has_action,
+        }
+    }
+
+    pub fn clickable(&self) -> bool {
+        self.has_action
+            && !matches!(
+                self.current.get(),
+                ControlState::Disabled | ControlState::Pending
+            )
+    }
+
+    pub fn toggle(&self, action: Option<&AsyncAction<bool>>) {
+        if let Some(act) = action {
+            run_toggle(act.clone(), self.value, self.local, self.job);
+        }
+    }
+}
+
 /// Copies text to the system clipboard.
 pub async fn copy_text(text: String) -> ActionResult {
     let Some(window) = web_sys::window() else {

@@ -90,7 +90,7 @@
   align-items: center;
   gap: calc(var(--op-du) * 1.5);
   padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
-  background-color: var(--op-carousel-dots-bg, rgba(0, 0, 0, 0.4));
+  background-color: var(--op-carousel-dots-bg, var(--op-overlay-scrim));
 }
 
 .op-carousel-dot {

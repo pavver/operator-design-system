@@ -9,15 +9,16 @@ pub(crate) const CSS: &str = include_str!("status_badge.css");
 
 /// Presence and activity status shown by [`StatusBadge`] and [`crate::components::avatar::Avatar`].
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[repr(usize)]
 pub enum PresenceStatus {
-    Online,
-    Offline,
-    Alarm,
-    Pending,
-    Error,
-    Typing,
-    RecordingAudio,
-    SendingFile,
+    Online = 0,
+    Offline = 1,
+    Alarm = 2,
+    Pending = 3,
+    Error = 4,
+    Typing = 5,
+    RecordingAudio = 6,
+    SendingFile = 7,
 }
 
 impl PresenceStatus {
@@ -42,6 +43,16 @@ impl PresenceStatus {
             Self::Typing => "Typing",
             Self::RecordingAudio => "RecordingAudio",
             Self::SendingFile => "SendingFile",
+        }
+    }
+
+    pub const fn led_kind(self) -> Option<&'static str> {
+        match self {
+            Self::Online => Some("online"),
+            Self::Offline => Some("offline"),
+            Self::Alarm => Some("alarm"),
+            Self::Error => Some("error"),
+            _ => None,
         }
     }
 }
@@ -103,94 +114,20 @@ pub fn StatusBadge(
         "Sending file",
     );
 
+    let labels = [
+        online_str,
+        offline_str,
+        alarm_str,
+        pending_str,
+        error_str,
+        typing_str,
+        rec_str,
+        send_str,
+    ];
+
     let accessible_name = Signal::derive(move || {
-        if let Some(name) = aria_label.get() {
-            name
-        } else {
-            match status.get() {
-                PresenceStatus::Online => online_str.get(),
-                PresenceStatus::Offline => offline_str.get(),
-                PresenceStatus::Alarm => alarm_str.get(),
-                PresenceStatus::Pending => pending_str.get(),
-                PresenceStatus::Error => error_str.get(),
-                PresenceStatus::Typing => typing_str.get(),
-                PresenceStatus::RecordingAudio => rec_str.get(),
-                PresenceStatus::SendingFile => send_str.get(),
-            }
-        }
+        resolve_badge_accessible_name(status.get(), aria_label.get(), &labels)
     });
-
-    let badge = move || {
-        match status.get() {
-        PresenceStatus::Pending => view! {
-            <ProgressIndicator size=size_val() stroke=0.3 color="var(--op-status-badge-activity, var(--op-status-activity))"/>
-        }
-        .into_any(),
-        PresenceStatus::Typing => view! {
-            <span class="op-badge-typing">
-                <i></i>
-                <i></i>
-                <i></i>
-            </span>
-        }
-        .into_any(),
-        PresenceStatus::RecordingAudio => {
-            let arcs = (0..3)
-                .map(|i| {
-                    let r = 28.0 + i as f32 * 23.5;
-                    view! { <path class=format!("op-wave op-wave-{i}") d=arc_path(18.0, 50.0, r, -32.0, 32.0)></path> }
-                })
-                .collect_view();
-            view! {
-                <svg class="op-badge-voice" viewBox="0 0 100 100">
-                    <circle class="op-wave-src" cx="18" cy="50" r="11"></circle>
-                    {arcs}
-                </svg>
-            }
-            .into_any()
-        }
-        PresenceStatus::SendingFile => {
-            let chevrons = (0..3)
-                .map(|i| {
-                    let tip = 28.0 + i as f32 * 30.0;
-                    let start = tip - 15.0;
-                    view! {
-                        <path
-                            class=format!("op-chev op-chev-{i}")
-                            d=format!("M{start} 26 L{tip} 50 L{start} 74")
-                        ></path>
-                    }
-                })
-                .collect_view();
-            view! {
-                <svg class="op-badge-file" viewBox="0 0 100 100">
-                    {chevrons}
-                </svg>
-            }
-            .into_any()
-        }
-        other => {
-            let kind = match other {
-                PresenceStatus::Online => "online",
-                PresenceStatus::Offline => "offline",
-                PresenceStatus::Alarm => "alarm",
-                PresenceStatus::Error => "error",
-                _ => "fallback",
-            };
-            view! { <span class="op-badge-led" data-kind=kind></span> }.into_any()
-        }
-    }
-    };
-
-    let text_content = move || {
-        if text_slot.is_set() {
-            view! { <span class="op-badge-text">{text_slot.run()}</span> }.into_any()
-        } else if let Some(t) = text.get() {
-            view! { <span class="op-badge-text">{t}</span> }.into_any()
-        } else {
-            ().into_any()
-        }
-    };
 
     view! {
         <span
@@ -207,8 +144,131 @@ pub fn StatusBadge(
                 style,
             )
         >
-            {badge}
-            {text_content}
+            <StatusBadgeGlyph status=status size_val=Signal::derive(size_val) />
+            <StatusBadgeText text=text text_slot=text_slot />
         </span>
+    }
+}
+
+pub fn resolve_badge_accessible_name(
+    status: PresenceStatus,
+    aria_label: Option<String>,
+    labels: &[Signal<String>; 8],
+) -> String {
+    if let Some(name) = aria_label {
+        name
+    } else {
+        labels[status as usize].get()
+    }
+}
+
+fn recording_audio_svg() -> impl IntoView {
+    let arcs = (0..3)
+        .map(|i| {
+            let r = 28.0 + i as f32 * 23.5;
+            view! { <path class=format!("op-wave op-wave-{i}") d=arc_path(18.0, 50.0, r, -32.0, 32.0)></path> }
+        })
+        .collect_view();
+    view! {
+        <svg class="op-badge-voice" viewBox="0 0 100 100">
+            <circle class="op-wave-src" cx="18" cy="50" r="11"></circle>
+            {arcs}
+        </svg>
+    }
+}
+
+fn sending_file_svg() -> impl IntoView {
+    let chevrons = (0..3)
+        .map(|i| {
+            let tip = 28.0 + i as f32 * 30.0;
+            let start = tip - 15.0;
+            view! {
+                <path
+                    class=format!("op-chev op-chev-{i}")
+                    d=format!("M{start} 26 L{tip} 50 L{start} 74")
+                ></path>
+            }
+        })
+        .collect_view();
+    view! {
+        <svg class="op-badge-file" viewBox="0 0 100 100">
+            {chevrons}
+        </svg>
+    }
+}
+
+#[component]
+fn StatusBadgeGlyph(status: Signal<PresenceStatus>, size_val: Signal<f32>) -> impl IntoView {
+    move || {
+        match status.get() {
+        PresenceStatus::Pending => view! {
+            <ProgressIndicator size=size_val.get() stroke=0.3 color="var(--op-status-badge-activity, var(--op-status-activity))"/>
+        }
+        .into_any(),
+        PresenceStatus::Typing => view! {
+            <span class="op-badge-typing">
+                <i></i>
+                <i></i>
+                <i></i>
+            </span>
+        }
+        .into_any(),
+        PresenceStatus::RecordingAudio => recording_audio_svg().into_any(),
+        PresenceStatus::SendingFile => sending_file_svg().into_any(),
+        other => {
+            let kind = other.led_kind().unwrap_or("fallback");
+            view! { <span class="op-badge-led" data-kind=kind></span> }.into_any()
+        }
+    }
+    }
+}
+
+#[component]
+fn StatusBadgeText(text: MaybeProp<String>, text_slot: Slot) -> impl IntoView {
+    move || {
+        if text_slot.is_set() {
+            view! { <span class="op-badge-text">{text_slot.run()}</span> }.into_any()
+        } else if let Some(t) = text.get() {
+            view! { <span class="op-badge-text">{t}</span> }.into_any()
+        } else {
+            ().into_any()
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_presence_status_led_kind() {
+        assert_eq!(PresenceStatus::Online.led_kind(), Some("online"));
+        assert_eq!(PresenceStatus::Offline.led_kind(), Some("offline"));
+        assert_eq!(PresenceStatus::Alarm.led_kind(), Some("alarm"));
+        assert_eq!(PresenceStatus::Error.led_kind(), Some("error"));
+        assert_eq!(PresenceStatus::Pending.led_kind(), None);
+        assert_eq!(PresenceStatus::Typing.led_kind(), None);
+    }
+
+    #[test]
+    fn test_resolve_badge_accessible_name() {
+        let labels = [
+            Signal::derive(|| "Online".to_string()),
+            Signal::derive(|| "Offline".to_string()),
+            Signal::derive(|| "Alarm".to_string()),
+            Signal::derive(|| "Pending".to_string()),
+            Signal::derive(|| "Error".to_string()),
+            Signal::derive(|| "Typing".to_string()),
+            Signal::derive(|| "Recording".to_string()),
+            Signal::derive(|| "Sending".to_string()),
+        ];
+        assert_eq!(
+            resolve_badge_accessible_name(PresenceStatus::Online, None, &labels),
+            "Online"
+        );
+        assert_eq!(
+            resolve_badge_accessible_name(PresenceStatus::Alarm, Some("Override".into()), &labels),
+            "Override"
+        );
     }
 }

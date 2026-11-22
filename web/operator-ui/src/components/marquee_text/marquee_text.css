@@ -6,10 +6,10 @@
 .op-marquee-track { display: inline-flex; will-change: transform; }
 .op-marquee-text { flex: none; white-space: pre; }
 .op-marquee-gap { flex: none; }
-.op-marquee-track[data-run="a"] { animation-name: op-marquee-a; animation-timing-function: linear; animation-iteration-count: 1; }
-.op-marquee-track[data-run="b"] { animation-name: op-marquee-b; animation-timing-function: linear; animation-iteration-count: 1; }
-@keyframes op-marquee-a { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
-@keyframes op-marquee-b { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
+.op-marquee-track[data-run="a"] { animation-name: op-marquee-text-a; animation-timing-function: linear; animation-iteration-count: 1; }
+.op-marquee-track[data-run="b"] { animation-name: op-marquee-text-b; animation-timing-function: linear; animation-iteration-count: 1; }
+@keyframes op-marquee-text-a { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
+@keyframes op-marquee-text-b { to { transform: translateX(calc(var(--op-marquee-distance) * -1)); } }
 @media (prefers-reduced-motion: reduce) {
   .op-marquee-track[data-run] { animation: none; }
   .op-marquee[data-overflow] .op-marquee-track { display: block; overflow: hidden; text-overflow: ellipsis; }
@@ -26,6 +26,6 @@
   line-height: var(--op-marquee-text-tooltip-line-height, var(--op-type-caption-line));
   background-color: var(--op-marquee-text-tooltip-background, var(--op-surface-alt));
   color: var(--op-marquee-text-tooltip-text, var(--op-text-primary));
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-marquee-text-tooltip-border, var(--op-border-strong)), 0 var(--op-marquee-text-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-marquee-text-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-marquee-text-tooltip-shadow, rgb(0 0 0 / 35%));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-marquee-text-tooltip-border, var(--op-border-strong)), 0 var(--op-marquee-text-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-marquee-text-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-marquee-text-tooltip-shadow, var(--op-shadow));
 }
 .op-marquee-tooltip-content { max-width: var(--op-marquee-text-tooltip-max-width, calc(var(--op-du) * 75)); }

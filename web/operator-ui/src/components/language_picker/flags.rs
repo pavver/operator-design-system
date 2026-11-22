@@ -2,86 +2,106 @@
 
 use leptos::prelude::*;
 
+#[derive(Clone, Copy)]
+enum StripeDir {
+    Horizontal,
+    Vertical,
+}
+
+const STRIPE_FLAGS: &[(&str, StripeDir, &[&str])] = &[
+    ("UA", StripeDir::Horizontal, &["#0057B7", "#FFD700"]),
+    ("PL", StripeDir::Horizontal, &["#FFFFFF", "#DC143C"]),
+    (
+        "DE",
+        StripeDir::Horizontal,
+        &["#000000", "#DD0000", "#FFCE00"],
+    ),
+    (
+        "NL",
+        StripeDir::Horizontal,
+        &["#AE1C28", "#FFFFFF", "#21468B"],
+    ),
+    (
+        "FR",
+        StripeDir::Vertical,
+        &["#002395", "#FFFFFF", "#ED2939"],
+    ),
+    (
+        "IT",
+        StripeDir::Vertical,
+        &["#009246", "#FFFFFF", "#CE2B37"],
+    ),
+];
+
+fn striped_flag(dir: StripeDir, colors: &[&'static str]) -> AnyView {
+    let n = colors.len() as f64;
+    match dir {
+        StripeDir::Horizontal => {
+            let h = 20.0 / n;
+            let rects: Vec<_> = colors
+                .iter()
+                .enumerate()
+                .map(|(i, &color)| {
+                    let y = i as f64 * h;
+                    view! {
+                        <rect y=format!("{y:.2}") width="30" height=format!("{h:.2}") fill=color />
+                    }
+                })
+                .collect();
+            view! {
+                <svg viewBox="0 0 30 20" aria-hidden="true">
+                    {rects}
+                </svg>
+            }
+            .into_any()
+        }
+        StripeDir::Vertical => {
+            let w = 30.0 / n;
+            let rects: Vec<_> = colors
+                .iter()
+                .enumerate()
+                .map(|(i, &color)| {
+                    let x = i as f64 * w;
+                    view! {
+                        <rect x=format!("{x:.2}") width=format!("{w:.2}") height="20" fill=color />
+                    }
+                })
+                .collect();
+            view! {
+                <svg viewBox="0 0 30 20" aria-hidden="true">
+                    {rects}
+                </svg>
+            }
+            .into_any()
+        }
+    }
+}
+
+type FlagBuilder = fn() -> AnyView;
+
+const CUSTOM_FLAGS: &[(&str, FlagBuilder)] = &[
+    ("GB", || flag_gb().into_any()),
+    ("US", || flag_us().into_any()),
+    ("ES", || flag_es().into_any()),
+    ("PT", || flag_pt().into_any()),
+    ("CZ", || flag_cz().into_any()),
+    ("SE", || flag_se().into_any()),
+    ("JP", || flag_jp().into_any()),
+    ("CN", || flag_cn().into_any()),
+    ("KR", || flag_kr().into_any()),
+    ("TR", || flag_tr().into_any()),
+];
+
 /// Returns the inline SVG view for a built-in country code, if recognized.
 pub fn builtin_flag_view(code: &str) -> Option<AnyView> {
     let upper = code.to_ascii_uppercase();
-    match upper.as_str() {
-        "UA" => Some(flag_ua().into_any()),
-        "GB" => Some(flag_gb().into_any()),
-        "US" => Some(flag_us().into_any()),
-        "DE" => Some(flag_de().into_any()),
-        "FR" => Some(flag_fr().into_any()),
-        "ES" => Some(flag_es().into_any()),
-        "IT" => Some(flag_it().into_any()),
-        "PL" => Some(flag_pl().into_any()),
-        "PT" => Some(flag_pt().into_any()),
-        "NL" => Some(flag_nl().into_any()),
-        "CZ" => Some(flag_cz().into_any()),
-        "SE" => Some(flag_se().into_any()),
-        "JP" => Some(flag_jp().into_any()),
-        "CN" => Some(flag_cn().into_any()),
-        "KR" => Some(flag_kr().into_any()),
-        "TR" => Some(flag_tr().into_any()),
-        _ => None,
+    if let Some((_, dir, colors)) = STRIPE_FLAGS.iter().find(|(c, _, _)| *c == upper) {
+        return Some(striped_flag(*dir, colors));
     }
-}
-
-fn flag_ua() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 30 20" aria-hidden="true">
-            <rect width="30" height="10" fill="#0057B7"/>
-            <rect y="10" width="30" height="10" fill="#FFD700"/>
-        </svg>
-    }
-}
-
-fn flag_pl() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 30 20" aria-hidden="true">
-            <rect width="30" height="10" fill="#FFFFFF"/>
-            <rect y="10" width="30" height="10" fill="#DC143C"/>
-        </svg>
-    }
-}
-
-fn flag_de() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 30 20" aria-hidden="true">
-            <rect width="30" height="6.67" fill="#000000"/>
-            <rect y="6.67" width="30" height="6.67" fill="#DD0000"/>
-            <rect y="13.34" width="30" height="6.66" fill="#FFCE00"/>
-        </svg>
-    }
-}
-
-fn flag_fr() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 30 20" aria-hidden="true">
-            <rect width="10" height="20" fill="#002395"/>
-            <rect x="10" width="10" height="20" fill="#FFFFFF"/>
-            <rect x="20" width="10" height="20" fill="#ED2939"/>
-        </svg>
-    }
-}
-
-fn flag_it() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 30 20" aria-hidden="true">
-            <rect width="10" height="20" fill="#009246"/>
-            <rect x="10" width="10" height="20" fill="#FFFFFF"/>
-            <rect x="20" width="10" height="20" fill="#CE2B37"/>
-        </svg>
-    }
-}
-
-fn flag_nl() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 30 20" aria-hidden="true">
-            <rect width="30" height="6.67" fill="#AE1C28"/>
-            <rect y="6.67" width="30" height="6.67" fill="#FFFFFF"/>
-            <rect y="13.34" width="30" height="6.66" fill="#21468B"/>
-        </svg>
-    }
+    CUSTOM_FLAGS
+        .iter()
+        .find(|(c, _)| *c == upper)
+        .map(|(_, f)| f())
 }
 
 fn flag_se() -> impl IntoView {
