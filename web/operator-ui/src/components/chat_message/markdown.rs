@@ -36,6 +36,99 @@ pub enum BlockToken {
     Paragraph(Vec<InlineToken>),
 }
 
+struct DelimitedSpan {
+    delim: &'static [char],
+    ctor: fn(String) -> InlineToken,
+    disallow_next: Option<char>,
+}
+
+const SPANS: &[DelimitedSpan] = &[
+    DelimitedSpan {
+        delim: &['*', '*', '*'],
+        ctor: InlineToken::BoldItalic,
+        disallow_next: None,
+    },
+    DelimitedSpan {
+        delim: &['*', '*'],
+        ctor: InlineToken::Bold,
+        disallow_next: None,
+    },
+    DelimitedSpan {
+        delim: &['*'],
+        ctor: InlineToken::Italic,
+        disallow_next: Some('*'),
+    },
+    DelimitedSpan {
+        delim: &['~', '~'],
+        ctor: InlineToken::Strike,
+        disallow_next: None,
+    },
+    DelimitedSpan {
+        delim: &['`'],
+        ctor: InlineToken::Code,
+        disallow_next: None,
+    },
+    DelimitedSpan {
+        delim: &['|', '|'],
+        ctor: InlineToken::Spoiler,
+        disallow_next: None,
+    },
+];
+
+fn find_delimiter(chars: &[char], delim: &[char], start: usize) -> Option<usize> {
+    let dlen = delim.len();
+    if dlen == 0 || start + dlen > chars.len() {
+        return None;
+    }
+    let mut i = start;
+    while i + dlen <= chars.len() {
+        if chars[i..].starts_with(delim) {
+            return Some(i);
+        }
+        i += 1;
+    }
+    None
+}
+
+fn try_parse_span(chars: &[char], i: usize) -> Option<(InlineToken, usize)> {
+    for span in SPANS {
+        if !chars[i..].starts_with(span.delim) {
+            continue;
+        }
+        if let Some(disallow) = span.disallow_next
+            && chars.get(i + span.delim.len()) == Some(&disallow)
+        {
+            continue;
+        }
+        let content_start = i + span.delim.len();
+        if let Some(end) = find_delimiter(chars, span.delim, content_start) {
+            let inner: String = chars[content_start..end].iter().collect();
+            return Some(((span.ctor)(inner), end + span.delim.len()));
+        }
+    }
+    None
+}
+
+fn try_parse_link(chars: &[char], i: usize) -> Option<(InlineToken, usize)> {
+    if chars.get(i) != Some(&'[') {
+        return None;
+    }
+    let label_end = find_delimiter(chars, &[']'], i + 1)?;
+    if chars.get(label_end + 1) != Some(&'(') {
+        return None;
+    }
+    let url_end = find_delimiter(chars, &[')'], label_end + 2)?;
+    let label: String = chars[i + 1..label_end].iter().collect();
+    let raw_url: String = chars[label_end + 2..url_end].iter().collect();
+    Some((
+        InlineToken::Link {
+            label,
+            url: sanitize_url(&raw_url),
+        },
+        url_end + 1,
+    ))
+}
+
 /// Parses inline markdown syntax safely into structured tokens.
 pub fn parse_inline_markdown(input: &str) -> Vec<InlineToken> {
     let mut tokens = Vec::new();
@@ -45,120 +138,21 @@ pub fn parse_inline_markdown(input: &str) -> Vec<InlineToken> {
     let mut plain_buf = String::new();
 
     while i < len {
-        // 1. Bold Italic: ***text***
-        if i + 2 < len
-            && chars[i] == '*'
-            && chars[i + 1] == '*'
-            && chars[i + 2] == '*'
-            && let Some(end) = find_triple_star(&chars, i + 3)
+        if let Some((tok, next_i)) = try_parse_span(&chars, i).or_else(|| try_parse_link(&chars, i))
         {
             if !plain_buf.is_empty() {
                 tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
             }
-            let inner: String = chars[i + 3..end].iter().collect();
-            tokens.push(InlineToken::BoldItalic(inner));
-            i = end + 3;
+            tokens.push(tok);
+            i = next_i;
             continue;
         }
 
-        // 2. Bold: **text**
-        if i + 1 < len
-            && chars[i] == '*'
-            && chars[i + 1] == '*'
-            && let Some(end) = find_double_star(&chars, i + 2)
-        {
-            if !plain_buf.is_empty() {
-                tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
-            }
-            let inner: String = chars[i + 2..end].iter().collect();
-            tokens.push(InlineToken::Bold(inner));
-            i = end + 2;
-            continue;
-        }
-
-        // Unclosed double-star delimiter cannot open an italic span
-        if i + 1 < len && chars[i] == '*' && chars[i + 1] == '*' {
+        // An unclosed double star cannot open an italic span; emit both stars as plain text.
+        if chars[i..].starts_with(&['*', '*']) {
             plain_buf.push('*');
             plain_buf.push('*');
             i += 2;
-            continue;
-        }
-
-        // 3. Italic: *text* (ensure not immediately followed by star)
-        if chars[i] == '*'
-            && (i + 1 >= len || chars[i + 1] != '*')
-            && let Some(end) = find_single_star(&chars, i + 1)
-        {
-            if !plain_buf.is_empty() {
-                tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
-            }
-            let inner: String = chars[i + 1..end].iter().collect();
-            tokens.push(InlineToken::Italic(inner));
-            i = end + 1;
-            continue;
-        }
-
-        // 4. Strikethrough: ~~text~~
-        if i + 1 < len
-            && chars[i] == '~'
-            && chars[i + 1] == '~'
-            && let Some(end) = find_double_tilde(&chars, i + 2)
-        {
-            if !plain_buf.is_empty() {
-                tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
-            }
-            let inner: String = chars[i + 2..end].iter().collect();
-            tokens.push(InlineToken::Strike(inner));
-            i = end + 2;
-            continue;
-        }
-
-        // 5. Inline Code: `code`
-        if chars[i] == '`'
-            && let Some(end) = find_backtick(&chars, i + 1)
-        {
-            if !plain_buf.is_empty() {
-                tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
-            }
-            let inner: String = chars[i + 1..end].iter().collect();
-            tokens.push(InlineToken::Code(inner));
-            i = end + 1;
-            continue;
-        }
-
-        // 6. Spoiler: ||spoiler||
-        if i + 1 < len
-            && chars[i] == '|'
-            && chars[i + 1] == '|'
-            && let Some(end) = find_double_pipe(&chars, i + 2)
-        {
-            if !plain_buf.is_empty() {
-                tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
-            }
-            let inner: String = chars[i + 2..end].iter().collect();
-            tokens.push(InlineToken::Spoiler(inner));
-            i = end + 2;
-            continue;
-        }
-
-        // 7. Link: [label](url)
-        if chars[i] == '['
-            && let Some(label_end) = find_char(&chars, ']', i + 1)
-            && label_end + 1 < len
-            && chars[label_end + 1] == '('
-            && let Some(url_end) = find_char(&chars, ')', label_end + 2)
-        {
-            if !plain_buf.is_empty() {
-                tokens.push(InlineToken::Text(std::mem::take(&mut plain_buf)));
-            }
-            let label: String = chars[i + 1..label_end].iter().collect();
-            let raw_url: String = chars[label_end + 2..url_end].iter().collect();
-            let safe_url = sanitize_url(&raw_url);
-            tokens.push(InlineToken::Link {
-                label,
-                url: safe_url,
-            });
-            i = url_end + 1;
             continue;
         }
 
@@ -171,76 +165,6 @@ pub fn parse_inline_markdown(input: &str) -> Vec<InlineToken> {
     }
 
     tokens
-}
-
-fn find_triple_star(chars: &[char], start: usize) -> Option<usize> {
-    let mut i = start;
-    while i + 2 < chars.len() {
-        if chars[i] == '*' && chars[i + 1] == '*' && chars[i + 2] == '*' {
-            return Some(i);
-        }
-        i += 1;
-    }
-    None
-}
-
-fn find_double_star(chars: &[char], start: usize) -> Option<usize> {
-    let mut i = start;
-    while i + 1 < chars.len() {
-        if chars[i] == '*' && chars[i + 1] == '*' {
-            return Some(i);
-        }
-        i += 1;
-    }
-    None
-}
-
-fn find_single_star(chars: &[char], start: usize) -> Option<usize> {
-    let mut i = start;
-    while i < chars.len() {
-        if chars[i] == '*' {
-            return Some(i);
-        }
-        i += 1;
-    }
-    None
-}
-
-fn find_double_tilde(chars: &[char], start: usize) -> Option<usize> {
-    let mut i = start;
-    while i + 1 < chars.len() {
-        if chars[i] == '~' && chars[i + 1] == '~' {
-            return Some(i);
-        }
-        i += 1;
-    }
-    None
-}
-
-fn find_backtick(chars: &[char], start: usize) -> Option<usize> {
-    find_char(chars, '`', start)
-}
-
-fn find_double_pipe(chars: &[char], start: usize) -> Option<usize> {
-    let mut i = start;
-    while i + 1 < chars.len() {
-        if chars[i] == '|' && chars[i + 1] == '|' {
-            return Some(i);
-        }
-        i += 1;
-    }
-    None
-}
-
-fn find_char(chars: &[char], target: char, start: usize) -> Option<usize> {
-    let mut i = start;
-    while i < chars.len() {
-        if chars[i] == target {
-            return Some(i);
-        }
-        i += 1;
-    }
-    None
 }
 
 fn sanitize_url(raw: &str) -> String {
