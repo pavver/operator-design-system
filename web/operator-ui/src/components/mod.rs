@@ -14,10 +14,6 @@ pub mod breadcrumbs;
 pub mod button_group;
 #[cfg(feature = "carousel")]
 pub mod carousel;
-#[cfg(feature = "chat-input")]
-pub mod chat_input;
-#[cfg(feature = "chat-message")]
-pub mod chat_message;
 #[cfg(feature = "checkbox")]
 pub mod checkbox;
 #[cfg(feature = "checkbox-group")]
@@ -46,8 +42,6 @@ pub mod dialog;
 pub mod dropdown_menu;
 #[cfg(feature = "editor")]
 pub mod editor;
-#[cfg(feature = "emoji-picker")]
-pub mod emoji_picker;
 #[cfg(feature = "empty-state")]
 pub mod empty_state;
 #[cfg(feature = "fab")]
@@ -58,12 +52,6 @@ pub mod field;
 pub mod file_field;
 #[cfg(feature = "form")]
 pub mod form;
-#[cfg(feature = "gallery")]
-pub mod gallery;
-#[cfg(feature = "gallery-viewer")]
-pub mod gallery_viewer;
-#[cfg(feature = "gif-picker")]
-pub mod gif_picker;
 #[cfg(feature = "graph")]
 pub mod graph;
 #[cfg(feature = "header")]
@@ -96,10 +84,23 @@ pub mod loading_bar;
 pub mod loading_overlay;
 #[cfg(feature = "marquee-text")]
 pub mod marquee_text;
-#[cfg(feature = "media-keyboard")]
-pub mod media_keyboard;
-#[cfg(feature = "media-record-button")]
-pub mod media_record_button;
+#[cfg(any(
+    feature = "media",
+    feature = "chat-input",
+    feature = "chat-message",
+    feature = "emoji-picker",
+    feature = "gallery",
+    feature = "gallery-viewer",
+    feature = "gif-picker",
+    feature = "media-keyboard",
+    feature = "media-record-button",
+    feature = "ptt-button",
+    feature = "ptz-pad",
+    feature = "reaction-picker",
+    feature = "sticker-picker",
+    feature = "video-stream"
+))]
+pub mod media;
 #[cfg(feature = "menu")]
 pub mod menu;
 #[cfg(feature = "navigation-rail")]
@@ -116,10 +117,6 @@ pub mod popup_edit;
 pub mod primitives;
 #[cfg(feature = "property-list")]
 pub mod property_list;
-#[cfg(feature = "ptt-button")]
-pub mod ptt_button;
-#[cfg(feature = "ptz-pad")]
-pub mod ptz_pad;
 #[cfg(feature = "pull-to-refresh")]
 pub mod pull_to_refresh;
 #[cfg(feature = "radio-group")]
@@ -128,8 +125,6 @@ pub mod radio_group;
 pub mod range_slider;
 #[cfg(feature = "rating")]
 pub mod rating;
-#[cfg(feature = "reaction-picker")]
-pub mod reaction_picker;
 #[cfg(feature = "scroll-area")]
 pub mod scroll_area;
 #[cfg(feature = "scrollbar")]
@@ -156,8 +151,6 @@ pub mod split_pane;
 pub mod status_badge;
 #[cfg(feature = "stepper")]
 pub mod stepper;
-#[cfg(feature = "sticker-picker")]
-pub mod sticker_picker;
 #[cfg(feature = "swipe-item")]
 pub mod swipe_item;
 #[cfg(feature = "switch")]
@@ -194,9 +187,35 @@ pub mod uploader;
 pub mod value_field;
 #[cfg(feature = "video")]
 pub mod video;
-#[cfg(feature = "video-stream")]
-pub mod video_stream;
 #[cfg(feature = "virtual-list")]
 pub mod virtual_list;
 #[cfg(feature = "wizard")]
 pub mod wizard;
+
+// Re-exports of media extension components to keep public API paths intact.
+#[cfg(feature = "chat-input")]
+pub use self::media::chat_input;
+#[cfg(feature = "chat-message")]
+pub use self::media::chat_message;
+#[cfg(feature = "emoji-picker")]
+pub use self::media::emoji_picker;
+#[cfg(feature = "gallery")]
+pub use self::media::gallery;
+#[cfg(feature = "gallery-viewer")]
+pub use self::media::gallery_viewer;
+#[cfg(feature = "gif-picker")]
+pub use self::media::gif_picker;
+#[cfg(feature = "media-keyboard")]
+pub use self::media::media_keyboard;
+#[cfg(feature = "media-record-button")]
+pub use self::media::media_record_button;
+#[cfg(feature = "ptt-button")]
+pub use self::media::ptt_button;
+#[cfg(feature = "ptz-pad")]
+pub use self::media::ptz_pad;
+#[cfg(feature = "reaction-picker")]
+pub use self::media::reaction_picker;
+#[cfg(feature = "sticker-picker")]
+pub use self::media::sticker_picker;
+#[cfg(feature = "video-stream")]
+pub use self::media::video_stream;

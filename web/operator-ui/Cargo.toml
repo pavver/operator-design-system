@@ -65,8 +65,6 @@ draft = [
     "breadcrumbs",
     "button-group",
     "carousel",
-    "chat-input",
-    "chat-message",
     "circular-progress",
     "color-field",
     "combobox",
@@ -75,14 +73,10 @@ draft = [
     "dropdown-menu",
     "duration-field",
     "editor",
-    "emoji-picker",
     "fab",
     "field",
     "file-field",
     "form",
-    "gallery",
-    "gallery-viewer",
-    "gif-picker",
     "hover-card",
     "image",
     "infinite-scroll",
@@ -93,8 +87,6 @@ draft = [
     "loading-bar",
     "loading-overlay",
     "marquee-text",
-    "media-keyboard",
-    "media-record-button",
     "menu",
     "navigation-rail",
     "number-field",
@@ -103,16 +95,12 @@ draft = [
     "popover",
     "popup-edit",
     "property-list",
-    "ptt-button",
-    "ptz-pad",
     "pull-to-refresh",
     "range-slider",
     "rating",
-    "reaction-picker",
     "side-panel",
     "space",
     "split-button",
-    "sticker-picker",
     "swipe-item",
     "tab-panels",
     "text-field",
@@ -123,15 +111,31 @@ draft = [
     "tree",
     "uploader",
     "video",
-    "video-stream",
     "virtual-list",
     "wizard",
 ]
 
 full = ["reviewed", "draft"]
 
-# Project-specific components (node-graph editing, code fields): not part of `full`.
-extensions = ["code-field", "graph"]
+# Project-specific components (node-graph editing, code fields, media suite): not part of `full`.
+extensions = ["code-field", "graph", "media"]
+
+# Media extension components
+media = [
+    "chat-input",
+    "chat-message",
+    "emoji-picker",
+    "gallery",
+    "gallery-viewer",
+    "gif-picker",
+    "media-keyboard",
+    "media-record-button",
+    "ptt-button",
+    "ptz-pad",
+    "reaction-picker",
+    "sticker-picker",
+    "video-stream",
+]
 
 # Component features
 editor = ["action-button", "field", "icon-button", "primitives", "text-field", "tooltip", "web-sys/Selection", "web-sys/Range", "web-sys/ClipboardEvent", "web-sys/DataTransfer", "web-sys/DomParser", "web-sys/SupportedType"]
