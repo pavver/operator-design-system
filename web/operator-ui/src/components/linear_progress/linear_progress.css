@@ -26,9 +26,9 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: 35%;
-  animation: op-indeterminate var(--op-motion-pending-lap) var(--op-ease-smooth) infinite;
+  animation: op-linear-progress-indeterminate var(--op-motion-pending-lap) var(--op-ease-smooth) infinite;
 }
-@keyframes op-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
+@keyframes op-linear-progress-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
 .op-progress-value {
   flex: none;
   min-width: var(--op-linear-progress-value-min-width, calc(var(--op-du) * 9));

@@ -14,7 +14,7 @@
   background-color: var(--op-field-background, var(--op-surface));
   box-shadow:
     inset 0 0 0 var(--op-dim-border) var(--op-field-popup-border, var(--op-border-strong)),
-    0 var(--op-field-popup-shadow-y, calc(var(--op-du) * 2)) var(--op-field-popup-shadow-blur, calc(var(--op-du) * 6)) var(--op-field-popup-shadow, rgb(0 0 0 / 35%));
+    0 var(--op-field-popup-shadow-y, calc(var(--op-du) * 2)) var(--op-field-popup-shadow-blur, calc(var(--op-du) * 6)) var(--op-field-popup-shadow, var(--op-shadow));
 }
 
 .op-calendar { display: flex; flex-direction: column; padding: var(--op-field-calendar-padding, var(--op-dim-pad-tight)); }
@@ -61,7 +61,7 @@
   padding: 0;
   border: 0;
   cursor: pointer;
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-field-swatch-border, rgb(0 0 0 / 25%));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-field-swatch-border, var(--op-border));
 }
 .op-color-swatch:hover { box-shadow: inset 0 0 0 var(--op-dim-border-emphasis) var(--op-field-popup-border, var(--op-border-strong)); }
 .op-color-swatch[aria-selected="true"] { box-shadow: inset 0 0 0 var(--op-dim-border-emphasis) var(--op-field-accent, var(--op-accent)); }

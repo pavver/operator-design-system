@@ -49,18 +49,6 @@
   transform: rotate(180deg);
 }
 
-.op-pull-to-refresh-spinner {
-  width: calc(var(--op-du) * 4);
-  height: calc(var(--op-du) * 4);
-  border: var(--op-dim-spinner-stroke) solid var(--op-border);
-  border-top-color: var(--op-accent);
-  animation: op-pull-spin var(--op-motion-spinner-lap) linear infinite;
-}
-
-@keyframes op-pull-spin {
-  to { transform: rotate(360deg); }
-}
-
 .op-pull-to-refresh-content {
   width: 100%;
   transition: transform var(--op-motion-expand) var(--op-ease-standard);

@@ -274,7 +274,7 @@
 }
 
 .op-delivery-exclamation {
-    color: #ffffff;
+    color: var(--op-on-accent);
     font-weight: 900;
     font-size: calc(var(--op-tu) * 9);
     line-height: 1;
@@ -298,7 +298,7 @@
     align-items: center;
     justify-content: center;
     background-color: var(--op-chat-accent, var(--op-accent));
-    color: var(--op-surface, #ffffff);
+    color: var(--op-surface);
     font-size: calc(var(--op-tu) * 10);
     font-weight: 700;
     padding: calc(var(--op-du) * 0.25) calc(var(--op-du) * 1);
@@ -311,7 +311,7 @@
     align-items: center;
     justify-content: center;
     background-color: var(--op-chat-accent, var(--op-accent));
-    color: var(--op-surface, #ffffff);
+    color: var(--op-surface);
     font-size: calc(var(--op-tu) * 10);
     font-weight: 700;
     padding: calc(var(--op-du) * 0.25) calc(var(--op-du) * 1.25);
@@ -326,13 +326,7 @@
 
 .op-chat-badge-count[data-critical] {
     background-color: var(--op-error);
-    color: #ffffff;
-}
-
-.op-chat-status-syncing {
-    display: inline-flex;
-    animation: op-spin 1.2s linear infinite;
-    color: var(--op-chat-accent, var(--op-accent));
+    color: var(--op-on-accent);
 }
 
 .op-chat-status-pinned,
@@ -346,7 +340,7 @@
     display: inline-flex;
     align-items: center;
     gap: calc(var(--op-du) * 0.5);
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: color-mix(in srgb, var(--op-surface-alt) 60%, transparent);
     border: calc(var(--op-du) * 0.25) solid var(--op-chat-accent, var(--op-accent));
     padding: calc(var(--op-du) * 0.25) calc(var(--op-du) * 1.25);
     font-family: var(--op-font-mono, monospace);
@@ -358,10 +352,10 @@
 .op-ttl-indicator[data-urgent] {
     border-color: var(--op-error);
     color: var(--op-error);
-    animation: op-ttl-pulse 0.8s infinite alternate ease-in-out;
+    animation: op-chat-message-ttl-pulse var(--op-motion-result-hold) infinite alternate ease-in-out;
 }
 
-@keyframes op-ttl-pulse {
+@keyframes op-chat-message-ttl-pulse {
     from { opacity: 0.6; }
     to { opacity: 1; }
 }
@@ -395,7 +389,7 @@
 }
 
 .op-reaction-chip[data-selected] {
-    background-color: rgba(var(--op-accent-rgb, 0, 160, 255), 0.18);
+    background-color: color-mix(in srgb, var(--op-chat-accent, var(--op-accent)) 18%, transparent);
     border-color: var(--op-chat-accent, var(--op-accent));
     color: var(--op-chat-accent, var(--op-accent));
 }

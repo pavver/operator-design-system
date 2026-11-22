@@ -39,8 +39,8 @@
   font-size: calc(var(--op-tu) * 18);
   cursor: pointer;
   user-select: none;
-  transition: transform var(--op-motion-expressive, 120ms ease),
-              background var(--op-motion-expressive, 120ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-quick-reaction-btn:hover {
@@ -81,7 +81,7 @@
   background: var(--op-reaction-picker-bg);
   border: calc(var(--op-du) * 0.25) solid var(--op-reaction-picker-accent);
   box-sizing: border-box;
-  box-shadow: 0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) rgba(0, 0, 0, 0.4);
+  box-shadow: 0 calc(var(--op-du) * 2) calc(var(--op-du) * 6) var(--op-shadow);
   z-index: 9999;
 }
 
@@ -180,9 +180,9 @@
   font-size: calc(var(--op-tu) * 20);
   cursor: pointer;
   user-select: none;
-  transition: transform var(--op-motion-expressive, 100ms ease),
-              background var(--op-motion-expressive, 100ms ease),
-              border-color var(--op-motion-expressive, 100ms ease);
+  transition: transform var(--op-motion-state-color) var(--op-ease-standard),
+              background var(--op-motion-state-color) var(--op-ease-standard),
+              border-color var(--op-motion-state-color) var(--op-ease-standard);
 }
 
 .op-reaction-picker__cell:hover {

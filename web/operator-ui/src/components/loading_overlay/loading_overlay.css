@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--op-loading-overlay-background, var(--op-overlay-scrim, rgb(0 0 0 / 55%)));
+    background-color: var(--op-loading-overlay-background, var(--op-overlay-scrim));
     pointer-events: none;
     user-select: none;
     opacity: 0;

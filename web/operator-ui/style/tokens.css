@@ -95,6 +95,8 @@
   --op-accent: #F0A53A;
   --op-accent-muted: #4A3820;
   --op-on-accent: #1A1205;
+  --op-on-media: #FFFFFF;
+  --op-overlay-scrim: #0000008C;
   --op-success: #8CBF6E;
   --op-warning: #DCC36A;
   --op-error: #E8664F;
@@ -112,6 +114,7 @@
   --op-status-alarm: #E8664F;
   --op-status-error: #E8664F;
   --op-status-activity: #8CBF6E;
+  --op-status-live: #DC2626;
   --op-status-border: #4A4A4A;
   --op-status-fallback: #6E6E6E;
   --op-switch-checked-track: #26331F;
@@ -173,6 +176,8 @@
   --op-accent: #A35C00;
   --op-accent-muted: #F5E6D0;
   --op-on-accent: #FFFFFF;
+  --op-on-media: #FFFFFF;
+  --op-overlay-scrim: #0000008C;
   --op-success: #477A2E;
   --op-warning: #8A6D00;
   --op-error: #B3361F;
@@ -190,6 +195,7 @@
   --op-status-alarm: #B3361F;
   --op-status-error: #B3361F;
   --op-status-activity: #477A2E;
+  --op-status-live: #DC2626;
   --op-status-border: #A0A0A0;
   --op-status-fallback: #A0A0A0;
   --op-switch-checked-track: #DCEBD3;

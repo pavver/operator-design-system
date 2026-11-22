@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* Sheet                                                               */
 /* ------------------------------------------------------------------ */
-.op-sheet-scrim { position: fixed; inset: 0; z-index: 45; background: var(--op-sheet-scrim, rgb(0 0 0 / 55%)); animation: op-fade-in var(--op-motion-sheet-slide) var(--op-ease-standard); }
+.op-sheet-scrim { position: fixed; inset: 0; z-index: 45; background: var(--op-sheet-scrim, var(--op-overlay-scrim)); animation: op-fade-in var(--op-motion-sheet-slide) var(--op-ease-standard); }
 .op-sheet {
   position: absolute;
   display: flex;

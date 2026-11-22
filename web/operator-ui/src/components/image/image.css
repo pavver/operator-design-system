@@ -32,7 +32,7 @@
     align-items: center;
     justify-content: center;
     gap: calc(var(--op-du) * 1);
-    background-color: var(--op-image-placeholder-bg, var(--op-surface-subtle));
+    background-color: var(--op-image-placeholder-bg, var(--op-surface-alt));
 }
 
 .op-image-error {
@@ -48,7 +48,7 @@
     left: 0;
     right: 0;
     padding: calc(var(--op-du) * 2);
-    background-color: var(--op-image-caption-bg, rgba(0, 0, 0, 0.7));
-    color: var(--op-image-caption-text, #ffffff);
+    background-color: var(--op-image-caption-bg, var(--op-overlay-scrim));
+    color: var(--op-image-caption-text, var(--op-on-media));
     font-size: var(--op-type-caption-size, 10TU);
 }

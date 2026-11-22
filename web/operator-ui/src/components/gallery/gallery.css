@@ -72,8 +72,8 @@
     width: calc(var(--op-du) * 11);
     height: calc(var(--op-du) * 11);
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.55);
-    color: #ffffff;
+    background: var(--op-overlay-scrim);
+    color: var(--op-on-media);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,8 +92,8 @@
     bottom: 0;
     inset-inline: 0;
     padding: calc(var(--op-du) * 1) calc(var(--op-du) * 1.5);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-    color: #ffffff;
+    background: linear-gradient(0deg, var(--op-overlay-scrim) 0%, transparent 100%);
+    color: var(--op-on-media);
     font-size: calc(var(--op-tu) * 11);
     font-weight: 500;
     line-height: calc(var(--op-tu) * 14);

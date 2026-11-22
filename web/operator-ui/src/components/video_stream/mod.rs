@@ -5,7 +5,7 @@ mod types;
 
 pub use types::*;
 
-use crate::components::primitives::Icon;
+use crate::components::primitives::{Icon, ProgressIndicator};
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use controls::VideoStreamChrome;
 use leptos::prelude::*;
@@ -255,10 +255,8 @@ pub fn VideoStream(
                     } else {
                         view! {
                             <div class="op-video-stream-overlay">
-                                <div class="op-video-stream-spinner">
-                                    <Icon icon=icons::REFRESH size=8.0 />
-                                </div>
-                                <span class="op-video-stream-status-text">{resolved_connecting.get()}</span>
+                                <ProgressIndicator size=8.0 />
+                                <span class="op-video-stream-status-text" style="margin-top:calc(var(--op-du)*2);">{resolved_connecting.get()}</span>
                             </div>
                         }.into_any()
                     }
@@ -266,10 +264,8 @@ pub fn VideoStream(
                 VideoStreamState::Stalled => {
                     view! {
                         <div class="op-video-stream-overlay">
-                            <div class="op-video-stream-spinner">
-                                <Icon icon=icons::REFRESH size=8.0 />
-                            </div>
-                            <span class="op-video-stream-status-text">{resolved_stalled.get()}</span>
+                            <ProgressIndicator size=8.0 />
+                            <span class="op-video-stream-status-text" style="margin-top:calc(var(--op-du)*2);">{resolved_stalled.get()}</span>
                         </div>
                     }.into_any()
                 }
