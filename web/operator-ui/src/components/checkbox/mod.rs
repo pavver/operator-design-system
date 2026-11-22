@@ -1,9 +1,8 @@
 //! Checkbox: AsyncCheckbox.
 
 use crate::core::{
-    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, mirrored, root_class,
-    root_style, run_toggle, spawn_ripple, ui_icon, ui_text, use_pending_indicator,
-    use_state_visual,
+    AsyncAction, ControlState, Metric, PendingRun, Slot, ToggleControl, root_class, root_style,
+    spawn_ripple, ui_icon, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, icons};
@@ -56,24 +55,13 @@ pub fn AsyncCheckbox(
     ];
 
     let has_label_slot = label_slot.is_set();
-    let local = RwSignal::new(ControlState::Idle);
-    let value = mirrored(checked);
-    let job = JobToken::new();
-    let press = Press::new();
-    let has_action = on_change.is_some();
+    let ctrl = ToggleControl::new(checked, state, enabled, on_change.is_some());
+    let value = ctrl.value;
+    let current = ctrl.current;
+    let press = ctrl.press;
+    let clickable = move || ctrl.clickable();
+    let toggle = move || ctrl.toggle(on_change.as_ref());
 
-    let current = Signal::derive(move || {
-        let managed = state.get().unwrap_or_else(|| local.get());
-        if !enabled.get() {
-            ControlState::Disabled
-        } else if managed != ControlState::Idle {
-            managed
-        } else if press.pressed.get() {
-            ControlState::Pressed
-        } else {
-            ControlState::Idle
-        }
-    });
     let border_state = Signal::derive(move || {
         let s = current.get();
         if s == ControlState::Idle && value.get() {
@@ -85,18 +73,6 @@ pub fn AsyncCheckbox(
     let visual = use_state_visual(border_state);
     let tone = use_state_visual(current);
     let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
-    let clickable = move || {
-        has_action
-            && !matches!(
-                current.get(),
-                ControlState::Disabled | ControlState::Pending
-            )
-    };
-    let toggle = move || {
-        if let Some(action) = on_change.clone() {
-            run_toggle(action, value, local, job);
-        }
-    };
 
     view! {
         <button

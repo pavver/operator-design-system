@@ -1,9 +1,8 @@
 //! Capsule switch: AsyncSwitch.
 
 use crate::core::{
-    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, mirrored, root_class,
-    root_style, run_toggle, spawn_ripple, ui_icon, ui_text, use_pending_indicator,
-    use_state_visual,
+    AsyncAction, ControlState, Metric, PendingRun, Slot, ToggleControl, root_class, root_style,
+    spawn_ripple, ui_icon, ui_text, use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use operator_ui_tokens::{Icon as IconData, icons};
@@ -52,38 +51,14 @@ pub fn AsyncSwitch(
         Metric::du("--op-switch-spinner-stroke", spinner_stroke),
     ];
 
-    let local = RwSignal::new(ControlState::Idle);
-    let value = mirrored(checked);
-    let job = JobToken::new();
-    let press = Press::new();
-    let has_action = on_toggle.is_some();
-
-    let current = Signal::derive(move || {
-        let managed = state.get().unwrap_or_else(|| local.get());
-        if !enabled.get() {
-            ControlState::Disabled
-        } else if managed != ControlState::Idle {
-            managed
-        } else if press.pressed.get() {
-            ControlState::Pressed
-        } else {
-            ControlState::Idle
-        }
-    });
+    let ctrl = ToggleControl::new(checked, state, enabled, on_toggle.is_some());
+    let value = ctrl.value;
+    let current = ctrl.current;
+    let press = ctrl.press;
     let visual = use_state_visual(current);
     let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
-    let clickable = move || {
-        has_action
-            && !matches!(
-                current.get(),
-                ControlState::Disabled | ControlState::Pending
-            )
-    };
-    let toggle = move || {
-        if let Some(action) = on_toggle.clone() {
-            run_toggle(action, value, local, job);
-        }
-    };
+    let clickable = move || ctrl.clickable();
+    let toggle = move || ctrl.toggle(on_toggle.as_ref());
 
     view! {
         <button
