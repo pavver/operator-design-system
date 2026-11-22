@@ -1,0 +1,10 @@
+date = "2026-11-11T22:17:26+02:00"
+status = "approved"
+kind = "feature"
+commit = "008f06c"
+
+[en]
+summary = "Lock page scroll while a Dialog or Sheet is open."
+
+[uk]
+summary = "Блокувати прокручування сторінки, поки відкритий Dialog або Sheet."

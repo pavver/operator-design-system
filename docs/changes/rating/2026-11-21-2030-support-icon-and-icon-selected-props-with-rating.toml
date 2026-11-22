@@ -1,0 +1,9 @@
+date = "2026-11-21T20:30:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Support icon and icon_selected props with rating.icon and rating.icon-selected keys."
+
+[uk]
+summary = "Підтримка властивостей icon та icon_selected з ключами rating.icon та rating.icon-selected."

@@ -1,0 +1,9 @@
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Use design token variables for color properties and remove pixel references from documentation."
+
+[uk]
+summary = "Використано стандартні токени дизайну для властивостей кольору та вилучено згадки пікселів з документації."

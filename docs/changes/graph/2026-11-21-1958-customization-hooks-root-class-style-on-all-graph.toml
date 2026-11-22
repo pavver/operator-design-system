@@ -1,0 +1,9 @@
+date = "2026-11-21T19:58:14+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: root class/style on all graph parts; metric props grid, header_height, row_height, socket_size, wire_width, wire_label_width/height, wire_handle_min, frame_header_height, minimap_width/height and padding/font/border metrics; --op-graph-* color variables; header, body, footer, title_slot and empty slots; graph.node-help and graph.minimap strings and graph.node-help icon; observe rendered socket geometry after layout and slot changes."
+
+[uk]
+summary = "Точки кастомізації: class/style кореневих елементів усіх частин графа; пропи розмірів grid, header_height, row_height, socket_size, wire_width, wire_label_width/height, wire_handle_min, frame_header_height, minimap_width/height, відступів, шрифтів і меж; змінні кольорів --op-graph-*; слоти header, body, footer, title_slot та empty; перекладні тексти graph.node-help і graph.minimap та замінна іконка graph.node-help; вимірювання сокетів після змін компонування й слотів."

@@ -2,7 +2,7 @@
 
 use crate::REPO_URL;
 use crate::docs;
-use crate::history::ChangeHistory;
+use crate::history::{ChangeHistory, ChangesToReview};
 use crate::i18n::{Lang, lang, t};
 use crate::kit::SimBar;
 use crate::nav::{group_of, neighbours};
@@ -55,6 +55,7 @@ pub fn DocPage(doc: &'static docs::Doc) -> impl IntoView {
                     </section>
                 })}
                 <div class="docs-md" inner_html=move || doc.body(lang())></div>
+                {(doc.slug == "changes-to-review").then(|| view! { <ChangesToReview/> })}
                 <footer class="docs-foot">
                     <div class="docs-pager">
                         {link(prev, "Previous", "docs-pager-prev")}

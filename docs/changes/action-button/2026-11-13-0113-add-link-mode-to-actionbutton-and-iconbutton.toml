@@ -1,0 +1,10 @@
+date = "2026-11-13T01:13:45+02:00"
+status = "approved"
+kind = "feature"
+commit = "66afa5e"
+
+[en]
+summary = "Add link mode to ActionButton and IconButton."
+
+[uk]
+summary = "Додати режим посилання до ActionButton та IconButton."

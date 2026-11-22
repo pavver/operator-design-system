@@ -1,0 +1,9 @@
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`tooltip_gap`, `tooltip_max_width`, `tooltip_padding_x`, `tooltip_padding_y`, `tooltip_font_size`, `tooltip_line_height`, `font_size`, `line_height`, `spacing`, `tooltip_shadow_y`, `tooltip_shadow_blur`), color variables, slots (`content`, `tooltip_slot`), strings (caller text) and icons (caller icons); unchanged defaults and a final Customization demo."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`tooltip_gap`, `tooltip_max_width`, `tooltip_padding_x`, `tooltip_padding_y`, `tooltip_font_size`, `tooltip_line_height`, `font_size`, `line_height`, `spacing`, `tooltip_shadow_y`, `tooltip_shadow_blur`), змінні кольорів, слоти (`content`, `tooltip_slot`), тексти застосунку й іконки застосунку; початковий вигляд збережено, приклад Customization додано останнім."

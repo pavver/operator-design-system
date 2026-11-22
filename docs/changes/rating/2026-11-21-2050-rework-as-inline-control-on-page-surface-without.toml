@@ -1,0 +1,9 @@
+date = "2026-11-21T20:50:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Rework as inline control on page surface without background or outer frame; pending spinner, result flash, and error rollback on chosen star; focus ring on focused star."
+
+[uk]
+summary = "Перероблено як інлайн-елемент на поверхні сторінки без фону та зовнішньої рамки; індикатор очікування, спалах результату та відкіт при помилці на обраній зірці; кільце фокусу на сфокусованій зірці."

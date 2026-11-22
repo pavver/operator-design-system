@@ -1,0 +1,9 @@
+date = "2026-11-21T21:02:31+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Initial implementation of the LauncherTile component for dashboard launchpads and application grids."
+
+[uk]
+summary = "Початкова реалізація компонента LauncherTile для панелей запуску та сіток додатків."

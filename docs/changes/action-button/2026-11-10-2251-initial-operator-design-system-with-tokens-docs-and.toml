@@ -1,0 +1,10 @@
+date = "2026-11-10T22:51:36+02:00"
+status = "approved"
+kind = "feature"
+commit = "a9382e9"
+
+[en]
+summary = "Initial Operator design system with tokens, docs and Leptos components."
+
+[uk]
+summary = "Початкова дизайн-система Operator з токенами, документацією та компонентами Leptos."

@@ -1,0 +1,9 @@
+date = "2026-11-21T20:30:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Use ActionButton for submit and reset with async states, and register TextField in demo."
+
+[uk]
+summary = "Використано ActionButton для надсилання й скидання з асинхронними станами, у демо зареєстровано TextField."

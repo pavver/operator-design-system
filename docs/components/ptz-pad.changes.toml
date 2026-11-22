@@ -1,9 +1,0 @@
-# Change history of PtzPad. Newest first.
-# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
-# Rejected changes are deleted from this file.
-
-[[change]]
-date = "2026-11-21T21:02:31+02:00"
-status = "draft"
-en = "Initial implementation of the PtzPad component with 8-way directional joystick control, keyboard arrows, and zoom actions."
-uk = "Початкова реалізація компонента PtzPad з 8-позиційним джойстиком, стрілками клавіатури та діями масштабування."

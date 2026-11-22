@@ -1,0 +1,9 @@
+date = "2026-11-21T20:30:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Rebuild toolbar with dense square icon buttons, tooltips, separators, and TextField for links."
+
+[uk]
+summary = "Панель інструментів перебудовано з компактними квадратними кнопками, підказками, роздільниками та TextField для посилань."

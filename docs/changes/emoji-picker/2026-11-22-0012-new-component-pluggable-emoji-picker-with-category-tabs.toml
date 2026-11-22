@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: pluggable emoji picker with category tabs, live search, and custom emoji support."
+
+[uk]
+summary = "Новий компонент: вибір емодзі з вкладками категорій, живим пошуком та підтримкою власних емодзі."

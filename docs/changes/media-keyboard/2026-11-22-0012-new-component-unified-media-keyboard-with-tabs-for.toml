@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: unified media keyboard with tabs for Emoji, Stickers, and GIFs, desktop popover, and mobile docked panel."
+
+[uk]
+summary = "Новий компонент: уніфікована медіа-клавіатура з вкладками Емодзі, Стікери та GIF, десктопним поповером та мобільною панеллю."

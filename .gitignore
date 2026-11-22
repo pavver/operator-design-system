@@ -5,3 +5,12 @@ Thumbs.db
 target/
 web/operator-ui-demo/dist/
 .metrics/
+
+# Keep the shared task templates and history helpers visible despite local task exclusions.
+!/.tasks/
+/.tasks/*
+!/.tasks/rollout-template.md
+!/.tasks/new-components-template.md
+!/.tasks/port-kotlin-template.md
+!/.tasks/backfill_changes.py
+!/.tasks/migrate_change_files.py

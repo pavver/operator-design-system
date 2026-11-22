@@ -1,0 +1,9 @@
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Add cancel string hook and use design token variables for color properties."
+
+[uk]
+summary = "Додано хук рядка скасування та використано стандартні токени дизайну для властивостей кольору."

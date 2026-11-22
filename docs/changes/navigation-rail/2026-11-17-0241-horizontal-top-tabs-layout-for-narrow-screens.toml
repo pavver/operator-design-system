@@ -1,0 +1,10 @@
+date = "2026-11-17T02:41:39+02:00"
+status = "draft"
+kind = "feature"
+commit = "2cf84d6"
+
+[en]
+summary = "Horizontal top tabs layout for narrow screens."
+
+[uk]
+summary = "Горизонтальне розташування вкладок угорі для вузьких екранів."

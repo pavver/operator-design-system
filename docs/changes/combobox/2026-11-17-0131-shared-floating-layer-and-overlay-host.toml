@@ -1,0 +1,10 @@
+date = "2026-11-17T01:31:40+02:00"
+status = "draft"
+kind = "feature"
+commit = "203c562"
+
+[en]
+summary = "Shared floating layer and overlay host."
+
+[uk]
+summary = "Спільний плаваючий шар та хост накладання."

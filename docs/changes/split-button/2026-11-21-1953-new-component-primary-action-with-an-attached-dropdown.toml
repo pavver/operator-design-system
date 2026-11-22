@@ -1,0 +1,9 @@
+date = "2026-11-21T19:53:42+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: primary action with an attached dropdown menu toggle."
+
+[uk]
+summary = "Новий компонент: основна дія з прикріпленим перемикачем спадного меню."

@@ -1,6 +1,6 @@
 //! Localized component history, with browser-local dates and relative times.
 
-use crate::docs::{Change, Doc};
+use crate::docs::{Change, Doc, DOCS};
 use crate::i18n::{Lang, lang, t, tr};
 use crate::shell::StatusPill;
 use leptos::prelude::*;
@@ -86,12 +86,53 @@ fn date_label(date: &str, language: Lang, summary: bool) -> String {
 }
 
 #[component]
-fn HistoryRow(change: &'static Change) -> impl IntoView {
+fn ChangeDetail(
+    title: &'static str,
+    en: Option<&'static str>,
+    uk: Option<&'static str>,
+) -> impl IntoView {
+    move || {
+        let html = match lang() {
+            Lang::En => en,
+            Lang::Uk => uk,
+        };
+        html.map(|html| view! {
+            <div class="docs-history-detail">
+                <strong>{t(title)}</strong>
+                <div class="docs-md" inner_html=html></div>
+            </div>
+        })
+    }
+}
+
+fn kind_label(kind: &str) -> &'static str {
+    match kind {
+        "new" => "New component",
+        "feature" => "Feature",
+        "fix" => "Fix",
+        "breaking" => "Breaking change",
+        "docs" => "Documentation",
+        "refactor" => "Refactor",
+        _ => "Change",
+    }
+}
+
+#[component]
+fn HistoryRow(
+    change: &'static Change,
+    #[prop(optional)] doc: Option<&'static Doc>,
+) -> impl IntoView {
     view! {
         <li class="docs-history-row">
+            {doc.map(|doc| view! {
+                <a class="docs-history-component" href=format!("#/{}", doc.slug)>
+                    {move || doc.title(lang())}
+                </a>
+            })}
             <div class="docs-history-meta">
                 <time datetime=change.date>{move || date_label(change.date, lang(), false)}</time>
                 <StatusPill status=Some(change.status)/>
+                <span class="docs-pill" data-kind=change.kind>{t(kind_label(change.kind))}</span>
                 {change.commit.map(|hash| view! {
                     <a class="docs-history-commit" href=format!("https://github.com/pavver/operator-design-system/commit/{hash}")>
                         <code>{hash.get(..7).unwrap_or(hash)}</code>
@@ -102,17 +143,15 @@ fn HistoryRow(change: &'static Change) -> impl IntoView {
                 Lang::En => change.en_html,
                 Lang::Uk => change.uk_html,
             }></div>
+            <ChangeDetail title="What to check" en=change.en_check_html uk=change.uk_check_html/>
+            <ChangeDetail title="Migration" en=change.en_migration_html uk=change.uk_migration_html/>
         </li>
     }
 }
 
 #[component]
 pub fn ChangeHistory(doc: &'static Doc) -> impl IntoView {
-    let Some(latest) = doc
-        .changes
-        .iter()
-        .max_by(|a, b| js_sys::Date::parse(a.date).total_cmp(&js_sys::Date::parse(b.date)))
-    else {
+    let Some(latest) = doc.changes.first() else {
         return ().into_any();
     };
     let now = RwSignal::new(js_sys::Date::now());
@@ -148,6 +187,33 @@ pub fn ChangeHistory(doc: &'static Doc) -> impl IntoView {
                 {doc.changes.iter().map(|change| view! { <HistoryRow change=change/> }).collect_view()}
             </ol>
         </details>
+    }.into_any()
+}
+
+/// The queue always reflects the same draft files as component histories.
+#[component]
+pub fn ChangesToReview() -> impl IntoView {
+    let mut changes: Vec<_> = DOCS
+        .iter()
+        .flat_map(|doc| {
+            doc.changes
+                .iter()
+                .filter(|change| change.status == "draft")
+                .map(move |change| (doc, change))
+        })
+        .collect();
+    changes.sort_by(|a, b| {
+        b.1.sort_key.cmp(&a.1.sort_key).then_with(|| a.0.slug.cmp(b.0.slug))
+    });
+    if changes.is_empty() {
+        return view! { <p role="status">{t("No changes awaiting review.")}</p> }.into_any();
+    }
+    view! {
+        <ol class="docs-review-changes" aria-label=t("Changes to review")>
+            {changes.into_iter().map(|(doc, change)| view! {
+                <HistoryRow change=change doc=doc/>
+            }).collect_view()}
+        </ol>
     }.into_any()
 }
 

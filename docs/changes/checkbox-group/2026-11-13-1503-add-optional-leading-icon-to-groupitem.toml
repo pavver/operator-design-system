@@ -1,0 +1,10 @@
+date = "2026-11-13T15:03:07+02:00"
+status = "approved"
+kind = "feature"
+commit = "b0a6108"
+
+[en]
+summary = "Add optional leading icon to GroupItem."
+
+[uk]
+summary = "Додати необов'язкову початкову іконку до GroupItem."

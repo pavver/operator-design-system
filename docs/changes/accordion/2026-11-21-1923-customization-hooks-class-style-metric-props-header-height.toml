@@ -1,0 +1,9 @@
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`header_height`, `padding_start`, `padding_end`, `padding_y`, `gap`, `icon_size`, `content_padding_top`, `content_padding_end`, `content_padding_bottom`, `content_padding_start`, `font_size`, `line_height`, `subtitle_font_size`, `subtitle_line_height`), color variables, slots (`header`, `actions`, `footer`, `trailing`, `children`), strings (`accordion.expand`, `accordion.collapse`) and icons (`accordion.chevron`); unchanged defaults and a final Customization demo."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`header_height`, `padding_start`, `padding_end`, `padding_y`, `gap`, `icon_size`, `content_padding_top`, `content_padding_end`, `content_padding_bottom`, `content_padding_start`, `font_size`, `line_height`, `subtitle_font_size`, `subtitle_line_height`), змінні кольорів, слоти (`header`, `actions`, `footer`, `trailing`, `children`), перекладні тексти (`accordion.expand`, `accordion.collapse`) й замінні іконки (`accordion.chevron`); початковий вигляд збережено, приклад Customization додано останнім."

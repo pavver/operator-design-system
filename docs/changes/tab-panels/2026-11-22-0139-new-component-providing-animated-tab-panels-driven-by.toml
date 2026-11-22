@@ -1,0 +1,9 @@
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component providing animated tab panels driven by a selection signal."
+
+[uk]
+summary = "Новий компонент анімованих панелей вкладок на основі сигналу вибору."

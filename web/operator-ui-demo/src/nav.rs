@@ -4,7 +4,13 @@
 pub const NAV: &[(&str, &[&str])] = &[
     (
         "Getting started",
-        &["platforms/web", "tokens", "porting", "releasing"],
+        &[
+            "platforms/web",
+            "tokens",
+            "porting",
+            "releasing",
+            "changes-to-review",
+        ],
     ),
     (
         "Foundations",

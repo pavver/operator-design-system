@@ -1,0 +1,10 @@
+date = "2026-11-11T20:46:55+02:00"
+status = "approved"
+kind = "feature"
+commit = "2669011"
+
+[en]
+summary = "Add the optional arborium feature for tree-sitter highlighting."
+
+[uk]
+summary = "Додати необов'язкову функціональність arborium для підсвічування через tree-sitter."

@@ -1,0 +1,9 @@
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`offset_x`, `offset_y`, `gap`), `--op-popover-*` metric and color variables, slots (`header`, `actions`, `footer`), translatable strings."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`offset_x`, `offset_y`, `gap`), змінні розмірів і кольорів `--op-popover-*`, слоти (`header`, `actions`, `footer`), перекладні тексти."

@@ -1,0 +1,9 @@
+date = "2026-11-21T21:02:31+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Initial implementation of the Gallery component with responsive grid and compact mosaic layout, selection, and viewport lazy loading."
+
+[uk]
+summary = "Початкова реалізація компонента Gallery з адаптивною сіткою та компактною мозаїчною розкладкою, вибором елементів та лінивим завантаженням."

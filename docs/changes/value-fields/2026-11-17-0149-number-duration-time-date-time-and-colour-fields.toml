@@ -1,0 +1,10 @@
+date = "2026-11-17T01:49:55+02:00"
+status = "draft"
+kind = "feature"
+commit = "21fdbf8"
+
+[en]
+summary = "Number, duration, time, date-time and colour fields."
+
+[uk]
+summary = "Поля чисел, тривалості, часу, дати й часу та кольору."

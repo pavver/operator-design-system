@@ -1,0 +1,9 @@
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`gap`, `padding`, `font_size`, `line_height`, `height`), color variables, slots (`header`, `footer`, `empty`), strings (`console-terminal.label`) and icons (caller icons); unchanged defaults and a final Customization demo."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`gap`, `padding`, `font_size`, `line_height`, `height`), змінні кольорів, слоти (`header`, `footer`, `empty`), перекладні тексти (`console-terminal.label`) й іконки застосунку; початковий вигляд збережено, приклад Customization додано останнім."

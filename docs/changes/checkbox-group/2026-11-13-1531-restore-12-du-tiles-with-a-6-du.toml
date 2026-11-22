@@ -1,0 +1,10 @@
+date = "2026-11-13T15:31:58+02:00"
+status = "approved"
+kind = "feature"
+commit = "199cdcc"
+
+[en]
+summary = "Restore 12 DU tiles with a 6 DU box and 2 DU padding."
+
+[uk]
+summary = "Відновити плитки 12 DU з боксом 6 DU та відступом 2 DU."

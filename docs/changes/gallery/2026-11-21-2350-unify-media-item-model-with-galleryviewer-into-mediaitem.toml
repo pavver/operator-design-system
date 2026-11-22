@@ -1,0 +1,9 @@
+date = "2026-11-21T23:50:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Unify media item model with GalleryViewer into MediaItem, and open GalleryViewer on tile click by default."
+
+[uk]
+summary = "Об'єднано модель медіаелементів із GalleryViewer у єдиний MediaItem та додано відкриття переглядача GalleryViewer при натисканні за замовчуванням."

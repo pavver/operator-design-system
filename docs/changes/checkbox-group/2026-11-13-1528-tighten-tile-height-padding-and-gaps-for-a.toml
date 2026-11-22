@@ -1,0 +1,10 @@
+date = "2026-11-13T15:28:09+02:00"
+status = "approved"
+kind = "feature"
+commit = "ccf15c5"
+
+[en]
+summary = "Tighten tile height, padding, and gaps for a compact layout."
+
+[uk]
+summary = "Зменшити висоту плиток, відступи та проміжки для компактного макета."

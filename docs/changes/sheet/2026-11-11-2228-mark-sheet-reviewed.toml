@@ -1,0 +1,10 @@
+date = "2026-11-11T22:28:27+02:00"
+status = "approved"
+kind = "feature"
+commit = "cd8e26c"
+
+[en]
+summary = "Mark Sheet reviewed."
+
+[uk]
+summary = "Позначити Sheet як рецензований."

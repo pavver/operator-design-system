@@ -1,0 +1,10 @@
+date = "2026-11-17T01:58:27+02:00"
+status = "draft"
+kind = "feature"
+commit = "a65383d"
+
+[en]
+summary = "NavigationRail, SidePanel and a virtualized Tree."
+
+[uk]
+summary = "NavigationRail, SidePanel та віртуалізоване Tree."

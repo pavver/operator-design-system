@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: looping GIF video picker with tag navigation and IntersectionObserver viewport auto-pause."
+
+[uk]
+summary = "Новий компонент: вибір GIF-відеокліпів із тегами та автопаузою за допомогою IntersectionObserver."

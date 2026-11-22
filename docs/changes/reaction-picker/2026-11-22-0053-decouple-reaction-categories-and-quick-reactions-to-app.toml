@@ -1,0 +1,9 @@
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Decouple reaction categories and quick reactions to app-provided sections via ReactionSection; add string and icon hooks."
+
+[uk]
+summary = "Винесено категорії реакцій та швидкі реакції у структуру застосунку через ReactionSection; додано хуки рядків і піктограм."

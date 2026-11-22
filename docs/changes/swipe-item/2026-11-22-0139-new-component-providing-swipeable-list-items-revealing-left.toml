@@ -1,0 +1,9 @@
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component providing swipeable list items revealing left and right actions."
+
+[uk]
+summary = "Новий компонент елементів списку з жестом гортання для відкриття дій ліворуч і праворуч."

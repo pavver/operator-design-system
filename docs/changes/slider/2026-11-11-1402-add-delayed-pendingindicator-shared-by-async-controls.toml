@@ -1,0 +1,10 @@
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+kind = "feature"
+commit = "963bf4d"
+
+[en]
+summary = "Add delayed PendingIndicator shared by async controls."
+
+[uk]
+summary = "Додати відкладений PendingIndicator, спільний для асинхронних елементів керування."

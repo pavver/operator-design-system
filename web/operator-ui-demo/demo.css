@@ -248,6 +248,10 @@ body { background: #181818; }
 .docs-history ol { list-style: none; margin: var(--op-dim-margin-screen) 0 0; padding: 0; }
 .docs-history-row + .docs-history-row { padding-top: var(--op-dim-pad-card); box-shadow: inset 0 var(--op-dim-border) 0 var(--op-divider); }
 .docs-history-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--op-dim-gutter); font-size: var(--op-type-caption-size); }
+.docs-pill[data-kind="breaking"] { color: var(--op-error); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-error); }
+.docs-review-changes { list-style: none; margin: var(--op-dim-margin-screen) 0 0; padding: 0; }
+.docs-history-component { display: inline-block; margin-bottom: var(--op-dim-gutter); }
+.docs-history-detail { margin-bottom: var(--op-dim-gutter); }
 
 @media (max-width: 30em) {
   .docs-topbar-inner { gap: var(--op-dim-gutter); }

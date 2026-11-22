@@ -1,0 +1,9 @@
+date = "2026-11-22T02:26:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Show pending spinner and Success/Error result states adhering to states.md."
+
+[uk]
+summary = "Відображення індикатора очікування та станів результату Success/Error згідно зі states.md."

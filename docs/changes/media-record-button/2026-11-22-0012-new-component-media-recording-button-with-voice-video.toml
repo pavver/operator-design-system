@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: media recording button with voice/video mode toggle, hold-to-record, slide-to-cancel, and lock gestures."
+
+[uk]
+summary = "Новий компонент: кнопка запису медіа з перемиканням режимів голос/відео, утриманням для запису, жестами скасування та фіксації."

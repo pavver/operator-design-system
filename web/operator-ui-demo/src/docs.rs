@@ -4,10 +4,16 @@ use crate::i18n::Lang;
 
 pub struct Change {
     pub date: &'static str,
+    pub sort_key: (i64, u32),
     pub status: &'static str,
+    pub kind: &'static str,
     pub commit: Option<&'static str>,
     pub en_html: &'static str,
     pub uk_html: &'static str,
+    pub en_check_html: Option<&'static str>,
+    pub uk_check_html: Option<&'static str>,
+    pub en_migration_html: Option<&'static str>,
+    pub uk_migration_html: Option<&'static str>,
 }
 
 /// One English document and its optional Ukrainian mirror.

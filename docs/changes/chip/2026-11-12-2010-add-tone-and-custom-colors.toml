@@ -1,0 +1,10 @@
+date = "2026-11-12T20:10:50+02:00"
+status = "approved"
+kind = "feature"
+commit = "c69e965"
+
+[en]
+summary = "Add tone and custom colors."
+
+[uk]
+summary = "Додати тон та власні кольори."

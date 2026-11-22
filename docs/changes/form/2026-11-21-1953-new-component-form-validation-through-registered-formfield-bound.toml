@@ -1,0 +1,9 @@
+date = "2026-11-21T19:53:42+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: form validation through registered FormField boundaries."
+
+[uk]
+summary = "Новий компонент: валідація форми через зареєстровані межі FormField."

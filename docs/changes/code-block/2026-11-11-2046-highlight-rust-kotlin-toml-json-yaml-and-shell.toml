@@ -1,0 +1,10 @@
+date = "2026-11-11T20:46:54+02:00"
+status = "approved"
+kind = "feature"
+commit = "7dae485"
+
+[en]
+summary = "Highlight Rust, Kotlin, TOML, JSON, YAML and shell with a built-in scanner."
+
+[uk]
+summary = "Підсвічувати Rust, Kotlin, TOML, JSON, YAML та shell за допомогою вбудованого сканера."

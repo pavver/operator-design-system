@@ -1,0 +1,10 @@
+date = "2026-11-11T20:46:54+02:00"
+status = "approved"
+kind = "feature"
+commit = "b485813"
+
+[en]
+summary = "Color logs from xterm SGR escape sequences on a shared styled text base."
+
+[uk]
+summary = "Розфарбовувати логи за керуючими послідовностями xterm SGR на спільній основі стилізованого тексту."

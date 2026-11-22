@@ -1,0 +1,10 @@
+date = "2026-11-11T15:18:35+02:00"
+status = "draft"
+kind = "feature"
+commit = "a27d1f0"
+
+[en]
+summary = "Split operator-ui into one module and stylesheet per component."
+
+[uk]
+summary = "Розділити operator-ui на окремий модуль і таблицю стилів для кожного компонента."

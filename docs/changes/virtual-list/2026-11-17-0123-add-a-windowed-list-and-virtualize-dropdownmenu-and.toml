@@ -1,0 +1,10 @@
+date = "2026-11-17T01:23:57+02:00"
+status = "draft"
+kind = "feature"
+commit = "0103e67"
+
+[en]
+summary = "Add a windowed list and virtualize DropdownMenu and Combobox."
+
+[uk]
+summary = "Додати віконний список і віртуалізувати DropdownMenu та Combobox."

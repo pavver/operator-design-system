@@ -1,0 +1,10 @@
+date = "2026-11-17T02:05:16+02:00"
+status = "draft"
+kind = "feature"
+commit = "8c859ce"
+
+[en]
+summary = "Project extension for node-graph editing."
+
+[uk]
+summary = "Розширення проєкту для редагування графа вузлів."

@@ -1,0 +1,10 @@
+date = "2026-11-11T19:40:14+02:00"
+status = "approved"
+kind = "feature"
+commit = "5a3fa52"
+
+[en]
+summary = "Mark LinearProgress and Dialog as reviewed."
+
+[uk]
+summary = "Позначити LinearProgress та Dialog як рецензовані."

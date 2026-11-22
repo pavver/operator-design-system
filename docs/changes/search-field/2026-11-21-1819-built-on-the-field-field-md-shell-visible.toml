@@ -1,0 +1,10 @@
+date = "2026-11-21T18:19:00+02:00"
+status = "draft"
+kind = "feature"
+commit = "660bfcc"
+
+[en]
+summary = "Built on the [Field](field.md) shell: visible `label`, `aria_label`, `hint`, `error`, `variant`, slots `prepend`/`append`/`before`/`after`, metric props (`height`, `padding_x`, `slot_size`, `gap`, `font_size`), `class`/`style`, translatable strings and replaceable icons. Breaking: `label` is now visible; use `aria_label` for the accessible name only."
+
+[uk]
+summary = "Побудовано на оболонці [Field](field.md): видимий `label`, `aria_label`, `hint`, `error`, `variant`, слоти `prepend`/`append`/`before`/`after`, пропи розмірів (`height`, `padding_x`, `slot_size`, `gap`, `font_size`), `class`/`style`, перекладні тексти й замінні іконки. Несумісна зміна: `label` тепер видимий; для самої доступної назви використовуйте `aria_label`."

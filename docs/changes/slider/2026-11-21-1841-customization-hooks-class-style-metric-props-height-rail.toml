@@ -1,0 +1,9 @@
+date = "2026-11-21T18:41:35+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`height`, `rail_inset`, `track_height`, `thumb_size`, `tick_size`, `dot_size`, `icon_size`, `spinner_size`, `tooltip_offset`, `tooltip_padding_x`, `tooltip_padding_y`, `font_size`, `line_height`, `focus_width`, `focus_offset`, `spinner_stroke`, `width`), color variables, slots (`thumb`), translatable strings and replaceable icons."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `rail_inset`, `track_height`, `thumb_size`, `tick_size`, `dot_size`, `icon_size`, `spinner_size`, `tooltip_offset`, `tooltip_padding_x`, `tooltip_padding_y`, `font_size`, `line_height`, `focus_width`, `focus_offset`, `spinner_stroke`, `width`), змінні кольорів, слоти (`thumb`), перекладні тексти й замінні іконки."

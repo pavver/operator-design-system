@@ -1,0 +1,9 @@
+date = "2026-11-21T20:56:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Show the selected language flag in the closed field prepend slot, add the width metric prop, and replace the docs header language toggle."
+
+[uk]
+summary = "Показ прапора обраної мови у слоті prepend закритого поля, додано метричний проп width та замінено перемикач мов у шапці документації."

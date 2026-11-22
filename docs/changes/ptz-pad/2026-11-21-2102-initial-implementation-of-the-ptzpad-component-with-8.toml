@@ -1,0 +1,9 @@
+date = "2026-11-21T21:02:31+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Initial implementation of the PtzPad component with 8-way directional joystick control, keyboard arrows, and zoom actions."
+
+[uk]
+summary = "Початкова реалізація компонента PtzPad з 8-позиційним джойстиком, стрілками клавіатури та діями масштабування."

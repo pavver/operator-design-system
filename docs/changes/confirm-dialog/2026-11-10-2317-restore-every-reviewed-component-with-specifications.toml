@@ -1,0 +1,10 @@
+date = "2026-11-10T23:17:32+02:00"
+status = "approved"
+kind = "feature"
+commit = "793487c"
+
+[en]
+summary = "Restore every reviewed component with specifications."
+
+[uk]
+summary = "Відновити всі рецензовані компоненти зі специфікаціями."

@@ -1,0 +1,9 @@
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`min_size`, `handle_size`, `divider_width`, `divider_active_width`, `grip_width`, `grip_length`), color variables (`--op-split-pane-divider-color`, `--op-split-pane-divider-active-color`, `--op-split-pane-grip-color`), slots (`start`, `end`, `grip`), and translatable `label` string."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`min_size`, `handle_size`, `divider_width`, `divider_active_width`, `grip_width`, `grip_length`), змінні кольорів (`--op-split-pane-divider-color`, `--op-split-pane-divider-active-color`, `--op-split-pane-grip-color`), слоти (`start`, `end`, `grip`) та перекладний рядок `label`."

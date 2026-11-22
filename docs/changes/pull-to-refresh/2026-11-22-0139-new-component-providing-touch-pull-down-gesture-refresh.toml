@@ -1,0 +1,9 @@
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component providing touch pull-down gesture refresh with Operator states."
+
+[uk]
+summary = "Новий компонент оновлення сенсорним жестом потягування зі станами Operator."

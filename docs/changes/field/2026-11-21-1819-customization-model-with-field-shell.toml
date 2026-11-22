@@ -1,0 +1,10 @@
+date = "2026-11-21T18:19:09+02:00"
+status = "draft"
+kind = "feature"
+commit = "660bfcc"
+
+[en]
+summary = "Customization model with Field shell."
+
+[uk]
+summary = "Модель кастомізації з оболонкою Field."

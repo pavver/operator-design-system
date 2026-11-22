@@ -1,0 +1,9 @@
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Describe generic media keyboard compatible with any packs (Telegram included); update emoji and trending tag props and tokens."
+
+[uk]
+summary = "Описано універсальну медіа-клавіатуру, сумісну з будь-якими паками (включно з Telegram); оновлено параметри емодзі й тегів та токени."

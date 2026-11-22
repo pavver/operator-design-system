@@ -1,9 +1,0 @@
-# Change history of Knob. Newest first.
-# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
-# Rejected changes are deleted from this file.
-
-[[change]]
-date = "2026-11-21T19:53:42+02:00"
-status = "draft"
-en = "New component: circular value control with pointer capture and keyboard stepping."
-uk = "Новий компонент: круговий регулятор значення із захопленням вказівника та покроковим клавіатурним введенням."

@@ -1,0 +1,10 @@
+date = "2026-11-10T23:45:31+02:00"
+status = "approved"
+kind = "feature"
+commit = "14c6151"
+
+[en]
+summary = "Drop async, disabled and external states."
+
+[uk]
+summary = "Вилучити стани async, disabled та external."

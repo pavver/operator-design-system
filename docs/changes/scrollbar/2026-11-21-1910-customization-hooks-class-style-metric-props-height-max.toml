@@ -1,0 +1,9 @@
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`height`, `max_height`, `track_size`, `thumb_thickness`), color variables (`--op-scrollbar-thumb-color`, `--op-scrollbar-thumb-hover-color`, `--op-scrollbar-thumb-active-color`, `--op-scrollbar-track-hover-background`, `--op-scrollbar-track-active-background`, `--op-scrollbar-divider-color`), slots (`header`, `footer`), and translatable `label` string."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `max_height`, `track_size`, `thumb_thickness`), змінні кольорів (`--op-scrollbar-thumb-color`, `--op-scrollbar-thumb-hover-color`, `--op-scrollbar-thumb-active-color`, `--op-scrollbar-track-hover-background`, `--op-scrollbar-track-active-background`, `--op-scrollbar-divider-color`), слоти (`header`, `footer`) та перекладний рядок `label`."

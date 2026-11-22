@@ -1,9 +1,0 @@
-# Change history of LauncherTile. Newest first.
-# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
-# Rejected changes are deleted from this file.
-
-[[change]]
-date = "2026-11-21T21:02:31+02:00"
-status = "draft"
-en = "Initial implementation of the LauncherTile component for dashboard launchpads and application grids."
-uk = "Початкова реалізація компонента LauncherTile для панелей запуску та сіток додатків."

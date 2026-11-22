@@ -1,0 +1,10 @@
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+kind = "feature"
+commit = "27ba774"
+
+[en]
+summary = "Add Scrollbar, ScrollView and reviewed ScrollArea."
+
+[uk]
+summary = "Додати Scrollbar, ScrollView та рецензований ScrollArea."

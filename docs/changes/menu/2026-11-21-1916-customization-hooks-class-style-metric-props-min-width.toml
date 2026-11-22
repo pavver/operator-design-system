@@ -1,0 +1,9 @@
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`min_width`, `max_width`, `viewport_margin`, `shadow_y`, `shadow_blur`, `gap`, `item_height`, `padding_end`, `padding_start`, `icon_size`, `shortcut_font_size`, `padding_y`, `font_size`, `line_height`, `max_height`), `--op-menu-*` metric and color variables, slots (`option`, `empty`, `before_options`, `after_options`, `header`, `footer`), translatable strings and replaceable icons."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`min_width`, `max_width`, `viewport_margin`, `shadow_y`, `shadow_blur`, `gap`, `item_height`, `padding_end`, `padding_start`, `icon_size`, `shortcut_font_size`, `padding_y`, `font_size`, `line_height`, `max_height`), змінні розмірів і кольорів `--op-menu-*`, слоти (`option`, `empty`, `before_options`, `after_options`, `header`, `footer`), перекладні тексти й замінні іконки."

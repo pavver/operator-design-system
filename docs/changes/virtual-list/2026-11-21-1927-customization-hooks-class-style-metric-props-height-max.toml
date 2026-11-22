@@ -1,0 +1,9 @@
+date = "2026-11-21T19:27:42+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`height`, `max_height`, `row_height`), and slots `header`/`footer`/`empty`."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `max_height`, `row_height`) та слоти `header`/`footer`/`empty`."

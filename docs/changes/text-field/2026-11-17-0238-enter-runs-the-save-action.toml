@@ -1,0 +1,10 @@
+date = "2026-11-17T02:38:08+02:00"
+status = "draft"
+kind = "feature"
+commit = "8cd398d"
+
+[en]
+summary = "Enter runs the save action."
+
+[uk]
+summary = "Enter запускає дію збереження."

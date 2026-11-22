@@ -1,0 +1,10 @@
+date = "2026-11-13T15:06:44+02:00"
+status = "approved"
+kind = "feature"
+commit = "f03c6da"
+
+[en]
+summary = "Add icon size option with a near full-height large size."
+
+[uk]
+summary = "Додати опцію розміру іконки з великим розміром майже на всю висоту."

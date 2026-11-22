@@ -1,0 +1,10 @@
+date = "2026-11-13T15:34:36+02:00"
+status = "approved"
+kind = "feature"
+commit = "65712c5"
+
+[en]
+summary = "Set the gap between tiles to 0.75 DU."
+
+[uk]
+summary = "Встановити проміжок між плитками у 0.75 DU."

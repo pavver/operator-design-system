@@ -1,0 +1,10 @@
+date = "2026-11-13T15:10:11+02:00"
+status = "draft"
+kind = "feature"
+commit = "154fb03"
+
+[en]
+summary = "Move commands into an overflow menu when they do not fit."
+
+[uk]
+summary = "Переносити команди в меню переповнення, коли вони не вміщуються."

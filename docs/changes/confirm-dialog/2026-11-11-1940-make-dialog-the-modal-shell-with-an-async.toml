@@ -1,0 +1,10 @@
+date = "2026-11-11T19:40:14+02:00"
+status = "approved"
+kind = "feature"
+commit = "af6d36d"
+
+[en]
+summary = "Make Dialog the modal shell with an async confirm action and ConfirmDialog its preset."
+
+[uk]
+summary = "Зробити Dialog модальною оболонкою з асинхронною дією підтвердження, а ConfirmDialog — його пресетом."

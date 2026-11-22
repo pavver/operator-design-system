@@ -1,0 +1,10 @@
+date = "2026-11-11T21:50:57+02:00"
+status = "approved"
+kind = "feature"
+commit = "3e95ba4"
+
+[en]
+summary = "Add load cycle example for Skeleton and EmptyState and mark both reviewed."
+
+[uk]
+summary = "Додати приклад циклу завантаження для Skeleton та EmptyState і позначити обидва як рецензовані."

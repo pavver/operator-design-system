@@ -1,0 +1,9 @@
+date = "2026-11-21T18:45:10+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Field shell with label/hint/error/variant; class/style; height, padding_x, slot_size, gap, font_size, icon_size, save_min_width and save_max_width; prepend, append, before, after, label_slot and hint_slot; text-field string keys and replaceable save/reveal/conceal icons."
+
+[uk]
+summary = "Оболонка Field із label/hint/error/variant; class/style; height, padding_x, slot_size, gap, font_size, icon_size, save_min_width і save_max_width; слоти prepend, append, before, after, label_slot і hint_slot; перекладні тексти text-field та замінні іконки збереження, показу й приховування пароля."

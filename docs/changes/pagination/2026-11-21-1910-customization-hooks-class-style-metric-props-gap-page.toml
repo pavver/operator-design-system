@@ -1,0 +1,9 @@
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`gap`, `page_size`, `page_padding_x`, `compact_gap`, `compact_padding_x`), color variables (`--op-pagination-page-background`, `--op-pagination-page-text`, `--op-pagination-current-background`, `--op-pagination-current-text`, `--op-pagination-gap-text`, `--op-pagination-compact-text`), slots (`before`, `after`), translatable strings (`label`, `prev_label`, `next_label`, `page_label`, `current_page_label`) and replaceable icons (`prev_icon`, `next_icon`)."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`gap`, `page_size`, `page_padding_x`, `compact_gap`, `compact_padding_x`), змінні кольорів (`--op-pagination-page-background`, `--op-pagination-page-text`, `--op-pagination-current-background`, `--op-pagination-current-text`, `--op-pagination-gap-text`, `--op-pagination-compact-text`), слоти (`before`, `after`), перекладні рядки (`label`, `prev_label`, `next_label`, `page_label`, `current_page_label`) та замінні іконки (`prev_icon`, `next_icon`)."

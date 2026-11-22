@@ -1,0 +1,9 @@
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`shadow_y`, `shadow_blur`, `viewport_margin`, `padding`, `gap`, `width`, `max_height`, `offset`, `font_size`, `line_height`, `max_width`), `--op-hover-card-*` metric and color variables, slots (`header`, `actions`, `footer`), translatable strings."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`shadow_y`, `shadow_blur`, `viewport_margin`, `padding`, `gap`, `width`, `max_height`, `offset`, `font_size`, `line_height`, `max_width`), змінні розмірів і кольорів `--op-hover-card-*`, слоти (`header`, `actions`, `footer`), перекладні тексти."

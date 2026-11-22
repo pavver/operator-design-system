@@ -1,0 +1,10 @@
+date = "2026-11-11T14:02:11+02:00"
+status = "approved"
+kind = "feature"
+commit = "648fa81"
+
+[en]
+summary = "Add TextArea, SearchField, RadioGroup and Combobox."
+
+[uk]
+summary = "Додати TextArea, SearchField, RadioGroup та Combobox."

@@ -1,0 +1,10 @@
+date = "2026-11-17T01:53:44+02:00"
+status = "draft"
+kind = "feature"
+commit = "7317598"
+
+[en]
+summary = "Nested submenus."
+
+[uk]
+summary = "Вкладені підменю."

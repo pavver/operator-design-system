@@ -1,0 +1,10 @@
+date = "2026-11-17T01:40:47+02:00"
+status = "draft"
+kind = "feature"
+commit = "654669f"
+
+[en]
+summary = "Rich options, sections, typed values and a pointer popup."
+
+[uk]
+summary = "Розширені опції, секції, типізовані значення та спливаюче вікно для вказівника."

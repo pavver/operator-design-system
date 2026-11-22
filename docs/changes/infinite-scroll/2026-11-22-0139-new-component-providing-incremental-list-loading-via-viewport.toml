@@ -1,0 +1,9 @@
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component providing incremental list loading via viewport intersection sentinel."
+
+[uk]
+summary = "Новий компонент поступового завантаження списку за допомогою мітки перетину з вікном перегляду."

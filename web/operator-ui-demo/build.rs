@@ -2,10 +2,11 @@
 //! Markdown share one source.
 
 use pulldown_cmark::{CowStr, Event, HeadingLevel, Options, Parser, Tag, TagEnd, html};
-use serde::Deserialize;
 use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 use std::{env, fs};
+
+mod build_history;
 
 const REPO_BLOB: &str = "https://github.com/pavver/operator-design-system/blob/main/";
 
@@ -169,83 +170,6 @@ fn parse(slug: &str, source: &str, file_dir: &Path) -> Doc {
     }
 }
 
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct History {
-    change: Vec<Change>,
-}
-
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Change {
-    date: String,
-    status: ChangeStatus,
-    commit: Option<String>,
-    en: String,
-    uk: String,
-}
-
-#[derive(Deserialize)]
-#[serde(rename_all = "lowercase")]
-enum ChangeStatus {
-    Approved,
-    Draft,
-}
-
-fn history(file: &Path, dir: &Path) -> Result<String, Box<dyn std::error::Error>> {
-    if !file.exists() {
-        return Ok(String::new());
-    }
-    let load = || -> Result<String, Box<dyn std::error::Error>> {
-        let history: History = toml::from_str(&fs::read_to_string(file)?)?;
-        let mut code = String::new();
-        for change in history.change {
-            let date: toml::value::Datetime = change.date.parse()?;
-            if date.date.is_none() || date.time.is_none() || date.offset.is_none() {
-                return Err("change date must include a date, time and UTC offset".into());
-            }
-            if change.commit.as_ref().is_some_and(|hash| {
-                !(7..=40).contains(&hash.len()) || !hash.bytes().all(|c| c.is_ascii_hexdigit())
-            }) {
-                return Err("change commit must be a 7 to 40 character hexadecimal hash".into());
-            }
-            let status = match change.status {
-                ChangeStatus::Approved => "approved",
-                ChangeStatus::Draft => "draft",
-            };
-            let markdown = |source: &str| {
-                let events = Parser::new(source)
-                    .map(|event| match event {
-                        Event::Start(Tag::Link {
-                            link_type,
-                            dest_url,
-                            title,
-                            id,
-                        }) => Event::Start(Tag::Link {
-                            link_type,
-                            dest_url: rewrite_link(&dest_url, dir).into(),
-                            title,
-                            id,
-                        }),
-                        other => other,
-                    })
-                    .collect();
-                render(events)
-            };
-            writeln!(
-                code,
-                "Change {{ date: {:?}, status: {status:?}, commit: {:?}, en_html: {:?}, uk_html: {:?} }},",
-                change.date,
-                change.commit,
-                markdown(&change.en),
-                markdown(&change.uk)
-            )?;
-        }
-        Ok(code)
-    };
-    load().map_err(|error| format!("{}: {error}", file.display()).into())
-}
-
 fn toc_code(doc: &Doc) -> String {
     doc.toc
         .iter()
@@ -278,6 +202,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .ok_or("repository root not found")?
         .to_path_buf();
     let docs = repo.join("docs");
+    build_history::validate_components(&docs)?;
+    build_history::watch_git(&repo);
     println!("cargo:rerun-if-changed={}", docs.display());
 
     let mut files = Vec::new();
@@ -310,7 +236,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             |d| format!("Some(&[{}])", toc_code(d)),
         );
         let changes = if slug.starts_with("components/") {
-            history(&file.with_extension("changes.toml"), &dir)?
+            build_history::history(
+                &docs.join("changes").join(slug.trim_start_matches("components/")),
+                &dir,
+                &repo,
+            )?
         } else {
             String::new()
         };
@@ -372,37 +302,17 @@ mod tests {
                 .iter()
                 .any(|p| p.components().any(|c| c.as_os_str() == "i18n"))
         );
-        let changes = history(
-            &repo.join("components/search-field.changes.toml"),
+        let changes = build_history::history(
+            &repo.join("changes/search-field"),
             Path::new("docs/components"),
+            &repo.join(".."),
         )?;
         assert!(changes.contains("<code>clear_label</code>"));
         assert!(changes.contains("status: \"draft\""));
         assert!(changes.contains("status: \"approved\""));
         assert!(changes.contains("e59d5b4"));
-        Ok(())
-    }
-
-    #[test]
-    fn malformed_history_reports_its_file_name() -> Result<(), Box<dyn std::error::Error>> {
-        let file = env::temp_dir().join(format!(
-            "ods-invalid-history-{}.changes.toml",
-            std::process::id()
-        ));
-        for source in [
-            "this is not TOML",
-            "[[change]]\ndate = '2026-11-21T12:00:00Z'\nstatus = 'rejected'\nen = 'Text'\nuk = 'Текст'",
-            "[[change]]\ndate = '2026-11-21'\nstatus = 'draft'\nen = 'Text'\nuk = 'Текст'",
-            "[[change]]\ndate = '2026-11-21T12:00:00Z'\nstatus = 'draft'\nen = 'Text'",
-        ] {
-            fs::write(&file, source)?;
-            let result = history(&file, Path::new("docs/components"));
-            fs::remove_file(&file)?;
-            let Err(error) = result else {
-                return Err("malformed history was accepted".into());
-            };
-            assert!(error.to_string().contains(&file.display().to_string()));
-        }
+        assert!(changes.contains("kind: \"feature\""));
+        assert!(changes.contains("href=\\\"#/components/field\\\""));
         Ok(())
     }
 }

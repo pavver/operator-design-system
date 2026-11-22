@@ -1,0 +1,9 @@
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`row_height`, `padding_y`, `gap`, `value_gap`, `copy_size`, `icon_size`, `stack_width`, `font_size`, `line_height`, `label_font_size`, `label_line_height`), color variables, slots (`option`, `value_slot`, `empty`, `header`, `footer`, `before_options`, `after_options`), strings (`property-list.copy`) and icons (`property-list.copy`); unchanged defaults and a final Customization demo."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`row_height`, `padding_y`, `gap`, `value_gap`, `copy_size`, `icon_size`, `stack_width`, `font_size`, `line_height`, `label_font_size`, `label_line_height`), змінні кольорів, слоти (`option`, `value_slot`, `empty`, `header`, `footer`, `before_options`, `after_options`), перекладні тексти (`property-list.copy`) й замінні іконки (`property-list.copy`); початковий вигляд збережено, приклад Customization додано останнім."

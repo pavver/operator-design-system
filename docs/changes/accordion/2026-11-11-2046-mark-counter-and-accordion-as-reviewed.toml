@@ -1,0 +1,10 @@
+date = "2026-11-11T20:46:54+02:00"
+status = "approved"
+kind = "feature"
+commit = "c00559d"
+
+[en]
+summary = "Mark Counter and Accordion as reviewed."
+
+[uk]
+summary = "Позначити Counter та Accordion як рецензовані."

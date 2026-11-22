@@ -1,0 +1,9 @@
+date = "2026-11-21T19:23:21+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`row_height`, `dense_row_height`, `header_height`, `padding_x`, `sort_gap`, `sort_padding`, `icon_size`, `loading_thickness`, `empty_padding`, `font_size`, `line_height`, `header_font_size`, `header_letter_spacing`, `max_height`), color variables, slots (`row`, `cell`, `header_cell`, `empty`, `header`, `footer`, `before_options`, `after_options`), strings (`data-table.label`, `data-table.empty`, `data-table.loading`, `data-table.sort-ascending`, `data-table.sort-descending`, `data-table.sort-clear`) and icons (`data-table.sort-ascending`, `data-table.sort-descending`); unchanged defaults and a final Customization demo."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`row_height`, `dense_row_height`, `header_height`, `padding_x`, `sort_gap`, `sort_padding`, `icon_size`, `loading_thickness`, `empty_padding`, `font_size`, `line_height`, `header_font_size`, `header_letter_spacing`, `max_height`), змінні кольорів, слоти (`row`, `cell`, `header_cell`, `empty`, `header`, `footer`, `before_options`, `after_options`), перекладні тексти (`data-table.label`, `data-table.empty`, `data-table.loading`, `data-table.sort-ascending`, `data-table.sort-descending`, `data-table.sort-clear`) й замінні іконки (`data-table.sort-ascending`, `data-table.sort-descending`); початковий вигляд збережено, приклад Customization додано останнім."

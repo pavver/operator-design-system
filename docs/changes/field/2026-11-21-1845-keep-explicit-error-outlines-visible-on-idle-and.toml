@@ -1,0 +1,9 @@
+date = "2026-11-21T18:45:10+02:00"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "Keep explicit error outlines visible on idle and disabled borderless fields; add live examples for label/hint, error, borderless, prepend/append/before/after and a custom control."
+
+[uk]
+summary = "Збережено видимість явної помилки для borderless у станах idle і disabled; додано живі приклади label/hint, помилки, borderless, слотів prepend/append/before/after та власного елемента керування."

@@ -1,0 +1,9 @@
+date = "2026-11-21T18:32:14+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`height`, `wide_min_width`, `space_min_width`, `padding_x`, `gap`, `font_size`), color variables (`--op-kbd-*`), slot `separator`, `aria_label`, and translatable separator string `kbd.plus`."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `wide_min_width`, `space_min_width`, `padding_x`, `gap`, `font_size`), змінні кольорів (`--op-kbd-*`), слот `separator`, `aria_label` та перекладний роздільник `kbd.plus`."

@@ -1,0 +1,9 @@
+date = "2026-11-21T19:10:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`height`, `max_height`, `focus_outline_width`), color variable (`--op-scroll-area-focus-outline-color`), slots (`header`, `footer`), and translatable `label` string."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `max_height`, `focus_outline_width`), змінна кольору (`--op-scroll-area-focus-outline-color`), слоти (`header`, `footer`) та перекладний рядок `label`."

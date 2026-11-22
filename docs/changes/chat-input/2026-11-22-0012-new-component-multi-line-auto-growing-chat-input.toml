@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: multi-line auto-growing chat input bar with reply/edit preview, attachments, and record button switch."
+
+[uk]
+summary = "Новий компонент: поле введення чату з автоматичним розширенням, переглядом цитат/редагування, додатками та записом медіа."

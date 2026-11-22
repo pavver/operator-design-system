@@ -1,0 +1,9 @@
+date = "2026-11-21T19:16:22+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`font_size`, `line_height`, `padding`, `header_padding`, `title_font_size`, `title_line_height`, `gap`, `button_height`, `width`, `max_height`), `--op-confirm-dialog-*` metric and color variables, slots (`header`, `actions`, `footer`), translatable strings."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`font_size`, `line_height`, `padding`, `header_padding`, `title_font_size`, `title_line_height`, `gap`, `button_height`, `width`, `max_height`), змінні розмірів і кольорів `--op-confirm-dialog-*`, слоти (`header`, `actions`, `footer`), перекладні тексти."

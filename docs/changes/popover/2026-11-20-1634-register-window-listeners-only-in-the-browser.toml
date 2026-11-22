@@ -1,0 +1,10 @@
+date = "2026-11-20T16:34:36+02:00"
+status = "draft"
+kind = "fix"
+commit = "014dff3"
+
+[en]
+summary = "Register window listeners only in the browser."
+
+[uk]
+summary = "Реєструвати слухачі вікна лише у браузері."

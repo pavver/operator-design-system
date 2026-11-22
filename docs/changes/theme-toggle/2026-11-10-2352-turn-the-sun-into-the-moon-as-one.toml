@@ -1,0 +1,10 @@
+date = "2026-11-10T23:52:12+02:00"
+status = "approved"
+kind = "feature"
+commit = "def9d3b"
+
+[en]
+summary = "Turn the sun into the moon as one body."
+
+[uk]
+summary = "Перетворити сонце на місяць як єдине тіло."

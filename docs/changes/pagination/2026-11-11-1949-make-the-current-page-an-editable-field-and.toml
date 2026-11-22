@@ -1,0 +1,10 @@
+date = "2026-11-11T19:49:02+02:00"
+status = "approved"
+kind = "feature"
+commit = "2394b19"
+
+[en]
+summary = "Make the current page an editable field and drop the separate jump field."
+
+[uk]
+summary = "Зробити поточну сторінку редагованим полем і прибрати окреме поле переходу."

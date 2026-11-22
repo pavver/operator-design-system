@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: pluggable sticker picker with pack navigation, vector/animated formats, and hover preview."
+
+[uk]
+summary = "Новий компонент: вибір стікерів з навігацією за паками, векторними/анімованими форматами та переглядом при наведенні."

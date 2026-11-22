@@ -1,0 +1,9 @@
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component providing slides with navigation arrows, dots, autoplay, swipe, and keyboard control."
+
+[uk]
+summary = "Новий компонент слайдів зі стрілками навігації, крапками, автопрокручуванням, жестами та клавіатурою."

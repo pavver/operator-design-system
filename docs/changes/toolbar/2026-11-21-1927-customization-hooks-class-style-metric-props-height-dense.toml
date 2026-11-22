@@ -1,0 +1,9 @@
+date = "2026-11-21T19:27:42+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`height`, `dense_height`, `padding_x`, `gap`, `dense_gap`, `title_padding_x`, `title_font_size`, `separator_width`, `separator_height`, `separator_margin_x`, `button_size`), color variables (`--op-toolbar-*`), slots `start`/`end`, translatable strings `toolbar.label`/`toolbar.more`, and replaceable icon `toolbar.more`."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`height`, `dense_height`, `padding_x`, `gap`, `dense_gap`, `title_padding_x`, `title_font_size`, `separator_width`, `separator_height`, `separator_margin_x`, `button_size`), змінні кольорів (`--op-toolbar-*`), слоти `start`/`end`, перекладні рядки `toolbar.label`/`toolbar.more` та замінна іконка `toolbar.more`."

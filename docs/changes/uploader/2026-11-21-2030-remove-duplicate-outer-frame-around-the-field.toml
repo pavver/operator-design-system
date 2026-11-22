@@ -1,0 +1,9 @@
+date = "2026-11-21T20:30:00+02:00"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "Remove duplicate outer frame around the field."
+
+[uk]
+summary = "Вилучено дубльовану зовнішню рамку навколо поля."

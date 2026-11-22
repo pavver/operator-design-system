@@ -1,0 +1,9 @@
+date = "2026-11-22T00:12:17+02:00"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New component: tactical reaction picker with quick reactions row and expandable category dialog."
+
+[uk]
+summary = "Новий компонент: тактичний вибір реакцій зі швидкою панеллю та розгортуваним діалогом категорій."

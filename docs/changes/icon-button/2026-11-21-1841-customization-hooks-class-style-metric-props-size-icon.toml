@@ -1,0 +1,9 @@
+date = "2026-11-21T18:41:35+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Customization hooks: `class`/`style`, metric props (`size`, `icon_size`, `gap`, `spinner_stroke`), color variables, slots (`leading`, `trailing`, `content`), translatable strings and replaceable icons."
+
+[uk]
+summary = "Точки кастомізації: `class`/`style`, пропи розмірів (`size`, `icon_size`, `gap`, `spinner_stroke`), змінні кольорів, слоти (`leading`, `trailing`, `content`), перекладні тексти й замінні іконки."

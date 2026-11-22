@@ -1,0 +1,10 @@
+date = "2026-11-11T19:40:14+02:00"
+status = "approved"
+kind = "feature"
+commit = "e2080a6"
+
+[en]
+summary = "Move shared fade keyframes, reduced motion and stray menu and terminal rules to their owners."
+
+[uk]
+summary = "Перенести спільні ключові кадри згасання, reduced motion та окремі правила меню і термінала до їхніх власників."

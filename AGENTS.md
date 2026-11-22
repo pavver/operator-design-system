@@ -22,9 +22,14 @@ Rules for AI agents contributing to this repository.
 
 ## Change History and Translations
 
-* Each component has `docs/components/<name>.changes.toml`, newest entry first, with `date` (RFC 3339), `status`, optional `commit`, and the text in `en` and `uk`.
-* Every change to a component adds an entry with `status = "draft"` in the same commit.
-* The maintainer approves an entry by setting `status = "approved"`; a rejected change is reverted and its entry deleted.
+* Each commit that changes a component adds one file in `docs/changes/<component>/<YYYY-MM-DD>-<HHMM>-<short-kebab-slug>.toml`, where `<component>` matches its specification filename.
+* A new change file starts with `status = "draft"` in the same commit as the component change.
+* Each file requires `date` (RFC 3339 with a UTC offset), `status` (`draft` or `approved`), and `kind` (`new`, `feature`, `fix`, `breaking`, `docs`, or `refactor`).
+* `commit` is optional and accepts 7–40 hexadecimal characters; the documentation build may derive the commit that added the file when complete Git history is available.
+* Both `[en]` and `[uk]` require a Markdown `summary`, may include `check` describing the examples, states, or props a tester should inspect, and require `migration` explaining user actions when `kind = "breaking"`.
+* Supply Ukrainian text for every supplied English summary, check, and migration instruction.
+* During review, the maintainer approves a file by setting `status = "approved"`, replaces it to describe the final revision, or deletes it if the change was dropped.
+* The documentation site lists all draft files on [Changes to review](docs/changes-to-review.md), newest first.
 * Ukrainian versions of the documentation live in `docs/i18n/uk/` with the same relative paths; a change to an English page updates its Ukrainian page in the same commit.
 
 ## Language and Formatting

@@ -1,0 +1,10 @@
+date = "2026-11-11T21:05:07+02:00"
+status = "approved"
+kind = "feature"
+commit = "8a5ac46"
+
+[en]
+summary = "Chain ScrollView scrolling to the page like native scrolling."
+
+[uk]
+summary = "Зв'язати прокручування ScrollView зі сторінкою як нативне прокручування."

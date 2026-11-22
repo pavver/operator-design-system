@@ -1,0 +1,9 @@
+date = "2026-11-21T23:50:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Unify media item model with Gallery into MediaItem, and add error/unavailable state overlay over poster on video load failure."
+
+[uk]
+summary = "Об'єднано модель медіаелементів із Gallery у єдиний MediaItem та додано відображення стану помилки поверх постера при невдалому завантаженні відео."

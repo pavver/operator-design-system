@@ -1,0 +1,10 @@
+date = "2026-11-11T03:33:12+02:00"
+status = "approved"
+kind = "feature"
+commit = "ece776d"
+
+[en]
+summary = "Add Chip, Tabs, Kbd and SplitPane with hover and held-press feedback."
+
+[uk]
+summary = "Додати Chip, Tabs, Kbd та SplitPane зі зворотним зв'язком на наведення та утримання натискання."

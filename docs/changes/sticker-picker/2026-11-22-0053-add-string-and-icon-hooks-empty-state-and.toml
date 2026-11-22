@@ -1,0 +1,9 @@
+date = "2026-11-22T00:53:00+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Add string and icon hooks, empty state, and replace hardcoded raw pixel styles with standard tokens."
+
+[uk]
+summary = "Додано хуки рядків і піктограм, порожній стан та замінено вбудовані піксельні стилі стандартними токенами."

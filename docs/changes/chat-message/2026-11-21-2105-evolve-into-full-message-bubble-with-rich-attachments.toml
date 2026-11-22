@@ -1,0 +1,9 @@
+date = "2026-11-21T21:05:52+02:00"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Evolve into full message bubble with rich attachments, safe markdown, reactions, TTL indicators, delivery statuses, and chat status badges."
+
+[uk]
+summary = "Розширено до повноцінної бульбашки повідомлення з мультимедійними додатками, безпечним markdown, реакціями, індикаторами TTL, статусами доставки та бейджами діалогів."
