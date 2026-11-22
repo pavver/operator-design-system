@@ -1,0 +1,11 @@
+date = "2026-11-22T12:40:00+02:00"
+status = "draft"
+kind = "refactor"
+
+[en]
+summary = "Move component into the separate media extension."
+migration = "Enable the media feature or the individual feature in Cargo.toml."
+
+[uk]
+summary = "Компонент перенесено до окремого розширення media."
+migration = "Увімкніть фічу media або окрему фічу компонента у Cargo.toml."
