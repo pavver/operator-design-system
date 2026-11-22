@@ -117,6 +117,7 @@ pub fn PtzZoomBar(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn apply_pointer_drag(
     pad: &web_sys::Element,
     client_x: f64,

@@ -257,8 +257,8 @@ pub fn Combobox(
                         accessible_name=accessible_name
                         rows=rows
                         on_open_list=Callback::new(move |()| open_list())
-                        on_reveal_active=Callback::new(move |center| reveal_active(center))
-                        on_commit_value=Callback::new(move |v| commit_value(v))
+                        on_reveal_active=Callback::new(reveal_active)
+                        on_commit_value=Callback::new(commit_value)
                         on_settle=Callback::new(move |()| settle())
                         shown_text=Callback::new(move |()| shown())
                         blocked=Signal::derive(blocked)

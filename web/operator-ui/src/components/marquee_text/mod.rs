@@ -356,6 +356,7 @@ fn MarqueeTrack(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn measure_marquee(
     host: NodeRef<leptos::html::Span>,
     probe: NodeRef<leptos::html::Span>,

@@ -39,10 +39,8 @@ pub fn handle_pointer_up_release(
         if let Some(cb) = on_mode_change {
             cb.run(next_mode);
         }
-    } else if !is_locked {
-        if let Some(cb) = on_record_stop {
-            cb.run(());
-        }
+    } else if !is_locked && let Some(cb) = on_record_stop {
+        cb.run(());
     }
 }
 
@@ -92,10 +90,11 @@ impl RecordGestureState {
 
         set_timeout(
             move || {
-                if self.is_holding.get() && !locked {
-                    if let Some(cb) = on_start {
-                        cb.run(current_mode);
-                    }
+                if self.is_holding.get()
+                    && !locked
+                    && let Some(cb) = on_start
+                {
+                    cb.run(current_mode);
                 }
             },
             std::time::Duration::from_millis(HOLD_TIMEOUT_MS as u64),
