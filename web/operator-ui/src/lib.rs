@@ -23,6 +23,8 @@ pub mod prelude {
     pub use crate::components::breadcrumbs::*;
     #[cfg(feature = "button-group")]
     pub use crate::components::button_group::*;
+    #[cfg(feature = "carousel")]
+    pub use crate::components::carousel::*;
     #[cfg(feature = "chat-input")]
     pub use crate::components::chat_input::*;
     #[cfg(feature = "chat-message")]
@@ -83,6 +85,8 @@ pub mod prelude {
     pub use crate::components::icon_button::*;
     #[cfg(feature = "image")]
     pub use crate::components::image::*;
+    #[cfg(feature = "infinite-scroll")]
+    pub use crate::components::infinite_scroll::*;
     #[cfg(feature = "kbd")]
     pub use crate::components::kbd::*;
     #[cfg(feature = "knob")]
@@ -91,6 +95,8 @@ pub mod prelude {
     pub use crate::components::language_picker::*;
     #[cfg(feature = "launcher-tile")]
     pub use crate::components::launcher_tile::*;
+    #[cfg(feature = "layout")]
+    pub use crate::components::layout::*;
     #[cfg(feature = "linear-progress")]
     pub use crate::components::linear_progress::*;
     #[cfg(feature = "list-item")]
@@ -111,6 +117,8 @@ pub mod prelude {
     pub use crate::components::navigation_rail::*;
     #[cfg(feature = "pagination")]
     pub use crate::components::pagination::*;
+    #[cfg(feature = "parallax")]
+    pub use crate::components::parallax::*;
     #[cfg(feature = "popover")]
     pub use crate::components::popover::*;
     #[cfg(feature = "popup-edit")]
@@ -123,6 +131,8 @@ pub mod prelude {
     pub use crate::components::ptt_button::*;
     #[cfg(feature = "ptz-pad")]
     pub use crate::components::ptz_pad::*;
+    #[cfg(feature = "pull-to-refresh")]
+    pub use crate::components::pull_to_refresh::*;
     #[cfg(feature = "radio-group")]
     pub use crate::components::radio_group::*;
     #[cfg(feature = "range-slider")]
@@ -159,8 +169,12 @@ pub mod prelude {
     pub use crate::components::stepper::*;
     #[cfg(feature = "sticker-picker")]
     pub use crate::components::sticker_picker::*;
+    #[cfg(feature = "swipe-item")]
+    pub use crate::components::swipe_item::*;
     #[cfg(feature = "switch")]
     pub use crate::components::switch::*;
+    #[cfg(feature = "tab-panels")]
+    pub use crate::components::tab_panels::*;
     #[cfg(feature = "tabs")]
     pub use crate::components::tabs::*;
     #[cfg(feature = "text-area")]
@@ -205,6 +219,10 @@ pub mod prelude {
     pub use crate::components::video_stream::*;
     #[cfg(feature = "virtual-list")]
     pub use crate::components::virtual_list::*;
+    #[cfg(feature = "wizard")]
+    pub use crate::components::wizard::*;
+    #[cfg(feature = "observers")]
+    pub use crate::core::observers::*;
     pub use crate::core::theme::{OperatorTheme, Theme, ThemeRoot};
     pub use crate::core::{
         ActionResult, AsyncAction, ControlState, Metric, ScopedSlot, Slot, UiIcons, UiStrings, du,

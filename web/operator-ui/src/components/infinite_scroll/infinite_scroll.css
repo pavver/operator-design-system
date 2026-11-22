@@ -1,0 +1,63 @@
+/* ------------------------------------------------------------------ */
+/* InfiniteScroll                                                      */
+/* ------------------------------------------------------------------ */
+.op-infinite-scroll {
+  position: relative;
+  width: 100%;
+}
+
+.op-infinite-scroll-sentinel {
+  width: 100%;
+  height: calc(var(--op-du) * 1);
+  pointer-events: none;
+}
+
+.op-infinite-scroll-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--op-du) * 2);
+  height: var(--op-infinite-scroll-pending-height, calc(var(--op-du) * 12));
+  color: var(--op-text-secondary);
+  font-size: var(--op-type-caption-size);
+}
+
+.op-infinite-scroll-spinner {
+  width: calc(var(--op-du) * 4);
+  height: calc(var(--op-du) * 4);
+  border: var(--op-dim-spinner-stroke) solid var(--op-border);
+  border-top-color: var(--op-accent);
+  animation: op-infinite-scroll-spin 0.8s linear infinite;
+}
+
+@keyframes op-infinite-scroll-spin {
+  to { transform: rotate(360deg); }
+}
+
+.op-infinite-scroll-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--op-du) * 3);
+  height: var(--op-infinite-scroll-pending-height, calc(var(--op-du) * 12));
+  color: var(--op-error);
+  font-size: var(--op-type-caption-size);
+}
+
+.op-infinite-scroll-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--op-du) * 1);
+  background: transparent;
+  color: var(--op-text-primary);
+  border: none;
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--op-type-caption-size);
+}
+
+.op-infinite-scroll-retry:hover {
+  background-color: var(--op-hover);
+}

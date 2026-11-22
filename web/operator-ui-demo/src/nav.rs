@@ -33,6 +33,7 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/ptz-pad",
             "components/media-record-button",
             "components/ptt-button",
+            "components/pull-to-refresh",
         ],
     ),
     (
@@ -107,10 +108,12 @@ pub const NAV: &[(&str, &[&str])] = &[
         &[
             "components/header",
             "components/tabs",
+            "components/tab-panels",
             "components/pagination",
             "components/navigation-rail",
             "components/side-panel",
             "components/breadcrumbs",
+            "components/wizard",
         ],
     ),
     (
@@ -134,15 +137,20 @@ pub const NAV: &[(&str, &[&str])] = &[
             "components/video",
             "components/gallery",
             "components/video-stream",
+            "components/carousel",
+            "components/swipe-item",
         ],
     ),
     (
         "Layout",
         &[
+            "components/layout",
             "components/split-pane",
             "components/scroll-area",
             "components/scrollbar",
             "components/virtual-list",
+            "components/infinite-scroll",
+            "components/parallax",
             "components/space",
             "components/aspect-ratio",
         ],

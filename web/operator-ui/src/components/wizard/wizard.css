@@ -1,0 +1,110 @@
+/* ------------------------------------------------------------------ */
+/* Wizard                                                              */
+/* ------------------------------------------------------------------ */
+.op-wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--op-wizard-content-gap, calc(var(--op-du) * 4));
+  width: 100%;
+  background-color: var(--op-wizard-background, var(--op-surface));
+  color: var(--op-wizard-text, var(--op-text-primary));
+  padding: var(--op-wizard-padding, calc(var(--op-du) * 4));
+}
+
+.op-wizard-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  padding-bottom: calc(var(--op-du) * 2);
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-wizard-divider, var(--op-divider));
+}
+
+.op-wizard-step-item {
+  display: flex;
+  align-items: center;
+  gap: var(--op-wizard-header-gap, calc(var(--op-du) * 2));
+  background: transparent;
+  border: none;
+  padding: calc(var(--op-du) * 1) calc(var(--op-du) * 2);
+  cursor: pointer;
+  color: var(--op-text-secondary);
+  font-family: inherit;
+  text-align: left;
+}
+
+.op-wizard-step-item:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.op-wizard-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--op-wizard-step-size, calc(var(--op-du) * 8));
+  height: var(--op-wizard-step-size, calc(var(--op-du) * 8));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-border);
+  background-color: var(--op-surface-alt);
+  color: var(--op-text-secondary);
+  font-weight: 700;
+  font-size: var(--op-type-caption-size);
+}
+
+.op-wizard-step-item[data-active] .op-wizard-step-badge {
+  background-color: var(--op-wizard-accent, var(--op-accent));
+  color: var(--op-on-accent);
+  box-shadow: inset 0 0 0 var(--op-dim-border-thick) var(--op-wizard-accent, var(--op-accent));
+}
+
+.op-wizard-step-item[data-done] .op-wizard-step-badge {
+  background-color: var(--op-surface);
+  color: var(--op-wizard-accent, var(--op-accent));
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-wizard-accent, var(--op-accent));
+}
+
+.op-wizard-step-labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.op-wizard-step-title {
+  font-size: var(--op-type-body-size);
+  font-weight: 500;
+  color: var(--op-text-secondary);
+}
+
+.op-wizard-step-item[data-active] .op-wizard-step-title {
+  color: var(--op-text-primary);
+  font-weight: 700;
+}
+
+.op-wizard-step-subtitle {
+  font-size: var(--op-type-caption-size);
+  color: var(--op-text-muted);
+}
+
+.op-wizard-connector {
+  flex: 1;
+  height: var(--op-dim-border);
+  background-color: var(--op-wizard-divider, var(--op-divider));
+  margin: 0 calc(var(--op-du) * 1);
+}
+
+.op-wizard-connector[data-done] {
+  background-color: var(--op-wizard-accent, var(--op-accent));
+}
+
+.op-wizard-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.op-wizard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--op-du) * 2);
+  padding-top: calc(var(--op-du) * 2);
+  box-shadow: inset 0 var(--op-dim-border) 0 var(--op-wizard-divider, var(--op-divider));
+}

@@ -64,6 +64,7 @@ draft = [
     "aspect-ratio",
     "breadcrumbs",
     "button-group",
+    "carousel",
     "chat-input",
     "chat-message",
     "circular-progress",
@@ -84,9 +85,11 @@ draft = [
     "gif-picker",
     "hover-card",
     "image",
+    "infinite-scroll",
     "knob",
     "language-picker",
     "launcher-tile",
+    "layout",
     "loading-bar",
     "loading-overlay",
     "marquee-text",
@@ -95,11 +98,14 @@ draft = [
     "menu",
     "navigation-rail",
     "number-field",
+    "observers",
+    "parallax",
     "popover",
     "popup-edit",
     "property-list",
     "ptt-button",
     "ptz-pad",
+    "pull-to-refresh",
     "range-slider",
     "rating",
     "reaction-picker",
@@ -107,6 +113,8 @@ draft = [
     "space",
     "split-button",
     "sticker-picker",
+    "swipe-item",
+    "tab-panels",
     "text-field",
     "time-field",
     "timeline",
@@ -117,6 +125,7 @@ draft = [
     "video",
     "video-stream",
     "virtual-list",
+    "wizard",
 ]
 
 full = ["reviewed", "draft"]
@@ -136,6 +145,7 @@ avatar = ["primitives", "status-badge"]
 banner = ["primitives", "toast"]
 breadcrumbs = ["icon-button", "menu", "primitives"]
 button-group = []
+carousel = ["icon-button", "primitives"]
 chat-input = ["chat-message", "media-record-button", "primitives"]
 chat-message = ["primitives"]
 checkbox = ["primitives"]
@@ -166,10 +176,12 @@ graph = ["hover-card", "primitives"]
 hover-card = ["popover"]
 icon-button = ["primitives", "tooltip"]
 image = ["primitives", "skeleton"]
+infinite-scroll = ["observers", "primitives"]
 kbd = []
 knob = ["primitives"]
 language-picker = ["combobox"]
 launcher-tile = ["primitives"]
+layout = ["icon-button", "observers"]
 linear-progress = []
 list-item = []
 loading-bar = []
@@ -180,11 +192,14 @@ media-record-button = ["primitives"]
 menu = ["icon-button", "popover", "primitives", "scrollbar"]
 navigation-rail = ["primitives"]
 number-field = ["field"]
+observers = ["web-sys/IntersectionObserver", "web-sys/IntersectionObserverEntry", "web-sys/IntersectionObserverInit", "web-sys/ResizeObserverEntry"]
 pagination = ["icon-button"]
+parallax = ["observers"]
 popover = []
 popup-edit = ["action-button", "popover", "text-field"]
 primitives = []
 property-list = ["icon-button"]
+pull-to-refresh = ["primitives"]
 ptt-button = ["primitives"]
 ptz-pad = ["icon-button", "primitives"]
 radio-group = ["checkbox-group", "primitives"]
@@ -205,7 +220,9 @@ split-pane = ["scrollbar"]
 status-badge = ["primitives"]
 stepper = ["primitives"]
 sticker-picker = ["chat-message", "primitives"]
+swipe-item = ["primitives"]
 switch = ["primitives"]
+tab-panels = ["primitives"]
 tabs = ["primitives"]
 text-area = ["field", "scrollbar", "tooltip"]
 text-field = ["action-button", "field", "primitives"]
@@ -220,4 +237,5 @@ video = ["primitives"]
 video-stream = ["action-button", "aspect-ratio", "icon-button", "primitives", "web-sys/HtmlVideoElement", "web-sys/MediaStream"]
 uploader = ["action-button", "file-field", "linear-progress", "primitives"]
 virtual-list = ["scrollbar"]
+wizard = ["action-button", "icon-button", "primitives"]
 

@@ -2,6 +2,8 @@
 
 mod action;
 pub mod custom;
+#[cfg(feature = "observers")]
+pub mod observers;
 pub mod overlay;
 mod ripple;
 #[cfg(any(feature = "dialog", feature = "sheet", feature = "gallery-viewer"))]
@@ -19,6 +21,8 @@ pub use action::{ActionResult, AsyncAction, JobToken, copy_text, sleep_ms};
 #[cfg(any(feature = "checkbox", feature = "switch"))]
 pub(crate) use action::{mirrored, run_toggle};
 pub use custom::*;
+#[cfg(feature = "observers")]
+pub use observers::*;
 pub use overlay::*;
 pub use ripple::spawn_ripple;
 #[cfg(any(feature = "dialog", feature = "sheet", feature = "gallery-viewer"))]

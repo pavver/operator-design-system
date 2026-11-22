@@ -1,0 +1,35 @@
+/* ------------------------------------------------------------------ */
+/* TabPanels                                                           */
+/* ------------------------------------------------------------------ */
+.op-tab-panels {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--op-tab-panels-background, transparent);
+  color: var(--op-tab-panels-text, var(--op-text-primary));
+  padding: var(--op-tab-panels-padding, 0);
+}
+
+.op-tab-panel {
+  width: 100%;
+  outline: none;
+}
+
+.op-tab-panels[data-animated] .op-tab-panel {
+  animation: op-tab-panel-enter var(--op-motion-fade) var(--op-ease-standard);
+}
+
+@keyframes op-tab-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--op-du) * 1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.op-tab-panel[data-hidden] {
+  display: none !important;
+}

@@ -1,0 +1,9 @@
+# Change history of Carousel. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+en = "New component providing slides with navigation arrows, dots, autoplay, swipe, and keyboard control."
+uk = "Новий компонент слайдів зі стрілками навігації, крапками, автопрокручуванням, жестами та клавіатурою."

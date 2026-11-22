@@ -7,6 +7,7 @@ mod avatar;
 mod banner;
 mod breadcrumbs;
 mod button_group;
+mod carousel;
 mod chat_input;
 mod chat_message;
 mod checkbox;
@@ -40,10 +41,12 @@ mod header;
 mod hover_card;
 mod icon_button;
 mod image;
+mod infinite_scroll;
 mod kbd;
 mod knob;
 mod language_picker;
 mod launcher_tile;
+mod layout;
 mod linear_progress;
 mod list_item;
 mod loading_bar;
@@ -54,12 +57,14 @@ mod media_record_button;
 mod menu;
 mod navigation_shell;
 mod pagination;
+mod parallax;
 mod popover;
 mod popup_edit;
 mod primitives;
 mod property_list;
 mod ptt_button;
 mod ptz_pad;
+mod pull_to_refresh;
 mod radio_group;
 mod range_slider;
 mod rating;
@@ -77,7 +82,9 @@ mod split_pane;
 mod status_badge;
 mod stepper;
 mod sticker_picker;
+mod swipe_item;
 mod switch;
+mod tab_panels;
 mod tabs;
 mod text_area;
 mod text_field;
@@ -91,6 +98,7 @@ mod value_fields;
 mod video;
 mod video_stream;
 mod virtual_list;
+mod wizard;
 
 use leptos::prelude::AnyView;
 
@@ -193,6 +201,14 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/ptt-button" => (ptt_button::ptt_button, false),
         "components/reaction-picker" => (reaction_picker::reaction_picker, false),
         "components/sticker-picker" => (sticker_picker::sticker_picker, false),
+        "components/carousel" => (carousel::carousel, false),
+        "components/infinite-scroll" => (infinite_scroll::infinite_scroll, false),
+        "components/layout" => (layout::layout, false),
+        "components/parallax" => (parallax::parallax, false),
+        "components/pull-to-refresh" => (pull_to_refresh::pull_to_refresh, false),
+        "components/swipe-item" => (swipe_item::swipe_item, false),
+        "components/tab-panels" => (tab_panels::tab_panels, false),
+        "components/wizard" => (wizard::wizard, false),
         _ => return None,
     };
     Some(entry)

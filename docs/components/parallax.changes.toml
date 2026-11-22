@@ -1,0 +1,9 @@
+# Change history of Parallax. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+en = "New component providing scroll-driven parallax background images respecting prefers-reduced-motion."
+uk = "Новий компонент фонових зображень із паралакс-ефектом, що поважає prefers-reduced-motion."

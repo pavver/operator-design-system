@@ -12,6 +12,8 @@ pub mod banner;
 pub mod breadcrumbs;
 #[cfg(feature = "button-group")]
 pub mod button_group;
+#[cfg(feature = "carousel")]
+pub mod carousel;
 #[cfg(feature = "chat-input")]
 pub mod chat_input;
 #[cfg(feature = "chat-message")]
@@ -72,6 +74,8 @@ pub mod hover_card;
 pub mod icon_button;
 #[cfg(feature = "image")]
 pub mod image;
+#[cfg(feature = "infinite-scroll")]
+pub mod infinite_scroll;
 #[cfg(feature = "kbd")]
 pub mod kbd;
 #[cfg(feature = "knob")]
@@ -80,6 +84,8 @@ pub mod knob;
 pub mod language_picker;
 #[cfg(feature = "launcher-tile")]
 pub mod launcher_tile;
+#[cfg(feature = "layout")]
+pub mod layout;
 #[cfg(feature = "linear-progress")]
 pub mod linear_progress;
 #[cfg(feature = "list-item")]
@@ -100,6 +106,8 @@ pub mod menu;
 pub mod navigation_rail;
 #[cfg(feature = "pagination")]
 pub mod pagination;
+#[cfg(feature = "parallax")]
+pub mod parallax;
 #[cfg(feature = "popover")]
 pub mod popover;
 #[cfg(feature = "popup-edit")]
@@ -112,6 +120,8 @@ pub mod property_list;
 pub mod ptt_button;
 #[cfg(feature = "ptz-pad")]
 pub mod ptz_pad;
+#[cfg(feature = "pull-to-refresh")]
+pub mod pull_to_refresh;
 #[cfg(feature = "radio-group")]
 pub mod radio_group;
 #[cfg(feature = "range-slider")]
@@ -148,8 +158,12 @@ pub mod status_badge;
 pub mod stepper;
 #[cfg(feature = "sticker-picker")]
 pub mod sticker_picker;
+#[cfg(feature = "swipe-item")]
+pub mod swipe_item;
 #[cfg(feature = "switch")]
 pub mod switch;
+#[cfg(feature = "tab-panels")]
+pub mod tab_panels;
 #[cfg(feature = "tabs")]
 pub mod tabs;
 #[cfg(feature = "text-area")]
@@ -184,3 +198,5 @@ pub mod video;
 pub mod video_stream;
 #[cfg(feature = "virtual-list")]
 pub mod virtual_list;
+#[cfg(feature = "wizard")]
+pub mod wizard;

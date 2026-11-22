@@ -1,0 +1,9 @@
+# Change history of InfiniteScroll. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+en = "New component providing incremental list loading via viewport intersection sentinel."
+uk = "Новий компонент поступового завантаження списку за допомогою мітки перетину з вікном перегляду."

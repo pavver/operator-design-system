@@ -1,0 +1,35 @@
+/* ------------------------------------------------------------------ */
+/* Parallax                                                            */
+/* ------------------------------------------------------------------ */
+.op-parallax {
+  position: relative;
+  width: 100%;
+  height: var(--op-parallax-height, calc(var(--op-du) * 75));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--op-parallax-background, var(--op-surface-alt));
+}
+
+.op-parallax-image {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 140%;
+  object-fit: cover;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.op-parallax-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

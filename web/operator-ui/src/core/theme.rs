@@ -205,6 +205,22 @@ fn stylesheet() -> &'static str {
             crate::components::reaction_picker::CSS,
             #[cfg(feature = "sticker-picker")]
             crate::components::sticker_picker::CSS,
+            #[cfg(feature = "carousel")]
+            crate::components::carousel::CSS,
+            #[cfg(feature = "infinite-scroll")]
+            crate::components::infinite_scroll::CSS,
+            #[cfg(feature = "layout")]
+            crate::components::layout::CSS,
+            #[cfg(feature = "parallax")]
+            crate::components::parallax::CSS,
+            #[cfg(feature = "pull-to-refresh")]
+            crate::components::pull_to_refresh::CSS,
+            #[cfg(feature = "swipe-item")]
+            crate::components::swipe_item::CSS,
+            #[cfg(feature = "tab-panels")]
+            crate::components::tab_panels::CSS,
+            #[cfg(feature = "wizard")]
+            crate::components::wizard::CSS,
             HOVER_CSS,
         ];
         // One cascade layer: unlayered application CSS always wins over component styles,

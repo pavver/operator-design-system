@@ -1,0 +1,9 @@
+# Change history of PullToRefresh. Newest first.
+# status: "approved" (checked by the maintainer) or "draft" (not reviewed yet).
+# Rejected changes are deleted from this file.
+
+[[change]]
+date = "2026-11-22T01:39:14+02:00"
+status = "draft"
+en = "New component providing touch pull-down gesture refresh with Operator states."
+uk = "Новий компонент оновлення сенсорним жестом потягування зі станами Operator."

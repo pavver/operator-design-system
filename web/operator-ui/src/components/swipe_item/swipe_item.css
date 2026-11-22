@@ -1,0 +1,54 @@
+/* ------------------------------------------------------------------ */
+/* SwipeItem                                                           */
+/* ------------------------------------------------------------------ */
+.op-swipe-item {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+  touch-action: pan-y;
+  background-color: var(--op-swipe-item-background, var(--op-surface));
+  color: var(--op-swipe-item-text, var(--op-text-primary));
+  box-shadow: inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-border);
+}
+
+.op-swipe-item-actions {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.op-swipe-item-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 calc(var(--op-du) * 3);
+  min-width: var(--op-swipe-item-action-width, calc(var(--op-du) * 18));
+  color: var(--op-on-accent);
+  font-weight: 500;
+  font-size: var(--op-type-caption-size);
+}
+
+.op-swipe-item-action[data-side="left"] {
+  background-color: var(--op-swipe-item-left-bg, var(--op-accent));
+}
+
+.op-swipe-item-action[data-side="right"] {
+  margin-left: auto;
+  background-color: var(--op-swipe-item-right-bg, var(--op-error));
+}
+
+.op-swipe-item-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: var(--op-swipe-item-height, calc(var(--op-du) * 12));
+  background-color: var(--op-swipe-item-content-bg, var(--op-surface));
+  transition: transform var(--op-motion-segment-slide) var(--op-ease-standard);
+}
+
+.op-swipe-item[data-dragging] .op-swipe-item-content {
+  transition: none;
+}
