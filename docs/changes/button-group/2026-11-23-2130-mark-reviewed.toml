@@ -1,0 +1,9 @@
+date = "2026-11-23T21:30:53Z"
+status = "draft"
+kind = "docs"
+
+[en]
+summary = "ButtonGroup is reviewed: it moves from the `draft` feature group to `reviewed` and is listed in the README as reviewed."
+
+[uk]
+summary = "ButtonGroup перевірено: він переходить із групи фіч `draft` до `reviewed` і позначений у README як перевірений."

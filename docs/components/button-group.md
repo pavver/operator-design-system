@@ -3,7 +3,7 @@
 Container grouping related [ActionButton](action-button.md) and [IconButton](icon-button.md) controls with shared borders.
 It creates visually cohesive command strips and segmented action bars.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 

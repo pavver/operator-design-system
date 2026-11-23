@@ -27,6 +27,7 @@ reviewed = [
     "action-stack",
     "avatar",
     "banner",
+    "button-group",
     "checkbox",
     "checkbox-group",
     "chip",
@@ -66,7 +67,6 @@ reviewed = [
 draft = [
     "aspect-ratio",
     "breadcrumbs",
-    "button-group",
     "carousel",
     "circular-progress",
     "color-field",
