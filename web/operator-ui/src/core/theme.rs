@@ -161,8 +161,8 @@ fn stylesheet() -> &'static str {
             crate::components::video::CSS,
             #[cfg(feature = "editor")]
             crate::components::editor::CSS,
-            #[cfg(feature = "fab")]
-            crate::components::fab::CSS,
+            #[cfg(feature = "action-stack")]
+            crate::components::action_stack::CSS,
             #[cfg(feature = "file-field")]
             crate::components::file_field::CSS,
             #[cfg(feature = "form")]

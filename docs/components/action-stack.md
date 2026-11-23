@@ -1,14 +1,16 @@
-# Fab
+# ActionStack
 
-Floating action button that expands into a stack of actions.
-The button stays anchored on screen or within a container, revealing contextual actions upon activation.
+A button that expands into a stack of asynchronous actions.
+It sits in the layout flow like any button; each action in the stack runs on its own and shows its own pending state and result.
+
+Unlike [Menu](menu.md), whose items are commands that close the menu on selection, every item here is an [ActionButton](action-button.md) with its own async feedback.
 
 Status: **draft** on web.
 
 ## Use
 
-* Highlighting a key contextual workflow in a view.
-* Expanding into secondary speed-dial operations on demand.
+* A few related asynchronous operations behind one button, such as the actions of a camera or a stream.
+* Secondary operations that should not take room in the layout until needed.
 
 ## Geometry
 
@@ -21,7 +23,7 @@ Status: **draft** on web.
 
 ## Behavior
 
-* Clicking the main FAB toggles the anchored overlay.
+* Clicking the trigger toggles the anchored stack.
 * The stack opens on the `side` of the trigger with the `align` alignment: below and centered by default.
 * `align` across a side above or below: `Center`, `Start` (left edges aligned, it sticks out to the right) or `End` (right edges aligned, it sticks out to the left).
 * `align` across a side to the left or right: `Center`, `Start` (top edges aligned, it sticks out downwards) or `End` (bottom edges aligned, it sticks out upwards).
@@ -39,13 +41,13 @@ Status: **draft** on web.
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `actions` | `Vec<FabAction>` | required | Actions shown in the speed dial list. |
+| `actions` | `Vec<ActionStackItem>` | required | Actions shown in the stack. |
 | `open` | bool signal | internal | Expansion state signal. |
 | `enabled` | bool | `true` | Enables interaction. |
 | `side` | `LayerSide` signal | `Below` | Preferred side of the trigger: `Above`, `Below`, `Left` or `Right`. |
 | `align` | `LayerAlign` signal | `Center` | Preferred alignment across that side: `Start`, `Center` or `End`. |
-| `label` | string | `fab.label` | Accessible label for the main trigger. |
-| `icon` | icon | `fab.open` | Icon shown in the main trigger. |
+| `label` | string | `action-stack.label` | Accessible label for the main trigger. |
+| `icon` | icon | `action-stack.open` | Icon shown in the main trigger. |
 | `size` | DU metric | `row_standard` | Diameter or size of the trigger. |
 | `gap` | DU metric | `gap_small` | Gap between stacked actions. |
 | `content` | `Slot` | none | Custom content replacing trigger text. |
@@ -57,14 +59,14 @@ Status: **draft** on web.
 
 | Metric prop | Unit | Variable | Default |
 | :--- | :--- | :--- | :--- |
-| `size` | DU | `--op-fab-size` | `row_standard` (`10 DU`) |
-| `gap` | DU | `--op-fab-gap` | `gap_small` (`2 DU`) |
+| `size` | DU | `--op-action-stack-size` | `row_standard` (`10 DU`) |
+| `gap` | DU | `--op-action-stack-gap` | `gap_small` (`2 DU`) |
 
 | Color variable | Default |
 | :--- | :--- |
-| `--op-fab-background` | `surface` |
-| `--op-fab-text` | `text_primary` |
-| `--op-fab-border` | `accent` |
+| `--op-action-stack-background` | `surface` |
+| `--op-action-stack-text` | `text_primary` |
+| `--op-action-stack-border` | `accent` |
 
 | Slot | Place |
 | :--- | :--- |
@@ -78,15 +80,15 @@ Status: **draft** on web.
 
 | Key | Default |
 | :--- | :--- |
-| `fab.label` | `Actions` |
+| `action-stack.label` | `Actions` |
 
 ### Icons
 
 | Key | Default |
 | :--- | :--- |
-| `fab.open` | `add` |
+| `action-stack.open` | `add` |
 
 ## Accessibility
 
 The trigger button sets `aria-haspopup="dialog"` and `aria-expanded`.
-Opening the speed dial automatically focuses the first action button.
+Opening the stack automatically focuses the first action button.

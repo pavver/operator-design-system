@@ -2,6 +2,8 @@
 pub mod accordion;
 #[cfg(feature = "action-button")]
 pub mod action_button;
+#[cfg(feature = "action-stack")]
+pub mod action_stack;
 #[cfg(feature = "aspect-ratio")]
 pub mod aspect_ratio;
 #[cfg(feature = "avatar")]
@@ -44,8 +46,6 @@ pub mod dropdown_menu;
 pub mod editor;
 #[cfg(feature = "empty-state")]
 pub mod empty_state;
-#[cfg(feature = "fab")]
-pub mod fab;
 #[cfg(feature = "field")]
 pub mod field;
 #[cfg(feature = "file-field")]

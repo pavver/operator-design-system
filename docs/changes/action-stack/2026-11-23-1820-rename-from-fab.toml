@@ -1,0 +1,13 @@
+date = "2026-11-23T18:20:34Z"
+status = "draft"
+kind = "breaking"
+
+[en]
+summary = "Fab is renamed ActionStack: it is a button in the layout flow that expands into asynchronous actions, not a floating action button. The name Fab stays free for a pinned single-icon button."
+check = "Open ActionStack in the Actions section of the sidebar and check every example still works."
+migration = "Rename `Fab` to `ActionStack`, `FabAction` to `ActionStackItem`, the Cargo feature `fab` to `action-stack`, the CSS variables `--op-fab-*` to `--op-action-stack-*`, the classes `op-fab*` to `op-action-stack*`, the string key `fab.label` to `action-stack.label`, and the icon key `fab.open` to `action-stack.open`."
+
+[uk]
+summary = "Fab перейменовано на ActionStack: це кнопка в потоці розмітки, що розгортає асинхронні дії, а не плаваюча кнопка дії. Ім'я Fab лишається вільним для закріпленої кнопки з однією піктограмою."
+check = "Відкрийте ActionStack у розділі Дії бічної панелі й перевірте, що всі приклади працюють."
+migration = "Перейменуйте `Fab` на `ActionStack`, `FabAction` на `ActionStackItem`, фічу Cargo `fab` на `action-stack`, CSS-змінні `--op-fab-*` на `--op-action-stack-*`, класи `op-fab*` на `op-action-stack*`, ключ рядка `fab.label` на `action-stack.label`, а ключ піктограми `fab.open` на `action-stack.open`."

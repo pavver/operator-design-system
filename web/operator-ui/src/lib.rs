@@ -13,6 +13,8 @@ pub mod prelude {
     pub use crate::components::accordion::*;
     #[cfg(feature = "action-button")]
     pub use crate::components::action_button::*;
+    #[cfg(feature = "action-stack")]
+    pub use crate::components::action_stack::*;
     #[cfg(feature = "aspect-ratio")]
     pub use crate::components::aspect_ratio::*;
     #[cfg(feature = "avatar")]
@@ -61,8 +63,6 @@ pub mod prelude {
     pub use crate::components::emoji_picker::*;
     #[cfg(feature = "empty-state")]
     pub use crate::components::empty_state::*;
-    #[cfg(feature = "fab")]
-    pub use crate::components::fab::*;
     #[cfg(feature = "field")]
     pub use crate::components::field::*;
     #[cfg(feature = "file-field")]

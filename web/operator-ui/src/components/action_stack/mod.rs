@@ -12,14 +12,14 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, icons, motion};
 
-pub(crate) const CSS: &str = include_str!("fab.css");
+pub(crate) const CSS: &str = include_str!("action_stack.css");
 #[derive(Clone)]
-pub struct FabAction {
+pub struct ActionStackItem {
     pub label: String,
     pub icon: Option<IconData>,
     pub action: AsyncAction,
 }
-impl FabAction {
+impl ActionStackItem {
     pub fn new(label: impl Into<String>, action: impl Into<AsyncAction>) -> Self {
         Self {
             label: label.into(),
@@ -33,8 +33,8 @@ impl FabAction {
     }
 }
 #[component]
-pub fn Fab(
-    actions: Vec<FabAction>,
+pub fn ActionStack(
+    actions: Vec<ActionStackItem>,
     #[prop(optional)] open: Option<RwSignal<bool>>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     /// Preferred side for the action stack; it flips when it does not fit there.
@@ -66,8 +66,8 @@ pub fn Fab(
     // it too, and the other actions are blocked until it settles.
     let running = RwSignal::new(None::<usize>);
     let trigger_state = Signal::derive(move || running.get().map(|_| ControlState::Pending));
-    let label = ui_text(label, "fab.label", "Actions");
-    let icon = ui_icon(icon, "fab.open", icons::ADD);
+    let label = ui_text(label, "action-stack.label", "Actions");
+    let icon = ui_icon(icon, "action-stack.open", icons::ADD);
     Effect::new(move |_| {
         if !enabled.get() {
             open.set(false);
@@ -86,16 +86,16 @@ pub fn Fab(
         PopoverAnchor::Point { .. } => None,
     });
     view! {
-        <div node_ref=root class=root_class("op-fab",class) style=root_style(vec![Metric::du("--op-fab-size",size),Metric::du("--op-fab-gap",gap)],style)>
+        <div node_ref=root class=root_class("op-action-stack",class) style=root_style(vec![Metric::du("--op-action-stack-size",size),Metric::du("--op-action-stack-gap",gap)],style)>
             <div aria-expanded=move || open.get().to_string() aria-haspopup="dialog">
                 <ActionButton text=label icon=icon.get_untracked() enabled=enabled state=trigger_state on_click=toggle content=content leading=leading trailing=trailing/>
             </div>
-            <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-fab-layer" aria_label=label role="dialog" node_ref=layer style=layer_style
+            <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-action-stack-layer" aria_label=label role="dialog" node_ref=layer style=layer_style
                 dismiss_on_outside=true
                 dismiss_on_scroll=true
                 hold_open=Signal::derive(move || running.get().is_some())
                 on_placed=Callback::new(move |()| { if let Some(el)=layer.get_untracked() && let Ok(Some(first))=el.query_selector("button") { use wasm_bindgen::JsCast; if let Ok(button)=first.dyn_into::<web_sys::HtmlElement>() { let _=button.focus(); } } })>
-                <ScrollView viewport_class="op-fab-actions op-scroll-contain" style=Signal::derive(root_style(vec![Metric::du("--op-fab-gap",gap)],None::<String>.into()))>
+                <ScrollView viewport_class="op-action-stack-actions op-scroll-contain" style=Signal::derive(root_style(vec![Metric::du("--op-action-stack-gap",gap)],None::<String>.into()))>
                     {actions.get_value().into_iter().enumerate().map(|(index, item)| {
                         let action = item.action;
                         let available = Signal::derive(move || {

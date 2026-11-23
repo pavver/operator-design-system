@@ -143,7 +143,7 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "editor.undo" => "Скасувати дію",
         "editor.redo" => "Повторити дію",
         "empty-state.title" => "Немає елементів",
-        "fab.label" => "Дії",
+        "action-stack.label" => "Дії",
         "file-field.pick" => "Вибрати файли",
         "file-field.label" => "Файли",
         "form.label" => "Форма",

@@ -29,7 +29,7 @@ pub const NAV: &[(&str, &[&str])] = &[
         "Actions",
         &[
             "components/action-button",
-            "components/fab",
+            "components/action-stack",
             "components/split-button",
             "components/icon-button",
             "components/menu",

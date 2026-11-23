@@ -1,0 +1,4 @@
+.op-action-stack { display: inline-block; width: fit-content; --op-button-height: var(--op-action-stack-size, var(--op-dim-row-standard)); --op-button-background: var(--op-action-stack-background, var(--op-surface)); --op-button-text: var(--op-action-stack-text, var(--op-text-primary)); }
+.op-action-stack-layer { --op-popover-border: var(--op-action-stack-border, var(--op-accent)); }
+.op-action-stack-actions { display: flex; flex-direction: column; gap: var(--op-action-stack-gap, var(--op-dim-gap-small)); }
+.op-action-stack-actions > * { flex-shrink: 0; }

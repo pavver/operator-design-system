@@ -2,6 +2,7 @@
 
 mod accordion;
 mod action_button;
+mod action_stack;
 mod aspect_ratio;
 mod avatar;
 mod banner;
@@ -28,7 +29,6 @@ mod dropdown_menu;
 mod editor;
 mod emoji_picker;
 mod empty_state;
-mod fab;
 mod field;
 mod file_field;
 mod form;
@@ -179,7 +179,7 @@ pub fn examples(slug: &str) -> Option<(fn() -> AnyView, bool)> {
         "components/timeline" => (timeline::timeline, false),
         "components/video" => (video::video, false),
         "components/editor" => (editor::editor, false),
-        "components/fab" => (fab::fab, true),
+        "components/action-stack" => (action_stack::action_stack, true),
         "components/file-field" => (file_field::file_field, false),
         "components/form" => (form::form, true),
         "components/knob" => (knob::knob, true),
