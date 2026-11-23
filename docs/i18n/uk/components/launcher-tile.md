@@ -22,8 +22,9 @@
 ## Поведінка
 
 * Клік на плитку викликає `on_click` або запускає `on_async_click`.
-* Під час виконання асинхронної дії плитка переходить у стан `Pending` та відображає візуальну рамку стану.
-* Після завершення плитка відображає пульсуючу рамку `Success` або `Error`.
+* Під час виконання асинхронної дії плитка дотримується [Станів](../foundations/states.md): рамка стану показує біжучий сегмент, а після затримки [відкладений спінер](../foundations/states.md#delayed-spinner) замінює піктограму в її розмірі; підпис лишається.
+* Результат спалахує на рамці й замінює піктограму піктограмою успіху чи помилки в її кольорі, після чого плитка повертається до спокою.
+* `loading` показує плитку в очікуванні ззовні.
 * Підтримує клавіатурну навігацію клавішами `Enter` та `Space`.
 * Якщо передано `href`, рендериться як посилання-якір, стилізоване ідентично до кнопки.
 
@@ -38,7 +39,9 @@
 | `content_slot` | Slot | немає | Користувацький контент замість стандартної піктограми та мітки. |
 | `state` | ControlState | немає | Явне перевизначення стану елемента керування. |
 | `enabled` | bool | `true` | Прапорець доступності; вимкнена плитка ігнорує введення. |
-| `loading` | bool | `false` | Прапорець завантаження для ручного спінера очікування. |
+| `loading` | bool | `false` | Показує плитку в очікуванні ззовні. |
+| `loading_label`, `success_label`, `error_label` | string | `launcher-tile.loading`, `.success`, `.error` | Доступні назви спінера й піктограм результату. |
+| `success_icon`, `error_icon` | піктограма | `launcher-tile.success`, `.error` | Піктограми результату. |
 | `selected` | bool | `false` | Прапорець вибору для виділення плитки в сітці. |
 | `on_click` | callback `()` | немає | Синхронний зворотний виклик кліку. |
 | `on_async_click` | AsyncAction | немає | Асинхронна дія кліку. |
@@ -61,25 +64,27 @@
 | `size` | DU | `--op-launcher-tile-size` | `24 DU` |
 | `icon_size` | DU | `--op-launcher-tile-icon-size` | `icon_xlarge` (`8 DU`) |
 | `gap` | DU | `--op-launcher-tile-gap` | `2.5 DU` |
-| `padding` | DU | `--op-launcher-tile-padding` | `2 DU` |
+| `padding` | DU | `--op-launcher-tile-padding` | `gutter` (`2 DU`) |
 | `border_width` | DU | `--op-launcher-tile-border-width` | `0.25 DU` |
 | `font_size` | TU | `--op-launcher-tile-font-size` | `11 TU` |
 | `line_height` | TU | `--op-launcher-tile-line-height` | `14 TU` |
 
 | Змінна кольору | За замовчуванням |
 | :--- | :--- |
-| `--op-launcher-tile-bg` | `var(--op-surface)` |
-| `--op-launcher-tile-color` | `var(--op-text-primary)` |
-| `--op-launcher-tile-border` | `var(--op-border)` |
-| `--op-launcher-tile-hover-bg` | `var(--op-surface-hover)` |
-| `--op-launcher-tile-hover-border` | `var(--op-border-strong)` |
-| `--op-launcher-tile-pressed-bg` | `var(--op-surface-active)` |
-| `--op-launcher-tile-selected-bg` | `var(--op-surface-selected)` |
-| `--op-launcher-tile-disabled-bg` | `var(--op-disabled-surface)` |
-| `--op-launcher-tile-disabled-border` | `var(--op-disabled-border)` |
-| `--op-launcher-tile-disabled-color` | `var(--op-text-disabled)` |
-| `--op-launcher-tile-icon-color` | `var(--op-icon)` |
-| `--op-launcher-tile-disabled-icon-color` | `var(--op-text-disabled)` |
+| `--op-launcher-tile-background` | `surface` |
+| `--op-launcher-tile-text` | `text_primary` |
+| `--op-launcher-tile-border` | `border` |
+| `--op-launcher-tile-hover` | `hover` |
+| `--op-launcher-tile-pressed` | `pressed` |
+| `--op-launcher-tile-selection` | `selection` |
+| `--op-launcher-tile-disabled-background` | `disabled_surface` |
+| `--op-launcher-tile-disabled-text` | `text_disabled` |
+| `--op-launcher-tile-icon` | `icon` |
+| `--op-launcher-tile-disabled-icon` | `icon_disabled` |
+| `--op-launcher-tile-success` | `success` |
+| `--op-launcher-tile-error` | `error` |
+| `--op-launcher-tile-pending` | `pending` |
+| `--op-launcher-tile-accent` | `accent` |
 
 `class` та `style` застосовуються до кореневого елемента `<button>` або `<a>`.
 
@@ -88,15 +93,19 @@
 | Ключ | За замовчуванням |
 | :--- | :--- |
 | `launcher-tile.label` | `"Launch"` |
+| `launcher-tile.loading` | `"Loading"` |
+| `launcher-tile.success` | `"Success"` |
+| `launcher-tile.error` | `"Error"` |
 
 ### Піктограми
 
 | Ключ | За замовчуванням |
 | :--- | :--- |
-| Індикатор очікування | `icons::REFRESH` |
+| `launcher-tile.success` | `check` |
+| `launcher-tile.error` | `close` |
 
 ## Доступність
 
 Плитка відображається як нативний елемент `<button>` або `<a>` із відповідними ARIA-атрибутами.
-У вимкненому стані встановлюються атрибути `disabled` та `aria-disabled="true"`.
+Поки виконується дія, встановлюється `aria-busy`; коли плитку не можна натиснути, — `aria-disabled="true"`.
 Повністю підтримується клавіатурна активація через `Enter` або `Space`.

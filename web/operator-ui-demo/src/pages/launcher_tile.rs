@@ -69,7 +69,7 @@ pub fn launcher_tile() -> AnyView {
                     }
                 />
                 <LauncherTile
-                    label="Compact Tile"
+                    label="Search"
                     icon=icons::SEARCH
                     size=18.0
                     icon_size=6.0

@@ -1,0 +1,13 @@
+date = "2026-11-23T21:40:33Z"
+status = "draft"
+kind = "breaking"
+
+[en]
+summary = "Pending follows States like the other buttons: the state border runs and the delayed spinner replaces the icon, instead of a dark scrim with a static refresh icon over the tile. The result replaces the icon with the success or error icon for a moment. The tile runs on click rather than on press, joins a surrounding ButtonGroup, and its colors come from existing tokens; the old color variables pointed to tokens that do not exist, so hover, press and selection had no fill. A link tile no longer takes the page link color."
+check = "Run Refresh Telemetry with the simulator on pending, success and error; check the Static States row, hover and press a tile, and the Docs link tile."
+migration = "Rename the color variables: `-bg` to `-background`, `-color` to `-text`, `-hover-bg` to `-hover`, `-pressed-bg` to `-pressed`, `-selected-bg` to `-selection`, `-disabled-bg` to `-disabled-background`, `-disabled-color` to `-disabled-text`, `-icon-color` to `-icon` and `-disabled-icon-color` to `-disabled-icon`; `-hover-border` and `-disabled-border` are gone, as the state border handles them."
+
+[uk]
+summary = "Очікування дотримується Станів, як в інших кнопках: рамка стану біжить, а відкладений спінер замінює піктограму, замість темної плями зі статичною піктограмою оновлення поверх плитки. Результат на мить замінює піктограму піктограмою успіху чи помилки. Плитка спрацьовує на клік, а не на натискання, приєднується до зовнішньої ButtonGroup, а її кольори беруться з наявних токенів; старі змінні кольорів посилалися на неіснуючі токени, тож наведення, натискання й вибір не мали заливки. Плитка-посилання більше не бере колір посилань сторінки."
+check = "Запустіть Refresh Telemetry із симулятором у режимах очікування, успіху й помилки; перевірте рядок статичних станів, наведіть і натисніть плитку, а також плитку-посилання Docs."
+migration = "Перейменуйте змінні кольорів: `-bg` на `-background`, `-color` на `-text`, `-hover-bg` на `-hover`, `-pressed-bg` на `-pressed`, `-selected-bg` на `-selection`, `-disabled-bg` на `-disabled-background`, `-disabled-color` на `-disabled-text`, `-icon-color` на `-icon` і `-disabled-icon-color` на `-disabled-icon`; `-hover-border` і `-disabled-border` прибрано, бо їх обробляє рамка стану."

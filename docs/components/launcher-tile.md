@@ -22,8 +22,9 @@ Do not use `LauncherTile` for inline form triggers or toolbars; use [ActionButto
 ## Behavior
 
 * Clicking the tile fires `on_click` or runs `on_async_click`.
-* While an async action runs, the tile enters `Pending` state and renders state-border visual feedback.
-* After completion, the tile displays `Success` or `Error` pulsing feedback.
+* While an async action runs, the tile follows [States](../foundations/states.md): the state border shows the running segment, and after the delay the [delayed spinner](../foundations/states.md#delayed-spinner) replaces the icon at the icon size; the label stays.
+* The result flashes the border and replaces the icon with the success or error icon in its tone, then the tile returns to rest.
+* `loading` shows the tile as pending from outside.
 * Supports keyboard navigation via `Enter` and `Space`.
 * When `href` is supplied, renders as an anchor link styled identically to the button.
 
@@ -38,7 +39,9 @@ Do not use `LauncherTile` for inline form triggers or toolbars; use [ActionButto
 | `content_slot` | Slot | none | Custom content replacing the default icon and label. |
 | `state` | ControlState | none | Explicit control state override. |
 | `enabled` | bool | `true` | Enabled flag; disabled tiles ignore input. |
-| `loading` | bool | `false` | Loading flag for manual pending spinner. |
+| `loading` | bool | `false` | Shows the tile as pending from outside. |
+| `loading_label`, `success_label`, `error_label` | string | `launcher-tile.loading`, `.success`, `.error` | Accessible names of the spinner and the result icons. |
+| `success_icon`, `error_icon` | icon | `launcher-tile.success`, `.error` | Result icons. |
 | `selected` | bool | `false` | Selected flag for selectable grid tiles. |
 | `on_click` | callback `()` | none | Synchronous click callback. |
 | `on_async_click` | AsyncAction | none | Asynchronous click action. |
@@ -61,25 +64,27 @@ Do not use `LauncherTile` for inline form triggers or toolbars; use [ActionButto
 | `size` | DU | `--op-launcher-tile-size` | `24 DU` |
 | `icon_size` | DU | `--op-launcher-tile-icon-size` | `icon_xlarge` (`8 DU`) |
 | `gap` | DU | `--op-launcher-tile-gap` | `2.5 DU` |
-| `padding` | DU | `--op-launcher-tile-padding` | `2 DU` |
+| `padding` | DU | `--op-launcher-tile-padding` | `gutter` (`2 DU`) |
 | `border_width` | DU | `--op-launcher-tile-border-width` | `0.25 DU` |
 | `font_size` | TU | `--op-launcher-tile-font-size` | `11 TU` |
 | `line_height` | TU | `--op-launcher-tile-line-height` | `14 TU` |
 
 | Color variable | Default |
 | :--- | :--- |
-| `--op-launcher-tile-bg` | `var(--op-surface)` |
-| `--op-launcher-tile-color` | `var(--op-text-primary)` |
-| `--op-launcher-tile-border` | `var(--op-border)` |
-| `--op-launcher-tile-hover-bg` | `var(--op-surface-hover)` |
-| `--op-launcher-tile-hover-border` | `var(--op-border-strong)` |
-| `--op-launcher-tile-pressed-bg` | `var(--op-surface-active)` |
-| `--op-launcher-tile-selected-bg` | `var(--op-surface-selected)` |
-| `--op-launcher-tile-disabled-bg` | `var(--op-disabled-surface)` |
-| `--op-launcher-tile-disabled-border` | `var(--op-disabled-border)` |
-| `--op-launcher-tile-disabled-color` | `var(--op-text-disabled)` |
-| `--op-launcher-tile-icon-color` | `var(--op-icon)` |
-| `--op-launcher-tile-disabled-icon-color` | `var(--op-text-disabled)` |
+| `--op-launcher-tile-background` | `surface` |
+| `--op-launcher-tile-text` | `text_primary` |
+| `--op-launcher-tile-border` | `border` |
+| `--op-launcher-tile-hover` | `hover` |
+| `--op-launcher-tile-pressed` | `pressed` |
+| `--op-launcher-tile-selection` | `selection` |
+| `--op-launcher-tile-disabled-background` | `disabled_surface` |
+| `--op-launcher-tile-disabled-text` | `text_disabled` |
+| `--op-launcher-tile-icon` | `icon` |
+| `--op-launcher-tile-disabled-icon` | `icon_disabled` |
+| `--op-launcher-tile-success` | `success` |
+| `--op-launcher-tile-error` | `error` |
+| `--op-launcher-tile-pending` | `pending` |
+| `--op-launcher-tile-accent` | `accent` |
 
 `class` and `style` apply to the root `<button>` or `<a>` element.
 
@@ -88,15 +93,19 @@ Do not use `LauncherTile` for inline form triggers or toolbars; use [ActionButto
 | Key | Default |
 | :--- | :--- |
 | `launcher-tile.label` | `"Launch"` |
+| `launcher-tile.loading` | `"Loading"` |
+| `launcher-tile.success` | `"Success"` |
+| `launcher-tile.error` | `"Error"` |
 
 ### Icons
 
 | Key | Default |
 | :--- | :--- |
-| Pending indicator icon | `icons::REFRESH` |
+| `launcher-tile.success` | `check` |
+| `launcher-tile.error` | `close` |
 
 ## Accessibility
 
 The tile renders as a native `<button>` or `<a>` element with appropriate ARIA attributes.
-When disabled, sets `disabled` and `aria-disabled="true"`.
+While an action runs, sets `aria-busy`; when it cannot be pressed, sets `aria-disabled="true"`.
 Keyboard activation via `Enter` or `Space` is fully supported.

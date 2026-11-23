@@ -1,14 +1,26 @@
 //! Square launcher tile for dashboards and application grids: LauncherTile.
 
-use crate::components::primitives::Icon;
+use crate::core::glyph::{pending_spinner, symbol};
 use crate::core::{
-    AsyncAction, ControlState, JobToken, Metric, Press, Slot, link_state, root_class, root_style,
-    sleep_ms, spawn_ripple, ui_text, use_pending_indicator, use_state_visual,
+    AsyncAction, ControlState, JobToken, Metric, PendingRun, Press, Slot, join_action_scope,
+    link_state, root_class, root_style, sleep_ms, spawn_ripple, ui_icon, ui_text,
+    use_pending_indicator, use_state_visual,
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
-use operator_ui_tokens::dim;
-use operator_ui_tokens::{Icon as IconData, motion};
+use operator_ui_tokens::{Icon as IconData, icons, motion};
+
+/// Icon size inside the tile; the pending spinner and the result icons take it too.
+const ICON_SIZE: &str = "var(--op-launcher-tile-icon-size, var(--op-dim-icon-xlarge))";
+
+/// What the icon area of the tile shows.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Glyph {
+    Icon,
+    Spinner,
+    Success,
+    Error,
+}
 
 pub(crate) const CSS: &str = include_str!("launcher_tile.css");
 
@@ -40,7 +52,18 @@ pub fn LauncherTile(
     /// Enabled flag; disabled tiles ignore clicks.
     #[prop(default = true.into(), into)]
     enabled: Signal<bool>,
-    /// Loading flag for manual pending spinner.
+    /// Accessible name of the pending spinner.
+    #[prop(optional, into)]
+    loading_label: MaybeProp<String>,
+    /// Accessible name of the success icon.
+    #[prop(optional, into)]
+    success_label: MaybeProp<String>,
+    #[prop(optional)] success_icon: Option<IconData>,
+    /// Accessible name of the error icon.
+    #[prop(optional, into)]
+    error_label: MaybeProp<String>,
+    #[prop(optional)] error_icon: Option<IconData>,
+    /// Shows the tile as pending from outside.
     #[prop(optional, into)]
     loading: Signal<bool>,
     /// Selected flag (for selectable grid tiles).
@@ -83,6 +106,13 @@ pub fn LauncherTile(
     #[prop(optional, into)] style: MaybeProp<String>,
 ) -> impl IntoView {
     let resolved_label = ui_text(label, "launcher-tile.label", "Launch");
+    let loading_label = ui_text(loading_label, "launcher-tile.loading", "Loading");
+    let success_label = ui_text(success_label, "launcher-tile.success", "Success");
+    let error_label = ui_text(error_label, "launcher-tile.error", "Error");
+    let success_icon = ui_icon(success_icon, "launcher-tile.success", icons::CHECK);
+    let error_icon = ui_icon(error_icon, "launcher-tile.error", icons::CLOSE);
+    // Inside a ButtonGroup the group can switch the tile off and block it while another runs.
+    let (enabled, on_async_click) = join_action_scope(enabled, on_async_click);
 
     let root_metrics = vec![
         Metric::du("--op-launcher-tile-size", size),
@@ -95,22 +125,32 @@ pub fn LauncherTile(
     ];
 
     let full_style = root_style(root_metrics, style);
-
+    let glyph = RwSignal::new(Glyph::Icon);
+    let has_icon = icon.is_some() || icon_slot.is_set();
+    let icon_area = move || {
+        let g = glyph.get();
+        if g == Glyph::Icon && !has_icon {
+            return None;
+        }
+        let shown = match g {
+            Glyph::Spinner => pending_spinner("launcher-tile", ICON_SIZE, loading_label),
+            Glyph::Success => symbol(success_icon, ICON_SIZE, Some(success_label)),
+            Glyph::Error => symbol(error_icon, ICON_SIZE, Some(error_label)),
+            Glyph::Icon => icon_slot
+                .run()
+                .or_else(|| icon.map(|ic| symbol(Signal::stored(ic), ICON_SIZE, None)))
+                .unwrap_or_else(|| ().into_any()),
+        };
+        Some(view! { <div class="op-launcher-tile-icon">{shown}</div> })
+    };
     let inner_view = move || {
         if content_slot.is_set() {
             content_slot.run()
         } else {
-            let icon_render = if icon_slot.is_set() {
-                icon_slot.run()
-            } else {
-                icon.map(|ic| view! { <Icon icon=ic size=dim::ICON_XLARGE /> }.into_any())
-            };
             Some(
                 view! {
                     <div class="op-launcher-tile-inner">
-                        {icon_render.map(|ic| view! {
-                            <div class="op-launcher-tile-icon">{ic}</div>
-                        })}
+                        {icon_area.clone()}
                         <span class="op-launcher-tile-label">{move || resolved_label.get()}</span>
                     </div>
                 }
@@ -162,21 +202,22 @@ pub fn LauncherTile(
     } else {
         let press = Press::new();
         let local_state = RwSignal::new(ControlState::Idle);
+        let show_flash = RwSignal::new(false);
         let job = JobToken::new();
 
         let current = Signal::derive(move || {
-            if let Some(s) = state.get() {
-                return s;
-            }
             if !enabled.get() {
                 return ControlState::Disabled;
+            }
+            if loading.get() {
+                return ControlState::Pending;
+            }
+            if let Some(s) = state.get() {
+                return s;
             }
             let managed = local_state.get();
             if managed != ControlState::Idle {
                 return managed;
-            }
-            if loading.get() {
-                return ControlState::Pending;
             }
             if selected.get() {
                 return ControlState::Selected;
@@ -188,21 +229,26 @@ pub fn LauncherTile(
         });
 
         let visual = use_state_visual(current);
-        let pending = use_pending_indicator(move || current.get() == ControlState::Pending);
+        let show_spinner = use_pending_indicator(move || current.get() == ControlState::Pending);
+        // The spinner and the result flash replace the icon, as in the other buttons.
+        Effect::new(move |_| {
+            let s = current.get();
+            glyph.set(if show_spinner.get() {
+                Glyph::Spinner
+            } else if show_flash.get() && s == ControlState::Success {
+                Glyph::Success
+            } else if show_flash.get() && s == ControlState::Error {
+                Glyph::Error
+            } else {
+                Glyph::Icon
+            });
+        });
+        let has_action = on_click.is_some() || on_async_click.is_some();
+        let clickable =
+            move || has_action && enabled.get() && current.get() != ControlState::Pending;
 
-        let is_busy = move || !enabled.get() || current.get() == ControlState::Pending;
-
-        let perform_click = Callback::new(move |ev: Option<web_sys::PointerEvent>| {
-            if is_busy() {
-                return;
-            }
-            if let Some(ref ev) = ev {
-                spawn_ripple(ev);
-            }
-            if let Some(cb) = on_click {
-                cb.run(());
-            } else if let Some(ref action) = on_async_click {
-                let action = action.clone();
+        let run = move || {
+            if let Some(action) = on_async_click.clone() {
                 let id = job.next();
                 spawn_local(async move {
                     local_state.set(ControlState::Pending);
@@ -211,36 +257,45 @@ pub fn LauncherTile(
                         return;
                     }
                     local_state.set(result.into());
-                    sleep_ms(motion::RESULT_HOLD_MS).await;
+                    show_flash.set(true);
+                    sleep_ms(motion::LOCAL_FLASH_ICON_MS).await;
+                    if !job.is_current(id) {
+                        return;
+                    }
+                    show_flash.set(false);
+                    sleep_ms(motion::LOCAL_FLASH_TAIL_MS).await;
                     if job.is_current(id) {
                         local_state.set(ControlState::Idle);
                     }
                 });
+            } else if let Some(cb) = on_click {
+                cb.run(());
             }
-        });
+        };
 
         view! {
             <button
                 type="button"
                 class=root_class("op-sb op-sb-bg op-rippled op-launcher-tile", class)
                 style=full_style
-                disabled=move || !enabled.get()
                 data-state=move || visual.state.get()
                 data-result=move || visual.result.get()
+                data-fading=move || visual.fading.get().then_some("")
                 aria-label=move || resolved_label.get()
+                aria-busy=move || (current.get() == ControlState::Pending).then_some("true")
+                aria-disabled=move || (!clickable()).then_some("true")
                 on:pointerdown=move |ev| {
-                    if !is_busy() {
+                    if clickable() {
                         press.down();
-                        perform_click.run(Some(ev));
+                        spawn_ripple(&ev);
                     }
                 }
                 on:pointerup=move |_| press.up()
                 on:pointerleave=move |_| press.up()
                 on:pointercancel=move |_| press.up()
-                on:keydown=move |ev| {
-                    if (ev.key() == "Enter" || ev.key() == " ") && !is_busy() {
-                        ev.prevent_default();
-                        perform_click.run(None);
+                on:click=move |_| {
+                    if clickable() {
+                        run();
                     }
                 }
             >
@@ -248,11 +303,7 @@ pub fn LauncherTile(
                 {badge_slot.is_set().then(|| view! {
                     <div class="op-launcher-tile-badge">{badge_slot.run()}</div>
                 })}
-                {move || pending.get().then(|| view! {
-                    <div class="op-launcher-tile-pending">
-                        <Icon icon=operator_ui_tokens::icons::REFRESH size=dim::ICON_LARGE />
-                    </div>
-                })}
+                <PendingRun/>
             </button>
         }
         .into_any()
