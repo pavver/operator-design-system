@@ -1,0 +1,11 @@
+date = "2026-11-23T22:21:50Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "A press on the prepend content or the arrow now focuses the text and opens the list, or closes it when open; before, only the text itself reacted."
+check = "Press the arrow of a combobox twice, then press its prepend content."
+
+[uk]
+summary = "Натискання на вміст prepend або на стрілку тепер фокусує текст і відкриває список, а якщо він відкритий — закриває; раніше реагував лише сам текст."
+check = "Натисніть стрілку комбобокса двічі, потім натисніть вміст prepend."

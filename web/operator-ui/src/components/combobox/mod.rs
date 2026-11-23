@@ -239,9 +239,48 @@ pub fn Combobox(
             </span>
         }
     });
+    // A press on the prepend (a flag) or the arrow opens the list like a press on the text,
+    // or closes it when it is open; controls the caller put there keep their own presses.
+    let on_box_press = move |ev: web_sys::PointerEvent| {
+        use wasm_bindgen::JsCast;
+        let Some(target) = ev
+            .target()
+            .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
+        else {
+            return;
+        };
+        let in_slot = target
+            .closest(".op-field-prepend, .op-field-append")
+            .ok()
+            .flatten()
+            .is_some();
+        let in_control = target
+            .closest("input, button, a, [role=button]")
+            .ok()
+            .flatten()
+            .is_some();
+        if !in_slot || in_control || blocked() {
+            return;
+        }
+        ev.prevent_default();
+        let was_open = open.get_untracked();
+        if let Some(input) = anchor_ref
+            .get_untracked()
+            .and_then(|a| a.query_selector("input").ok().flatten())
+            .and_then(|e| e.dyn_into::<web_sys::HtmlElement>().ok())
+        {
+            let _ = input.focus();
+        }
+        if was_open {
+            open.set(false);
+            filtering.set(false);
+        } else {
+            open_list();
+        }
+    };
     view! {
         <div class=root_class("op-dropdown op-combobox", class) style=move || custom_style.get()>
-            <div class="op-dropdown-anchor" node_ref=anchor_ref>
+            <div class="op-dropdown-anchor" node_ref=anchor_ref on:pointerdown=on_box_press>
                 <Field state=current label=label hint=hint error=error variant=variant
                     prepend=prepend append=append before=before after=after label_slot=label_slot hint_slot=hint_slot
                     trailing=true pending_run=true

@@ -1,0 +1,11 @@
+date = "2026-11-23T22:21:50Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "A press on the flag or the arrow now opens and closes the language list, as a press on the name does."
+check = "Press the flag and the arrow of a picker, including the one in the site header."
+
+[uk]
+summary = "Натискання на прапор або стрілку тепер відкриває й закриває список мов, як і натискання на назву."
+check = "Натисніть прапор і стрілку вибору мови, зокрема в шапці сайту."
