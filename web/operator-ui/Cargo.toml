@@ -139,7 +139,7 @@ media = [
 
 # Component features
 editor = ["action-button", "field", "icon-button", "primitives", "text-field", "tooltip", "web-sys/Selection", "web-sys/Range", "web-sys/ClipboardEvent", "web-sys/DataTransfer", "web-sys/DomParser", "web-sys/SupportedType"]
-action-stack = ["action-button", "popover", "scrollbar"]
+action-stack = ["action-button", "icon-button", "popover", "scrollbar"]
 field = ["primitives"]
 accordion = ["primitives"]
 action-button = ["primitives"]
@@ -219,7 +219,7 @@ side-panel = ["icon-button"]
 skeleton = []
 slider = ["primitives"]
 space = []
-split-button = ["action-button", "menu", "primitives"]
+split-button = ["action-button", "action-stack"]
 split-pane = ["scrollbar"]
 status-badge = ["primitives"]
 stepper = ["primitives"]

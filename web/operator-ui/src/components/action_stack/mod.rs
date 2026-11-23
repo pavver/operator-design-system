@@ -1,6 +1,7 @@
 //! Floating action group, using the shared anchored overlay.
 use crate::components::{
     action_button::ActionButton,
+    icon_button::IconButton,
     popover::{LayerAlign, LayerSide, Placement, Popover, PopoverAnchor},
     scrollbar::ScrollView,
 };
@@ -49,7 +50,20 @@ pub fn ActionStack(
     #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(optional)] icon: Option<IconData>,
     #[prop(optional, into)] size: MaybeProp<f32>,
+    /// Size of the trigger icon in DU.
+    #[prop(optional, into)]
+    icon_size: MaybeProp<f32>,
     #[prop(optional, into)] gap: MaybeProp<f32>,
+    /// Shows only the icon on a square trigger; `label` becomes its accessible name and tooltip.
+    #[prop(optional)]
+    icon_only: bool,
+    /// Element the stack opens from instead of the trigger, such as a whole composite control.
+    #[prop(optional)]
+    anchor_to: Option<NodeRef<leptos::html::Div>>,
+    /// Set to true while one of the actions runs, for a composite control that blocks its other
+    /// parts meanwhile.
+    #[prop(optional)]
+    busy: Option<RwSignal<bool>>,
     #[prop(optional, into)] content: Slot,
     #[prop(optional, into)] leading: Slot,
     #[prop(optional, into)] trailing: Slot,
@@ -60,8 +74,10 @@ pub fn ActionStack(
     let root = NodeRef::<leptos::html::Div>::new();
     let layer = NodeRef::<leptos::html::Div>::new();
     // Read live on every placement, so the stack follows the trigger while the page scrolls.
+    let anchor_el = anchor_to.unwrap_or(root);
     let anchor = Signal::derive(move || {
-        root.get()
+        anchor_el
+            .get()
             .map(|el| PopoverAnchor::of(&el))
             .unwrap_or(PopoverAnchor::Point { x: 0.0, y: 0.0 })
     });
@@ -69,6 +85,21 @@ pub fn ActionStack(
     // it too, and the other actions are blocked until it settles.
     let running = RwSignal::new(None::<usize>);
     let trigger_state = Signal::derive(move || running.get().map(|_| ControlState::Pending));
+    if let Some(busy) = busy {
+        Effect::new(move |_| busy.set(running.get().is_some()));
+    }
+    // The trigger button carries the popup state itself; in the icon-only mode it sits inside
+    // its tooltip wrapper, so the attributes are set on the button element directly.
+    Effect::new(move |_| {
+        let expanded = open.get().to_string();
+        if let Some(button) = root
+            .get()
+            .and_then(|el| el.query_selector("button").ok().flatten())
+        {
+            let _ = button.set_attribute("aria-haspopup", "menu");
+            let _ = button.set_attribute("aria-expanded", &expanded);
+        }
+    });
     let label = ui_text(label, "action-stack.label", "Actions");
     let icon = ui_icon(icon, "action-stack.open", icons::ADD);
     Effect::new(move |_| {
@@ -126,9 +157,12 @@ pub fn ActionStack(
         PopoverAnchor::Point { .. } => None,
     });
     view! {
-        <div node_ref=root class=root_class("op-action-stack",class) style=root_style(vec![Metric::du("--op-action-stack-size",size),Metric::du("--op-action-stack-gap",gap)],style)>
-            <ActionButton text=label icon=icon.get_untracked() enabled=enabled state=trigger_state on_click=toggle content=content leading=leading trailing=trailing
-                attr:aria-haspopup="menu" attr:aria-expanded=move || open.get().to_string() on:keydown=on_trigger_key/>
+        <div node_ref=root class=root_class("op-action-stack",class) style=root_style(vec![Metric::du("--op-action-stack-size",size),Metric::du("--op-action-stack-icon-size",icon_size),Metric::du("--op-action-stack-gap",gap)],style)>
+            {if icon_only {
+                view! { <IconButton icon=icon.get_untracked() label=label enabled=enabled state=trigger_state on_async_click=toggle content=content leading=leading trailing=trailing on:keydown=on_trigger_key/> }.into_any()
+            } else {
+                view! { <ActionButton text=label icon=icon.get_untracked() enabled=enabled state=trigger_state on_click=toggle content=content leading=leading trailing=trailing on:keydown=on_trigger_key/> }.into_any()
+            }}
             <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-action-stack-layer" aria_label=label role="menu" node_ref=layer style=layer_style
                 dismiss_on_outside=true
                 dismiss_on_scroll=true

@@ -1,7 +1,9 @@
-.op-split-button { display: inline-flex; --op-button-height: var(--op-split-button-height, var(--op-dim-row-standard)); }
+.op-split-button { display: inline-flex; width: fit-content; --op-button-height: var(--op-split-button-height, var(--op-dim-row-standard)); }
 :where(.op-split-button) { color: var(--op-split-button-text, inherit); }
-.op-split-button-toggle { position: relative; display: grid; place-items: center; border: 0; border-radius: 0; height: var(--op-split-button-height, var(--op-dim-row-standard)); width: var(--op-split-button-toggle-size, var(--op-dim-row-standard)); background: var(--op-split-button-background, var(--op-surface)); color: inherit; box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-split-button-border, var(--op-border)); cursor: pointer; }
-.op-split-button-toggle svg { width: var(--op-split-button-icon-size, var(--op-dim-icon-small)); height: var(--op-split-button-icon-size, var(--op-dim-icon-small)); }
-.op-split-button-toggle:hover { background: var(--op-split-button-hover, var(--op-hover)); }
-.op-split-button-toggle:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-split-button-accent, var(--op-accent)); outline-offset: var(--op-dim-gap-micro); }
-.op-split-button-toggle:disabled { color: var(--op-split-button-disabled-text, var(--op-text-disabled)); cursor: default; }
+/* The toggle is the icon-only trigger of an ActionStack, sized to the control. */
+.op-split-button-toggle {
+  --op-action-stack-size: var(--op-split-button-height, var(--op-dim-row-standard));
+  --op-action-stack-icon-size: var(--op-split-button-icon-size, var(--op-dim-icon-small));
+  --op-action-stack-background: var(--op-split-button-background, var(--op-surface));
+}
+.op-split-button-toggle .op-icon-btn { width: var(--op-split-button-toggle-size, var(--op-dim-row-standard)); }

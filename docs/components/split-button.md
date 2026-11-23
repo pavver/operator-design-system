@@ -1,7 +1,7 @@
 # SplitButton
 
-Primary action button with an attached dropdown menu toggle.
-Clicking the main button executes the default action, while clicking the attached toggle button opens an anchored menu of secondary actions.
+Primary action button with an attached toggle that opens a stack of secondary actions.
+Clicking the main button runs the default action, while the toggle opens an [ActionStack](action-stack.md) under the whole control.
 
 Status: **draft** on web.
 
@@ -21,23 +21,26 @@ Status: **draft** on web.
 
 ## Behavior
 
-* The main button triggers the primary action directly.
-* The attached toggle opens or closes the anchored menu.
-* Pressing Arrow Down on the toggle opens the menu.
-* When the control is disabled or pending, both the main action and toggle are inert.
+* The main button runs the primary action with the [ActionButton](action-button.md) states.
+* The toggle is the icon-only trigger of an [ActionStack](action-stack.md) anchored to the whole control.
+* The stack opens below by default, aligned to the start edge of the control, and follows the [ActionStack](action-stack.md) placement, scroll and dismissal rules.
+* Each secondary action runs with its own pending, success and error feedback, and the stack closes after a success.
+* While the primary action runs, the toggle is disabled; while a secondary action runs, the main button is disabled.
+* When the control is disabled or `state` is pending or disabled, the toggle is inert.
 
 ## API
 
 | Property | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `items` | `Vec<MenuItem>` | required | Actions rendered in the dropdown menu. |
-| `on_select` | callback `(String)` | required | Emits selected menu item id. |
+| `actions` | `Vec<ActionStackItem>` | required | Secondary actions in the stack. |
 | `on_click` | `AsyncAction` | none | Primary action handler. |
 | `text` | string | `split-button.text` | Label of the main button. |
 | `enabled` | bool | `true` | Enables interaction. |
-| `state` | `ControlState` | none | Explicit control state override. |
-| `toggle_label` | string | `split-button.toggle` | Accessible name for the dropdown toggle. |
-| `toggle_icon` | icon | `split-button.toggle` | Semantic icon for dropdown toggle. |
+| `state` | `ControlState` | none | Explicit state of the main button. |
+| `toggle_label` | string | `split-button.toggle` | Accessible name and tooltip of the toggle. |
+| `toggle_icon` | icon | `split-button.toggle` | Icon of the toggle. |
+| `side` | `LayerSide` | `Below` | Preferred side of the stack. |
+| `align` | `LayerAlign` | `Start` | Preferred alignment of the stack across the control. |
 | `height` | DU metric | `row_standard` | Height of the entire control. |
 | `toggle_size` | DU metric | `row_standard` | Width of the toggle button. |
 | `icon_size` | DU metric | `icon_small` | Size of the toggle icon. |
@@ -58,10 +61,8 @@ Status: **draft** on web.
 | :--- | :--- |
 | `--op-split-button-text` | `inherit` |
 | `--op-split-button-background` | `surface` |
-| `--op-split-button-border` | `border` |
-| `--op-split-button-hover` | `hover` |
-| `--op-split-button-accent` | `accent` |
-| `--op-split-button-disabled-text` | `text_disabled` |
+
+The toggle takes the hover, focus and disabled colors of [IconButton](icon-button.md), and the stack takes the [ActionStack](action-stack.md) variables.
 
 | Slot | Place |
 | :--- | :--- |
@@ -86,5 +87,5 @@ Status: **draft** on web.
 
 ## Accessibility
 
-The toggle button has `aria-haspopup="menu"` and reports `aria-expanded`.
-Keyboard arrow navigation on the toggle triggers menu display.
+The toggle has `aria-haspopup="menu"`, reports `aria-expanded`, and uses `toggle_label` as its accessible name and tooltip.
+The stack is a `menu` of `menuitem` actions with the [ActionStack](action-stack.md) keyboard support: Arrow Down and Arrow Up on the toggle open it, the arrows, Home and End move between actions, and Escape or Tab close it.

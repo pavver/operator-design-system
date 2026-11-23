@@ -1,0 +1,13 @@
+date = "2026-11-23T19:23:54Z"
+status = "draft"
+kind = "breaking"
+
+[en]
+summary = "The toggle now opens an ActionStack instead of a Menu: secondary actions are `ActionStackItem`s that run with their own pending, success and error feedback. The stack opens under the whole control with `side` and `align`, follows the ActionStack placement, scroll and keyboard rules, and the main button and the stack block each other while one of them runs. The toggle-only color variables are gone; the toggle takes the IconButton colors."
+check = "Run the main action and a secondary one in the Interactive example, try the Custom toggle icon example opening above and to the left, and navigate the stack with the arrows, Home, End, Escape and Tab."
+migration = "Replace `items` and `on_select` with `actions`: turn each `MenuItem::new(id, label)` into `ActionStackItem::new(label, action)` and move the code from the `on_select` branch for that id into its `AsyncAction`. Replace `--op-split-button-border`, `--op-split-button-hover`, `--op-split-button-accent` and `--op-split-button-disabled-text` with the IconButton variables on `.op-split-button-toggle`."
+
+[uk]
+summary = "Кнопка перемикання тепер відкриває ActionStack замість Menu: додаткові дії — це `ActionStackItem`, які виконуються з власним очікуванням, успіхом і помилкою. Стос відкривається під усім елементом керування з `side` і `align`, дотримується правил розміщення, прокручування й клавіатури ActionStack, а основна кнопка й стос блокують одне одного, поки щось виконується. Змінні кольорів лише для кнопки перемикання прибрано; вона бере кольори IconButton."
+check = "Запустіть основну й додаткову дію в інтерактивному прикладі, спробуйте приклад із власною піктограмою перемикача, що відкривається вгору й ліворуч, і пройдіть стос стрілками, Home, End, Escape і Tab."
+migration = "Замініть `items` і `on_select` на `actions`: перетворіть кожен `MenuItem::new(id, label)` на `ActionStackItem::new(label, action)` і перенесіть код із гілки `on_select` для цього id в його `AsyncAction`. Замініть `--op-split-button-border`, `--op-split-button-hover`, `--op-split-button-accent` і `--op-split-button-disabled-text` змінними IconButton на `.op-split-button-toggle`."

@@ -10,6 +10,7 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Long text" => "Довгий текст",
         "Long action list" => "Довгий список дій",
         "Side and alignment" => "Сторона та вирівнювання",
+        "Custom toggle icon" => "Власна піктограма перемикача",
         "Link mode" => "Режим посилання",
         "16:9 widescreen box" => "Широкоформатний блок 16:9",
         "1:1 square box" => "Квадратний блок 1:1",

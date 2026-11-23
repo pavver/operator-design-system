@@ -1,0 +1,11 @@
+date = "2026-11-23T19:23:54Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "New `icon_only` mode with a square icon trigger whose label becomes its accessible name and tooltip, an `icon_size` metric (`--op-action-stack-icon-size`), and `anchor_to` and `busy` for composite controls such as SplitButton."
+check = "Open the SplitButton page: its toggle is an icon-only ActionStack, the stack opens under the whole control, and the main button is blocked while a secondary action runs."
+
+[uk]
+summary = "Новий режим `icon_only` з квадратною кнопкою-піктограмою, підпис якої стає доступною назвою й підказкою, метрика `icon_size` (`--op-action-stack-icon-size`), а також `anchor_to` і `busy` для складених елементів керування, як-от SplitButton."
+check = "Відкрийте сторінку SplitButton: її кнопка перемикання — це ActionStack лише з піктограмою, стос відкривається під усім елементом керування, а основна кнопка заблокована, поки виконується додаткова дія."

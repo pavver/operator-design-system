@@ -24,6 +24,7 @@ Status: **reviewed** on web.
 ## Behavior
 
 * Clicking the trigger toggles the anchored stack.
+* With `icon_only`, the trigger is a square [IconButton](icon-button.md); [SplitButton](split-button.md) uses this mode for its toggle.
 * The stack opens on the `side` of the trigger with the `align` alignment: below and centered by default.
 * `align` across a side above or below: `Center`, `Start` (left edges aligned, it sticks out to the right) or `End` (right edges aligned, it sticks out to the left).
 * `align` across a side to the left or right: `Center`, `Start` (top edges aligned, it sticks out downwards) or `End` (bottom edges aligned, it sticks out upwards).
@@ -49,7 +50,11 @@ Status: **reviewed** on web.
 | `label` | string | `action-stack.label` | Accessible label for the main trigger. |
 | `icon` | icon | `action-stack.open` | Icon shown in the main trigger. |
 | `size` | DU metric | `row_standard` | Diameter or size of the trigger. |
+| `icon_size` | DU metric | `icon_small` | Size of the trigger icon. |
 | `gap` | DU metric | `gap_small` | Gap between stacked actions. |
+| `icon_only` | bool | `false` | Square trigger with only the icon; `label` becomes its accessible name and tooltip. |
+| `anchor_to` | `NodeRef<Div>` | the trigger | Element the stack opens from, such as a whole composite control. |
+| `busy` | bool signal | none | Set to true while an action runs, so a composite control can block its other parts. |
 | `content` | `Slot` | none | Custom content replacing trigger text. |
 | `leading` | `Slot` | none | Leading content inside trigger. |
 | `trailing` | `Slot` | none | Trailing content inside trigger. |
@@ -60,6 +65,7 @@ Status: **reviewed** on web.
 | Metric prop | Unit | Variable | Default |
 | :--- | :--- | :--- | :--- |
 | `size` | DU | `--op-action-stack-size` | `row_standard` (`10 DU`) |
+| `icon_size` | DU | `--op-action-stack-icon-size` | `icon_small` (`4 DU`) |
 | `gap` | DU | `--op-action-stack-gap` | `gap_small` (`2 DU`) |
 
 | Color variable | Default |
