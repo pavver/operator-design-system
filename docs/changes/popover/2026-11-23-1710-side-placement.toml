@@ -1,0 +1,11 @@
+date = "2026-11-23T17:10:35Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "The new `Placement::Side(LayerSide, LayerAlign)` places a layer on a preferred side (above, below, left or right) with a preferred alignment (start, center or end). It flips to the opposite side, falls back below and above from the left or right, and shifts along the anchor to stay on screen."
+check = "Open the Side and alignment stacks on the Fab page, also near the screen edges."
+
+[uk]
+summary = "Нове `Placement::Side(LayerSide, LayerAlign)` розміщує шар на бажаній стороні (зверху, знизу, ліворуч чи праворуч) з бажаним вирівнюванням (за початком, по центру чи за кінцем). Він перевертається на протилежну сторону, зліва чи справа переходить униз і вгору та зсувається вздовж якоря, щоб лишатися на екрані."
+check = "Відкрийте стоси прикладу Side and alignment на сторінці Fab, зокрема біля країв екрана."

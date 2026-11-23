@@ -43,36 +43,133 @@ pub struct FloatLimit {
     pub max_width: Option<f64>,
 }
 
-/// Centered on the anchor, on the preferred side when it fits, else on the other side.
+/// Preferred side of the anchor for a layer.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum LayerSide {
+    Above,
+    #[default]
+    Below,
+    Left,
+    Right,
+}
+
+impl LayerSide {
+    fn vertical(self) -> bool {
+        matches!(self, Self::Above | Self::Below)
+    }
+}
+
+/// Preferred alignment of a layer across its side of the anchor.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum LayerAlign {
+    /// Start edges aligned: the layer sticks out to the right (above or below the anchor) or
+    /// downwards (left or right of it).
+    Start,
+    /// Centered on the anchor.
+    #[default]
+    Center,
+    /// End edges aligned: the layer sticks out to the left (above or below the anchor) or
+    /// upwards (left or right of it).
+    End,
+}
+
+/// A box in viewport coordinates, in CSS pixels.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Bounds {
+    pub left: f64,
+    pub top: f64,
+    pub width: f64,
+    pub height: f64,
+}
+
+impl Bounds {
+    fn right(self) -> f64 {
+        self.left + self.width
+    }
+    fn bottom(self) -> f64 {
+        self.top + self.height
+    }
+}
+
+/// Position on the cross axis for an alignment, kept inside `0..extent`.
+fn cross(start: f64, len: f64, size: f64, extent: f64, align: LayerAlign) -> f64 {
+    let pos = match align {
+        LayerAlign::Start => start,
+        LayerAlign::Center => start + (len - size) / 2.0,
+        LayerAlign::End => start + len - size,
+    };
+    pos.clamp(0.0, (extent - size).max(0.0))
+}
+
+/// Places a `w`×`h` layer next to `anchor` inside a `vw`×`vh` viewport, `gap` pixels away.
 ///
-/// When neither side fits, the layer takes the roomier side and gets a `max_height`, so it
-/// scrolls; horizontally it shifts inside the viewport and never gets wider than it.
-pub fn place_centered(
-    anchor: &web_sys::DomRect,
+/// `side` and `align` are preferences: the layer takes the first side it fits on (the
+/// preferred one, its opposite, then below and above for a side placement) and shifts on the
+/// cross axis to stay inside the viewport. When it fits nowhere, it takes the roomier of
+/// above and below and gets a `max_height`, so its content scrolls. It is never wider or
+/// taller than the viewport.
+#[allow(clippy::too_many_arguments)]
+pub fn fit_layer(
+    anchor: Bounds,
     w: f64,
     h: f64,
-    gap_du: f32,
-    prefer_above: bool,
+    vw: f64,
+    vh: f64,
+    gap: f64,
+    side: LayerSide,
+    align: LayerAlign,
 ) -> (FloatPos, FloatLimit) {
-    let (vw, vh) = viewport();
-    let gap = f64::from(gap_du * DU_POINTS);
+    use LayerSide::{Above, Below, Left, Right};
     let max_width = (w > vw).then_some(vw);
     let w = w.min(vw);
-    let left = (anchor.left() + (anchor.width() - w) / 2.0).clamp(0.0, (vw - w).max(0.0));
-    let room_above = (anchor.top() - gap).max(0.0);
-    let room_below = (vh - anchor.bottom() - gap).max(0.0);
-    let above = match (h <= room_above, h <= room_below) {
-        (true, true) => prefer_above,
-        (fits_above, fits_below) if fits_above != fits_below => fits_above,
-        _ => room_above > room_below,
+    let room = |s: LayerSide| {
+        match s {
+            Above => anchor.top - gap,
+            Below => vh - anchor.bottom() - gap,
+            Left => anchor.left - gap,
+            Right => vw - anchor.right() - gap,
+        }
+        .max(0.0)
     };
-    let room = if above { room_above } else { room_below };
-    let max_height = (h > room).then_some(room);
-    let shown = h.min(room);
-    let top = if above {
-        anchor.top() - gap - shown
+    let fits = |s: LayerSide| {
+        if s.vertical() {
+            h <= room(s)
+        } else {
+            w <= room(s)
+        }
+    };
+    let order: &[LayerSide] = match side {
+        Above => &[Above, Below],
+        Below => &[Below, Above],
+        Left => &[Left, Right, Below, Above],
+        Right => &[Right, Left, Below, Above],
+    };
+    let chosen = order.iter().copied().find(|&s| fits(s));
+    let s = chosen.unwrap_or(if room(Above) > room(Below) {
+        Above
     } else {
-        anchor.bottom() + gap
+        Below
+    });
+    let limit_h = if s.vertical() { room(s) } else { vh };
+    let max_height = (h > limit_h).then_some(limit_h);
+    let shown = h.min(limit_h);
+    let (left, top) = match s {
+        Above => (
+            cross(anchor.left, anchor.width, w, vw, align),
+            anchor.top - gap - shown,
+        ),
+        Below => (
+            cross(anchor.left, anchor.width, w, vw, align),
+            anchor.bottom() + gap,
+        ),
+        Left => (
+            anchor.left - gap - w,
+            cross(anchor.top, anchor.height, shown, vh, align),
+        ),
+        Right => (
+            anchor.right() + gap,
+            cross(anchor.top, anchor.height, shown, vh, align),
+        ),
     };
     (
         FloatPos { left, top },
@@ -81,6 +178,50 @@ pub fn place_centered(
             max_width,
         },
     )
+}
+
+/// [`fit_layer`] in the current viewport, with the gap in DU.
+pub fn place_on_side(
+    anchor: &web_sys::DomRect,
+    w: f64,
+    h: f64,
+    gap_du: f32,
+    side: LayerSide,
+    align: LayerAlign,
+) -> (FloatPos, FloatLimit) {
+    let (vw, vh) = viewport();
+    let bounds = Bounds {
+        left: anchor.left(),
+        top: anchor.top(),
+        width: anchor.width(),
+        height: anchor.height(),
+    };
+    fit_layer(
+        bounds,
+        w,
+        h,
+        vw,
+        vh,
+        f64::from(gap_du * DU_POINTS),
+        side,
+        align,
+    )
+}
+
+/// Centered on the anchor, above or below it; see [`place_on_side`].
+pub fn place_centered(
+    anchor: &web_sys::DomRect,
+    w: f64,
+    h: f64,
+    gap_du: f32,
+    prefer_above: bool,
+) -> (FloatPos, FloatLimit) {
+    let side = if prefer_above {
+        LayerSide::Above
+    } else {
+        LayerSide::Below
+    };
+    place_on_side(anchor, w, h, gap_du, side, LayerAlign::Center)
 }
 
 /// Below the anchor aligned to its end edge, flipped above when there is no room, clamped to the viewport.
@@ -169,3 +310,7 @@ pub fn event_in_layer_tree(e: &web_sys::Event, own: u64) -> bool {
     }
     false
 }
+
+#[cfg(test)]
+#[path = "overlay_tests.rs"]
+mod tests;

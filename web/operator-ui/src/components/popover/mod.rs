@@ -1,7 +1,7 @@
 //! Floating layer: Popover, the shared base of menus, lists, tooltips and hover cards.
 
 use crate::core::overlay::{
-    FloatLimit, FloatPos, OverlayHost, place_at, place_below_start, place_centered, viewport,
+    FloatLimit, FloatPos, OverlayHost, place_at, place_below_start, place_on_side, viewport,
 };
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::portal::Portal;
@@ -9,6 +9,8 @@ use leptos::prelude::*;
 use send_wrapper::SendWrapper;
 use std::sync::atomic::{AtomicU64, Ordering};
 use wasm_bindgen::JsCast;
+
+pub use crate::core::overlay::{LayerAlign, LayerSide};
 
 pub(crate) const CSS: &str = include_str!("popover.css");
 
@@ -79,6 +81,9 @@ pub enum Placement {
     Above,
     /// Centered below; flips above without room.
     Below,
+    /// On a preferred side with a preferred alignment; both bend to keep the layer on screen
+    /// (see [`fit_layer`](crate::core::overlay::fit_layer)).
+    Side(LayerSide, LayerAlign),
     /// At the anchor point (context menus); shifted inside the viewport.
     AtPoint,
     /// Beside the anchor, top edges aligned, to the right or else to the left (submenus).
@@ -138,8 +143,9 @@ pub fn place_limited(
             unlimited(place_below_start(&rect, w, h, gap))
         }
         Placement::BelowEnd => unlimited(place_end(&rect, w, h, gap)),
-        Placement::Above => place_centered(&rect, w, h, gap, true),
-        Placement::Below => place_centered(&rect, w, h, gap, false),
+        Placement::Above => place_on_side(&rect, w, h, gap, LayerSide::Above, LayerAlign::Center),
+        Placement::Below => place_on_side(&rect, w, h, gap, LayerSide::Below, LayerAlign::Center),
+        Placement::Side(side, align) => place_on_side(&rect, w, h, gap, side, align),
         Placement::AtPoint => unlimited(place_at(rect.left(), rect.top(), w, h)),
         Placement::SideStart => unlimited(place_side(&rect, w, h, gap)),
     }

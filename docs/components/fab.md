@@ -22,9 +22,14 @@ Status: **draft** on web.
 ## Behavior
 
 * Clicking the main FAB toggles the anchored overlay.
-* The stack opens centered above the trigger, or below it with `below`.
-* It flips to the other side when it fits only there, and shifts sideways near a screen edge.
-* When it fits on neither side, it takes the side with more room and scrolls with the library [Scrollbar](scrollbar.md).
+* The stack opens on the `side` of the trigger with the `align` alignment: below and centered by default.
+* `align` across a side above or below: `Center`, `Start` (left edges aligned, it sticks out to the right) or `End` (right edges aligned, it sticks out to the left).
+* `align` across a side to the left or right: `Center`, `Start` (top edges aligned, it sticks out downwards) or `End` (bottom edges aligned, it sticks out upwards).
+* Both are preferences that bend to keep the stack on screen:
+  * it opens on the opposite side when it fits only there;
+  * a stack to the left or right falls back below, then above, when it fits on neither of those sides;
+  * it shifts along the trigger near a screen edge;
+  * when it fits nowhere, it takes the roomier of above and below and scrolls with the library [Scrollbar](scrollbar.md).
 * While open, clicking any action executes it and closes the layer.
 * Actions close when disabled, when clicking outside, or when the page or another container scrolls; scrolling the stack itself keeps it open.
 
@@ -35,7 +40,8 @@ Status: **draft** on web.
 | `actions` | `Vec<FabAction>` | required | Actions shown in the speed dial list. |
 | `open` | bool signal | internal | Expansion state signal. |
 | `enabled` | bool | `true` | Enables interaction. |
-| `below` | bool | `false` | Prefers the side below the FAB instead of above. |
+| `side` | `LayerSide` signal | `Below` | Preferred side of the trigger: `Above`, `Below`, `Left` or `Right`. |
+| `align` | `LayerAlign` signal | `Center` | Preferred alignment across that side: `Start`, `Center` or `End`. |
 | `label` | string | `fab.label` | Accessible label for the main trigger. |
 | `icon` | icon | `fab.open` | Icon shown in the main trigger. |
 | `size` | DU metric | `row_standard` | Diameter or size of the trigger. |

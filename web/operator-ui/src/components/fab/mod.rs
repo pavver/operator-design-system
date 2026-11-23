@@ -1,7 +1,7 @@
 //! Floating action group, using the shared anchored overlay.
 use crate::components::{
     action_button::ActionButton,
-    popover::{Placement, Popover, PopoverAnchor},
+    popover::{LayerAlign, LayerSide, Placement, Popover, PopoverAnchor},
     scrollbar::ScrollView,
 };
 use crate::core::{
@@ -35,7 +35,12 @@ pub fn Fab(
     actions: Vec<FabAction>,
     #[prop(optional)] open: Option<RwSignal<bool>>,
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
-    #[prop(optional)] below: bool,
+    /// Preferred side for the action stack; it flips when it does not fit there.
+    #[prop(into, default = LayerSide::Below.into())]
+    side: Signal<LayerSide>,
+    /// Preferred alignment across that side; it shifts when the stack would leave the screen.
+    #[prop(into, default = LayerAlign::Center.into())]
+    align: Signal<LayerAlign>,
     #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(optional)] icon: Option<IconData>,
     #[prop(optional, into)] size: MaybeProp<f32>,
@@ -81,7 +86,7 @@ pub fn Fab(
             <div aria-expanded=move || open.get().to_string() aria-haspopup="dialog">
                 <ActionButton text=label icon=icon.get_untracked() enabled=available on_click=toggle content=content leading=leading trailing=trailing/>
             </div>
-            <Popover open=open anchor=anchor placement=if below { Placement::Below } else { Placement::Above } class="op-fab-layer" aria_label=label role="dialog" node_ref=layer style=layer_style
+            <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-fab-layer" aria_label=label role="dialog" node_ref=layer style=layer_style
                 dismiss_on_outside=true
                 dismiss_on_scroll=true
                 on_placed=Callback::new(move |()| { if let Some(el)=layer.get_untracked() && let Ok(Some(first))=el.query_selector("button") { use wasm_bindgen::JsCast; if let Ok(button)=first.dyn_into::<web_sys::HtmlElement>() { let _=button.focus(); } } })>

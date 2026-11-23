@@ -21,11 +21,12 @@ Status: **draft** on web.
 | `BelowStretch` | Under the anchor with the anchor's width, for lists of a field. |
 | `Above` | Centered above the anchor, `gap` DU away; flips below when it fits only there. |
 | `Below` | Centered below the anchor, `gap` DU away; flips above when it fits only there. |
+| `Side(side, align)` | On a preferred `LayerSide` with a preferred `LayerAlign`; flips to the opposite side, then (from the left or right) below and above, and shifts along the anchor to stay on screen. |
 | `AtPoint` | At a pointer position, shifted to stay inside the viewport (context menus). |
 | `SideStart` | Beside the anchor, top edges aligned, to the right or else to the left (submenus). |
 
 The layer is always clamped to the viewport.
-A centered layer (`Above`, `Below`) near a side edge shifts sideways to stay on screen, and is never wider than the viewport.
+A centered or side layer (`Above`, `Below`, `Side`) near a screen edge shifts along the anchor to stay on screen, and is never wider than the viewport.
 When it fits neither above nor below, it takes the side with more room, gets that height as its limit and clips.
 Content that can grow puts its rows in a [ScrollView](scrollbar.md), which fills the limited layer and scrolls with the library scrollbar instead of the native one.
 It is measured hidden in the first frame and shown placed in the next one, so it never flashes at a wrong position.

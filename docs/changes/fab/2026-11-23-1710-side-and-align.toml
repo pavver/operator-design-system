@@ -1,0 +1,13 @@
+date = "2026-11-23T17:10:35Z"
+status = "draft"
+kind = "breaking"
+
+[en]
+summary = "The action stack now opens below the trigger by default. The new `side` (`Above`, `Below`, `Left`, `Right`) and `align` (`Start`, `Center`, `End`) props set the preferred side and alignment; both bend when the stack does not fit on screen. They replace `below`."
+check = "Open the four stacks in the Side and alignment example and check each opens on its side and sticks out in its direction; move one near a screen edge and check it flips or shifts to stay on screen."
+migration = "Remove `below=true`: below is now the default. To keep a stack above the trigger, set `side=LayerSide::Above`."
+
+[uk]
+summary = "Стос дій тепер типово відкривається під кнопкою. Нові пропси `side` (`Above`, `Below`, `Left`, `Right`) і `align` (`Start`, `Center`, `End`) задають бажану сторону та вирівнювання; обидва порушуються, коли стос не вміщується на екрані. Вони замінюють `below`."
+check = "Відкрийте чотири стоси в прикладі Side and alignment і перевірте, що кожен відкривається на своїй стороні та стирчить у свій бік; розмістіть один біля краю екрана й перевірте, що він перевертається чи зсувається, щоб лишатися на екрані."
+migration = "Приберіть `below=true`: розташування знизу тепер типове. Щоб стос лишився над кнопкою, задайте `side=LayerSide::Above`."
