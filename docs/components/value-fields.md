@@ -1,6 +1,6 @@
 # Value fields
 
-Typed text fields: NumberField, DurationField, TimeField, DateTimeField and ColorField, with the ColorPicker editor.
+Typed text fields: NumberField, DurationField, TimeField, DateTimeField and ColorField, with the ColorPicker and ClockPicker editors.
 Each one looks like a [TextField](text-field.md) and edits one typed value through its text form.
 
 Status: **draft** on web.
@@ -9,7 +9,8 @@ Status: **draft** on web.
 
 * NumberField: numbers with an optional unit (`21.5 °C`, `1200 kWh`), optionally empty.
 * DurationField: signed durations such as delays and offsets (`1h 30m`, `-15m`).
-* TimeField: a time of day (`07:30`).
+* TimeField: a time of day (`07:30`) with a clock dial.
+* ClockPicker: the clock dial alone: drag the hand to the hour, then to the minute.
 * DateTimeField: a local date and time (`2026-11-17 07:30`) with a calendar.
 * ColorField: a colour as `#rrggbb` (or `#rrggbbaa` with opacity) with a ColorPicker popup.
 * ColorPicker: the colour editor alone, for panels and dialogs: spectrum, RGB, HSL and colour temperature modes, opacity, a colour code and swatches.
@@ -23,10 +24,15 @@ Status: **draft** on web.
 | Picker button | `10 DU` wide, full height, `arrow_drop_down`; ColorField adds an `icon_field` (`5 DU`) colour preview before the arrow. |
 | Calendar | Popup with a `row_compact` header (previous, month and year, next), a weekday row of `row_dense` and `row_compact` square day cells; weeks start on Monday. |
 | ColorPicker | `80 DU` wide, `pad_content` padding, `gutter` between rows; a row of mode tabs `row_compact` high with a `0.5 DU` `accent` underline on the selected one. |
+| ClockPicker | `pad_content` padding; a readout of two `row_avatar` buttons in `type_screen_title_size` with a `0.5 DU` `accent` underline on the active hand, an optional AM/PM pair; a `64 DU` round dial in `surface_alt` with `row_compact` numbers, a `0.5 DU` `accent` hand and a round `row_compact` tip. |
 | Spectrum plane | `40 DU` high, saturation across and brightness up; an `icon_small` (`4 DU`) square marker with a `0.5 DU` light ring and a `0.25 DU` dark outline. |
 | Channel row | A caption, a `row_dense` bar with a `pad_small` marker that overhangs it by `gap_micro`, and a `14 DU` number input `row_compact` high; opacity bars show a checkerboard. |
 | Colour code | A `row_compact` input with an `icon_field` (`5 DU`) sample, the code, and the CSS form of the current mode. |
 | Swatches | `row_compact` squares filling the width, `gap_micro` apart, with a `0.5 DU` `accent` outline on the selected one. |
+
+## Geometry exceptions
+
+The ClockPicker dial, its centre, the hand tip and the selected number are round; everything else keeps `0 DU` corners.
 
 ## Behavior
 
@@ -39,6 +45,10 @@ Status: **draft** on web.
 * External changes of the value show up unless the field has focus.
 * The calendar keeps the time of day; the selected day is filled with `accent`, today has an `accent` outline.
 * Popups are [Popover](popover.md) layers and close on a press outside or Escape.
+* ClockPicker sets the hour first: dragging moves the hand and the value live, releasing commits it and switches to minutes; releasing the minute hand commits and runs `on_done`, which closes the TimeField popup.
+* In 24-hour mode the outer ring holds `12` and `1`–`11` and the inner ring `00` and `13`–`23`; with `hour12` the dial shows `12` and `1`–`11` and AM/PM switches the half of the day.
+* Minutes snap to `minute_step`; seconds of the value are kept.
+* On the dial, arrows step the active hand by one hour or one `minute_step`, Page keys by five, and Enter moves from hours to minutes or finishes.
 * ColorPicker updates the value live while the plane or a bar is dragged and runs `on_commit` when the edit ends: on release, Enter in a number or the code, a swatch, or a key on a bar.
 * The plane moves saturation with Arrow Left and Right and brightness with Arrow Up and Down; bars step with arrows, by ten steps with Shift or Page keys, and jump with Home and End.
 * Greys and black keep the hue and saturation they had, so dragging through them does not reset the other bars.
@@ -65,7 +75,8 @@ Applications that need localized forms wrap [`ParsedField`](#parsedfield) with t
 | :--- | :--- | :--- |
 | `NumberField` | `Option<f64>` | `min`, `max`, `step` (`1`), `decimals` (`3`), `unit`, `allow_empty`. |
 | `DurationField` | `i64` milliseconds | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`). |
-| `TimeField` | `u32` seconds since midnight | `seconds`, `step_s` (`60`). |
+| `TimeField` | `u32` seconds since midnight | `seconds`, `step_s` (`60`), `hour12`, `minute_step` (`1`), `no_picker`. |
+| `ClockPicker` | `u32` seconds since midnight | `hour12`, `minute_step` (`1`), `enabled`, `on_commit`, `on_done`. |
 | `DateTimeField` | `LocalDateTime` | `seconds`, `month_names`, `weekday_names`. |
 | `ColorField` | `String` `#rrggbb` or `#rrggbbaa` | `swatches`, `alpha`, `modes`, `min_kelvin` (`2000`), `max_kelvin` (`6500`), `temperature`. |
 | `ColorPicker` | `String` `#rrggbb` or `#rrggbbaa` | `swatches`, `alpha`, `modes` (`ColorMode::Spectrum`, `Rgb`, `Hsl`, `Temperature`; empty means all), `min_kelvin`, `max_kelvin`, `temperature: Option<RwSignal<Option<u32>>>`, `enabled`, `on_commit`. |
@@ -111,12 +122,12 @@ Labels are visible above the box; use `aria_label` for an accessible name alone.
 | `minute_unit` | `string signal` | string key | DurationField | Translatable text; see Strings. |
 | `second_unit` | `string signal` | string key | DurationField | Translatable text; see Strings. |
 | `millisecond_unit` | `string signal` | string key | DurationField | Translatable text; see Strings. |
-| `picker_label` | `string signal` | string key | DateTimeField, ColorField | Translatable text; see Strings. |
-| `popup_label` | `string signal` | string key | DateTimeField, ColorField | Translatable text; see Strings. |
-| `icon` | `Option<IconData>` | icon key | DateTimeField, ColorField | Built-in icon override; see Icons. |
-| `icon_size` | `number` | unset | DateTimeField, ColorField, Calendar | Metric override; see below. |
-| `popup_shadow_y` | `number` | unset | DateTimeField, ColorField | Metric override; see below. |
-| `popup_shadow_blur` | `number` | unset | DateTimeField, ColorField | Metric override; see below. |
+| `picker_label` | `string signal` | string key | DateTimeField, ColorField, TimeField | Translatable text; see Strings. |
+| `popup_label` | `string signal` | string key | DateTimeField, ColorField, TimeField | Translatable text; see Strings. |
+| `icon` | `Option<IconData>` | icon key | DateTimeField, ColorField, TimeField | Built-in icon override; see Icons. |
+| `icon_size` | `number` | unset | DateTimeField, ColorField, TimeField, Calendar | Metric override; see below. |
+| `popup_shadow_y` | `number` | unset | DateTimeField, ColorField, TimeField | Metric override; see below. |
+| `popup_shadow_blur` | `number` | unset | DateTimeField, ColorField, TimeField | Metric override; see below. |
 | `calendar_padding` | `number` | unset | DateTimeField | Metric override; see below. |
 | `calendar_cell_size` | `number` | unset | DateTimeField | Metric override; see below. |
 | `calendar_header_height` | `number` | unset | DateTimeField | Metric override; see below. |
@@ -157,6 +168,20 @@ Labels are visible above the box; use `aria_label` for an accessible name alone.
 | `font_size` | `number` | unset | ColorPicker | Metric override; see below. |
 | `header` | `slot` | none | ColorPicker | Above the mode tabs. |
 | `footer` | `slot` | none | ColorPicker | Below the swatches. |
+| `clock_size` | `number` | unset | TimeField | Metric override; see below. |
+| `hours_label` | `string signal` | string key | ClockPicker | Translatable text; see Strings. |
+| `minutes_label` | `string signal` | string key | ClockPicker | Translatable text; see Strings. |
+| `am_label` | `string signal` | string key | ClockPicker | Translatable text; see Strings. |
+| `pm_label` | `string signal` | string key | ClockPicker | Translatable text; see Strings. |
+| `size` | `number` | unset | ClockPicker | Metric override; see below. |
+| `padding` | `number` | unset | ClockPicker | Metric override; see below. |
+| `gap` | `number` | unset | ClockPicker | Metric override; see below. |
+| `number_size` | `number` | unset | ClockPicker | Metric override; see below. |
+| `hand_width` | `number` | unset | ClockPicker | Metric override; see below. |
+| `readout_font_size` | `number` | unset | ClockPicker | Metric override; see below. |
+| `font_size` | `number` | unset | ClockPicker | Metric override; see below. |
+| `header` | `slot` | none | ClockPicker | Above the readout. |
+| `footer` | `slot` | none | ClockPicker | Below the dial. |
 | `previous_label` | `string signal` | string key | Calendar | Translatable text; see Strings. |
 | `next_label` | `string signal` | string key | Calendar | Translatable text; see Strings. |
 | `previous_icon` | `Option<IconData>` | icon key | Calendar | Built-in icon override; see Icons. |
@@ -192,9 +217,9 @@ All text-like inputs provide the same six field slots.
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar |
 | `unit_padding_x` | DU | `--op-field-unit-padding-x` | `pad_card` | NumberField |
 | `unit_gap` | DU | `--op-field-unit-gap` | `pad_tight` | NumberField |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) for picker arrows | DateTimeField, ColorField, Calendar |
-| `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, ColorField |
-| `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, ColorField |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) for picker arrows | DateTimeField, ColorField, TimeField, Calendar |
+| `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, ColorField, TimeField |
+| `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, ColorField, TimeField |
 | `calendar_padding` | DU | `--op-field-calendar-padding` | `pad_tight` | DateTimeField |
 | `calendar_cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | DateTimeField |
 | `calendar_header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | DateTimeField |
@@ -212,6 +237,11 @@ All text-like inputs provide the same six field slots.
 | `tab_height` | DU | `--op-field-color-tab-height` | `row_compact` | ColorPicker |
 | `number_width` | DU | `--op-field-color-number-width` | `14 DU` | ColorPicker |
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | ColorPicker |
+| `clock_size`, `size` | DU | `--op-field-clock-size` | `64 DU` | TimeField, ClockPicker |
+| `number_size` | DU | `--op-field-clock-number-size` | `row_compact` | ClockPicker |
+| `hand_width` | DU | `--op-field-clock-hand-width` | `border_thick` | ClockPicker |
+| `readout_font_size` | TU | `--op-field-clock-readout-font-size` | `type_screen_title_size` | ClockPicker |
+| `padding`, `gap`, `font_size` | DU, DU, TU | `--op-field-popup-padding`, `--op-field-popup-gap`, `--op-field-font-size` | `pad_content`, `gutter`, `type_body_size` | ClockPicker |
 | `padding` | DU | `--op-field-calendar-padding` | `pad_tight` | Calendar |
 | `cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | Calendar |
 | `header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | Calendar |
@@ -231,6 +261,7 @@ All text-like inputs provide the same six field slots.
 | `--op-field-on-accent` | `on_accent` |
 | `--op-field-popup-shadow` | `existing black at 35% opacity` |
 | `--op-field-swatch-border` | `existing black at 25% opacity` |
+| `--op-field-surface-alt` | `surface_alt` for the ClockPicker dial and readout |
 | `--op-field-border` | `border` for ColorPicker number and code inputs |
 | `--op-field-hover` | `hover` for ColorPicker tabs |
 | `--op-field-divider` | `divider` under ColorPicker tabs |
@@ -269,6 +300,12 @@ DurationField accepts translated suffixes as well as canonical English forms.
 | `duration-field.millisecond-unit` | `millisecond_unit` | `ms` |
 | `time-field.placeholder` | `placeholder` | `(empty)` |
 | `time-field.label` | `aria_label` | `Time` |
+| `time-field.pick` | `picker_label` | `Pick a time` |
+| `time-field.popup` | `popup_label` | `Clock` |
+| `clock-picker.hours` | `hours_label` | `Hours` |
+| `clock-picker.minutes` | `minutes_label` | `Minutes` |
+| `clock-picker.am` | `am_label` | `AM` |
+| `clock-picker.pm` | `pm_label` | `PM` |
 | `date-time-field.placeholder` | `placeholder` | `(empty)` |
 | `date-time-field.label` | `aria_label` | `Date and time` |
 | `date-time-field.pick` | `picker_label` | `Pick a date` |
@@ -320,6 +357,7 @@ DurationField accepts translated suffixes as well as canonical English forms.
 
 | Key | Prop | Default |
 | :--- | :--- | :--- |
+| `time-field.expand` | `icon` | `arrow_drop_down` |
 | `date-time-field.expand` | `icon` | `arrow_drop_down` |
 | `color-field.expand` | `icon` | `arrow_drop_down` |
 | `calendar.previous` | `previous_icon` | `chevron_left` |

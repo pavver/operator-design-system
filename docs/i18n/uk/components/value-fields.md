@@ -1,6 +1,6 @@
 # Поля значень
 
-Типізовані текстові поля: NumberField, DurationField, TimeField, DateTimeField і ColorField, а також редактор ColorPicker.
+Типізовані текстові поля: NumberField, DurationField, TimeField, DateTimeField і ColorField, а також редактори ColorPicker і ClockPicker.
 Кожне виглядає як [TextField](text-field.md) і редагує одне типізоване значення через його текстову форму.
 
 Статус: **чернетка** у вебреалізації.
@@ -9,7 +9,8 @@
 
 * NumberField: числа з необов'язковою одиницею (`21.5 °C`, `1200 kWh`), може бути порожнім.
 * DurationField: тривалості зі знаком, як-от затримки та зміщення (`1h 30m`, `-15m`).
-* TimeField: час доби (`07:30`).
+* TimeField: час доби (`07:30`) із циферблатом.
+* ClockPicker: лише циферблат: перетягніть стрілку на годину, потім на хвилину.
 * DateTimeField: локальні дата й час (`2026-11-17 07:30`) із календарем.
 * ColorField: колір як `#rrggbb` (або `#rrggbbaa` із прозорістю) зі спливним ColorPicker.
 * ColorPicker: лише редактор кольору для панелей і діалогів: режими спектра, RGB, HSL і колірної температури, прозорість, код кольору та зразки.
@@ -23,10 +24,15 @@
 | Кнопка вибору | Завширшки `10 DU`, на всю висоту, `arrow_drop_down`; ColorField додає зразок кольору `icon_field` (`5 DU`) перед стрілкою. |
 | Календар | Спливний шар із заголовком `row_compact` (попередній, місяць і рік, наступний), рядком днів тижня `row_dense` і квадратними комірками днів `row_compact`; тижні починаються з понеділка. |
 | ColorPicker | Завширшки `80 DU`, внутрішній відступ `pad_content`, між рядками `gutter`; рядок вкладок режимів заввишки `row_compact` із підкресленням `0.5 DU` у кольорі `accent` на вибраній. |
+| ClockPicker | Внутрішній відступ `pad_content`; показ із двох кнопок `row_avatar` розміром `type_screen_title_size` з підкресленням `0.5 DU` у кольорі `accent` на активній стрілці та необов'язковою парою AM/PM; круглий циферблат `64 DU` у `surface_alt` із числами `row_compact`, стрілкою `0.5 DU` у кольорі `accent` і круглим кінчиком `row_compact`. |
 | Площина спектра | Заввишки `40 DU`, насиченість по горизонталі, яскравість угору; квадратний маркер `icon_small` (`4 DU`) зі світлим кільцем `0.5 DU` і темним контуром `0.25 DU`. |
 | Рядок каналу | Підпис, смуга `row_dense` із маркером `pad_small`, що виступає на `gap_micro`, і числове поле `14 DU` заввишки `row_compact`; смуга прозорості має шахове тло. |
 | Код кольору | Поле `row_compact` зі зразком `icon_field` (`5 DU`), кодом і CSS-формою поточного режиму. |
 | Зразки | Квадрати `row_compact` на всю ширину з проміжком `gap_micro`, із контуром `0.5 DU` у кольорі `accent` на вибраному. |
+
+## Винятки геометрії
+
+Циферблат ClockPicker, його центр, кінчик стрілки й вибране число круглі; усе інше має кути `0 DU`.
 
 ## Поведінка
 
@@ -39,6 +45,10 @@
 * Зовнішні зміни значення відображаються, якщо поле не у фокусі.
 * Календар зберігає час доби; вибраний день заповнений `accent`, сьогоднішній має контур `accent`.
 * Спливні шари є шарами [Popover](popover.md) і закриваються при натисканні зовні або за Escape.
+* ClockPicker спершу задає годину: перетягування рухає стрілку й значення наживо, відпускання фіксує його та перемикає на хвилини; відпускання хвилинної стрілки фіксує значення й викликає `on_done`, що закриває спливне вікно TimeField.
+* У 24-годинному режимі зовнішнє коло містить `12` і `1`–`11`, а внутрішнє — `00` і `13`–`23`; з `hour12` циферблат показує `12` і `1`–`11`, а AM/PM перемикає половину доби.
+* Хвилини прив'язуються до `minute_step`; секунди значення зберігаються.
+* На циферблаті стрілки змінюють активну стрілку на годину або на `minute_step`, клавіші Page — на п'ять, а Enter переходить від годин до хвилин або завершує вибір.
 * ColorPicker оновлює значення наживо під час перетягування площини чи смуги та викликає `on_commit`, коли редагування завершено: після відпускання, Enter у числовому полі чи коді, вибору зразка або натискання клавіші на смузі.
 * На площині Arrow Left і Right змінюють насиченість, а Arrow Up і Down — яскравість; смуги змінюються стрілками, на десять кроків — із Shift або клавішами Page, а Home і End переносять на краї.
 * Сірі кольори й чорний зберігають попередні відтінок і насиченість, тож перетягування через них не скидає інші смуги.
@@ -65,7 +75,8 @@
 | :--- | :--- | :--- |
 | `NumberField` | `Option<f64>` | `min`, `max`, `step` (`1`), `decimals` (`3`), `unit`, `allow_empty`. |
 | `DurationField` | `i64` мілісекунд | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`). |
-| `TimeField` | `u32` секунд від півночі | `seconds`, `step_s` (`60`). |
+| `TimeField` | `u32` секунд від півночі | `seconds`, `step_s` (`60`), `hour12`, `minute_step` (`1`), `no_picker`. |
+| `ClockPicker` | `u32` секунд від півночі | `hour12`, `minute_step` (`1`), `enabled`, `on_commit`, `on_done`. |
 | `DateTimeField` | `LocalDateTime` | `seconds`, `month_names`, `weekday_names`. |
 | `ColorField` | `String` `#rrggbb` або `#rrggbbaa` | `swatches`, `alpha`, `modes`, `min_kelvin` (`2000`), `max_kelvin` (`6500`), `temperature`. |
 | `ColorPicker` | `String` `#rrggbb` або `#rrggbbaa` | `swatches`, `alpha`, `modes` (`ColorMode::Spectrum`, `Rgb`, `Hsl`, `Temperature`; порожній означає всі), `min_kelvin`, `max_kelvin`, `temperature: Option<RwSignal<Option<u32>>>`, `enabled`, `on_commit`. |
@@ -111,12 +122,12 @@
 | `minute_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
 | `second_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
 | `millisecond_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
-| `picker_label` | `string signal` | ключ рядка | DateTimeField, ColorField | Перекладний текст; див. Рядки. |
-| `popup_label` | `string signal` | ключ рядка | DateTimeField, ColorField | Перекладний текст; див. Рядки. |
-| `icon` | `Option<IconData>` | ключ піктограми | DateTimeField, ColorField | Перевизначення вбудованої піктограми; див. Піктограми. |
-| `icon_size` | `number` | не встановлено | DateTimeField, ColorField, Calendar | Перевизначення метрики; див. нижче. |
-| `popup_shadow_y` | `number` | не встановлено | DateTimeField, ColorField | Перевизначення метрики; див. нижче. |
-| `popup_shadow_blur` | `number` | не встановлено | DateTimeField, ColorField | Перевизначення метрики; див. нижче. |
+| `picker_label` | `string signal` | ключ рядка | DateTimeField, ColorField, TimeField | Перекладний текст; див. Рядки. |
+| `popup_label` | `string signal` | ключ рядка | DateTimeField, ColorField, TimeField | Перекладний текст; див. Рядки. |
+| `icon` | `Option<IconData>` | ключ піктограми | DateTimeField, ColorField, TimeField | Перевизначення вбудованої піктограми; див. Піктограми. |
+| `icon_size` | `number` | не встановлено | DateTimeField, ColorField, TimeField, Calendar | Перевизначення метрики; див. нижче. |
+| `popup_shadow_y` | `number` | не встановлено | DateTimeField, ColorField, TimeField | Перевизначення метрики; див. нижче. |
+| `popup_shadow_blur` | `number` | не встановлено | DateTimeField, ColorField, TimeField | Перевизначення метрики; див. нижче. |
 | `calendar_padding` | `number` | не встановлено | DateTimeField | Перевизначення метрики; див. нижче. |
 | `calendar_cell_size` | `number` | не встановлено | DateTimeField | Перевизначення метрики; див. нижче. |
 | `calendar_header_height` | `number` | не встановлено | DateTimeField | Перевизначення метрики; див. нижче. |
@@ -157,6 +168,20 @@
 | `font_size` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
 | `header` | `slot` | немає | ColorPicker | Над вкладками режимів. |
 | `footer` | `slot` | немає | ColorPicker | Під зразками. |
+| `clock_size` | `number` | не встановлено | TimeField | Перевизначення метрики; див. нижче. |
+| `hours_label` | `string signal` | ключ рядка | ClockPicker | Перекладний текст; див. Рядки. |
+| `minutes_label` | `string signal` | ключ рядка | ClockPicker | Перекладний текст; див. Рядки. |
+| `am_label` | `string signal` | ключ рядка | ClockPicker | Перекладний текст; див. Рядки. |
+| `pm_label` | `string signal` | ключ рядка | ClockPicker | Перекладний текст; див. Рядки. |
+| `size` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `padding` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `gap` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `number_size` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `hand_width` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `readout_font_size` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `font_size` | `number` | не встановлено | ClockPicker | Перевизначення метрики; див. нижче. |
+| `header` | `slot` | немає | ClockPicker | Над показом часу. |
+| `footer` | `slot` | немає | ClockPicker | Під циферблатом. |
 | `previous_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
 | `next_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
 | `previous_icon` | `Option<IconData>` | ключ піктограми | Calendar | Перевизначення вбудованої піктограми; див. Піктограми. |
@@ -192,9 +217,9 @@
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar |
 | `unit_padding_x` | DU | `--op-field-unit-padding-x` | `pad_card` | NumberField |
 | `unit_gap` | DU | `--op-field-unit-gap` | `pad_tight` | NumberField |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) для стрілок вибору | DateTimeField, ColorField, Calendar |
-| `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, ColorField |
-| `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, ColorField |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) для стрілок вибору | DateTimeField, ColorField, TimeField, Calendar |
+| `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, ColorField, TimeField |
+| `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, ColorField, TimeField |
 | `calendar_padding` | DU | `--op-field-calendar-padding` | `pad_tight` | DateTimeField |
 | `calendar_cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | DateTimeField |
 | `calendar_header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | DateTimeField |
@@ -212,6 +237,11 @@
 | `tab_height` | DU | `--op-field-color-tab-height` | `row_compact` | ColorPicker |
 | `number_width` | DU | `--op-field-color-number-width` | `14 DU` | ColorPicker |
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | ColorPicker |
+| `clock_size`, `size` | DU | `--op-field-clock-size` | `64 DU` | TimeField, ClockPicker |
+| `number_size` | DU | `--op-field-clock-number-size` | `row_compact` | ClockPicker |
+| `hand_width` | DU | `--op-field-clock-hand-width` | `border_thick` | ClockPicker |
+| `readout_font_size` | TU | `--op-field-clock-readout-font-size` | `type_screen_title_size` | ClockPicker |
+| `padding`, `gap`, `font_size` | DU, DU, TU | `--op-field-popup-padding`, `--op-field-popup-gap`, `--op-field-font-size` | `pad_content`, `gutter`, `type_body_size` | ClockPicker |
 | `padding` | DU | `--op-field-calendar-padding` | `pad_tight` | Calendar |
 | `cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | Calendar |
 | `header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | Calendar |
@@ -231,6 +261,7 @@
 | `--op-field-on-accent` | `on_accent` |
 | `--op-field-popup-shadow` | `existing black at 35% opacity` |
 | `--op-field-swatch-border` | `existing black at 25% opacity` |
+| `--op-field-surface-alt` | `surface_alt` для циферблата й показу часу ClockPicker |
 | `--op-field-border` | `border` для числових полів і поля коду ColorPicker |
 | `--op-field-hover` | `hover` для вкладок ColorPicker |
 | `--op-field-divider` | `divider` під вкладками ColorPicker |
@@ -269,6 +300,12 @@ DurationField приймає перекладені суфікси поряд і
 | `duration-field.millisecond-unit` | `millisecond_unit` | `ms` |
 | `time-field.placeholder` | `placeholder` | `(empty)` |
 | `time-field.label` | `aria_label` | `Time` |
+| `time-field.pick` | `picker_label` | `Pick a time` |
+| `time-field.popup` | `popup_label` | `Clock` |
+| `clock-picker.hours` | `hours_label` | `Hours` |
+| `clock-picker.minutes` | `minutes_label` | `Minutes` |
+| `clock-picker.am` | `am_label` | `AM` |
+| `clock-picker.pm` | `pm_label` | `PM` |
 | `date-time-field.placeholder` | `placeholder` | `(empty)` |
 | `date-time-field.label` | `aria_label` | `Date and time` |
 | `date-time-field.pick` | `picker_label` | `Pick a date` |
@@ -320,6 +357,7 @@ DurationField приймає перекладені суфікси поряд і
 
 | Ключ | Проп | Типове значення |
 | :--- | :--- | :--- |
+| `time-field.expand` | `icon` | `arrow_drop_down` |
 | `date-time-field.expand` | `icon` | `arrow_drop_down` |
 | `color-field.expand` | `icon` | `arrow_drop_down` |
 | `calendar.previous` | `previous_icon` | `chevron_left` |

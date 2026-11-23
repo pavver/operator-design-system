@@ -1,0 +1,11 @@
+date = "2026-11-23T23:15:02Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "TimeField gains a clock dial popup: drag the hand to the hour, then to the minute. The new ClockPicker supports 24-hour rings, `hour12` with AM/PM, `minute_step` snapping and keyboard steps."
+check = "Open the dial of both demo TimeFields, drag through the inner and outer rings, switch AM/PM, step with arrows and Page keys, and check that releasing the minute closes the popup."
+
+[uk]
+summary = "TimeField отримав спливний циферблат: перетягніть стрілку на годину, потім на хвилину. Новий ClockPicker підтримує 24-годинні кола, `hour12` з AM/PM, прив'язку до `minute_step` і кроки з клавіатури."
+check = "Відкрийте циферблат обох демонстраційних TimeField, перетягніть стрілку внутрішнім і зовнішнім колом, перемкніть AM/PM, покрокуйте стрілками та клавішами Page і перевірте, що відпускання хвилини закриває вікно."

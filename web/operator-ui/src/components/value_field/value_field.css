@@ -182,3 +182,91 @@
 .op-calendar-weekday { font-size: var(--op-field-caption-font-size, var(--op-type-caption-size)); line-height: var(--op-field-caption-line-height, var(--op-type-caption-line)); }
 
 .op-value-field .op-field-append { margin-left: 0; }
+
+/* ClockPicker. The dial, its centre, the hand tip and the selected number are round. */
+.op-clock-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--op-field-popup-gap, var(--op-dim-gutter));
+  padding: var(--op-field-popup-padding, var(--op-dim-pad-content));
+  color: var(--op-field-text, var(--op-text-primary));
+  font-size: var(--op-field-font-size, var(--op-type-body-size));
+}
+.op-clock-readout { display: flex; align-items: center; gap: var(--op-dim-gap-micro); }
+.op-clock-part {
+  min-width: calc(var(--op-du) * 14);
+  height: var(--op-dim-row-avatar);
+  padding: 0 var(--op-dim-pad-tight);
+  border: 0;
+  background-color: var(--op-field-surface-alt, var(--op-surface-alt));
+  color: var(--op-field-text, var(--op-text-primary));
+  font: inherit;
+  font-size: var(--op-field-clock-readout-font-size, var(--op-type-screen-title-size));
+  line-height: var(--op-type-screen-title-line);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard), color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-clock-part:hover { background-color: var(--op-field-hover, var(--op-hover)); }
+.op-clock-part[aria-pressed="true"] { color: var(--op-field-accent, var(--op-accent)); box-shadow: inset 0 calc(var(--op-dim-border-thick) * -1) 0 var(--op-field-accent, var(--op-accent)); }
+.op-clock-colon { font-size: var(--op-field-clock-readout-font-size, var(--op-type-screen-title-size)); font-weight: 700; color: var(--op-field-secondary-text, var(--op-text-secondary)); }
+.op-clock-meridiem { display: flex; flex-direction: column; margin-inline-start: var(--op-dim-pad-tight); }
+.op-clock-period {
+  height: calc(var(--op-dim-row-avatar) / 2);
+  padding: 0 var(--op-dim-pad-small);
+  border: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-field-border, var(--op-border));
+  color: var(--op-field-secondary-text, var(--op-text-secondary));
+  font-weight: 700;
+  cursor: pointer;
+}
+.op-clock-period[aria-pressed="true"] { background-color: var(--op-field-accent, var(--op-accent)); color: var(--op-field-on-accent, var(--op-on-accent)); box-shadow: none; }
+.op-root .op-clock-part:focus-visible, .op-root .op-clock-period:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+.op-clock-dial {
+  position: relative;
+  flex: none;
+  width: var(--op-field-clock-size, calc(var(--op-du) * 64));
+  height: var(--op-field-clock-size, calc(var(--op-du) * 64));
+  border-radius: 50%;
+  background-color: var(--op-field-surface-alt, var(--op-surface-alt));
+  touch-action: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.op-root .op-clock-dial:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: var(--op-dim-border); }
+.op-clock-dial[aria-disabled] { cursor: default; opacity: 0.5; }
+.op-clock-hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: var(--op-field-clock-hand-width, var(--op-dim-border-thick));
+  transform-origin: 50% 100%;
+  background-color: var(--op-field-accent, var(--op-accent));
+  pointer-events: none;
+}
+.op-clock-center, .op-clock-tip {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--op-field-accent, var(--op-accent));
+  pointer-events: none;
+}
+.op-clock-center { left: 50%; top: 50%; width: var(--op-dim-pad-small); height: var(--op-dim-pad-small); }
+.op-clock-tip { width: var(--op-field-clock-number-size, var(--op-dim-row-compact)); height: var(--op-field-clock-number-size, var(--op-dim-row-compact)); }
+.op-clock-dial:not([data-dragging]) .op-clock-hand { transition: transform var(--op-motion-state-color) var(--op-ease-standard), height var(--op-motion-state-color) var(--op-ease-standard); }
+.op-clock-number {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: var(--op-field-clock-number-size, var(--op-dim-row-compact));
+  height: var(--op-field-clock-number-size, var(--op-dim-row-compact));
+  transform: translate(-50%, -50%);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.op-clock-number[data-inner] { color: var(--op-field-secondary-text, var(--op-text-secondary)); font-size: var(--op-type-caption-size); }
+.op-clock-number[data-selected] { color: var(--op-field-on-accent, var(--op-on-accent)); }

@@ -340,6 +340,10 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Spectrum, RGB, HSL and temperature editors; the code updates live while dragging. Opacity adds an alpha byte." => {
             "Редактори спектра, RGB, HSL і температури; код оновлюється наживо під час перетягування. Прозорість додає байт альфа-каналу."
         }
+        "The arrow opens a dial: drag the hand to the hour, then to the minute. The inner ring holds 00 and 13–23." => {
+            "Стрілка відкриває циферблат: перетягніть стрілку на годину, потім на хвилину. Внутрішнє коло містить 00 і 13–23."
+        }
+        "The dial alone, for panels and dialogs." => "Лише циферблат — для панелей і діалогів.",
         "The editor alone, for panels and dialogs." => "Лише редактор — для панелей і діалогів.",
         "The arrow opens a calendar or the swatches; text input works too." => {
             "Стрілка відкриває календар або зразки кольорів; текстове введення також працює."

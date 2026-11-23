@@ -8,19 +8,29 @@ pub mod parse;
 mod parsed;
 // Reuse the popup helper without adding dropdown-menu as a value-field dependency.
 #[cfg(all(
-    any(feature = "color-field", feature = "date-time-field"),
+    any(
+        feature = "color-field",
+        feature = "date-time-field",
+        feature = "time-field"
+    ),
     not(feature = "dropdown-menu")
 ))]
 #[path = "../dropdown_menu/portal_style.rs"]
 mod portal_style;
 #[cfg(all(
-    any(feature = "color-field", feature = "date-time-field"),
+    any(
+        feature = "color-field",
+        feature = "date-time-field",
+        feature = "time-field"
+    ),
     feature = "dropdown-menu"
 ))]
 use super::dropdown_menu::portal_style;
 
 #[cfg(feature = "date-time-field")]
 mod calendar;
+#[cfg(feature = "time-field")]
+mod clock;
 #[cfg(feature = "color-field")]
 mod color;
 #[cfg(feature = "color-field")]
@@ -36,6 +46,8 @@ mod time;
 
 #[cfg(feature = "date-time-field")]
 pub use calendar::Calendar;
+#[cfg(feature = "time-field")]
+pub use clock::ClockPicker;
 #[cfg(feature = "color-field")]
 pub use color::ColorField;
 #[cfg(feature = "color-field")]

@@ -206,3 +206,21 @@ mod colors {
         assert!(kelvin_to_rgb(2000.0).b < kelvin_to_rgb(5000.0).b);
     }
 }
+
+#[test]
+fn dial_maps_angles_to_hours_and_minutes() {
+    assert!((dial_angle(1.0, 0.0) - 90.0).abs() < 1e-9);
+    assert!((dial_angle(0.0, 1.0) - 180.0).abs() < 1e-9);
+    assert_eq!(dial_hour(0.0, false, false, false), 12);
+    assert_eq!(dial_hour(0.0, true, false, false), 0);
+    assert_eq!(dial_hour(90.0, false, false, false), 3);
+    assert_eq!(dial_hour(90.0, true, false, false), 15);
+    assert_eq!(dial_hour(359.0, true, false, false), 0);
+    assert_eq!(dial_hour(0.0, false, true, false), 0);
+    assert_eq!(dial_hour(0.0, false, true, true), 12);
+    assert_eq!(dial_hour(210.0, false, true, true), 19);
+    assert_eq!(dial_minute(90.0, 1), 15);
+    assert_eq!(dial_minute(357.0, 1), 0);
+    assert_eq!(dial_minute(100.0, 5), 15);
+    assert_eq!(dial_minute(350.0, 15), 0);
+}

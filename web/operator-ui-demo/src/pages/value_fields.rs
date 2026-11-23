@@ -24,6 +24,9 @@ pub fn value_fields() -> AnyView {
     let lamp = RwSignal::new("#ffb46b".to_string());
     let lamp_kelvin = RwSignal::new(Some(3000_u32));
     let picked = RwSignal::new("#457b9d".to_string());
+    let wake = RwSignal::new(6 * 3600 + 45 * 60_u32);
+    let meeting = RwSignal::new(14 * 3600 + 30 * 60_u32);
+    let dial = RwSignal::new(21 * 3600 + 15 * 60_u32);
     let swatches: Vec<String> = [
         "#e63946", "#f4a261", "#e9c46a", "#2a9d8f", "#2ec4b6", "#457b9d", "#6d597a", "#f1faee",
     ]
@@ -49,6 +52,18 @@ pub fn value_fields() -> AnyView {
             <div class="demo-grid-2">
                 <DateTimeField label="Start" value=when/>
                 <ColorField label="Colour" value=color swatches=swatches.get_value()/>
+            </div>
+        </Example>
+        <Example title="Clock dial" note="The arrow opens a dial: drag the hand to the hour, then to the minute. The inner ring holds 00 and 13–23." block=true>
+            <div class="demo-grid-2">
+                <TimeField label=l("Wake up", "Підйом") value=wake/>
+                <TimeField label=l("Meeting (12-hour, 5-minute step)", "Зустріч (12 годин, крок 5 хвилин)") value=meeting hour12=true minute_step=5/>
+            </div>
+        </Example>
+        <Example title="Inline ClockPicker" note="The dial alone, for panels and dialogs." block=true>
+            <div class="demo-stack">
+                <ClockPicker value=dial/>
+                <span class="op-t-caption demo-muted">{move || format!("{:02}:{:02}", dial.get() / 3600, dial.get() / 60 % 60)}</span>
             </div>
         </Example>
         <Example title="Colour picker modes" note="Spectrum, RGB, HSL and temperature editors; the code updates live while dragging. Opacity adds an alpha byte." block=true>

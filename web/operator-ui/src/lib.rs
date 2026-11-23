@@ -199,10 +199,10 @@ pub mod prelude {
     pub use crate::components::value_field::DurationField;
     #[cfg(feature = "number-field")]
     pub use crate::components::value_field::NumberField;
-    #[cfg(feature = "time-field")]
-    pub use crate::components::value_field::TimeField;
     #[cfg(feature = "date-time-field")]
     pub use crate::components::value_field::{Calendar, DateTimeField};
+    #[cfg(feature = "time-field")]
+    pub use crate::components::value_field::{ClockPicker, TimeField};
     #[cfg(feature = "color-field")]
     pub use crate::components::value_field::{ColorField, ColorMode, ColorPicker};
     #[cfg(any(

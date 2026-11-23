@@ -302,3 +302,35 @@ pub fn parse_date_time(text: &str) -> Option<LocalDateTime> {
 pub fn parse_color(text: &str) -> Option<String> {
     super::color_math::parse_rgba(text).map(|c| c.hex(false))
 }
+
+/// Clockwise angle in degrees from twelve o'clock for a pointer offset from the dial centre
+/// (`dy` grows downwards).
+pub fn dial_angle(dx: f64, dy: f64) -> f64 {
+    dx.atan2(-dy).to_degrees().rem_euclid(360.0)
+}
+
+/// The hour under `angle`: in 24-hour mode the inner ring holds `0` and `13..=23`, the outer
+/// ring `12` and `1..=11`; in 12-hour mode `pm` adds twelve.
+pub fn dial_hour(angle: f64, inner: bool, hour12: bool, pm: bool) -> u32 {
+    // The angle is reduced to `0..360`, so the index fits.
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    let index = ((angle.rem_euclid(360.0) / 30.0).round() as u32) % 12;
+    if hour12 {
+        index + if pm { 12 } else { 0 }
+    } else if inner {
+        if index == 0 { 0 } else { index + 12 }
+    } else if index == 0 {
+        12
+    } else {
+        index
+    }
+}
+
+/// The minute under `angle`, rounded to a multiple of `step`.
+pub fn dial_minute(angle: f64, step: u32) -> u32 {
+    let step = f64::from(step.clamp(1, 30));
+    // The angle is reduced to `0..360`, so the minute fits.
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    let m = ((angle.rem_euclid(360.0) / 6.0 / step).round() * step) as u32;
+    m % 60
+}
