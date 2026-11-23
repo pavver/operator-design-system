@@ -1,0 +1,11 @@
+date = "2026-11-23T18:44:06Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Keyboard navigation like a menu: Arrow Down and Arrow Up open the stack on the first or last action, move between enabled actions and wrap, Home and End jump to the ends, and Tab or Escape close it with focus back on the trigger. The trigger button itself now carries `aria-haspopup=\"menu\"` and `aria-expanded`, the stack is a `menu` and its actions are `menuitem`s."
+check = "Focus a trigger with Tab, press Arrow Down and Arrow Up, move through the Long action list with arrows, Home and End, then close with Tab and Escape; check the roles with a screen reader or the accessibility tree."
+
+[uk]
+summary = "Навігація клавіатурою, як у меню: стрілки вниз і вгору відкривають стос на першій чи останній дії, переходять між доступними діями по колу, Home і End ведуть на краї, а Tab чи Escape закривають стос і повертають фокус на кнопку. Сама кнопка відкриття тепер має `aria-haspopup=\"menu\"` і `aria-expanded`, стос має роль `menu`, а дії — `menuitem`."
+check = "Наведіть фокус на кнопку клавішею Tab, натисніть стрілки вниз і вгору, пройдіть довгий список дій стрілками, Home і End, потім закрийте Tab і Escape; перевірте ролі програмою зчитування екрана чи деревом доступності."

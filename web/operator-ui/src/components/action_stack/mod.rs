@@ -12,6 +12,9 @@ use leptos::prelude::*;
 use leptos::task::spawn_local;
 use operator_ui_tokens::{Icon as IconData, icons, motion};
 
+mod focus;
+use focus::{Target, focus_action};
+
 pub(crate) const CSS: &str = include_str!("action_stack.css");
 #[derive(Clone)]
 pub struct ActionStackItem {
@@ -78,6 +81,43 @@ pub fn ActionStack(
         ActionResult::Success
     });
     let actions = StoredValue::new(actions);
+    // Which action takes focus once the stack is placed: the last one after Arrow Up.
+    let focus_on_open = StoredValue::new(Target::First);
+    let open_with = move |target: Target| {
+        focus_on_open.set_value(target);
+        open.set(true);
+    };
+    let on_layer_key = move |e: leptos::ev::KeyboardEvent| {
+        let target = match e.key().as_str() {
+            "ArrowDown" => Target::Step(1),
+            "ArrowUp" => Target::Step(-1),
+            "Home" => Target::First,
+            "End" => Target::Last,
+            "Tab" => {
+                // Like a menu, Tab leaves the stack; focus returns to the trigger.
+                if running.get_untracked().is_none() {
+                    e.prevent_default();
+                    open.set(false);
+                }
+                return;
+            }
+            _ => return,
+        };
+        e.prevent_default();
+        focus_action(layer, target);
+    };
+    let on_trigger_key = move |e: leptos::ev::KeyboardEvent| {
+        if open.get_untracked() || !enabled.get_untracked() || running.get_untracked().is_some() {
+            return;
+        }
+        let target = match e.key().as_str() {
+            "ArrowDown" => Target::First,
+            "ArrowUp" => Target::Last,
+            _ => return,
+        };
+        e.prevent_default();
+        open_with(target);
+    };
     // The stack grows with its content but is never narrower than the trigger.
     let layer_style = Signal::derive(move || match anchor.get() {
         PopoverAnchor::Rect { width, .. } => {
@@ -87,21 +127,24 @@ pub fn ActionStack(
     });
     view! {
         <div node_ref=root class=root_class("op-action-stack",class) style=root_style(vec![Metric::du("--op-action-stack-size",size),Metric::du("--op-action-stack-gap",gap)],style)>
-            <div aria-expanded=move || open.get().to_string() aria-haspopup="dialog">
-                <ActionButton text=label icon=icon.get_untracked() enabled=enabled state=trigger_state on_click=toggle content=content leading=leading trailing=trailing/>
-            </div>
-            <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-action-stack-layer" aria_label=label role="dialog" node_ref=layer style=layer_style
+            <ActionButton text=label icon=icon.get_untracked() enabled=enabled state=trigger_state on_click=toggle content=content leading=leading trailing=trailing
+                attr:aria-haspopup="menu" attr:aria-expanded=move || open.get().to_string() on:keydown=on_trigger_key/>
+            <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-action-stack-layer" aria_label=label role="menu" node_ref=layer style=layer_style
                 dismiss_on_outside=true
                 dismiss_on_scroll=true
                 hold_open=Signal::derive(move || running.get().is_some())
-                on_placed=Callback::new(move |()| { if let Some(el)=layer.get_untracked() && let Ok(Some(first))=el.query_selector("button") { use wasm_bindgen::JsCast; if let Ok(button)=first.dyn_into::<web_sys::HtmlElement>() { let _=button.focus(); } } })>
+                on_placed=Callback::new(move |()| {
+                    focus_action(layer, focus_on_open.get_value());
+                    focus_on_open.set_value(Target::First);
+                })>
+                <div class="op-action-stack-body" on:keydown=on_layer_key>
                 <ScrollView viewport_class="op-action-stack-actions op-scroll-contain" style=Signal::derive(root_style(vec![Metric::du("--op-action-stack-gap",gap)],None::<String>.into()))>
                     {actions.get_value().into_iter().enumerate().map(|(index, item)| {
                         let action = item.action;
                         let available = Signal::derive(move || {
                             enabled.get() && running.get().is_none_or(|r| r == index)
                         });
-                        view! { <ActionButton text=item.label icon=item.icon.unwrap_or(icons::CHEVRON_RIGHT) enabled=available on_click=move |()| {
+                        view! { <ActionButton text=item.label icon=item.icon.unwrap_or(icons::CHEVRON_RIGHT) enabled=available attr:role="menuitem" on_click=move |()| {
                             let action = action.clone();
                             async move {
                                 running.set(Some(index));
@@ -124,6 +167,7 @@ pub fn ActionStack(
                         }/> }
                     }).collect_view()}
                 </ScrollView>
+                </div>
             </Popover>
         </div>
     }

@@ -67,6 +67,8 @@ Status: **draft** on web.
 | `--op-action-stack-background` | `surface` |
 | `--op-action-stack-text` | `text_primary` |
 | `--op-action-stack-border` | `accent` |
+| `--op-action-stack-focus` | `accent` |
+| `--op-action-stack-focus-background` | `hover` |
 
 | Slot | Place |
 | :--- | :--- |
@@ -90,5 +92,20 @@ Status: **draft** on web.
 
 ## Accessibility
 
-The trigger button sets `aria-haspopup="dialog"` and `aria-expanded`.
-Opening the stack automatically focuses the first action button.
+The trigger button sets `aria-haspopup="menu"` and `aria-expanded`.
+The stack has `role="menu"` with the trigger label as its name, and each action has `role="menuitem"`.
+Opening the stack focuses the first action, or the last one when it was opened with Arrow Up.
+The focused action shows a `0.5 DU` `accent` ring inside its bounds, so the stack's scroll view never clips it, and a `hover` fill while it is at rest.
+
+| Key | Where | Action |
+| :--- | :--- | :--- |
+| Enter, Space | Trigger | Opens or closes the stack. |
+| Arrow Down | Closed trigger | Opens the stack and focuses the first action. |
+| Arrow Up | Closed trigger | Opens the stack and focuses the last action. |
+| Arrow Down, Arrow Up | Stack | Moves to the next or previous enabled action and wraps. |
+| Home, End | Stack | Moves to the first or last enabled action. |
+| Enter, Space | Action | Runs the action. |
+| Escape | Stack | Closes the stack and returns focus to the trigger. |
+| Tab | Stack | Closes the stack and returns focus to the trigger. |
+
+While an action runs, Escape and Tab do not close the stack.

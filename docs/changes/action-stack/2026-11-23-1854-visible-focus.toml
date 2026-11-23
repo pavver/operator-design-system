@@ -1,0 +1,11 @@
+date = "2026-11-23T18:54:14Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "The action focused from the keyboard now shows a full `accent` ring inside its bounds and a `hover` fill. The outer focus ring was clipped by the stack's scroll view and left only stray horizontal lines."
+check = "Open a stack with Arrow Down and move through it with the arrows: the focused action has a complete ring and a lighter fill; pressed, pending and result states keep their own fill."
+
+[uk]
+summary = "Дія, вибрана з клавіатури, тепер показує повне кільце `accent` усередині своїх меж і заливку `hover`. Зовнішнє кільце фокусу обрізалося областю прокручування стосу й лишало тільки окремі горизонтальні лінії."
+check = "Відкрийте стос стрілкою вниз і пройдіть його стрілками: сфокусована дія має повне кільце й світлішу заливку; натиснутий стан, очікування й результати зберігають власну заливку."
