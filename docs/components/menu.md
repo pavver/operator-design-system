@@ -3,7 +3,7 @@
 Floating list of commands.
 It opens from an overflow button (⋮) or as a context menu at the pointer.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 

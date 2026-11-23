@@ -1,0 +1,9 @@
+date = "2026-11-23T21:01:45Z"
+status = "draft"
+kind = "docs"
+
+[en]
+summary = "Menu, MenuButton and ContextMenu are reviewed: they move from the `draft` feature group to `reviewed`."
+
+[uk]
+summary = "Menu, MenuButton і ContextMenu перевірено: вони переходять із групи фіч `draft` до `reviewed`."
