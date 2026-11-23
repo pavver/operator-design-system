@@ -96,7 +96,7 @@ pub fn TopBar(dark: RwSignal<bool>, menu_open: RwSignal<bool>) -> impl IntoView 
         }
     });
 
-    let width_signal = Signal::derive(move || if is_phone.get() { 19.0 } else { 42.0 });
+    let width_signal = Signal::derive(move || if is_phone.get() { 19.0 } else { 38.0 });
 
     view! {
         <header class="docs-topbar">
@@ -134,7 +134,11 @@ pub fn TopBar(dark: RwSignal<bool>, menu_open: RwSignal<bool>) -> impl IntoView 
                             select_language(language, l);
                         }
                     })
-                    height=6.0
+                    height=8.0
+                    row_height=8.0
+                    slot_size=8.0
+                    flag_width=5.0
+                    flag_height=3.5
                     width=width_signal
                     format=format_cb
                     aria_label=t("Language")
