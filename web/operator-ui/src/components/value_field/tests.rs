@@ -113,3 +113,96 @@ fn colors_normalize_to_six_digits() {
     assert_eq!(parse_color("#12345"), None);
     assert_eq!(parse_color("red"), None);
 }
+
+mod colors {
+    use super::super::color_math::*;
+
+    fn near(a: f64, b: f64) -> bool {
+        (a - b).abs() < 0.01
+    }
+
+    #[test]
+    fn hex_forms_parse_with_alpha() {
+        let c = parse_rgba("#11223380").map(|c| c.bytes());
+        assert_eq!(c, Some([0x11, 0x22, 0x33, 0x80]));
+        assert_eq!(
+            parse_rgba("#abcd").map(|c| c.bytes()),
+            Some([0xaa, 0xbb, 0xcc, 0xdd])
+        );
+        assert_eq!(parse_rgba("#12345"), None);
+        assert_eq!(parse_rgba("red"), None);
+    }
+
+    #[test]
+    fn css_functions_parse() {
+        assert_eq!(
+            parse_rgba("rgb(255, 0, 128)").map(|c| c.hex(true)),
+            Some("#ff0080".into())
+        );
+        assert_eq!(
+            parse_rgba("rgba(0 0 0 / 50%)").map(|c| c.hex(true)),
+            Some("#00000080".into())
+        );
+        assert_eq!(
+            parse_rgba("hsl(120, 100%, 50%)").map(|c| c.hex(false)),
+            Some("#00ff00".into())
+        );
+        assert_eq!(
+            parse_rgba("hsv(240, 100, 100)").map(|c| c.hex(false)),
+            Some("#0000ff".into())
+        );
+        assert_eq!(parse_rgba("rgb(300, 0, 0)"), None);
+    }
+
+    #[test]
+    fn hex_drops_opaque_alpha() {
+        let c = Rgba::from_bytes(1, 2, 3, 255);
+        assert_eq!(c.hex(true), "#010203");
+        assert_eq!(Rgba::from_bytes(1, 2, 3, 0).hex(true), "#01020300");
+        assert_eq!(Rgba::from_bytes(1, 2, 3, 0).hex(false), "#010203");
+    }
+
+    #[test]
+    fn models_round_trip() {
+        for hex in [
+            "#2ec4b6", "#e63946", "#000000", "#ffffff", "#808080", "#123456",
+        ] {
+            let c = parse_rgba(hex).unwrap_or(Rgba {
+                r: 0.0,
+                g: 0.0,
+                b: 0.0,
+                a: 1.0,
+            });
+            assert_eq!(hsv_to_rgb(rgb_to_hsv(c), 1.0).hex(false), hex);
+            assert_eq!(hsl_to_rgb(rgb_to_hsl(c), 1.0).hex(false), hex);
+        }
+        let hsl = rgb_to_hsl(Rgba::from_bytes(46, 196, 182, 255));
+        assert!(near(hsl.h, 174.4) || (hsl.h - 174.4).abs() < 0.5);
+    }
+
+    #[test]
+    fn greys_keep_the_previous_hue() {
+        let previous = Hsv {
+            h: 200.0,
+            s: 0.7,
+            v: 0.9,
+        };
+        let grey = hsv_keeping(Rgba::from_bytes(80, 80, 80, 255), previous);
+        assert!(near(grey.h, 200.0) && near(grey.s, 0.0));
+        let black = hsv_keeping(Rgba::from_bytes(0, 0, 0, 255), previous);
+        assert!(near(black.h, 200.0) && near(black.s, 0.7));
+    }
+
+    #[test]
+    fn temperatures_round_trip() {
+        assert_eq!(
+            parse_rgba("6600K").map(|c| c.hex(false)),
+            Some("#ffffff".into())
+        );
+        for k in [2200.0, 2700.0, 4000.0, 5000.0, 6000.0] {
+            let back = rgb_to_kelvin(kelvin_to_rgb(k), 1500.0, 6500.0);
+            assert!((back - k).abs() < 50.0, "{k} -> {back}");
+        }
+        assert!(kelvin_to_rgb(2000.0).b < kelvin_to_rgb(5000.0).b);
+    }
+}

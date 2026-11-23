@@ -297,17 +297,8 @@ pub fn parse_date_time(text: &str) -> Option<LocalDateTime> {
     LocalDateTime::new(y.parse().ok()?, m.parse().ok()?, day.parse().ok()?, second)
 }
 
-/// A colour as lowercase `#rrggbb` from `#rgb`, `#rrggbb`, or the same without `#`.
+/// A colour as lowercase `#rrggbb` from any form [`parse_rgba`](super::color_math::parse_rgba)
+/// accepts; alpha is dropped.
 pub fn parse_color(text: &str) -> Option<String> {
-    let t = text.trim();
-    let hex = t.strip_prefix('#').unwrap_or(t);
-    if !hex.chars().all(|c| c.is_ascii_hexdigit()) {
-        return None;
-    }
-    let full = match hex.len() {
-        3 => hex.chars().flat_map(|c| [c, c]).collect::<String>(),
-        6 => hex.to_string(),
-        _ => return None,
-    };
-    Some(format!("#{}", full.to_lowercase()))
+    super::color_math::parse_rgba(text).map(|c| c.hex(false))
 }

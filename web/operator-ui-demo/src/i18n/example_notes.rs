@@ -337,6 +337,10 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Durations accept 1h 30m, 90s, 1:30 and a sign; times accept 07:30 or 0730." => {
             "Тривалість приймає 1h 30m, 90s, 1:30 і знак; час приймає 07:30 або 0730."
         }
+        "Spectrum, RGB, HSL and temperature editors; the code updates live while dragging. Opacity adds an alpha byte." => {
+            "Редактори спектра, RGB, HSL і температури; код оновлюється наживо під час перетягування. Прозорість додає байт альфа-каналу."
+        }
+        "The editor alone, for panels and dialogs." => "Лише редактор — для панелей і діалогів.",
         "The arrow opens a calendar or the swatches; text input works too." => {
             "Стрілка відкриває календар або зразки кольорів; текстове введення також працює."
         }

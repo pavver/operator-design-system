@@ -1,6 +1,6 @@
 # Поля значень
 
-Типізовані текстові поля: NumberField, DurationField, TimeField, DateTimeField і ColorField.
+Типізовані текстові поля: NumberField, DurationField, TimeField, DateTimeField і ColorField, а також редактор ColorPicker.
 Кожне виглядає як [TextField](text-field.md) і редагує одне типізоване значення через його текстову форму.
 
 Статус: **чернетка** у вебреалізації.
@@ -11,7 +11,8 @@
 * DurationField: тривалості зі знаком, як-от затримки та зміщення (`1h 30m`, `-15m`).
 * TimeField: час доби (`07:30`).
 * DateTimeField: локальні дата й час (`2026-11-17 07:30`) із календарем.
-* ColorField: колір як `#rrggbb` зі зразками та системним засобом вибору.
+* ColorField: колір як `#rrggbb` (або `#rrggbbaa` із прозорістю) зі спливним ColorPicker.
+* ColorPicker: лише редактор кольору для панелей і діалогів: режими спектра, RGB, HSL і колірної температури, прозорість, код кольору та зразки.
 
 ## Геометрія
 
@@ -19,9 +20,13 @@
 | :--- | :--- |
 | Поле | Як у [TextField](text-field.md): `row_standard` (`10 DU`), внутрішній відступ `pad_card`, табличні цифри. |
 | Одиниця | Після значення, `text_secondary`, на відстані `pad_tight` від тексту. |
-| Кнопка вибору | Завширшки `10 DU`, на всю висоту, `arrow_drop_down`; ColorField додає зразок кольору `5 DU` перед стрілкою. |
+| Кнопка вибору | Завширшки `10 DU`, на всю висоту, `arrow_drop_down`; ColorField додає зразок кольору `icon_field` (`5 DU`) перед стрілкою. |
 | Календар | Спливний шар із заголовком `row_compact` (попередній, місяць і рік, наступний), рядком днів тижня `row_dense` і квадратними комірками днів `row_compact`; тижні починаються з понеділка. |
-| Зразки | Квадрати `row_compact`, вісім у рядку, із контуром `0.5 DU` у кольорі `accent` на вибраному; далі рядок системного засобу вибору. |
+| ColorPicker | Завширшки `80 DU`, внутрішній відступ `pad_content`, між рядками `gutter`; рядок вкладок режимів заввишки `row_compact` із підкресленням `0.5 DU` у кольорі `accent` на вибраній. |
+| Площина спектра | Заввишки `40 DU`, насиченість по горизонталі, яскравість угору; квадратний маркер `icon_small` (`4 DU`) зі світлим кільцем `0.5 DU` і темним контуром `0.25 DU`. |
+| Рядок каналу | Підпис, смуга `row_dense` із маркером `pad_small`, що виступає на `gap_micro`, і числове поле `14 DU` заввишки `row_compact`; смуга прозорості має шахове тло. |
+| Код кольору | Поле `row_compact` зі зразком `icon_field` (`5 DU`), кодом і CSS-формою поточного режиму. |
+| Зразки | Квадрати `row_compact` на всю ширину з проміжком `gap_micro`, із контуром `0.5 DU` у кольорі `accent` на вибраному. |
 
 ## Поведінка
 
@@ -34,6 +39,12 @@
 * Зовнішні зміни значення відображаються, якщо поле не у фокусі.
 * Календар зберігає час доби; вибраний день заповнений `accent`, сьогоднішній має контур `accent`.
 * Спливні шари є шарами [Popover](popover.md) і закриваються при натисканні зовні або за Escape.
+* ColorPicker оновлює значення наживо під час перетягування площини чи смуги та викликає `on_commit`, коли редагування завершено: після відпускання, Enter у числовому полі чи коді, вибору зразка або натискання клавіші на смузі.
+* На площині Arrow Left і Right змінюють насиченість, а Arrow Up і Down — яскравість; смуги змінюються стрілками, на десять кроків — із Shift або клавішами Page, а Home і End переносять на краї.
+* Сірі кольори й чорний зберігають попередні відтінок і насиченість, тож перетягування через них не скидає інші смуги.
+* Смуга температури йде від `min_kelvin` до `max_kelvin` уздовж кривої чорного тіла; поки колір задано нею, `temperature` містить значення в кельвінах, а будь-яке інше редагування встановлює `None`.
+* Без `alpha` значення завжди непрозоре; з ним непрозорий колір лишається `#rrggbb`, а напівпрозорий стає `#rrggbbaa`.
+* Некоректний текст у числовому полі чи полі коду відновлює показане значення.
 
 ## Текстові форми
 
@@ -43,9 +54,9 @@
 | DurationField | `1h 30m`, `1.5h`, `90s`, `250ms`, `2d`, `1:30` (хвилини та секунди), `1:02:03`, число без суфікса в `default_unit_ms`, початковий `-` | `-1d 2h 3m 4s 500ms`, нуль як `0s`. |
 | TimeField | `7:30`, `0730`, `7:30:15`, `9` | `07:30`, із секундами, коли вони ненульові або встановлено `seconds`. |
 | DateTimeField | `2026-11-17 07:30`, `2026-11-17T07:30:15`, лише дата означає північ | `2026-11-17 07:30`. |
-| ColorField | `#abc`, `#aabbcc`, те саме без `#` | `#aabbcc`. |
+| ColorField, код у ColorPicker | `#abc`, `#abcd`, `#aabbcc`, `#aabbccdd`, те саме без `#`, `rgb()`, `rgba()`, `hsl()`, `hsla()`, `hsv()`, температура на кшталт `2700K` | `#aabbcc`, або `#aabbccdd` з `alpha` для напівпрозорих. |
 
-Розбір і форматування містяться в `value_field::parse` та не потребують бібліотеки дат.
+Розбір і форматування містяться в `value_field::parse` і `value_field::color_math` та не потребують бібліотек дат чи кольорів.
 Застосунки, яким потрібні локалізовані форми, обгортають [`ParsedField`](#parsedfield) власними `parse` і `format`.
 
 ## API
@@ -56,7 +67,8 @@
 | `DurationField` | `i64` мілісекунд | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`). |
 | `TimeField` | `u32` секунд від півночі | `seconds`, `step_s` (`60`). |
 | `DateTimeField` | `LocalDateTime` | `seconds`, `month_names`, `weekday_names`. |
-| `ColorField` | `String` `#rrggbb` | `swatches`, `custom_label`. |
+| `ColorField` | `String` `#rrggbb` або `#rrggbbaa` | `swatches`, `alpha`, `modes`, `min_kelvin` (`2000`), `max_kelvin` (`6500`), `temperature`. |
+| `ColorPicker` | `String` `#rrggbb` або `#rrggbbaa` | `swatches`, `alpha`, `modes` (`ColorMode::Spectrum`, `Rgb`, `Hsl`, `Temperature`; порожній означає всі), `min_kelvin`, `max_kelvin`, `temperature: Option<RwSignal<Option<u32>>>`, `enabled`, `on_commit`. |
 | `Calendar` | | `selected`, `on_pick`, `month_names`, `weekday_names`. |
 
 Кожне поле, зокрема ColorField і ParsedField, приймає `label`, `placeholder`, `enabled`, `state` і `on_commit`.
@@ -115,9 +127,36 @@
 | `popup_gap` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
 | `popup_padding` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
 | `swatch_size` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
-| `custom_height` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
-| `custom_padding_x` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
-| `custom_label` | `string signal` | ключ рядка | ColorField | Перекладний текст; див. Рядки. |
+| `picker_width` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
+| `plane_height` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
+| `bar_height` | `number` | не встановлено | ColorField | Перевизначення метрики; див. нижче. |
+| `spectrum_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `rgb_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `hsl_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `temperature_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `plane_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `hue_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `saturation_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `brightness_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `lightness_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `red_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `green_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `blue_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `alpha_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `hex_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `swatches_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `width` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `padding` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `gap` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `plane_height` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `bar_height` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `thumb_size` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `tab_height` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `number_width` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `swatch_size` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `font_size` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
+| `header` | `slot` | немає | ColorPicker | Над вкладками режимів. |
+| `footer` | `slot` | немає | ColorPicker | Під зразками. |
 | `previous_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
 | `next_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
 | `previous_icon` | `Option<IconData>` | ключ піктограми | Calendar | Перевизначення вбудованої піктограми; див. Піктограми. |
@@ -136,6 +175,7 @@
 
 * Поле введення має підпис; `aria-invalid` встановлено, поки показується пульсація помилки.
 * Кнопки вибору мають підписи та `aria-expanded`; спливні шари мають роль `dialog`.
+* Режими ColorPicker утворюють `tablist`; площина й смуги є `slider` з `aria-valuetext`; числові поля й поле коду мають назви каналів; зразки — підписаний `listbox`.
 
 ## Кастомізація
 
@@ -159,14 +199,19 @@
 | `calendar_cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | DateTimeField |
 | `calendar_header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | DateTimeField |
 | `calendar_weekday_height` | DU | `--op-field-calendar-weekday-height` | `row_dense` | DateTimeField |
-| `preview_size` | DU | `--op-field-preview-size` | `5 DU` | ColorField |
+| `preview_size` | DU | `--op-field-preview-size` | `icon_field` (`5 DU`) | ColorField |
 | `picker_gap` | DU | `--op-field-picker-gap` | `pad_tight` | ColorField |
 | `picker_padding_x` | DU | `--op-field-picker-padding-x` | `pad_tight` | ColorField |
-| `popup_gap` | DU | `--op-field-popup-gap` | `pad_tight` | ColorField |
-| `popup_padding` | DU | `--op-field-popup-padding` | `pad_tight` | ColorField |
-| `swatch_size` | DU | `--op-field-swatch-size` | `row_compact` | ColorField |
-| `custom_height` | DU | `--op-field-custom-height` | `row_compact` | ColorField |
-| `custom_padding_x` | DU | `--op-field-custom-padding-x` | `pad_tight` | ColorField |
+| `popup_gap`, `gap` | DU | `--op-field-popup-gap` | `gutter` | ColorField, ColorPicker |
+| `popup_padding`, `padding` | DU | `--op-field-popup-padding` | `pad_content` | ColorField, ColorPicker |
+| `swatch_size` | DU | `--op-field-swatch-size` | `row_compact` | ColorField, ColorPicker |
+| `picker_width`, `width` | DU | `--op-field-color-width` | `80 DU` | ColorField, ColorPicker |
+| `plane_height` | DU | `--op-field-color-plane-height` | `40 DU` | ColorField, ColorPicker |
+| `bar_height` | DU | `--op-field-color-bar-height` | `row_dense` | ColorField, ColorPicker |
+| `thumb_size` | DU | `--op-field-color-thumb-size` | `icon_small` (`4 DU`) | ColorPicker |
+| `tab_height` | DU | `--op-field-color-tab-height` | `row_compact` | ColorPicker |
+| `number_width` | DU | `--op-field-color-number-width` | `14 DU` | ColorPicker |
+| `font_size` | TU | `--op-field-font-size` | `type_body_size` | ColorPicker |
 | `padding` | DU | `--op-field-calendar-padding` | `pad_tight` | Calendar |
 | `cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | Calendar |
 | `header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | Calendar |
@@ -186,6 +231,12 @@
 | `--op-field-on-accent` | `on_accent` |
 | `--op-field-popup-shadow` | `existing black at 35% opacity` |
 | `--op-field-swatch-border` | `existing black at 25% opacity` |
+| `--op-field-border` | `border` для числових полів і поля коду ColorPicker |
+| `--op-field-hover` | `hover` для вкладок ColorPicker |
+| `--op-field-divider` | `divider` під вкладками ColorPicker |
+| `--op-field-checker` | `border` для шахового тла під напівпрозорими кольорами |
+| `--op-field-color-thumb` | `on_media` для маркерів площини та смуг |
+| `--op-field-color-thumb-outline` | `shadow` навколо маркерів площини та смуг |
 
 | Слот | Розташування |
 | :--- | :--- |
@@ -196,7 +247,7 @@
 | `label_slot` | Замінює видиму мітку. |
 | `hint_slot` | Замінює рядок підказки та помилки. |
 | `header` | Перед опціями спливного вікна; Calendar: над навігацією місяців. |
-| `footer` | Після опцій спливного вікна; Calendar: під сіткою днів. |
+| `footer` | Після опцій спливного вікна; Calendar: під сіткою днів; ColorPicker: під зразками. |
 
 ParsedField зберігає наявні `trailing: Option<ChildrenFn>`; `append` відображається перед цими представленнями.
 Спливні шари вибору отримують перевизначення кореневих метрик і успадковані змінні `--op-field-*`.
@@ -226,7 +277,21 @@ DurationField приймає перекладені суфікси поряд і
 | `color-field.label` | `aria_label` | `Colour` |
 | `color-field.pick` | `picker_label` | `Pick a colour` |
 | `color-field.popup` | `popup_label` | `Colours` |
-| `color-field.custom` | `custom_label` | `Custom…` |
+| `color-picker.spectrum` | `spectrum_label` | `Spectrum` |
+| `color-picker.rgb` | `rgb_label` | `RGB` |
+| `color-picker.hsl` | `hsl_label` | `HSL` |
+| `color-picker.temperature` | `temperature_label` | `Temperature` |
+| `color-picker.plane` | `plane_label` | `Saturation and brightness` |
+| `color-picker.hue` | `hue_label` | `Hue` |
+| `color-picker.saturation` | `saturation_label` | `Saturation` |
+| `color-picker.brightness` | `brightness_label` | `Brightness` |
+| `color-picker.lightness` | `lightness_label` | `Lightness` |
+| `color-picker.red` | `red_label` | `Red` |
+| `color-picker.green` | `green_label` | `Green` |
+| `color-picker.blue` | `blue_label` | `Blue` |
+| `color-picker.alpha` | `alpha_label` | `Opacity` |
+| `color-picker.hex` | `hex_label` | `Colour code` |
+| `color-picker.swatches` | `swatches_label` | `Presets` |
 | `parsed-field.placeholder` | `placeholder` | `(empty)` |
 | `parsed-field.label` | `aria_label` | `Value` |
 | `calendar.previous` | `previous_label` | `Previous month` |

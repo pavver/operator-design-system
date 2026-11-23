@@ -1,0 +1,13 @@
+date = "2026-11-23T22:58:14Z"
+status = "draft"
+kind = "breaking"
+
+[en]
+summary = "ColorField opens the new ColorPicker: spectrum, RGB, HSL and colour temperature modes, an opacity bar (`alpha`), a live colour code and swatches. The code accepts `#rgba`, `#rrggbbaa`, `rgb()`, `hsl()`, `hsv()` and `2700K`. ColorPicker is also available on its own."
+check = "Drag the plane and every bar in each mode, type into the numbers and the code, press arrows on a bar, pick swatches; check the opacity field and the temperature field with its kelvin readout."
+migration = "The system colour picker row is gone: remove `custom_label`, `custom_height` and `custom_padding_x` from ColorField and the `color-field.custom` string. Use `picker_width`, `plane_height` and `bar_height` to size the popup."
+
+[uk]
+summary = "ColorField відкриває новий ColorPicker: режими спектра, RGB, HSL і колірної температури, смуга прозорості (`alpha`), живий код кольору та зразки. Код приймає `#rgba`, `#rrggbbaa`, `rgb()`, `hsl()`, `hsv()` і `2700K`. ColorPicker доступний і окремо."
+check = "Перетягніть площину й кожну смугу в усіх режимах, введіть числа й код, натисніть стрілки на смузі, виберіть зразки; перевірте поле з прозорістю та поле температури з показом кельвінів."
+migration = "Рядка системного вибору кольору більше немає: приберіть `custom_label`, `custom_height` і `custom_padding_x` з ColorField та рядок `color-field.custom`. Розмір спливного вікна задають `picker_width`, `plane_height` і `bar_height`."

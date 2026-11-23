@@ -3,6 +3,7 @@
 //! Each one is a [`ParsedField`]: the text is parsed on Enter or blur; invalid text rolls back to
 //! the last value and the field pulses the error state.
 
+pub mod color_math;
 pub mod parse;
 mod parsed;
 // Reuse the popup helper without adding dropdown-menu as a value-field dependency.
@@ -22,6 +23,8 @@ use super::dropdown_menu::portal_style;
 mod calendar;
 #[cfg(feature = "color-field")]
 mod color;
+#[cfg(feature = "color-field")]
+mod color_picker;
 #[cfg(feature = "date-time-field")]
 mod date_time;
 #[cfg(feature = "duration-field")]
@@ -35,6 +38,8 @@ mod time;
 pub use calendar::Calendar;
 #[cfg(feature = "color-field")]
 pub use color::ColorField;
+#[cfg(feature = "color-field")]
+pub use color_picker::{ColorMode, ColorPicker};
 #[cfg(feature = "date-time-field")]
 pub use date_time::DateTimeField;
 #[cfg(feature = "duration-field")]

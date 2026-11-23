@@ -1,6 +1,7 @@
-//! ColorField: a hex colour with swatches.
+//! ColorField: a colour code with a ColorPicker popup.
 
-use super::parse::parse_color;
+use super::color_math::parse_rgba;
+use super::color_picker::{ColorMode, ColorPicker};
 use super::parsed::ParsedField;
 use super::portal_style::{field_popup_label, field_popup_style};
 use crate::components::field::FieldMetrics;
@@ -13,13 +14,29 @@ use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 use std::sync::Arc;
 
-/// Colour input as `#rrggbb` with a preview square, preset swatches and the system colour picker.
+/// Colour input as `#rrggbb` (or `#rrggbbaa` with `alpha`) with a preview square and a
+/// [`ColorPicker`] popup: spectrum, RGB, HSL and temperature editors, opacity and swatches.
 #[component]
 pub fn ColorField(
     value: RwSignal<String>,
-    /// Preset colours offered in the popup, as `#rrggbb`.
+    /// Preset colours offered in the popup.
     #[prop(optional)]
     swatches: Vec<String>,
+    /// Adds the opacity bar; the value gains an alpha byte when the colour is not opaque.
+    #[prop(optional)]
+    alpha: bool,
+    /// Editor tabs of the popup; empty means every mode.
+    #[prop(optional)]
+    modes: Vec<ColorMode>,
+    /// Warm end of the temperature bar, in kelvin.
+    #[prop(default = 2000.0)]
+    min_kelvin: f64,
+    /// Cool end of the temperature bar, in kelvin.
+    #[prop(default = 6500.0)]
+    max_kelvin: f64,
+    /// The colour temperature while the colour comes from the temperature bar.
+    #[prop(optional)]
+    temperature: Option<RwSignal<Option<u32>>>,
     #[prop(optional, into)] placeholder: MaybeProp<String>,
     #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(optional, into)] hint: MaybeProp<String>,
@@ -51,15 +68,13 @@ pub fn ColorField(
     #[prop(optional, into)] popup_gap: MaybeProp<f32>,
     #[prop(optional, into)] popup_padding: MaybeProp<f32>,
     #[prop(optional, into)] swatch_size: MaybeProp<f32>,
-    #[prop(optional, into)] custom_height: MaybeProp<f32>,
-    #[prop(optional, into)] custom_padding_x: MaybeProp<f32>,
+    #[prop(optional, into)] picker_width: MaybeProp<f32>,
+    #[prop(optional, into)] plane_height: MaybeProp<f32>,
+    #[prop(optional, into)] bar_height: MaybeProp<f32>,
 
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     #[prop(optional)] on_commit: Option<Callback<String>>,
-    /// Label of the system picker button.
-    #[prop(optional, into)]
-    custom_label: MaybeProp<String>,
 ) -> impl IntoView {
     let placeholder = ui_text(placeholder, "color-field.placeholder", "");
     let aria_label = ui_text(aria_label, "color-field.label", "Colour");
@@ -93,12 +108,12 @@ pub fn ColorField(
     metrics.push(Metric::du("--op-field-popup-gap", popup_gap));
     metrics.push(Metric::du("--op-field-popup-padding", popup_padding));
     metrics.push(Metric::du("--op-field-swatch-size", swatch_size));
-    metrics.push(Metric::du("--op-field-custom-height", custom_height));
-    metrics.push(Metric::du("--op-field-custom-padding-x", custom_padding_x));
+    metrics.push(Metric::du("--op-field-color-width", picker_width));
+    metrics.push(Metric::du("--op-field-color-plane-height", plane_height));
+    metrics.push(Metric::du("--op-field-color-bar-height", bar_height));
     let custom_style = Signal::derive(root_style(metrics, style));
-    let custom_label = ui_text(custom_label, "color-field.custom", "Custom…");
     let format = Callback::new(|v: String| v);
-    let parse = Callback::new(|t: String| parse_color(&t));
+    let parse = Callback::new(move |t: String| parse_rgba(&t).map(|c| c.hex(alpha)));
     let open = RwSignal::new(false);
     let popup_ref = NodeRef::<leptos::html::Div>::new();
     field_popup_label(popup_ref, popup_label);
@@ -120,14 +135,6 @@ pub fn ColorField(
             })
             .unwrap_or(PopoverAnchor::Point { x: 0.0, y: 0.0 })
     });
-    let set = move |c: String| {
-        if c != value.get_untracked() {
-            value.set(c.clone());
-            if let Some(cb) = on_commit {
-                cb.run(c);
-            }
-        }
-    };
     let trailing: ChildrenFn = Arc::new(move || {
         view! {
             <button
@@ -139,13 +146,15 @@ pub fn ColorField(
                 on:mousedown=|ev| ev.prevent_default()
                 on:click=move |_| open.update(|o| *o = !*o)
             >
-                <span class="op-color-preview" style:background-color=move || value.get()></span>
+                <span class="op-color-preview op-color-checker"><span style:background-color=move || value.get()></span></span>
                 {move || view! { <Icon icon=icon.get() size=dim::ICON_FIELD attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-field));height:var(--op-field-icon-size, var(--op-dim-icon-field));"/> }}
             </button>
         }
         .into_any()
     });
+    let modes = StoredValue::new(modes);
     let swatches = StoredValue::new(swatches);
+    let temperature = temperature.unwrap_or_else(|| RwSignal::new(None));
     view! {
         <div class=root_class("op-value-anchor op-color-field", class) style=move || custom_style.get() node_ref=host>
             <ParsedField
@@ -171,47 +180,22 @@ pub fn ColorField(
             />
         </div>
         <Popover dismiss_on_scroll=true node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowEnd class="op-value-popup" role="dialog" label=popup_label.get()>
-            <div class="op-color-popup" style=move || popup_style.get()>
-                <div class="op-color-swatches" role="listbox">
-                    {swatches
-                        .get_value()
-                        .into_iter()
-                        .filter_map(|c| parse_color(&c))
-                        .map(|c| {
-                            let pick = c.clone();
-                            let current = c.clone();
-                            view! {
-                                <button
-                                    type="button"
-                                    role="option"
-                                    class="op-color-swatch"
-                                    aria-label=c.clone()
-                                    aria-selected=move || (value.get() == current).to_string()
-                                    style:background-color=c
-                                    disabled=blocked
-                                    on:click=move |_| {
-                                        set(pick.clone());
-                                        open.set(false);
-                                    }
-                                ></button>
-                            }
-                        })
-                        .collect_view()}
-                </div>
-                <label class="op-rippled op-color-custom">
-                    <input
-                        type="color"
-                        aria-label=move || custom_label.get()
-                        disabled=blocked
-                        prop:value=move || value.get()
-                        on:change=move |ev| {
-                            if let Some(c) = parse_color(&event_target_value(&ev)) {
-                                set(c);
-                            }
+            <div style=move || popup_style.get()>
+                <ColorPicker
+                    value=value
+                    alpha=alpha
+                    modes=modes.get_value()
+                    min_kelvin=min_kelvin
+                    max_kelvin=max_kelvin
+                    temperature=temperature
+                    swatches=swatches.get_value()
+                    enabled=Signal::derive(move || !blocked())
+                    on_commit=Callback::new(move |c: String| {
+                        if let Some(cb) = on_commit {
+                            cb.run(c);
                         }
-                    />
-                    <span>{move || custom_label.get()}</span>
-                </label>
+                    })
+                />
             </div>
         </Popover>
     }

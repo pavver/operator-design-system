@@ -1,6 +1,6 @@
 # Value fields
 
-Typed text fields: NumberField, DurationField, TimeField, DateTimeField and ColorField.
+Typed text fields: NumberField, DurationField, TimeField, DateTimeField and ColorField, with the ColorPicker editor.
 Each one looks like a [TextField](text-field.md) and edits one typed value through its text form.
 
 Status: **draft** on web.
@@ -11,7 +11,8 @@ Status: **draft** on web.
 * DurationField: signed durations such as delays and offsets (`1h 30m`, `-15m`).
 * TimeField: a time of day (`07:30`).
 * DateTimeField: a local date and time (`2026-11-17 07:30`) with a calendar.
-* ColorField: a colour as `#rrggbb` with swatches and the system picker.
+* ColorField: a colour as `#rrggbb` (or `#rrggbbaa` with opacity) with a ColorPicker popup.
+* ColorPicker: the colour editor alone, for panels and dialogs: spectrum, RGB, HSL and colour temperature modes, opacity, a colour code and swatches.
 
 ## Geometry
 
@@ -19,13 +20,17 @@ Status: **draft** on web.
 | :--- | :--- |
 | Field | As [TextField](text-field.md): `row_standard` (`10 DU`), `pad_card` padding, tabular digits. |
 | Unit | After the value, `text_secondary`, `pad_tight` from the text. |
-| Picker button | `10 DU` wide, full height, `arrow_drop_down`; ColorField adds a `5 DU` colour preview before the arrow. |
+| Picker button | `10 DU` wide, full height, `arrow_drop_down`; ColorField adds an `icon_field` (`5 DU`) colour preview before the arrow. |
 | Calendar | Popup with a `row_compact` header (previous, month and year, next), a weekday row of `row_dense` and `row_compact` square day cells; weeks start on Monday. |
-| Swatches | `row_compact` squares, eight per row, with a `0.5 DU` `accent` outline on the selected one; the system picker row follows. |
+| ColorPicker | `80 DU` wide, `pad_content` padding, `gutter` between rows; a row of mode tabs `row_compact` high with a `0.5 DU` `accent` underline on the selected one. |
+| Spectrum plane | `40 DU` high, saturation across and brightness up; an `icon_small` (`4 DU`) square marker with a `0.5 DU` light ring and a `0.25 DU` dark outline. |
+| Channel row | A caption, a `row_dense` bar with a `pad_small` marker that overhangs it by `gap_micro`, and a `14 DU` number input `row_compact` high; opacity bars show a checkerboard. |
+| Colour code | A `row_compact` input with an `icon_field` (`5 DU`) sample, the code, and the CSS form of the current mode. |
+| Swatches | `row_compact` squares filling the width, `gap_micro` apart, with a `0.5 DU` `accent` outline on the selected one. |
 
 ## Behavior
 
-* Scrolling the page or another container outside the calendar or color popup closes it; scrolling inside it, or inside its own field, does not.
+* Scrolling the page or another container outside the calendar or colour popup closes it; scrolling inside it, or inside its own field, does not.
 * Typing edits only the text; Enter or leaving the field parses it and commits the value.
 * Valid text is re-formatted to the canonical form.
 * Invalid text rolls back to the last value and the field pulses the error state, as an error rolls back a change everywhere.
@@ -34,6 +39,12 @@ Status: **draft** on web.
 * External changes of the value show up unless the field has focus.
 * The calendar keeps the time of day; the selected day is filled with `accent`, today has an `accent` outline.
 * Popups are [Popover](popover.md) layers and close on a press outside or Escape.
+* ColorPicker updates the value live while the plane or a bar is dragged and runs `on_commit` when the edit ends: on release, Enter in a number or the code, a swatch, or a key on a bar.
+* The plane moves saturation with Arrow Left and Right and brightness with Arrow Up and Down; bars step with arrows, by ten steps with Shift or Page keys, and jump with Home and End.
+* Greys and black keep the hue and saturation they had, so dragging through them does not reset the other bars.
+* The temperature bar runs from `min_kelvin` to `max_kelvin` along the black-body curve; while the colour comes from it, `temperature` holds the kelvin value, and any other edit sets it to `None`.
+* Without `alpha` the value is always opaque; with it, an opaque colour stays `#rrggbb` and a translucent one becomes `#rrggbbaa`.
+* Invalid text in a number or the code input restores the shown value.
 
 ## Text forms
 
@@ -43,9 +54,9 @@ Status: **draft** on web.
 | DurationField | `1h 30m`, `1.5h`, `90s`, `250ms`, `2d`, `1:30` (minutes and seconds), `1:02:03`, a bare number in `default_unit_ms`, a leading `-` | `-1d 2h 3m 4s 500ms`, zero as `0s`. |
 | TimeField | `7:30`, `0730`, `7:30:15`, `9` | `07:30`, with seconds when they are not zero or `seconds` is set. |
 | DateTimeField | `2026-11-17 07:30`, `2026-11-17T07:30:15`, a date alone at midnight | `2026-11-17 07:30`. |
-| ColorField | `#abc`, `#aabbcc`, the same without `#` | `#aabbcc`. |
+| ColorField, ColorPicker code | `#abc`, `#abcd`, `#aabbcc`, `#aabbccdd`, the same without `#`, `rgb()`, `rgba()`, `hsl()`, `hsla()`, `hsv()`, a temperature such as `2700K` | `#aabbcc`, or `#aabbccdd` with `alpha` when translucent. |
 
-Parsing and formatting live in `value_field::parse` and need no date library.
+Parsing and formatting live in `value_field::parse` and `value_field::color_math` and need no date or colour library.
 Applications that need localized forms wrap [`ParsedField`](#parsedfield) with their own `parse` and `format`.
 
 ## API
@@ -56,7 +67,8 @@ Applications that need localized forms wrap [`ParsedField`](#parsedfield) with t
 | `DurationField` | `i64` milliseconds | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`). |
 | `TimeField` | `u32` seconds since midnight | `seconds`, `step_s` (`60`). |
 | `DateTimeField` | `LocalDateTime` | `seconds`, `month_names`, `weekday_names`. |
-| `ColorField` | `String` `#rrggbb` | `swatches`, `custom_label`. |
+| `ColorField` | `String` `#rrggbb` or `#rrggbbaa` | `swatches`, `alpha`, `modes`, `min_kelvin` (`2000`), `max_kelvin` (`6500`), `temperature`. |
+| `ColorPicker` | `String` `#rrggbb` or `#rrggbbaa` | `swatches`, `alpha`, `modes` (`ColorMode::Spectrum`, `Rgb`, `Hsl`, `Temperature`; empty means all), `min_kelvin`, `max_kelvin`, `temperature: Option<RwSignal<Option<u32>>>`, `enabled`, `on_commit`. |
 | `Calendar` | | `selected`, `on_pick`, `month_names`, `weekday_names`. |
 
 Every field, including ColorField and ParsedField, takes `label`, `placeholder`, `enabled`, `state` and `on_commit`.
@@ -115,9 +127,36 @@ Labels are visible above the box; use `aria_label` for an accessible name alone.
 | `popup_gap` | `number` | unset | ColorField | Metric override; see below. |
 | `popup_padding` | `number` | unset | ColorField | Metric override; see below. |
 | `swatch_size` | `number` | unset | ColorField | Metric override; see below. |
-| `custom_height` | `number` | unset | ColorField | Metric override; see below. |
-| `custom_padding_x` | `number` | unset | ColorField | Metric override; see below. |
-| `custom_label` | `string signal` | string key | ColorField | Translatable text; see Strings. |
+| `picker_width` | `number` | unset | ColorField | Metric override; see below. |
+| `plane_height` | `number` | unset | ColorField | Metric override; see below. |
+| `bar_height` | `number` | unset | ColorField | Metric override; see below. |
+| `spectrum_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `rgb_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `hsl_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `temperature_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `plane_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `hue_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `saturation_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `brightness_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `lightness_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `red_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `green_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `blue_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `alpha_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `hex_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `swatches_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `width` | `number` | unset | ColorPicker | Metric override; see below. |
+| `padding` | `number` | unset | ColorPicker | Metric override; see below. |
+| `gap` | `number` | unset | ColorPicker | Metric override; see below. |
+| `plane_height` | `number` | unset | ColorPicker | Metric override; see below. |
+| `bar_height` | `number` | unset | ColorPicker | Metric override; see below. |
+| `thumb_size` | `number` | unset | ColorPicker | Metric override; see below. |
+| `tab_height` | `number` | unset | ColorPicker | Metric override; see below. |
+| `number_width` | `number` | unset | ColorPicker | Metric override; see below. |
+| `swatch_size` | `number` | unset | ColorPicker | Metric override; see below. |
+| `font_size` | `number` | unset | ColorPicker | Metric override; see below. |
+| `header` | `slot` | none | ColorPicker | Above the mode tabs. |
+| `footer` | `slot` | none | ColorPicker | Below the swatches. |
 | `previous_label` | `string signal` | string key | Calendar | Translatable text; see Strings. |
 | `next_label` | `string signal` | string key | Calendar | Translatable text; see Strings. |
 | `previous_icon` | `Option<IconData>` | icon key | Calendar | Built-in icon override; see Icons. |
@@ -136,6 +175,7 @@ Labels are visible above the box; use `aria_label` for an accessible name alone.
 
 * The input carries the label; `aria-invalid` is set while the error pulse shows.
 * Picker buttons have labels and `aria-expanded`; the popups have the `dialog` role.
+* ColorPicker modes are a `tablist`; the plane and the bars are `slider`s with `aria-valuetext`; number and code inputs carry the channel names; swatches are a labelled `listbox`.
 
 ## Customization
 
@@ -159,14 +199,19 @@ All text-like inputs provide the same six field slots.
 | `calendar_cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | DateTimeField |
 | `calendar_header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | DateTimeField |
 | `calendar_weekday_height` | DU | `--op-field-calendar-weekday-height` | `row_dense` | DateTimeField |
-| `preview_size` | DU | `--op-field-preview-size` | `5 DU` | ColorField |
+| `preview_size` | DU | `--op-field-preview-size` | `icon_field` (`5 DU`) | ColorField |
 | `picker_gap` | DU | `--op-field-picker-gap` | `pad_tight` | ColorField |
 | `picker_padding_x` | DU | `--op-field-picker-padding-x` | `pad_tight` | ColorField |
-| `popup_gap` | DU | `--op-field-popup-gap` | `pad_tight` | ColorField |
-| `popup_padding` | DU | `--op-field-popup-padding` | `pad_tight` | ColorField |
-| `swatch_size` | DU | `--op-field-swatch-size` | `row_compact` | ColorField |
-| `custom_height` | DU | `--op-field-custom-height` | `row_compact` | ColorField |
-| `custom_padding_x` | DU | `--op-field-custom-padding-x` | `pad_tight` | ColorField |
+| `popup_gap`, `gap` | DU | `--op-field-popup-gap` | `gutter` | ColorField, ColorPicker |
+| `popup_padding`, `padding` | DU | `--op-field-popup-padding` | `pad_content` | ColorField, ColorPicker |
+| `swatch_size` | DU | `--op-field-swatch-size` | `row_compact` | ColorField, ColorPicker |
+| `picker_width`, `width` | DU | `--op-field-color-width` | `80 DU` | ColorField, ColorPicker |
+| `plane_height` | DU | `--op-field-color-plane-height` | `40 DU` | ColorField, ColorPicker |
+| `bar_height` | DU | `--op-field-color-bar-height` | `row_dense` | ColorField, ColorPicker |
+| `thumb_size` | DU | `--op-field-color-thumb-size` | `icon_small` (`4 DU`) | ColorPicker |
+| `tab_height` | DU | `--op-field-color-tab-height` | `row_compact` | ColorPicker |
+| `number_width` | DU | `--op-field-color-number-width` | `14 DU` | ColorPicker |
+| `font_size` | TU | `--op-field-font-size` | `type_body_size` | ColorPicker |
 | `padding` | DU | `--op-field-calendar-padding` | `pad_tight` | Calendar |
 | `cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | Calendar |
 | `header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | Calendar |
@@ -186,6 +231,12 @@ All text-like inputs provide the same six field slots.
 | `--op-field-on-accent` | `on_accent` |
 | `--op-field-popup-shadow` | `existing black at 35% opacity` |
 | `--op-field-swatch-border` | `existing black at 25% opacity` |
+| `--op-field-border` | `border` for ColorPicker number and code inputs |
+| `--op-field-hover` | `hover` for ColorPicker tabs |
+| `--op-field-divider` | `divider` under ColorPicker tabs |
+| `--op-field-checker` | `border` for the checkerboard under translucent colours |
+| `--op-field-color-thumb` | `on_media` for the plane and bar markers |
+| `--op-field-color-thumb-outline` | `shadow` around the plane and bar markers |
 
 | Slot | Place |
 | :--- | :--- |
@@ -196,7 +247,7 @@ All text-like inputs provide the same six field slots.
 | `label_slot` | Replaces the visible label. |
 | `hint_slot` | Replaces the hint and error line. |
 | `header` | Before the popup options; Calendar: above the month navigation. |
-| `footer` | After the popup options; Calendar: below the day grid. |
+| `footer` | After the popup options; Calendar: below the day grid; ColorPicker: below the swatches. |
 
 ParsedField retains its existing `trailing: Option<ChildrenFn>`; `append` renders before those views.
 Picker popups receive root metric overrides and inherited `--op-field-*` variables.
@@ -226,7 +277,21 @@ DurationField accepts translated suffixes as well as canonical English forms.
 | `color-field.label` | `aria_label` | `Colour` |
 | `color-field.pick` | `picker_label` | `Pick a colour` |
 | `color-field.popup` | `popup_label` | `Colours` |
-| `color-field.custom` | `custom_label` | `Custom…` |
+| `color-picker.spectrum` | `spectrum_label` | `Spectrum` |
+| `color-picker.rgb` | `rgb_label` | `RGB` |
+| `color-picker.hsl` | `hsl_label` | `HSL` |
+| `color-picker.temperature` | `temperature_label` | `Temperature` |
+| `color-picker.plane` | `plane_label` | `Saturation and brightness` |
+| `color-picker.hue` | `hue_label` | `Hue` |
+| `color-picker.saturation` | `saturation_label` | `Saturation` |
+| `color-picker.brightness` | `brightness_label` | `Brightness` |
+| `color-picker.lightness` | `lightness_label` | `Lightness` |
+| `color-picker.red` | `red_label` | `Red` |
+| `color-picker.green` | `green_label` | `Green` |
+| `color-picker.blue` | `blue_label` | `Blue` |
+| `color-picker.alpha` | `alpha_label` | `Opacity` |
+| `color-picker.hex` | `hex_label` | `Colour code` |
+| `color-picker.swatches` | `swatches_label` | `Presets` |
 | `parsed-field.placeholder` | `placeholder` | `(empty)` |
 | `parsed-field.label` | `aria_label` | `Value` |
 | `calendar.previous` | `previous_label` | `Previous month` |
