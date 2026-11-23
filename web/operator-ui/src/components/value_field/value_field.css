@@ -19,7 +19,47 @@
 
 .op-calendar { display: flex; flex-direction: column; padding: var(--op-field-calendar-padding, var(--op-dim-pad-tight)); }
 .op-calendar-head { display: flex; align-items: center; height: var(--op-field-calendar-header-height, var(--op-dim-row-compact)); }
-.op-calendar-title { flex: 1; text-align: center; font-weight: 700; color: var(--op-field-text, var(--op-text-primary)); }
+.op-calendar-title {
+  flex: 1;
+  align-self: stretch;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: center;
+  font-weight: 700;
+  color: var(--op-field-text, var(--op-text-primary));
+  cursor: pointer;
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-calendar-title:hover { background-color: var(--op-field-pressed, var(--op-pressed)); }
+.op-calendar-title[aria-expanded="true"] { color: var(--op-field-accent, var(--op-accent)); }
+.op-calendar-picks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: calc(var(--op-field-calendar-cell-size, var(--op-dim-row-compact)) * 7);
+  grid-auto-rows: calc((var(--op-field-calendar-cell-size, var(--op-dim-row-compact)) * 6 + var(--op-field-calendar-weekday-height, var(--op-dim-row-dense))) / 4);
+  align-content: start;
+}
+.op-calendar-pick {
+  min-width: 0;
+  text-align: center;
+  padding: 0 var(--op-dim-gap-micro);
+  border: 0;
+  background: transparent;
+  color: var(--op-field-text, var(--op-text-primary));
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-calendar-pick:hover { background-color: var(--op-field-pressed, var(--op-pressed)); }
+.op-calendar-pick[data-today] { box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-field-accent, var(--op-accent)); }
+.op-calendar-pick[aria-selected="true"] { background-color: var(--op-field-accent, var(--op-accent)); color: var(--op-field-on-accent, var(--op-on-accent)); }
+.op-root .op-calendar-pick:focus-visible, .op-root .op-calendar-title:focus-visible, .op-root .op-calendar-day:focus-visible, .op-root .op-calendar-nav:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
 .op-calendar-nav, .op-calendar-day {
   display: grid;
   place-items: center;

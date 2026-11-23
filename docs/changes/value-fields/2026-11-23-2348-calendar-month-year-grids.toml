@@ -1,0 +1,11 @@
+date = "2026-11-23T23:48:54Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "The Calendar title opens month and year grids for jumping far, in DateTimeField, DateRangeField and the standalone Calendar."
+check = "Press a calendar title once and twice, page the years with the arrows, pick a year and a month, and check that the grid keeps the calendar size."
+
+[uk]
+summary = "Заголовок Calendar відкриває сітки місяців і років для далеких переходів у DateTimeField, DateRangeField і окремому Calendar."
+check = "Натисніть заголовок календаря один і два рази, погортайте роки стрілками, виберіть рік і місяць і перевірте, що сітка зберігає розмір календаря."

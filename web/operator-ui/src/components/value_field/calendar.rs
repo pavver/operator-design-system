@@ -21,6 +21,17 @@ pub(super) const MONTHS: [&str; 12] = [
 ];
 pub(super) const WEEKDAYS: [&str; 7] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
+/// What the calendar grid shows.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum View {
+    Days,
+    Months,
+    Years,
+}
+
+/// Years per page of the year grid.
+const YEAR_PAGE: i32 = 12;
+
 /// Today's local date from the browser clock.
 pub(super) fn today() -> (i32, u32, u32) {
     let d = js_sys::Date::new_0();
@@ -58,6 +69,13 @@ pub fn Calendar(
     weekday_names: Option<Vec<String>>,
     #[prop(optional, into)] previous_label: MaybeProp<String>,
     #[prop(optional, into)] next_label: MaybeProp<String>,
+    /// Accessible name of the title button that opens the month and year grids.
+    #[prop(optional, into)]
+    jump_label: MaybeProp<String>,
+    #[prop(optional, into)] previous_year_label: MaybeProp<String>,
+    #[prop(optional, into)] next_year_label: MaybeProp<String>,
+    #[prop(optional, into)] previous_years_label: MaybeProp<String>,
+    #[prop(optional, into)] next_years_label: MaybeProp<String>,
     #[prop(optional)] previous_icon: Option<IconData>,
     #[prop(optional)] next_icon: Option<IconData>,
     #[prop(optional, into)] padding: MaybeProp<f32>,
@@ -132,6 +150,20 @@ pub fn Calendar(
         .collect();
     let previous_label = ui_text(previous_label, "calendar.previous", "Previous month");
     let next_label = ui_text(next_label, "calendar.next", "Next month");
+    let jump_label = ui_text(jump_label, "calendar.jump", "Choose month and year");
+    let previous_year_label = ui_text(
+        previous_year_label,
+        "calendar.previous-year",
+        "Previous year",
+    );
+    let next_year_label = ui_text(next_year_label, "calendar.next-year", "Next year");
+    let previous_years_label = ui_text(
+        previous_years_label,
+        "calendar.previous-years",
+        "Previous years",
+    );
+    let next_years_label = ui_text(next_years_label, "calendar.next-years", "Next years");
+    let view_mode = RwSignal::new(View::Days);
     let previous_icon = ui_icon(previous_icon, "calendar.previous", icons::CHEVRON_LEFT);
     let next_icon = ui_icon(next_icon, "calendar.next", icons::CHEVRON_RIGHT);
     let custom_style = root_style(
@@ -155,13 +187,81 @@ pub fn Calendar(
             *m = u32::try_from(index.rem_euclid(12)).unwrap_or(0) + 1;
         });
     };
+    let months = StoredValue::new(months);
+    let month_name = move |m: u32| {
+        months.with_value(|list| {
+            list.get(usize::try_from(m).unwrap_or(1).saturating_sub(1))
+                .map(|name| name.get())
+                .unwrap_or_default()
+        })
+    };
+    // The first year of the shown page of the year grid.
+    let page_start = move || shown.get().0.div_euclid(YEAR_PAGE) * YEAR_PAGE;
     let title = move || {
         let (y, m) = shown.get();
-        let name = months
-            .get(usize::try_from(m).unwrap_or(1) - 1)
-            .map(|name| name.get())
-            .unwrap_or_default();
-        format!("{name} {y}")
+        match view_mode.get() {
+            View::Days => format!("{} {y}", month_name(m)),
+            View::Months => y.to_string(),
+            View::Years => format!("{} – {}", page_start(), page_start() + YEAR_PAGE - 1),
+        }
+    };
+    let step = move |dir: i32| match view_mode.get_untracked() {
+        View::Days => shift(dir),
+        View::Months => shift(dir * 12),
+        View::Years => shift(dir * 12 * YEAR_PAGE),
+    };
+    let previous_text = move || match view_mode.get() {
+        View::Days => previous_label.get(),
+        View::Months => previous_year_label.get(),
+        View::Years => previous_years_label.get(),
+    };
+    let next_text = move || match view_mode.get() {
+        View::Days => next_label.get(),
+        View::Months => next_year_label.get(),
+        View::Years => next_years_label.get(),
+    };
+    let selected_month = move || selected.get().or_else(|| range.get().map(|r| r.start));
+    let month_grid = move || {
+        let (y, _) = shown.get();
+        (1..=12_u32)
+            .map(|m| {
+                view! {
+                    <button
+                        type="button"
+                        class="op-rippled op-calendar-pick"
+                        data-today=(now.0 == y && now.1 == m).then_some("")
+                        aria-selected=move || selected_month().is_some_and(|d| d.0 == y && d.1 == m).to_string()
+                        on:click=move |_| {
+                            shown.set((y, m));
+                            view_mode.set(View::Days);
+                        }
+                    >
+                        {move || month_name(m)}
+                    </button>
+                }
+            })
+            .collect_view()
+    };
+    let year_grid = move || {
+        let first = page_start();
+        (first..first + YEAR_PAGE)
+            .map(|y| {
+                view! {
+                    <button
+                        type="button"
+                        class="op-rippled op-calendar-pick"
+                        data-today=(now.0 == y).then_some("")
+                        aria-selected=move || selected_month().is_some_and(|d| d.0 == y).to_string()
+                        on:click=move |_| {
+                            shown.update(|s| s.0 = y);
+                            view_mode.set(View::Months);
+                        }
+                    >
+                        {y}
+                    </button>
+                }
+            })
+            .collect_view()
     };
     let cells = move || {
         let (y, m) = shown.get();
@@ -174,15 +274,34 @@ pub fn Calendar(
         <div class=root_class("op-calendar", class) style=custom_style>
             {header.run()}
             <div class="op-calendar-head">
-                <button type="button" class="op-rippled op-calendar-nav" style:visibility=hide_previous.then_some("hidden") aria-label=move || previous_label.get() on:click=move |_| shift(-1)>
+                <button type="button" class="op-rippled op-calendar-nav" style:visibility=hide_previous.then_some("hidden") aria-label=previous_text on:click=move |_| step(-1)>
                     {move || view! { <Icon icon=previous_icon.get() size=dim::ICON_SMALL attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-small));height:var(--op-field-icon-size, var(--op-dim-icon-small));"/> }}
                 </button>
-                <span class="op-calendar-title">{title}</span>
-                <button type="button" class="op-rippled op-calendar-nav" style:visibility=hide_next.then_some("hidden") aria-label=move || next_label.get() on:click=move |_| shift(1)>
+                <button
+                    type="button"
+                    class="op-rippled op-calendar-title"
+                    aria-label=move || format!("{}: {}", jump_label.get(), title())
+                    aria-expanded=move || (view_mode.get() != View::Days).to_string()
+                    on:click=move |_| view_mode.update(|v| *v = match *v {
+                        View::Days => View::Months,
+                        View::Months => View::Years,
+                        View::Years => View::Days,
+                    })
+                >
+                    {title}
+                </button>
+                <button type="button" class="op-rippled op-calendar-nav" style:visibility=hide_next.then_some("hidden") aria-label=next_text on:click=move |_| step(1)>
                     {move || view! { <Icon icon=next_icon.get() size=dim::ICON_SMALL attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-small));height:var(--op-field-icon-size, var(--op-dim-icon-small));"/> }}
                 </button>
             </div>
-            <div class="op-calendar-grid" role="grid" on:pointerleave=move |_| if let Some(cb) = on_hover { cb.run(None) }>
+            <div class="op-calendar-picks" style:display=move || (view_mode.get() == View::Days).then_some("none")>
+                {move || match view_mode.get() {
+                    View::Months => month_grid().into_any(),
+                    View::Years => year_grid().into_any(),
+                    View::Days => ().into_any(),
+                }}
+            </div>
+            <div class="op-calendar-grid" role="grid" style:display=move || (view_mode.get() != View::Days).then_some("none") on:pointerleave=move |_| if let Some(cb) = on_hover { cb.run(None) }>
                 {weekdays.into_iter().map(|w| view! { <span class="op-calendar-weekday op-t-caption">{move || w.get()}</span> }).collect_view()}
                 {move || {
                     let (y, m) = shown.get();

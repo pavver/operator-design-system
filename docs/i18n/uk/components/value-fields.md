@@ -26,6 +26,7 @@
 | Календар | Спливний шар із заголовком `row_compact` (попередній, місяць і рік, наступний), рядком днів тижня `row_dense` і квадратними комірками днів `row_compact`; тижні починаються з понеділка. |
 | ColorPicker | Завширшки `80 DU`, внутрішній відступ `pad_content`, між рядками `gutter`; рядок вкладок режимів заввишки `row_compact` із підкресленням `0.5 DU` у кольорі `accent` на вибраній. |
 | Вікно діапазону дат | Стовпчик `36 DU` швидких діапазонів `row_compact` зі смужкою `0.5 DU` у кольорі `accent` на відповідному й роздільником, далі два календарі поруч і підказка; на вузькому екрані календарі переносяться один під одний. |
+| Сітки місяців і років | Три стовпці й чотири рядки на місці сітки днів, із тим самим заповненням `accent` для вибраного місяця чи року та контуром для поточного. |
 | Дні діапазону | Кінці заповнені `accent`; дні між ними підфарбовані `accent` на 22%. |
 | ClockPicker | Внутрішній відступ `pad_content`; показ із двох кнопок `row_avatar` розміром `type_screen_title_size` з підкресленням `0.5 DU` у кольорі `accent` на активній стрілці та необов'язковою парою AM/PM; круглий циферблат `64 DU` у `surface_alt` із числами `row_compact`, стрілкою `0.5 DU` у кольорі `accent` і круглим кінчиком `row_compact`. |
 | Площина спектра | Заввишки `40 DU`, насиченість по горизонталі, яскравість угору; квадратний маркер `icon_small` (`4 DU`) зі світлим кільцем `0.5 DU` і темним контуром `0.25 DU`. |
@@ -46,6 +47,7 @@
 * Escape відновлює текст поточного значення без фіксації.
 * Arrow Up і Down змінюють значення кроками: NumberField на `step` у межах `min` і `max`, DurationField на `step_ms`, TimeField на `step_s` із переходом через північ.
 * Зовнішні зміни значення відображаються, якщо поле не у фокусі.
+* Заголовок календаря відкриває сітку місяців, а повторно — сітку з дванадцяти років; вибір року повертає до його місяців, а вибір місяця — до його днів; стрілки рухають на місяць, рік або дванадцять років.
 * Календар зберігає час доби; вибраний день заповнений `accent`, сьогоднішній має контур `accent`.
 * Спливні шари є шарами [Popover](popover.md) і закриваються при натисканні зовні або за Escape.
 * DateRangeField: перше натискання на день починає діапазон, вказівник чи фокус показують його попередньо, а друге натискання завершує, фіксує й закриває вікно; дні можна вибирати в будь-якому порядку.
@@ -200,6 +202,11 @@
 | `footer` | `slot` | немає | ClockPicker | Під циферблатом. |
 | `previous_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
 | `next_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
+| `jump_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
+| `previous_year_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
+| `next_year_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
+| `previous_years_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
+| `next_years_label` | `string signal` | ключ рядка | Calendar | Перекладний текст; див. Рядки. |
 | `previous_icon` | `Option<IconData>` | ключ піктограми | Calendar | Перевизначення вбудованої піктограми; див. Піктограми. |
 | `next_icon` | `Option<IconData>` | ключ піктограми | Calendar | Перевизначення вбудованої піктограми; див. Піктограми. |
 | `padding` | `number` | не встановлено | Calendar | Перевизначення метрики; див. нижче. |
@@ -370,6 +377,11 @@ DurationField приймає перекладені суфікси поряд і
 | `parsed-field.label` | `aria_label` | `Value` |
 | `calendar.previous` | `previous_label` | `Previous month` |
 | `calendar.next` | `next_label` | `Next month` |
+| `calendar.jump` | `jump_label` | `Choose month and year` |
+| `calendar.previous-year` | `previous_year_label` | `Previous year` |
+| `calendar.next-year` | `next_year_label` | `Next year` |
+| `calendar.previous-years` | `previous_years_label` | `Previous years` |
+| `calendar.next-years` | `next_years_label` | `Next years` |
 | `calendar.january` | `month_names` | `January` |
 | `calendar.february` | `month_names` | `February` |
 | `calendar.march` | `month_names` | `March` |
