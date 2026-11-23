@@ -103,7 +103,7 @@
 | Сокет | `socket_outline_offset` | MaybeProp, число в DU | border (`0.25 DU`) | Перевизначення геометрії або типографіки. |
 | NodeCard, Wire, GraphFrame, Minimap | `border_width` | MaybeProp, число в DU | border (`0.25 DU`) | Перевизначення геометрії або типографіки. |
 | NodeCard, GraphFrame | `emphasis_width` | MaybeProp, число в DU | border_emphasis (`0.5 DU`) | Перевизначення геометрії або типографіки. |
-| NodeCard | `icon_size` | MaybeProp, число в DU | icon_small (`4 DU`) | Перевизначення геометрії або типографіки. |
+| NodeCard | `icon_size` | MaybeProp, число в DU | `icon_small` (`4 DU`) | Перевизначення геометрії або типографіки. |
 | NodeCard, NodeRow, GraphFrame | `font_size` | MaybeProp, число в TU | type_body_size | Перевизначення геометрії або типографіки. |
 | NodeCard, NodeRow, GraphFrame | `line_height` | MaybeProp, число в TU | type_body_line | Перевизначення геометрії або типографіки. |
 | NodeCard, Wire | `caption_font_size` | MaybeProp, число в TU | type_caption_size | Перевизначення геометрії або типографіки. |
@@ -157,7 +157,7 @@
 | `socket_outline_offset` | Socket | DU | `--op-graph-socket-outline-offset` | border (`0.25 DU`) |
 | `border_width` | NodeCard, Wire, GraphFrame, Minimap | DU | `--op-graph-border-width` | border (`0.25 DU`) |
 | `emphasis_width` | NodeCard, GraphFrame | DU | `--op-graph-emphasis-width` | border_emphasis (`0.5 DU`) |
-| `icon_size` | NodeCard | DU | `--op-graph-icon-size` | icon_small (`4 DU`) |
+| `icon_size` | NodeCard | DU | `--op-graph-icon-size` | `icon_small` (`4 DU`) |
 | `font_size` | NodeCard, NodeRow, GraphFrame | TU | `--op-graph-font-size` | type_body_size |
 | `line_height` | NodeCard, NodeRow, GraphFrame | TU | `--op-graph-line-height` | type_body_line |
 | `caption_font_size` | NodeCard, Wire | TU | `--op-graph-caption-font-size` | type_caption_size |

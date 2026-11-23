@@ -44,7 +44,7 @@ Status: **reviewed** on web.
 
 | Component | Properties |
 | :--- | :--- |
-| `Icon` | `icon`, `size` (`6 DU`), `color`, `label`. |
+| `Icon` | `icon`, `size` (`icon_large`, `6 DU`), `color`, `label`. |
 | `ProgressIndicator` | `size` (`6 DU`), `stroke` (`0.5 DU`), `color`, `label` (`progress-indicator.loading`). |
 | `PendingIndicator` | `size` (`4 DU`), `stroke` (`0.375 DU`). |
 | `Divider` | `thickness` (`0.25 DU`). |

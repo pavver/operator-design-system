@@ -7,6 +7,7 @@ use crate::components::image::Image;
 use crate::components::primitives::Icon;
 use crate::core::{ActionResult, AsyncAction};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 /// Single media tile inside a Gallery.
@@ -69,7 +70,7 @@ pub fn GalleryItemView(
             // Play badge for videos
             {item.is_video.then(|| view! {
                 <div class="op-gallery-play-badge">
-                    <Icon icon=icons::VIDEOCAM size=6.0 />
+                    <Icon icon=icons::VIDEOCAM size=dim::ICON_LARGE />
                 </div>
             })}
 

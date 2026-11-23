@@ -9,7 +9,7 @@ use operator_ui_tokens::{Icon as IconData, icons};
 
 use crate::core::glyph::{pending_spinner, symbol};
 
-const ICON_SIZE: &str = "var(--op-checkbox-icon-size, calc(var(--op-du) * 3.5))";
+const ICON_SIZE: &str = "var(--op-checkbox-icon-size, var(--op-dim-icon-xsmall))";
 const SPINNER_SIZE: &str = "var(--op-checkbox-spinner-size, calc(var(--op-du) * 3))";
 
 pub(crate) const CSS: &str = include_str!("checkbox.css");

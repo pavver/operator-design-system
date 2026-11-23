@@ -37,7 +37,7 @@
 | `gap` | необов'язкове число (DU) | `gutter` | Перевизначає `--op-property-list-gap`. |
 | `value_gap` | необов'язкове число (DU) | `pad_tight` | Перевизначає `--op-property-list-value-gap`. |
 | `copy_size` | необов'язкове число (DU) | `row_dense` | Перевизначає `--op-property-list-copy-size`. |
-| `icon_size` | необов'язкове число (DU) | `3.5 DU` | Перевизначає `--op-property-list-icon-size`. |
+| `icon_size` | необов'язкове число (DU) | `icon_xsmall` (`3.5 DU`) | Перевизначає `--op-property-list-icon-size`. |
 | `stack_width` | необов'язкове число (DU) | `60 DU` | Перевизначає `--op-property-list-stack-width`. |
 | `font_size` | необов'язкове число (TU) | `inherit` | Перевизначає `--op-property-list-font-size`. |
 | `line_height` | необов'язкове число (TU) | `inherit` | Перевизначає `--op-property-list-line-height`. |
@@ -77,7 +77,7 @@
 | `gap` | DU | `--op-property-list-gap` | `gutter` |
 | `value_gap` | DU | `--op-property-list-value-gap` | `pad_tight` |
 | `copy_size` | DU | `--op-property-list-copy-size` | `row_dense` |
-| `icon_size` | DU | `--op-property-list-icon-size` | `3.5 DU` |
+| `icon_size` | DU | `--op-property-list-icon-size` | `icon_xsmall` (`3.5 DU`) |
 | `stack_width` | DU | `--op-property-list-stack-width` | `60 DU` |
 | `font_size` | TU | `--op-property-list-font-size` | `inherit` |
 | `line_height` | TU | `--op-property-list-line-height` | `inherit` |

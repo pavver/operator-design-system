@@ -55,9 +55,13 @@ pub mod dim {
     pub const PAD_CARD: f32 = 3.0;
     pub const MARGIN_SCREEN: f32 = 4.0;
     pub const SECTION_GAP: f32 = 6.0;
+    pub const ICON_XSMALL: f32 = 3.5;
     pub const ICON_SMALL: f32 = 4.0;
     pub const ICON_MEDIUM: f32 = 4.5;
+    pub const ICON_FIELD: f32 = 5.0;
     pub const ICON_LARGE: f32 = 6.0;
+    pub const ICON_XLARGE: f32 = 8.0;
+    pub const ICON_DISPLAY: f32 = 12.0;
     pub const ROW_DENSE: f32 = 6.0;
     pub const ROW_COMPACT: f32 = 8.0;
     pub const ROW_STANDARD: f32 = 10.0;

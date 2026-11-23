@@ -4,6 +4,7 @@ use crate::components::chat_message::types::MessageTtlInfo;
 use crate::components::primitives::Icon;
 use crate::core::{root_class, root_style};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 /// Self-destruct TTL timer badge indicating expiring message content.
@@ -34,7 +35,7 @@ pub fn TtlIndicator(
         >
             {ttl.is_encrypted.then(|| view! {
                 <span class="op-ttl-lock-icon" aria-hidden="true">
-                    <Icon icon=icons::LOCK size=2.75 />
+                    <Icon icon=icons::LOCK size=dim::ICON_XSMALL />
                 </span>
             })}
             <span class="op-ttl-timer-glyph" aria-hidden="true">"⏱"</span>

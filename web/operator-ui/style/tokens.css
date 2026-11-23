@@ -15,9 +15,13 @@
   --op-dim-pad-card: calc(var(--op-du) * 3);
   --op-dim-margin-screen: calc(var(--op-du) * 4);
   --op-dim-section-gap: calc(var(--op-du) * 6);
+  --op-dim-icon-xsmall: calc(var(--op-du) * 3.5);
   --op-dim-icon-small: calc(var(--op-du) * 4);
   --op-dim-icon-medium: calc(var(--op-du) * 4.5);
+  --op-dim-icon-field: calc(var(--op-du) * 5);
   --op-dim-icon-large: calc(var(--op-du) * 6);
+  --op-dim-icon-xlarge: calc(var(--op-du) * 8);
+  --op-dim-icon-display: calc(var(--op-du) * 12);
   --op-dim-row-dense: calc(var(--op-du) * 6);
   --op-dim-row-compact: calc(var(--op-du) * 8);
   --op-dim-row-standard: calc(var(--op-du) * 10);

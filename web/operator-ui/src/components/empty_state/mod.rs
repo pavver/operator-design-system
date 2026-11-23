@@ -3,7 +3,7 @@
 use crate::components::primitives::Icon;
 use crate::core::{Metric, Slot, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
-use operator_ui_tokens::{Icon as IconData, icons};
+use operator_ui_tokens::{Icon as IconData, dim, icons};
 
 pub(crate) const CSS: &str = include_str!("empty_state.css");
 
@@ -51,7 +51,11 @@ pub fn EmptyState(
 ) -> impl IntoView {
     let resolved_icon = ui_icon(icon, "empty-state.icon", icons::INBOX);
     let resolved_title = ui_text(title, "empty-state.title", "No items");
-    let default_icon_size = if compact { 8.0 } else { 12.0 };
+    let default_icon_size = if compact {
+        dim::ICON_XLARGE
+    } else {
+        dim::ICON_DISPLAY
+    };
     let size = move || icon_size.get().unwrap_or(default_icon_size);
 
     let rendered_icon = move || {

@@ -6,6 +6,7 @@ use crate::core::observers::{IntersectionOptions, use_intersection};
 use crate::core::{ActionResult, AsyncAction, Metric, Slot, root_class, root_style, ui_text};
 use leptos::html::Div;
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("infinite_scroll.css");
@@ -84,7 +85,7 @@ pub fn InfiniteScroll(
                     } else {
                         view! {
                             <div class="op-infinite-scroll-error" role="alert">
-                                <Icon icon=icons::ERROR size=18.0 />
+                                <Icon icon=icons::ERROR size=dim::ICON_MEDIUM />
                                 <span>{if err_msg.is_empty() { error_str.get() } else { err_msg }}</span>
                                 <ActionButton
                                     icon=icons::REFRESH

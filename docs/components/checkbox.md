@@ -9,7 +9,7 @@ Status: **reviewed** on web.
 | Property | Value |
 | :--- | :--- |
 | Box | `5 DU` square, corner radius `0 DU`. |
-| Check icon | `3.5 DU`; spinner `3 DU`. |
+| Check icon | `icon_xsmall` (`3.5 DU`); spinner `3 DU`. |
 | Box-to-label gap | `gutter` (`2 DU`). |
 | Hit area padding | `pad_small` vertical, `pad_tight` horizontal. |
 | Label | `body` size, weight 500, `text_primary`. |

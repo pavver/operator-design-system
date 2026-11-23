@@ -67,7 +67,7 @@
 | `padding_x` | необов'язкове число (DU) | `pad_card` | Перевизначає `--op-data-table-padding-x`. |
 | `sort_gap` | необов'язкове число (DU) | `pad_tight` | Перевизначає `--op-data-table-sort-gap`. |
 | `sort_padding` | необов'язкове число (DU) | `pad_tight` | Перевизначає `--op-data-table-sort-padding`. |
-| `icon_size` | необов'язкове число (DU) | `3.5 DU` | Перевизначає `--op-data-table-icon-size`. |
+| `icon_size` | необов'язкове число (DU) | `icon_xsmall` (`3.5 DU`) | Перевизначає `--op-data-table-icon-size`. |
 | `loading_thickness` | необов'язкове число (DU) | `0.5 DU` | Перевизначає `--op-data-table-loading-thickness`. |
 | `empty_padding` | необов'язкове число (DU) | `section_gap` | Перевизначає `--op-data-table-empty-padding`. |
 | `font_size` | необов'язкове число (TU) | `type_body_small_size` | Перевизначає `--op-data-table-font-size`. |
@@ -114,7 +114,7 @@
 | `padding_x` | DU | `--op-data-table-padding-x` | `pad_card` |
 | `sort_gap` | DU | `--op-data-table-sort-gap` | `pad_tight` |
 | `sort_padding` | DU | `--op-data-table-sort-padding` | `pad_tight` |
-| `icon_size` | DU | `--op-data-table-icon-size` | `3.5 DU` |
+| `icon_size` | DU | `--op-data-table-icon-size` | `icon_xsmall` (`3.5 DU`) |
 | `loading_thickness` | DU | `--op-data-table-loading-thickness` | `0.5 DU` |
 | `empty_padding` | DU | `--op-data-table-empty-padding` | `section_gap` |
 | `font_size` | TU | `--op-data-table-font-size` | `type_body_small_size` |

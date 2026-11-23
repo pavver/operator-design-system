@@ -96,7 +96,7 @@ Caller `style` is appended after metric declarations and takes precedence.
 | `spinner_stroke` | DU | `--op-checkbox-group-spinner-stroke` | `var(--op-dim-spinner-stroke)` |
 | `width` | DU | `--op-checkbox-group-width` | `100%` |
 
-`item_icon_size` overrides the existing `icon_size` enum; when unset, Small uses `icon_small`, Medium uses `icon_large`, and Large uses the resolved `height` minus two `large_icon_inset` values.
+`item_icon_size` overrides the existing `icon_size` enum; when unset, Small uses `icon_small` (`4 DU`), Medium uses `icon_large` (`6 DU`), and Large uses the resolved `height` minus two `large_icon_inset` values.
 
 | Color variable | Default |
 | :--- | :--- |

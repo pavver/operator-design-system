@@ -181,7 +181,7 @@ pub fn DropdownMenu(
                             }
                                 .into_any()
                         } else {
-                            view! { <span class="op-dropdown-arrow"><Icon icon=icon.get() size=5.0 attr:style="width:var(--op-field-icon-size, calc(var(--op-du) * 5));height:var(--op-field-icon-size, calc(var(--op-du) * 5));"/></span> }
+                            view! { <span class="op-dropdown-arrow"><Icon icon=icon.get() size=dim::ICON_FIELD attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-field));height:var(--op-field-icon-size, var(--op-dim-icon-field));"/></span> }
                                 .into_any()
                         }
                     }}

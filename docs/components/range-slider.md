@@ -47,7 +47,7 @@ Status: **draft** on web.
 | `height` | DU metric | `row_compact` | Overall height of the slider. |
 | `rail_inset` | DU metric | `3 DU` | Inset for thumb boundaries. |
 | `track_height` | DU metric | `2 DU` | Thickness of the track rail. |
-| `thumb_size` | DU metric | `icon_large` | Diameter of the thumbs. |
+| `thumb_size` | DU metric | `icon_large` (`6 DU`) | Diameter of the thumbs. |
 | `dot_size` | DU metric | `pad_small` | Diameter of the thumb center dot. |
 | `width` | DU metric | none | Explicit width override. |
 | `thumb` | `Slot` | none | Replaces standard thumb visual. |

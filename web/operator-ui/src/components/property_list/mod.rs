@@ -165,8 +165,8 @@ pub fn Property(
                     <IconButton
                         icon=copy_icon.get()
                         label=copy_label
-                        content=move || view! { <crate::components::primitives::Icon icon=copy_icon.get() style="--op-icon-size:var(--op-property-list-icon-size, calc(var(--op-du) * 3.5))"/> }
-                        style="--op-button-size:var(--op-property-list-copy-size, var(--op-dim-row-dense));--op-button-icon-size:var(--op-property-list-icon-size, calc(var(--op-du) * 3.5))"
+                        content=move || view! { <crate::components::primitives::Icon icon=copy_icon.get() style="--op-icon-size:var(--op-property-list-icon-size, var(--op-dim-icon-xsmall))"/> }
+                        style="--op-button-size:var(--op-property-list-copy-size, var(--op-dim-row-dense));--op-button-icon-size:var(--op-property-list-icon-size, var(--op-dim-icon-xsmall))"
                         on_async_click=action
                     />
                 })}

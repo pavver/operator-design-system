@@ -8,6 +8,7 @@ use crate::core::{
     ControlState, Metric, ScopedSlot, Slot, root_class, root_style, ui_icon, ui_text,
 };
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 use send_wrapper::SendWrapper;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -169,7 +170,7 @@ pub fn FileField(
                     on:change=move |_| {if let Some(el)=input.get_untracked() {if let Some(files)=el.files() {add.run((0..files.length()).filter_map(|i|files.item(i)).collect());}el.set_value("");}}/>
                 <button type="button" class="op-file-field-pick" disabled=move || !available.get() on:click=move |_| {if available.get_untracked() && let Some(el)=input.get_untracked() {el.click();}}
                     on:focus=move |_| focused.set(true) on:blur=move |_| focused.set(false)>
-                    {move || view! {<Icon icon=icon.get() size=4.0/>}}{move || pick.get()}
+                    {move || view! {<Icon icon=icon.get() size=dim::ICON_SMALL/>}}{move || pick.get()}
                 </button>
                 <div class="op-file-field-chips">
                     <For each=move || value.get() key=|f| f.id children=move |f| {let id=f.id;

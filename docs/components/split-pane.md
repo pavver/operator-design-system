@@ -34,7 +34,7 @@ Status: **reviewed** on web.
 | `divider_width` | DU | `border` | Divider line width. |
 | `divider_active_width` | DU | `border_thick` | Active/hovered divider line width. |
 | `grip_width` | DU | `pad_tight` | Grip width. |
-| `grip_length` | DU | `icon_large` | Grip length. |
+| `grip_length` | DU | `icon_large` (`6 DU`) | Grip length. |
 | `grip` | slot | none | Custom grip slot. |
 | `label` | string | `split-pane.handle` | Accessible label for the separator handle. |
 
@@ -47,7 +47,7 @@ Status: **reviewed** on web.
 | `divider_width` | DU | `--op-split-pane-divider-width` | `border` |
 | `divider_active_width` | DU | `--op-split-pane-divider-active-width` | `border_thick` |
 | `grip_width` | DU | `--op-split-pane-grip-width` | `pad_tight` |
-| `grip_length` | DU | `--op-split-pane-grip-length` | `icon_large` |
+| `grip_length` | DU | `--op-split-pane-grip-length` | `icon_large` (`6 DU`) |
 
 | Color variable | Default |
 | :--- | :--- |

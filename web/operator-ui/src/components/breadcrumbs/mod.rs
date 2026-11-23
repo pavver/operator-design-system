@@ -6,6 +6,7 @@ use crate::components::primitives::Icon;
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::html;
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 
 pub(crate) const CSS: &str = include_str!("breadcrumbs.css");
@@ -94,7 +95,7 @@ pub fn Breadcrumbs(
                 view! {
                     <Icon
                         icon=icon
-                        size=4.0
+                        size=dim::ICON_SMALL
                     />
                 }
                 .into_any(),
@@ -184,7 +185,7 @@ pub fn Breadcrumbs(
                                 {first.icon.map(|ic| view! {
                                     <Icon
                                         icon=ic
-                                        size=4.0
+                                        size=dim::ICON_SMALL
                                     />
                                 })}
                                 {if let Some(href) = &first.href {
@@ -251,7 +252,7 @@ pub fn Breadcrumbs(
                                 {last.icon.map(|ic| view! {
                                     <Icon
                                         icon=ic
-                                        size=4.0
+                                        size=dim::ICON_SMALL
                                     />
                                 })}
                                 <span class="op-breadcrumbs-text">
@@ -278,7 +279,7 @@ pub fn Breadcrumbs(
                                     {icon.map(|ic| view! {
                                         <Icon
                                             icon=ic
-                                            size=4.0
+                                            size=dim::ICON_SMALL
                                         />
                                     })}
                                     {if is_last {

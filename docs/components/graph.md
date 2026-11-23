@@ -103,7 +103,7 @@ These application geometry inputs are separate from the DU component metrics.
 | Socket | `socket_outline_offset` | MaybeProp DU number | border (`0.25 DU`) | Geometry or typography override. |
 | NodeCard, Wire, GraphFrame, Minimap | `border_width` | MaybeProp DU number | border (`0.25 DU`) | Geometry or typography override. |
 | NodeCard, GraphFrame | `emphasis_width` | MaybeProp DU number | border_emphasis (`0.5 DU`) | Geometry or typography override. |
-| NodeCard | `icon_size` | MaybeProp DU number | icon_small (`4 DU`) | Geometry or typography override. |
+| NodeCard | `icon_size` | MaybeProp DU number | `icon_small` (`4 DU`) | Geometry or typography override. |
 | NodeCard, NodeRow, GraphFrame | `font_size` | MaybeProp TU number | type_body_size | Geometry or typography override. |
 | NodeCard, NodeRow, GraphFrame | `line_height` | MaybeProp TU number | type_body_line | Geometry or typography override. |
 | NodeCard, Wire | `caption_font_size` | MaybeProp TU number | type_caption_size | Geometry or typography override. |
@@ -157,7 +157,7 @@ The `color` props and `MiniItem.color` remain available for application type col
 | `socket_outline_offset` | Socket | DU | `--op-graph-socket-outline-offset` | border (`0.25 DU`) |
 | `border_width` | NodeCard, Wire, GraphFrame, Minimap | DU | `--op-graph-border-width` | border (`0.25 DU`) |
 | `emphasis_width` | NodeCard, GraphFrame | DU | `--op-graph-emphasis-width` | border_emphasis (`0.5 DU`) |
-| `icon_size` | NodeCard | DU | `--op-graph-icon-size` | icon_small (`4 DU`) |
+| `icon_size` | NodeCard | DU | `--op-graph-icon-size` | `icon_small` (`4 DU`) |
 | `font_size` | NodeCard, NodeRow, GraphFrame | TU | `--op-graph-font-size` | type_body_size |
 | `line_height` | NodeCard, NodeRow, GraphFrame | TU | `--op-graph-line-height` | type_body_line |
 | `caption_font_size` | NodeCard, Wire | TU | `--op-graph-caption-font-size` | type_caption_size |

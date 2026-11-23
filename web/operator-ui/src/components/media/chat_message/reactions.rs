@@ -4,6 +4,7 @@ use crate::components::chat_message::types::MessageReaction;
 use crate::components::primitives::Icon;
 use crate::core::{root_class, root_style};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 /// Row of emoji reaction counters with selection toggle states.
@@ -54,7 +55,7 @@ pub fn ReactionsRow(
                     on:click=move |_| cb.run(())
                     aria-label="Add reaction"
                 >
-                    <Icon icon=icons::ADD size=3.0 />
+                    <Icon icon=icons::ADD size=dim::ICON_XSMALL />
                 </button>
             })}
         </div>

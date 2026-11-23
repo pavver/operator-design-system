@@ -9,6 +9,7 @@ use crate::components::primitives::{Icon, ProgressIndicator};
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use controls::VideoStreamChrome;
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("video_stream.css");
@@ -242,7 +243,7 @@ pub fn VideoStream(
                 VideoStreamState::Idle => {
                     view! {
                         <div class="op-video-stream-overlay">
-                            <Icon icon=icons::VIDEOCAM size=8.0 />
+                            <Icon icon=icons::VIDEOCAM size=dim::ICON_XLARGE />
                             <span class="op-video-stream-status-text" style="margin-top:calc(var(--op-du)*1.5);">
                                 {move || resolved_empty.get()}
                             </span>
@@ -276,7 +277,7 @@ pub fn VideoStream(
                         view! {
                             <div class="op-video-stream-overlay">
                                 <div class="op-video-stream-error-box">
-                                    <Icon icon=icons::ERROR size=8.0 />
+                                    <Icon icon=icons::ERROR size=dim::ICON_XLARGE />
                                     <span class="op-video-stream-status-text">{resolved_error.get()}</span>
                                     <span class="op-video-stream-error-msg">{err}</span>
                                 </div>

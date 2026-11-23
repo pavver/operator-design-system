@@ -11,6 +11,7 @@ use crate::components::icon_button::IconButton;
 use crate::components::primitives::Icon;
 use crate::core::{Metric, Slot, root_class, root_style, ui_text, use_page_scroll_lock};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 use thumbnails::GalleryThumbnailCarousel;
 
@@ -309,7 +310,7 @@ pub fn GalleryViewer(
                                                         <img class="op-gallery-viewer-video-error-poster" src=p.clone() alt="" />
                                                     })}
                                                     <div class="op-gallery-viewer-video-error-overlay">
-                                                        <Icon icon=icons::ERROR size=8.0 />
+                                                        <Icon icon=icons::ERROR size=dim::ICON_XLARGE />
                                                         <span class="op-gallery-viewer-video-error-text">
                                                             {move || resolved_video_error.get()}
                                                         </span>

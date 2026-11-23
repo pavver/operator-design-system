@@ -11,7 +11,7 @@
   color: var(--op-banner-text, var(--op-text-primary));
 }
 /* The first text line is centered on the 8 DU icon. */
-.op-banner-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--op-banner-body-gap, var(--op-dim-pad-tight)); padding-top: calc((var(--op-banner-icon-size, calc(var(--op-du) * 8)) - var(--op-banner-line-height, var(--op-type-body-line))) / 2); }
+.op-banner-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--op-banner-body-gap, var(--op-dim-pad-tight)); padding-top: calc((var(--op-banner-icon-size, var(--op-dim-icon-xlarge)) - var(--op-banner-line-height, var(--op-type-body-line))) / 2); }
 .op-banner-title { font-weight: 700; }
 .op-banner-text { color: var(--op-banner-text, var(--op-text-primary)); overflow-wrap: anywhere; }
 .op-banner-actions { display: flex; flex-wrap: wrap; gap: var(--op-banner-gap, var(--op-dim-gutter)); margin-top: var(--op-banner-body-gap, var(--op-dim-pad-tight)); }
@@ -25,7 +25,7 @@
 
 .op-banner { background-color: var(--op-banner-background, color-mix(in srgb, var(--op-banner-tone, var(--tone)) 15%, var(--op-banner-surface, var(--op-surface)))); font-size: var(--op-banner-font-size, var(--op-type-body-size)); line-height: var(--op-banner-line-height, var(--op-type-body-line)); }
 .op-banner-icon { display: inline-flex; color: var(--op-banner-tone, var(--tone)); flex: none; }
-.op-banner-icon .op-icon { --op-icon-size: var(--op-banner-icon-size, calc(var(--op-du) * 8)); }
+.op-banner-icon .op-icon { --op-icon-size: var(--op-banner-icon-size, var(--op-dim-icon-xlarge)); }
 .op-banner-close { flex: none; display: grid; place-items: center; width: var(--op-banner-button-size, var(--op-dim-row-compact)); height: var(--op-banner-button-size, var(--op-dim-row-compact)); color: var(--op-banner-secondary, var(--op-text-secondary)); }
 .op-banner-close .op-icon { --op-icon-size: var(--op-banner-close-icon-size, var(--op-dim-icon-small)); }
 .op-banner-close:hover { background-color: var(--op-banner-hover, var(--op-hover)); }

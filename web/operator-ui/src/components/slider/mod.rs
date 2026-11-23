@@ -12,7 +12,7 @@ use wasm_bindgen::JsCast;
 
 use crate::core::glyph::{pending_spinner, symbol};
 
-const ICON_SIZE: &str = "var(--op-slider-icon-size, calc(var(--op-du) * 3.5))";
+const ICON_SIZE: &str = "var(--op-slider-icon-size, var(--op-dim-icon-xsmall))";
 const SPINNER_SIZE: &str = "var(--op-slider-spinner-size, calc(var(--op-du) * 3))";
 
 pub(crate) const CSS: &str = include_str!("slider.css");

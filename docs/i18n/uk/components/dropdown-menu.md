@@ -102,12 +102,12 @@
 | `slot_size` | DU | `--op-field-slot-size` | `row_standard` | DropdownMenu |
 | `gap` | DU | `--op-field-gap` | `gap_micro` | DropdownMenu |
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | DropdownMenu |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small; 5 DU for picker arrows` | DropdownMenu |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) для стрілок вибору | DropdownMenu |
 | `row_height` | DU | `--op-field-row-height` | `row_control` | DropdownMenu |
 | `max_height` | DU | `--op-field-max-height` | `50 DU` | DropdownMenu |
 | `option_padding_x` | DU | `--op-field-option-padding-x` | `pad_card` | DropdownMenu |
 | `trigger_gap` | DU | `--op-field-trigger-gap` | `gutter` | DropdownMenu |
-| `spinner_size` | DU | `--op-field-spinner-size` | `icon_small` | DropdownMenu |
+| `spinner_size` | DU | `--op-field-spinner-size` | `icon_small` (`4 DU`) | DropdownMenu |
 | `spinner_stroke` | DU | `--op-field-spinner-stroke` | `spinner_stroke` | DropdownMenu |
 
 | Змінна кольору | Типове значення |

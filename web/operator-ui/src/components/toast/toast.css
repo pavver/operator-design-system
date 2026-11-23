@@ -71,7 +71,7 @@
 .op-toast-close:hover, .op-toast-action:hover { background-color: var(--op-toast-hover, var(--op-hover)); }
 
 .op-toast { font-size: var(--op-toast-font-size, var(--op-type-body-size)); line-height: var(--op-toast-line-height, var(--op-type-body-line)); }
-.op-toast-icon .op-icon { --op-icon-size: var(--op-toast-icon-size, calc(var(--op-du) * 8)); }
+.op-toast-icon .op-icon { --op-icon-size: var(--op-toast-icon-size, var(--op-dim-icon-xlarge)); }
 .op-toast-close .op-icon { --op-icon-size: var(--op-toast-close-icon-size, var(--op-dim-icon-small)); }
 .op-toast-header { grid-area: label; }
 .op-toast-footer { grid-column: 1 / -1; }

@@ -9,6 +9,7 @@ use leptos::ev;
 use leptos::html::Div;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{icons, motion};
 
 pub(crate) const CSS: &str = include_str!("pull_to_refresh.css");
@@ -168,13 +169,13 @@ pub fn PullToRefresh(
                                     <span>{refreshing_str.get()}</span>
                                 }.into_any(),
                                 ControlState::Success => view! {
-                                    <Icon icon=icons::CHECK size=18.0 />
+                                    <Icon icon=icons::CHECK size=dim::ICON_MEDIUM />
                                     <span>{success_str.get()}</span>
                                 }.into_any(),
                                 ControlState::Error => {
                                     let custom_err = error_message.get();
                                     view! {
-                                        <Icon icon=icons::ERROR size=18.0 />
+                                        <Icon icon=icons::ERROR size=dim::ICON_MEDIUM />
                                         <span>{custom_err.unwrap_or_else(|| error_str.get())}</span>
                                     }.into_any()
                                 }
@@ -185,7 +186,7 @@ pub fn PullToRefresh(
                                             class="op-pull-to-refresh-icon"
                                             data-flipped=past_threshold.then_some("")
                                         >
-                                            <Icon icon=icons::ARROW_DOWNWARD size=18.0 />
+                                            <Icon icon=icons::ARROW_DOWNWARD size=dim::ICON_MEDIUM />
                                         </span>
                                         <span>{if past_threshold { release_str.get() } else { pull_str.get() }}</span>
                                     }.into_any()

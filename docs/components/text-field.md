@@ -157,7 +157,7 @@ All text-like inputs provide the same six field slots.
 | `slot_size` | DU | `--op-field-slot-size` | `row_standard` | TextField |
 | `gap` | DU | `--op-field-gap` | `gap_micro` | TextField |
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | TextField |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small; 5 DU for picker arrows` | TextField |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) for picker arrows | TextField |
 | `save_min_width` | DU | `--op-field-save-min-width` | `12 DU` | TextField |
 | `save_max_width` | DU | `--op-field-save-max-width` | `30 DU` | TextField |
 

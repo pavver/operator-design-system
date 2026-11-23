@@ -59,7 +59,7 @@
 | Проп метрики | Одиниця | Змінна | За замовчуванням |
 | :--- | :--- | :--- | :--- |
 | `size` | DU | `--op-launcher-tile-size` | `24 DU` |
-| `icon_size` | DU | `--op-launcher-tile-icon-size` | `8 DU` |
+| `icon_size` | DU | `--op-launcher-tile-icon-size` | `icon_xlarge` (`8 DU`) |
 | `gap` | DU | `--op-launcher-tile-gap` | `2.5 DU` |
 | `padding` | DU | `--op-launcher-tile-padding` | `2 DU` |
 | `border_width` | DU | `--op-launcher-tile-border-width` | `0.25 DU` |

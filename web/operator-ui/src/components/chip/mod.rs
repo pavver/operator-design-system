@@ -9,7 +9,7 @@ use operator_ui_tokens::{Icon as IconData, icons};
 
 use crate::core::glyph::symbol;
 
-const ICON_SIZE: &str = "var(--op-chip-icon-size, calc(var(--op-du) * 3.5))";
+const ICON_SIZE: &str = "var(--op-chip-icon-size, var(--op-dim-icon-xsmall))";
 
 pub(crate) const CSS: &str = include_str!("chip.css");
 

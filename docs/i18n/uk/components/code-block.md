@@ -75,7 +75,7 @@
 | `number_width` | optional number (DU) | `8 DU` | Перевизначає `--op-code-block-number-width`. |
 | `number_padding` | optional number (DU) | `pad_card` | Перевизначає `--op-code-block-number-padding`. |
 | `copy_size` | optional number (DU) | `row_dense` | Перевизначає `--op-code-block-copy-size`. |
-| `icon_size` | optional number (DU) | `3.5 DU` | Перевизначає `--op-code-block-icon-size`. |
+| `icon_size` | optional number (DU) | `icon_xsmall` (`3.5 DU`) | Перевизначає `--op-code-block-icon-size`. |
 | `font_size` | optional number (TU) | `type_console_size` | Перевизначає `--op-code-block-font-size`. |
 | `line_height` | optional number (TU) | `type_console_line` | Перевизначає `--op-code-block-line-height`. |
 | `header_font_size` | optional number (TU) | `type_caption_size` | Перевизначає `--op-code-block-header-font-size`. |
@@ -105,7 +105,7 @@
 | `number_width` | DU | `--op-code-block-number-width` | `8 DU` |
 | `number_padding` | DU | `--op-code-block-number-padding` | `pad_card` |
 | `copy_size` | DU | `--op-code-block-copy-size` | `row_dense` |
-| `icon_size` | DU | `--op-code-block-icon-size` | `3.5 DU` |
+| `icon_size` | DU | `--op-code-block-icon-size` | `icon_xsmall` (`3.5 DU`) |
 | `font_size` | TU | `--op-code-block-font-size` | `type_console_size` |
 | `line_height` | TU | `--op-code-block-line-height` | `type_console_line` |
 | `header_font_size` | TU | `--op-code-block-header-font-size` | `type_caption_size` |

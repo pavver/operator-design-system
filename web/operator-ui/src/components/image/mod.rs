@@ -4,6 +4,7 @@ use crate::components::primitives::Icon;
 use crate::components::skeleton::Skeleton;
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("image.css");
@@ -172,7 +173,7 @@ pub fn Image(
                         <div class="op-image-error">
                             <Icon
                                 icon=icons::ERROR
-                                size=6.0
+                                size=dim::ICON_LARGE
                             />
                             <span>{resolved_error.get()}</span>
                         </div>

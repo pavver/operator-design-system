@@ -4,6 +4,7 @@ use crate::components::primitives::Icon;
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
 use operator_ui_tokens::Icon as IconData;
+use operator_ui_tokens::dim;
 
 pub(crate) const CSS: &str = include_str!("timeline.css");
 
@@ -95,7 +96,7 @@ pub fn TimelineEntry(
                         icon.map(|ic| view! {
                             <Icon
                                 icon=ic
-                                size=4.0
+                                size=dim::ICON_SMALL
                             />
                         }.into_any())
                     }}

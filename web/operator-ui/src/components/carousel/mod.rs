@@ -6,6 +6,7 @@ use gloo_timers::future::TimeoutFuture;
 use leptos::ev;
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("carousel.css");
@@ -214,7 +215,7 @@ fn CarouselArrows(
                     disabled=move || !can_prev.get()
                     on:click=move |_| on_prev.run(())
                 >
-                    <Icon icon=icons::CHEVRON_LEFT size=20.0 />
+                    <Icon icon=icons::CHEVRON_LEFT size=dim::ICON_FIELD />
                 </button>
                 <button
                     type="button"
@@ -224,7 +225,7 @@ fn CarouselArrows(
                     disabled=move || !can_next.get()
                     on:click=move |_| on_next.run(())
                 >
-                    <Icon icon=icons::CHEVRON_RIGHT size=20.0 />
+                    <Icon icon=icons::CHEVRON_RIGHT size=dim::ICON_FIELD />
                 </button>
             }
         })

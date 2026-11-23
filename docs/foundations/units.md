@@ -47,9 +47,13 @@ The values live in [tokens.toml](../../tokens/tokens.toml).
 | `pad_card` | `3 DU` | Card and field inner padding. |
 | `margin_screen` | `4 DU` | Screen margin, button side padding. |
 | `section_gap` | `6 DU` | Gap between sections. |
+| `icon_xsmall` | `3.5 DU` | Status icons inside small elements. |
 | `icon_small` | `4 DU` | Icons inside controls. |
 | `icon_medium` | `4.5 DU` | Toolbar icons. |
+| `icon_field` | `5 DU` | Picker arrows of selection fields. |
 | `icon_large` | `6 DU` | Standalone icons, slider thumb. |
+| `icon_xlarge` | `8 DU` | Banner, toast and tile icons. |
+| `icon_display` | `12 DU` | Empty state icons. |
 | `row_dense` | `6 DU` | Log and console rows. |
 | `row_compact` | `8 DU` | Compact rows, slider height. |
 | `row_standard` | `10 DU` | Buttons, fields, standard rows. |

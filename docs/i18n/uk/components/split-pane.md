@@ -34,7 +34,7 @@
 | `divider_width` | DU | `border` | Ширина лінії розділювача. |
 | `divider_active_width` | DU | `border_thick` | Ширина лінії активного розділювача або при наведенні. |
 | `grip_width` | DU | `pad_tight` | Ширина ручки. |
-| `grip_length` | DU | `icon_large` | Довжина ручки. |
+| `grip_length` | DU | `icon_large` (`6 DU`) | Довжина ручки. |
 | `grip` | слот | немає | Слот власної ручки. |
 | `label` | string | `split-pane.handle` | Доступний підпис ручки розділювача. |
 
@@ -47,7 +47,7 @@
 | `divider_width` | DU | `--op-split-pane-divider-width` | `border` |
 | `divider_active_width` | DU | `--op-split-pane-divider-active-width` | `border_thick` |
 | `grip_width` | DU | `--op-split-pane-grip-width` | `pad_tight` |
-| `grip_length` | DU | `--op-split-pane-grip-length` | `icon_large` |
+| `grip_length` | DU | `--op-split-pane-grip-length` | `icon_large` (`6 DU`) |
 
 | Змінна кольору | Типове значення |
 | :--- | :--- |

@@ -21,9 +21,13 @@ object OperatorDu {
     val PadCard: Dp = 12.0.dp
     val MarginScreen: Dp = 16.0.dp
     val SectionGap: Dp = 24.0.dp
+    val IconXsmall: Dp = 14.0.dp
     val IconSmall: Dp = 16.0.dp
     val IconMedium: Dp = 18.0.dp
+    val IconField: Dp = 20.0.dp
     val IconLarge: Dp = 24.0.dp
+    val IconXlarge: Dp = 32.0.dp
+    val IconDisplay: Dp = 48.0.dp
     val RowDense: Dp = 24.0.dp
     val RowCompact: Dp = 32.0.dp
     val RowStandard: Dp = 40.0.dp

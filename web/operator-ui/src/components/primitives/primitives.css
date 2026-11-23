@@ -5,8 +5,8 @@
   display: block;
   flex: none;
   fill: currentColor;
-  width: var(--op-icon-size, calc(var(--op-du) * 6));
-  height: var(--op-icon-size, calc(var(--op-du) * 6));
+  width: var(--op-icon-size, var(--op-dim-icon-large));
+  height: var(--op-icon-size, var(--op-dim-icon-large));
 }
 .op-spinner {
   display: block;

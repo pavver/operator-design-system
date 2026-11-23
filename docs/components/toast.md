@@ -23,7 +23,7 @@ Status: **reviewed** on web.
 | Padding | `1 DU` vertical, `3 DU` start, `1 DU` end. |
 | Start bar | `0.5 DU` in the tone color. |
 | Outline | `0.25 DU` `border`, plus a soft drop shadow. |
-| Icon | `8 DU`, tone color. |
+| Icon | `icon_xlarge` (`8 DU`), tone color. |
 | Tall layout | From 4 wrapped text lines: a header with the icon, the tone name (uppercase `caption`, tone color), the action, and the close button; the text spans the full width below, `3 DU` bottom padding. |
 | Buttons | Action and close are `8 DU` tall; the action is an uppercase `caption` label in `accent`. |
 | Stack | Up to 3 toasts, `2 DU` apart; the oldest is dropped first. |
@@ -125,8 +125,8 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | `button_size` | DU | `--op-toast-button-size` | `row_compact` |
 | `font_size` | TU | `--op-toast-font-size` | `body_size` |
 | `line_height` | TU | `--op-toast-line-height` | `body_line` |
-| `icon_size` | DU | `--op-toast-icon-size` | `8 DU` |
-| `close_icon_size` | DU | `--op-toast-close-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-toast-icon-size` | `icon_xlarge` (`8 DU`) |
+| `close_icon_size` | DU | `--op-toast-close-icon-size` | `icon_small` (`4 DU`) |
 | `letter_spacing` | TU | `--op-toast-letter-spacing` | `0.04em (relative to caption size)` |
 | `padding_end` | DU | `--op-toast-padding-end` | `pad_tight` |
 | `shadow_y` | DU | `--op-toast-shadow-y` | `2 DU` |

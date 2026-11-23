@@ -12,7 +12,7 @@ Status: **draft** on web.
 | Row | `row_compact` (`8 DU`), one line. |
 | Indent | `4 DU` per level plus `1 DU`. |
 | Arrow | `chevron_right` in a `4 DU` slot, turned `90°` when expanded; leaves keep the empty slot so labels align. |
-| Icon | Optional, `4 DU`, `text_secondary`. |
+| Icon | Optional, `icon_small` (`4 DU`), `text_secondary`. |
 | Detail | Optional `caption` text at the end, `text_secondary`. |
 | Selected | `pressed` background and a `0.5 DU` `accent` bar on the start edge. |
 
@@ -43,7 +43,7 @@ Status: **draft** on web.
 | `padding_start` | optional number (DU) | `1 DU` | Overrides `--op-tree-padding-start`. |
 | `padding_end` | optional number (DU) | `pad_tight` | Overrides `--op-tree-padding-end`. |
 | `gap` | optional number (DU) | `gap_micro` | Overrides `--op-tree-gap`. |
-| `icon_size` | optional number (DU) | `icon_small` | Overrides `--op-tree-icon-size`. |
+| `icon_size` | optional number (DU) | `icon_small` (`4 DU`) | Overrides `--op-tree-icon-size`. |
 | `font_size` | optional number (TU) | `inherit` | Overrides `--op-tree-font-size`. |
 | `line_height` | optional number (TU) | `inherit` | Overrides `--op-tree-line-height`. |
 | `detail_font_size` | optional number (TU) | `type_caption_size` | Overrides `--op-tree-detail-font-size`. |
@@ -80,7 +80,7 @@ Existing `height` and `max_height` props retain their DU meaning for the scrolle
 | `padding_start` | DU | `--op-tree-padding-start` | `1 DU` |
 | `padding_end` | DU | `--op-tree-padding-end` | `pad_tight` |
 | `gap` | DU | `--op-tree-gap` | `gap_micro` |
-| `icon_size` | DU | `--op-tree-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-tree-icon-size` | `icon_small` (`4 DU`) |
 | `font_size` | TU | `--op-tree-font-size` | `inherit` |
 | `line_height` | TU | `--op-tree-line-height` | `inherit` |
 | `detail_font_size` | TU | `--op-tree-detail-font-size` | `type_caption_size` |

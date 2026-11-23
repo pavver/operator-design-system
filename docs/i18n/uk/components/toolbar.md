@@ -59,7 +59,7 @@
 | `title_padding_x` | DU | `pad_tight` | Горизонтальний внутрішній відступ заголовка. |
 | `title_font_size` | TU | `inherit` | Розмір шрифту заголовка. |
 | `separator_width` | DU | `border` | Товщина лінії розділювача. |
-| `separator_height` | DU | `icon_large` | Висота лінії розділювача. |
+| `separator_height` | DU | `icon_large` (`6 DU`) | Висота лінії розділювача. |
 | `separator_margin_x` | DU | `pad_tight` | Горизонтальні зовнішні відступи розділювача. |
 | `button_size` | DU | `row_compact` (щільний варіант: `row_dense`) | Розмір кнопки команди. |
 | `more_label` | string | `toolbar.more` | Доступна назва кнопки додаткових команд. |

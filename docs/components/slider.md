@@ -35,7 +35,7 @@ Status: **reviewed** on web.
 | Thumb | Circle, `icon_large` (`6 DU`) diameter. Round shape is an allowed exception. |
 | Tick | Circle, `pad_tight` (`1 DU`) diameter. |
 | Idle dot in thumb | Circle, `pad_small` (`1.5 DU`) diameter. |
-| Thumb status icon | `3.5 DU`; spinner `3 DU` with `spinner_stroke`. |
+| Thumb status icon | `icon_xsmall` (`3.5 DU`); spinner `3 DU` with `spinner_stroke`. |
 | Tooltip | `10 DU` above the thumb center, `caption` style, bold, `0.25 DU` outline. |
 
 ## Colors

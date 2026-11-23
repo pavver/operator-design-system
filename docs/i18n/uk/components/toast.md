@@ -23,7 +23,7 @@
 | Внутрішній відступ | `1 DU` по вертикалі, `3 DU` на початку, `1 DU` у кінці. |
 | Початкова смуга | `0.5 DU` у кольорі тону. |
 | Контур | `0.25 DU` у кольорі `border` плюс м'яка тінь. |
-| Піктограма | `8 DU`, колір тону. |
+| Піктограма | `icon_xlarge` (`8 DU`), колір тону. |
 | Високе компонування | Від 4 рядків перенесеного тексту: заголовок із піктограмою, назвою тону (великими літерами у стилі `caption`, колір тону), дією та кнопкою закриття; текст займає всю ширину нижче, нижній внутрішній відступ `3 DU`. |
 | Кнопки | Дія та закриття мають висоту `8 DU`; дія — підпис великими літерами у стилі `caption` в кольорі `accent`. |
 | Стос | До 3 повідомлень із проміжком `2 DU`; найстаріше вилучається першим. |
@@ -125,8 +125,8 @@
 | `button_size` | DU | `--op-toast-button-size` | `row_compact` |
 | `font_size` | TU | `--op-toast-font-size` | `body_size` |
 | `line_height` | TU | `--op-toast-line-height` | `body_line` |
-| `icon_size` | DU | `--op-toast-icon-size` | `8 DU` |
-| `close_icon_size` | DU | `--op-toast-close-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-toast-icon-size` | `icon_xlarge` (`8 DU`) |
+| `close_icon_size` | DU | `--op-toast-close-icon-size` | `icon_small` (`4 DU`) |
 | `letter_spacing` | TU | `--op-toast-letter-spacing` | `0.04em (relative to caption size)` |
 | `padding_end` | DU | `--op-toast-padding-end` | `pad_tight` |
 | `shadow_y` | DU | `--op-toast-shadow-y` | `2 DU` |

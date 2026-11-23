@@ -18,7 +18,7 @@ The capsule track and the round thumb are an allowed exception to the rectangula
 | Track | `13 DU` × `row_compact` (`8 DU`), fully rounded. |
 | Thumb | `row_dense` (`6 DU`) circle, `pad_tight` (`1 DU`) from the track edge. |
 | Thumb travel | `5 DU` between off and on; centered (`2.5 DU`) while pending. |
-| Thumb icon | `3 DU`; spinner `3.5 DU`. |
+| Thumb icon | `icon_xsmall` (`3.5 DU`); spinner `3.5 DU`. |
 | Outline | State border with the spinner stroke (`0.375 DU`), following the capsule. |
 
 ## Colors

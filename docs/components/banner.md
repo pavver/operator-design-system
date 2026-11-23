@@ -18,7 +18,7 @@ Status: **reviewed** on web.
 | Padding | `3 DU`. |
 | Background | Tone color at 15% over `surface`. |
 | Start bar | `0.5 DU` in the tone color. |
-| Icon | `8 DU`, tone color, `2 DU` from the text; the first text line is centered on it. |
+| Icon | `icon_xlarge` (`8 DU`), tone color, `2 DU` from the text; the first text line is centered on it. |
 | Title | Body style, bold. |
 | Actions | Under the text, `8 DU` tall [ActionButtons](action-button.md), `2 DU` apart. |
 | Action colors | Transparent background, tone-colored label and icon, outline in the tone at 50%; hover adds a 12% tone tint and a full tone outline, press 25%. Danger buttons keep their own colors. |
@@ -73,12 +73,12 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | `gap` | DU | `--op-banner-gap` | `gutter` |
 | `padding` | DU | `--op-banner-padding` | `pad_card` |
 | `body_gap` | DU | `--op-banner-body-gap` | `pad_tight` |
-| `icon_size` | DU | `--op-banner-icon-size` | `8 DU` |
+| `icon_size` | DU | `--op-banner-icon-size` | `icon_xlarge` (`8 DU`) |
 | `line_height` | TU | `--op-banner-line-height` | `body_line` |
 | `button_size` | DU | `--op-banner-button-size` | `row_compact` |
 | `close_outset` | DU | `--op-banner-close-outset` | `pad_small` |
 | `font_size` | TU | `--op-banner-font-size` | `body_size` |
-| `close_icon_size` | DU | `--op-banner-close-icon-size` | `icon_small` |
+| `close_icon_size` | DU | `--op-banner-close-icon-size` | `icon_small` (`4 DU`) |
 | `width` | DU | `--op-banner-width` | `100%` |
 
 | Color variable | Default |

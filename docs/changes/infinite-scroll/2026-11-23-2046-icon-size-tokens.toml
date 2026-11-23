@@ -1,0 +1,11 @@
+date = "2026-11-23T20:46:29Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "Icon sizes now use the icon tokens (`icon_xsmall` 3.5, `icon_small` 4, `icon_medium` 4.5, `icon_field` 5, `icon_large` 6, `icon_xlarge` 8, `icon_display` 12 DU) instead of raw numbers, and the specification names each token with its value. Its icons were sized in pixels as if they were DU, so they rendered four times too large; they now use the intended token."
+check = "Trigger a load error and check its icon."
+
+[uk]
+summary = "Розміри піктограм тепер задаються токенами (`icon_xsmall` 3.5, `icon_small` 4, `icon_medium` 4.5, `icon_field` 5, `icon_large` 6, `icon_xlarge` 8, `icon_display` 12 DU) замість сирих чисел, а специфікація називає кожен токен разом зі значенням. Його піктограми були задані в пікселях так, ніби це DU, тож виходили вчетверо завеликими; тепер вони мають задуманий токен."
+check = "Викличте помилку завантаження й перевірте її піктограму."

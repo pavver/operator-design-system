@@ -37,7 +37,7 @@ When the list is narrower than `60 DU`, the label moves above the value in `capt
 | `gap` | optional number (DU) | `gutter` | Overrides `--op-property-list-gap`. |
 | `value_gap` | optional number (DU) | `pad_tight` | Overrides `--op-property-list-value-gap`. |
 | `copy_size` | optional number (DU) | `row_dense` | Overrides `--op-property-list-copy-size`. |
-| `icon_size` | optional number (DU) | `3.5 DU` | Overrides `--op-property-list-icon-size`. |
+| `icon_size` | optional number (DU) | `icon_xsmall` (`3.5 DU`) | Overrides `--op-property-list-icon-size`. |
 | `stack_width` | optional number (DU) | `60 DU` | Overrides `--op-property-list-stack-width`. |
 | `font_size` | optional number (TU) | `inherit` | Overrides `--op-property-list-font-size`. |
 | `line_height` | optional number (TU) | `inherit` | Overrides `--op-property-list-line-height`. |
@@ -77,7 +77,7 @@ A private ResizeObserver compares the measured list width with the DU breakpoint
 | `gap` | DU | `--op-property-list-gap` | `gutter` |
 | `value_gap` | DU | `--op-property-list-value-gap` | `pad_tight` |
 | `copy_size` | DU | `--op-property-list-copy-size` | `row_dense` |
-| `icon_size` | DU | `--op-property-list-icon-size` | `3.5 DU` |
+| `icon_size` | DU | `--op-property-list-icon-size` | `icon_xsmall` (`3.5 DU`) |
 | `stack_width` | DU | `--op-property-list-stack-width` | `60 DU` |
 | `font_size` | TU | `--op-property-list-font-size` | `inherit` |
 | `line_height` | TU | `--op-property-list-line-height` | `inherit` |

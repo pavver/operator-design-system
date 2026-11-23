@@ -4,6 +4,7 @@ use crate::components::chat_message::types::DeliveryStatus as StatusEnum;
 use crate::components::primitives::{Icon, ProgressIndicator};
 use crate::core::{Metric, root_class, root_style};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 /// Delivery and reception status badge.
@@ -43,19 +44,19 @@ pub fn DeliveryStatus(
                 }.into_any(),
                 StatusEnum::Sent => view! {
                     <span class="op-delivery-single-check">
-                        <Icon icon=icons::CHECK size=3.5 />
+                        <Icon icon=icons::CHECK size=dim::ICON_XSMALL />
                     </span>
                 }.into_any(),
                 StatusEnum::Delivered => view! {
                     <span class="op-delivery-double-check">
-                        <Icon icon=icons::CHECK size=3.5 />
-                        <Icon icon=icons::CHECK size=3.5 class="op-delivery-check-overlap" />
+                        <Icon icon=icons::CHECK size=dim::ICON_XSMALL />
+                        <Icon icon=icons::CHECK size=dim::ICON_XSMALL class="op-delivery-check-overlap" />
                     </span>
                 }.into_any(),
                 StatusEnum::Read => view! {
                     <span class="op-delivery-double-check op-delivery-read">
-                        <Icon icon=icons::CHECK size=3.5 />
-                        <Icon icon=icons::CHECK size=3.5 class="op-delivery-check-overlap" />
+                        <Icon icon=icons::CHECK size=dim::ICON_XSMALL />
+                        <Icon icon=icons::CHECK size=dim::ICON_XSMALL class="op-delivery-check-overlap" />
                     </span>
                 }.into_any(),
                 StatusEnum::Failed => view! {

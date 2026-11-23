@@ -20,10 +20,10 @@ Status: **draft** on web.
 | Padding | `1 DU` above and below the items. |
 | Outline | The shared [Popover](popover.md) frame, `0.25 DU` `accent`, plus a soft drop shadow. |
 | Item | At least `8 DU` tall, `2 DU` start and `3 DU` end padding. |
-| Icon slot | `4 DU`, kept empty for items without an icon so labels align. |
+| Icon slot | `icon_small` (`4 DU`), kept empty for items without an icon so labels align. |
 | Shortcut | `caption` style, `text_secondary`, at the end. |
 | Separator | `0.25 DU` `divider` with `1 DU` above and below. |
-| Header and footer | Item insets, `1 DU` vertical padding, and a `0.25 DU` `divider` towards the items. |
+| Header and footer | Item insets and a `0.25 DU` `divider` towards the items; the header has `gutter` (`2 DU`) vertical padding and bold text, the footer `pad_tight` (`1 DU`). |
 | Submenu arrow | `chevron_right`, `4 DU`, `text_secondary`, at the end of an item with a submenu. |
 
 ## Items
@@ -89,6 +89,7 @@ The customization properties are optional and accept reactive values where indic
 | `icon_size` | reactive DU metric | design-system value | Sets `--op-menu-icon-size`. |
 | `shortcut_font_size` | reactive TU metric | design-system value | Sets `--op-menu-shortcut-font-size`. |
 | `padding_y` | reactive DU metric | design-system value | Sets `--op-menu-padding-y`. |
+| `header_padding_y` | reactive DU metric | design-system value | Sets `--op-menu-header-padding-y`. |
 | `font_size` | reactive TU metric | design-system value | Sets `--op-menu-font-size`. |
 | `line_height` | reactive TU metric | design-system value | Sets `--op-menu-line-height`. |
 | `max_height` | reactive DU metric | design-system value | Sets `--op-menu-max-height`. |
@@ -121,9 +122,10 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | `item_height` | DU | `--op-menu-item-height` | `row_compact` |
 | `padding_end` | DU | `--op-menu-padding-end` | `pad_card` |
 | `padding_start` | DU | `--op-menu-padding-start` | `gutter` |
-| `icon_size` | DU | `--op-menu-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-menu-icon-size` | `icon_small` (`4 DU`) |
 | `shortcut_font_size` | TU | `--op-menu-shortcut-font-size` | `caption_size` |
 | `padding_y` | DU | `--op-menu-padding-y` | `pad_tight` |
+| `header_padding_y` | DU | `--op-menu-header-padding-y` | `gutter` (`2 DU`) |
 | `font_size` | TU | `--op-menu-font-size` | `body_size` |
 | `line_height` | TU | `--op-menu-line-height` | `body_line` |
 | `max_height` | DU | `--op-menu-max-height` | `calc(100vh - var(--op-menu-viewport-margin, margin_screen) * 2)` |

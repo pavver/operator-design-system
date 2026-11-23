@@ -41,7 +41,7 @@
   flex: none;
   padding: var(--op-menu-padding-y, var(--op-dim-pad-tight)) var(--op-menu-padding-end, var(--op-dim-pad-card)) var(--op-menu-padding-y, var(--op-dim-pad-tight)) var(--op-menu-padding-start, var(--op-dim-gutter));
 }
-.op-menu-header { border-bottom: var(--op-dim-border) solid var(--op-menu-divider, var(--op-divider)); }
+.op-menu-header { padding-top: var(--op-menu-header-padding-y, var(--op-dim-gutter)); padding-bottom: var(--op-menu-header-padding-y, var(--op-dim-gutter)); font-weight: 700; border-bottom: var(--op-dim-border) solid var(--op-menu-divider, var(--op-divider)); }
 .op-menu-footer {
   border-top: var(--op-dim-border) solid var(--op-menu-divider, var(--op-divider));
   color: var(--op-menu-secondary, var(--op-text-secondary));

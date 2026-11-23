@@ -9,6 +9,7 @@ use crate::components::popover::{Placement, Popover, PopoverAnchor};
 use crate::components::primitives::Icon;
 use crate::core::{ControlState, Metric, Slot, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 use std::sync::Arc;
 
@@ -139,7 +140,7 @@ pub fn ColorField(
                 on:click=move |_| open.update(|o| *o = !*o)
             >
                 <span class="op-color-preview" style:background-color=move || value.get()></span>
-                {move || view! { <Icon icon=icon.get() size=5.0 attr:style="width:var(--op-field-icon-size, calc(var(--op-du) * 5));height:var(--op-field-icon-size, calc(var(--op-du) * 5));"/> }}
+                {move || view! { <Icon icon=icon.get() size=dim::ICON_FIELD attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-field));height:var(--op-field-icon-size, var(--op-dim-icon-field));"/> }}
             </button>
         }
         .into_any()

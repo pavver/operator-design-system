@@ -16,7 +16,7 @@ Status: **reviewed** on web.
 | :--- | :--- |
 | Layout | Centered column. |
 | Padding | `10 DU` vertical and `4 DU` horizontal; compact: `6 DU` × `3 DU`. |
-| Icon | `12 DU`, compact `8 DU`, `text_disabled`, `2 DU` above the title. |
+| Icon | `icon_display` (`12 DU`), compact `icon_xlarge` (`8 DU`), `text_disabled`, `2 DU` above the title. |
 | Title | `row_title` style, `text_primary`. |
 | Description | Body style, `text_secondary`, at most `90 DU` wide. |
 | Actions | `3 DU` below the text, centered, `2 DU` apart. |
@@ -44,7 +44,7 @@ Status: **reviewed** on web.
 
 | Metric prop | Unit | Variable | Default |
 | :--- | :--- | :--- | :--- |
-| `icon_size` | DU | `--op-empty-state-icon-size` | `12 DU` (compact `8 DU`) |
+| `icon_size` | DU | `--op-empty-state-icon-size` | `icon_display` (`12 DU`); compact `icon_xlarge` (`8 DU`) |
 | `padding_x` | DU | `--op-empty-state-padding-x` | `margin_screen` (`4 DU`; compact `pad_card`, `3 DU`) |
 | `padding_y` | DU | `--op-empty-state-padding-y` | `10 DU` (compact `section_gap`, `6 DU`) |
 | `gap` | DU | `--op-empty-state-gap` | `pad_tight` (`1 DU`) |

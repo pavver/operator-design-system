@@ -14,7 +14,7 @@ Status: **draft** on web.
 | Property | Value |
 | :--- | :--- |
 | Width | `16 DU`; the rail scrolls vertically without a visible scrollbar when the items do not fit. |
-| Item | `row_two_line` (`13 DU`) tall: a `7 DU` icon tile with a `4.5 DU` icon over a `caption` label, `gap_micro` apart. |
+| Item | `row_two_line` (`13 DU`) tall: a `7 DU` icon tile with an `icon_medium` (`4.5 DU`) icon over a `caption` label, `gap_micro` apart. |
 | Label | One line, ellipsis when longer. |
 | Selected | `pressed` background, `text_primary` label and a `0.5 DU` bar on the start edge in the item colour or `accent`. |
 | Edge | `0.25 DU` `divider` on the end edge. |
@@ -40,7 +40,7 @@ Status: **draft** on web.
 | `item_padding_x` | DU | `gap_micro` | Destination item horizontal padding. |
 | `gap` | DU | `gap_micro` | Gap between icon tile and label. |
 | `icon_tile_size` | DU | `7 DU` | Size of the icon square tile. |
-| `icon_size` | DU | `icon_medium` | Icon glyph size. |
+| `icon_size` | DU | `icon_medium` (`4.5 DU`) | Icon glyph size. |
 | `indicator_thickness` | DU | `border_emphasis` | Selection indicator thickness. |
 | `font_size` | TU | `type_caption_size` | Destination label font size. |
 | `header` | slot | none | Slot above the destinations list. |

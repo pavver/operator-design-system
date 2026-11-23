@@ -20,7 +20,7 @@ Status: **reviewed** on web.
 | Height | `6 DU`. |
 | Padding | `2 DU` horizontal. |
 | Type | `body_small` style. |
-| Icon and check | `3.5 DU`, `1 DU` from the text. |
+| Icon and check | `icon_xsmall` (`3.5 DU`), `1 DU` from the text. |
 | Remove button | `6 DU` wide at the end. |
 | Outline | State border. |
 | Set | Chips wrap with `1 DU` gaps. |

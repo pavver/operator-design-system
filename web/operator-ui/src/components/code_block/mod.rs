@@ -109,7 +109,7 @@ pub fn CodeBlock(
                                         <IconButton
                                             icon=copy_icon.get()
                                             label=copy_label
-                                            style="--op-button-size:var(--op-code-block-copy-size, var(--op-dim-row-dense));--op-button-icon-size:var(--op-code-block-icon-size, calc(var(--op-du) * 3.5))"
+                                            style="--op-button-size:var(--op-code-block-copy-size, var(--op-dim-row-dense));--op-button-icon-size:var(--op-code-block-icon-size, var(--op-dim-icon-xsmall))"
                                             on_async_click=copy_action(code)
                                         />
                                     }

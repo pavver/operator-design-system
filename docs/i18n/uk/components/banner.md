@@ -18,7 +18,7 @@
 | Внутрішній відступ | `3 DU`. |
 | Тло | Колір тону з непрозорістю 15% поверх `surface`. |
 | Початкова смуга | `0.5 DU` у кольорі тону. |
-| Піктограма | `8 DU`, колір тону, `2 DU` від тексту; перший рядок тексту центровано по ній. |
+| Піктограма | `icon_xlarge` (`8 DU`), колір тону, `2 DU` від тексту; перший рядок тексту центровано по ній. |
 | Заголовок | Стиль body, жирний. |
 | Дії | Під текстом, [ActionButtons](action-button.md) заввишки `8 DU`, на відстані `2 DU` одна від одної. |
 | Кольори дій | Прозоре тло, мітка та піктограма в кольорі тону, контур у тоні з 50% непрозорістю; наведення додає відтінок тону 12% і повний контур у тоні, натискання — 25%. Кнопки Danger зберігають власні кольори. |
@@ -73,12 +73,12 @@
 | `gap` | DU | `--op-banner-gap` | `gutter` |
 | `padding` | DU | `--op-banner-padding` | `pad_card` |
 | `body_gap` | DU | `--op-banner-body-gap` | `pad_tight` |
-| `icon_size` | DU | `--op-banner-icon-size` | `8 DU` |
+| `icon_size` | DU | `--op-banner-icon-size` | `icon_xlarge` (`8 DU`) |
 | `line_height` | TU | `--op-banner-line-height` | `body_line` |
 | `button_size` | DU | `--op-banner-button-size` | `row_compact` |
 | `close_outset` | DU | `--op-banner-close-outset` | `pad_small` |
 | `font_size` | TU | `--op-banner-font-size` | `body_size` |
-| `close_icon_size` | DU | `--op-banner-close-icon-size` | `icon_small` |
+| `close_icon_size` | DU | `--op-banner-close-icon-size` | `icon_small` (`4 DU`) |
 | `width` | DU | `--op-banner-width` | `100%` |
 
 | Змінна кольору | Типове значення |

@@ -67,7 +67,7 @@ Status: **draft** on web.
 | `padding_x` | optional number (DU) | `pad_card` | Overrides `--op-data-table-padding-x`. |
 | `sort_gap` | optional number (DU) | `pad_tight` | Overrides `--op-data-table-sort-gap`. |
 | `sort_padding` | optional number (DU) | `pad_tight` | Overrides `--op-data-table-sort-padding`. |
-| `icon_size` | optional number (DU) | `3.5 DU` | Overrides `--op-data-table-icon-size`. |
+| `icon_size` | optional number (DU) | `icon_xsmall` (`3.5 DU`) | Overrides `--op-data-table-icon-size`. |
 | `loading_thickness` | optional number (DU) | `0.5 DU` | Overrides `--op-data-table-loading-thickness`. |
 | `empty_padding` | optional number (DU) | `section_gap` | Overrides `--op-data-table-empty-padding`. |
 | `font_size` | optional number (TU) | `type_body_small_size` | Overrides `--op-data-table-font-size`. |
@@ -114,7 +114,7 @@ Sort button names combine the column title with the resolved action string; `ari
 | `padding_x` | DU | `--op-data-table-padding-x` | `pad_card` |
 | `sort_gap` | DU | `--op-data-table-sort-gap` | `pad_tight` |
 | `sort_padding` | DU | `--op-data-table-sort-padding` | `pad_tight` |
-| `icon_size` | DU | `--op-data-table-icon-size` | `3.5 DU` |
+| `icon_size` | DU | `--op-data-table-icon-size` | `icon_xsmall` (`3.5 DU`) |
 | `loading_thickness` | DU | `--op-data-table-loading-thickness` | `0.5 DU` |
 | `empty_padding` | DU | `--op-data-table-empty-padding` | `section_gap` |
 | `font_size` | TU | `--op-data-table-font-size` | `type_body_small_size` |

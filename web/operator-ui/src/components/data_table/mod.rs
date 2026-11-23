@@ -279,7 +279,7 @@ pub fn DataTable(
                                 <span class="op-table-sort-icon">
                                     {move || {
                                         let icon = if dir() == Some(SortDir::Desc) { descending_icon.get() } else { ascending_icon.get() };
-                                        view! { <Icon icon=icon style="--op-icon-size:var(--op-data-table-icon-size, calc(var(--op-du) * 3.5))"/> }
+                                        view! { <Icon icon=icon style="--op-icon-size:var(--op-data-table-icon-size, var(--op-dim-icon-xsmall))"/> }
                                     }}
                                 </span>
                             </button>

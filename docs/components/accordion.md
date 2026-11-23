@@ -39,7 +39,7 @@ Status: **reviewed** on web.
 | `padding_end` | optional number (DU) | `pad_card` | Overrides `--op-accordion-padding-end`. |
 | `padding_y` | optional number (DU) | `pad_tight` | Overrides `--op-accordion-padding-y`. |
 | `gap` | optional number (DU) | `gutter` | Overrides `--op-accordion-gap`. |
-| `icon_size` | optional number (DU) | `icon_small` | Overrides `--op-accordion-icon-size`. |
+| `icon_size` | optional number (DU) | `icon_small` (`4 DU`) | Overrides `--op-accordion-icon-size`. |
 | `content_padding_top` | optional number (DU) | `pad_tight` | Overrides `--op-accordion-content-padding-top`. |
 | `content_padding_end` | optional number (DU) | `pad_card` | Overrides `--op-accordion-content-padding-end`. |
 | `content_padding_bottom` | optional number (DU) | `pad_card` | Overrides `--op-accordion-content-padding-bottom`. |
@@ -77,7 +77,7 @@ The action description follows the open state without replacing the title as the
 | `padding_end` | DU | `--op-accordion-padding-end` | `pad_card` |
 | `padding_y` | DU | `--op-accordion-padding-y` | `pad_tight` |
 | `gap` | DU | `--op-accordion-gap` | `gutter` |
-| `icon_size` | DU | `--op-accordion-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-accordion-icon-size` | `icon_small` (`4 DU`) |
 | `content_padding_top` | DU | `--op-accordion-content-padding-top` | `pad_tight` |
 | `content_padding_end` | DU | `--op-accordion-content-padding-end` | `pad_card` |
 | `content_padding_bottom` | DU | `--op-accordion-content-padding-bottom` | `pad_card` |

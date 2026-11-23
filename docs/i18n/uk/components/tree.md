@@ -12,7 +12,7 @@
 | Рядок | `row_compact` (`8 DU`), один рядок. |
 | Відступ | `4 DU` на рівень плюс `1 DU`. |
 | Стрілка | `chevron_right` у слоті `4 DU`, повернута на `90°` в розгорнутому стані; листки зберігають порожній слот, щоб підписи вирівнювалися. |
-| Піктограма | Необов'язкова, `4 DU`, `text_secondary`. |
+| Піктограма | Необов'язкова, `icon_small` (`4 DU`), `text_secondary`. |
 | Подробиці | Необов'язковий текст `caption` у кінці, `text_secondary`. |
 | Вибрана | Фон `pressed` і смуга `0.5 DU` у кольорі `accent` на початковому краї. |
 
@@ -43,7 +43,7 @@
 | `padding_start` | необов'язкове число (DU) | `1 DU` | Перевизначає `--op-tree-padding-start`. |
 | `padding_end` | необов'язкове число (DU) | `pad_tight` | Перевизначає `--op-tree-padding-end`. |
 | `gap` | необов'язкове число (DU) | `gap_micro` | Перевизначає `--op-tree-gap`. |
-| `icon_size` | необов'язкове число (DU) | `icon_small` | Перевизначає `--op-tree-icon-size`. |
+| `icon_size` | необов'язкове число (DU) | `icon_small` (`4 DU`) | Перевизначає `--op-tree-icon-size`. |
 | `font_size` | необов'язкове число (TU) | `inherit` | Перевизначає `--op-tree-font-size`. |
 | `line_height` | необов'язкове число (TU) | `inherit` | Перевизначає `--op-tree-line-height`. |
 | `detail_font_size` | необов'язкове число (TU) | `type_caption_size` | Перевизначає `--op-tree-detail-font-size`. |
@@ -80,7 +80,7 @@
 | `padding_start` | DU | `--op-tree-padding-start` | `1 DU` |
 | `padding_end` | DU | `--op-tree-padding-end` | `pad_tight` |
 | `gap` | DU | `--op-tree-gap` | `gap_micro` |
-| `icon_size` | DU | `--op-tree-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-tree-icon-size` | `icon_small` (`4 DU`) |
 | `font_size` | TU | `--op-tree-font-size` | `inherit` |
 | `line_height` | TU | `--op-tree-line-height` | `inherit` |
 | `detail_font_size` | TU | `--op-tree-detail-font-size` | `type_caption_size` |

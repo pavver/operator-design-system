@@ -16,7 +16,7 @@
 | :--- | :--- |
 | Компонування | Стовпець із центруванням. |
 | Внутрішній відступ | `10 DU` по вертикалі та `4 DU` по горизонталі; компактний варіант: `6 DU` × `3 DU`. |
-| Піктограма | `12 DU`, у компактному варіанті `8 DU`, колір `text_disabled`, на `2 DU` вище заголовка. |
+| Піктограма | `icon_display` (`12 DU`), у компактному варіанті `icon_xlarge` (`8 DU`), колір `text_disabled`, на `2 DU` вище заголовка. |
 | Назва | Стиль `row_title`, колір `text_primary`. |
 | Опис | Основний стиль тексту, `text_secondary`, ширина щонайбільше `90 DU`. |
 | Дії | На `3 DU` нижче тексту, по центру, із проміжком `2 DU`. |
@@ -44,7 +44,7 @@
 
 | Метричний проп | Одиниця | Змінна | Типове значення |
 | :--- | :--- | :--- | :--- |
-| `icon_size` | DU | `--op-empty-state-icon-size` | `12 DU` (компактний варіант `8 DU`) |
+| `icon_size` | DU | `--op-empty-state-icon-size` | `icon_display` (`12 DU`); у компактному варіанті `icon_xlarge` (`8 DU`) |
 | `padding_x` | DU | `--op-empty-state-padding-x` | `margin_screen` (`4 DU`; компактний варіант `pad_card`, `3 DU`) |
 | `padding_y` | DU | `--op-empty-state-padding-y` | `10 DU` (компактний варіант `section_gap`, `6 DU`) |
 | `gap` | DU | `--op-empty-state-gap` | `pad_tight` (`1 DU`) |

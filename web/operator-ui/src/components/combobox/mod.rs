@@ -22,6 +22,7 @@ use crate::core::{
 use input::ComboboxInput;
 use leptos::prelude::*;
 pub(crate) use list::ComboList;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 
 pub(crate) const CSS: &str = include_str!("combobox.css");
@@ -234,7 +235,7 @@ pub fn Combobox(
         view! {
             {append.run()}
             <span class="op-field-reveal op-combobox-arrow" aria-hidden="true">
-                {move || view! { <Icon icon=icon.get() size=5.0 attr:style="width:var(--op-field-icon-size, calc(var(--op-du) * 5));height:var(--op-field-icon-size, calc(var(--op-du) * 5));"/> }}
+                {move || view! { <Icon icon=icon.get() size=dim::ICON_FIELD attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-field));height:var(--op-field-icon-size, var(--op-dim-icon-field));"/> }}
             </span>
         }
     });

@@ -73,8 +73,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--op-launcher-tile-icon-size, calc(var(--op-du) * 8));
-    height: var(--op-launcher-tile-icon-size, calc(var(--op-du) * 8));
+    width: var(--op-launcher-tile-icon-size, var(--op-dim-icon-xlarge));
+    height: var(--op-launcher-tile-icon-size, var(--op-dim-icon-xlarge));
     color: var(--op-launcher-tile-icon-color, var(--op-icon));
     flex-shrink: 0;
 }

@@ -4,6 +4,7 @@ use crate::components::action_button::ActionButton;
 use crate::components::primitives::Icon;
 use crate::core::{ActionResult, AsyncAction, Metric, Slot, root_class, root_style, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 
 pub(crate) const CSS: &str = include_str!("wizard.css");
@@ -179,11 +180,11 @@ pub fn Wizard(
                                 {move || {
                                     if is_done.get() {
                                         view! {
-                                            <Icon icon=icons::CHECK size=16.0 />
+                                            <Icon icon=icons::CHECK size=dim::ICON_SMALL />
                                         }.into_any()
                                     } else if let Some(icon) = step.icon {
                                         view! {
-                                            <Icon icon=icon size=16.0 />
+                                            <Icon icon=icon size=dim::ICON_SMALL />
                                         }.into_any()
                                     } else {
                                         view! {
@@ -215,7 +216,7 @@ pub fn Wizard(
                     } else {
                         view! {
                             <div class="op-wizard-error" role="alert">
-                                <Icon icon=icons::ERROR size=14.0 />
+                                <Icon icon=icons::ERROR size=dim::ICON_XSMALL />
                                 <span>{msg}</span>
                             </div>
                         }.into_any()

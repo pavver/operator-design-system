@@ -16,17 +16,21 @@ Custom icons follow the rules in [Custom Icons](#custom-icons).
 | Style | Sharp | Always. |
 | Fill | Outlined | Filled only where the specification asks for it, for example to mark an active state. |
 | Weight | 400 | The only weight in use. |
-| Optical size | 20 | For icons up to `5 DU`; use 24 for `icon_large` and above. |
+| Optical size | 20 | For icons up to `icon_field` (`5 DU`); use 24 for `icon_large` and above. |
 
 ## Sizes
 
 | Token | Size | Use |
 | :--- | :--- | :--- |
-| `icon_small` | `4 DU` | Icons inside controls: buttons, fields, segments. |
-| `icon_medium` | `4.5 DU` | Toolbar and header actions. |
+| `icon_xsmall` | `3.5 DU` | Status icons inside small elements: checkbox, chip, slider and switch thumbs, table and message status. |
+| `icon_small` | `4 DU` | Icons inside controls: buttons, fields, segments, menu items. |
+| `icon_medium` | `4.5 DU` | Toolbar, header and navigation actions. |
+| `icon_field` | `5 DU` | Picker arrows at the end of selection fields, directional pads. |
 | `icon_large` | `6 DU` | Standalone icons. |
+| `icon_xlarge` | `8 DU` | Leading icons of banners, toasts and tiles, media placeholders. |
+| `icon_display` | `12 DU` | Illustrative icons of empty states. |
 
-Status icons inside small round elements, such as the slider thumb, use `3.5 DU`.
+Components size icons only with these tokens; a specification names the token with its value, for example `icon_small` (`4 DU`).
 
 ## Color
 
@@ -56,4 +60,4 @@ CI fails when an icon file differs from its Material source or is missing from t
 * Use a `0 0 24 24` viewBox with filled paths only; no strokes, no transforms.
 * Keep a `2` unit margin inside the viewBox and a stroke-like line width of `2` units.
 * Use sharp corners and 45° or 90° angles where possible.
-* Match the visual weight of the neighbouring Material Sharp icons at `4 DU`.
+* Match the visual weight of the neighbouring Material Sharp icons at `icon_small` (`4 DU`).

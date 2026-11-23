@@ -44,7 +44,7 @@ An option is a plain string or a `ComboOption`:
 | `value` | Committed value. |
 | `label` | Text in the list and in the field; the value when empty. |
 | `detail` | Secondary text at the end of the row in `caption` style, for example a type or a unit. |
-| `icon` | `4 DU` icon before the label in `text_secondary`. |
+| `icon` | `icon_small` (`4 DU`) icon before the label in `text_secondary`. |
 | `section` | Header above a group; consecutive options with the same section share one header. |
 
 * Section headers are list rows of the same height in `caption` style, uppercase `text_secondary`, with a `divider` line above all but the first.
@@ -155,7 +155,7 @@ All text-like inputs provide the same six field slots.
 | `slot_size` | DU | `--op-field-slot-size` | `row_standard` | Combobox, ComboboxPopup |
 | `gap` | DU | `--op-field-gap` | `gap_micro` | Combobox, ComboboxPopup |
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | Combobox, ComboboxPopup |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small; 5 DU for picker arrows` | Combobox |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) for picker arrows | Combobox |
 | `row_height` | DU | `--op-field-row-height` | `row_control` | Combobox, ComboboxPopup |
 | `max_height` | DU | `--op-field-max-height` | `50 DU` | Combobox, ComboboxPopup |
 | `option_gap` | DU | `--op-field-option-gap` | `pad_tight` | Combobox, ComboboxPopup |
@@ -163,7 +163,7 @@ All text-like inputs provide the same six field slots.
 | `detail_font_size` | TU | `--op-field-detail-font-size` | `type_caption_size` | Combobox, ComboboxPopup |
 | `detail_line_height` | TU | `--op-field-detail-line-height` | `type_caption_line` | Combobox, ComboboxPopup |
 | `letter_spacing` | TU | `--op-field-letter-spacing` | `0.06em` | Combobox, ComboboxPopup |
-| `option_icon_size` | DU | `--op-field-option-icon-size` | `icon_small` | Combobox, ComboboxPopup |
+| `option_icon_size` | DU | `--op-field-option-icon-size` | `icon_small` (`4 DU`) | Combobox, ComboboxPopup |
 | `section_padding_y` | DU | `--op-field-section-padding-y` | `pad_tight` | Combobox, ComboboxPopup |
 | `width` | DU | `--op-field-popup-width` | `80 DU` | ComboboxPopup |
 | `screen_margin` | DU | `--op-field-screen-margin` | `margin_screen` | ComboboxPopup |

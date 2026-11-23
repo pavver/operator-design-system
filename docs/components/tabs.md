@@ -24,7 +24,7 @@ A `0.25 DU` `divider` under the tabs and a `0.5 DU` `accent` underline under the
 | Tab height | `10 DU`. |
 | Tab padding | `2.5 DU` horizontal; the width follows the label. |
 | Label | `caption` size, uppercase, medium weight; bold `accent` when active, `text_secondary` otherwise. |
-| Icon | `4 DU`, `1 DU` before the label. |
+| Icon | `icon_small` (`4 DU`), `1 DU` before the label. |
 | Counter | After the label, `4 DU` minimum width; `accent` background on the active tab. |
 | Fill | Optional: tabs share the full width equally. |
 

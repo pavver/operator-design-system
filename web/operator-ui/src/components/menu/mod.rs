@@ -107,6 +107,9 @@ pub fn Menu(
     #[prop(optional, into)] icon_size: MaybeProp<f32>,
     #[prop(optional, into)] shortcut_font_size: MaybeProp<f32>,
     #[prop(optional, into)] padding_y: MaybeProp<f32>,
+    /// Vertical padding of the header in DU.
+    #[prop(optional, into)]
+    header_padding_y: MaybeProp<f32>,
     #[prop(optional, into)] font_size: MaybeProp<f32>,
     #[prop(optional, into)] line_height: MaybeProp<f32>,
     #[prop(optional, into)] max_height: MaybeProp<f32>,
@@ -142,6 +145,7 @@ pub fn Menu(
             Metric::du("--op-menu-icon-size", icon_size),
             Metric::tu("--op-menu-shortcut-font-size", shortcut_font_size),
             Metric::du("--op-menu-padding-y", padding_y),
+            Metric::du("--op-menu-header-padding-y", header_padding_y),
             Metric::tu("--op-menu-font-size", font_size),
             Metric::tu("--op-menu-line-height", line_height),
         ],

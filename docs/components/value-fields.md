@@ -152,7 +152,7 @@ All text-like inputs provide the same six field slots.
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar |
 | `unit_padding_x` | DU | `--op-field-unit-padding-x` | `pad_card` | NumberField |
 | `unit_gap` | DU | `--op-field-unit-gap` | `pad_tight` | NumberField |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small; 5 DU for picker arrows` | DateTimeField, ColorField, Calendar |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) for picker arrows | DateTimeField, ColorField, Calendar |
 | `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, ColorField |
 | `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, ColorField |
 | `calendar_padding` | DU | `--op-field-calendar-padding` | `pad_tight` | DateTimeField |

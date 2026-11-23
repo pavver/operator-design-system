@@ -50,7 +50,7 @@ Status: **reviewed** on web.
 | `label` | string | `action-stack.label` | Accessible label for the main trigger. |
 | `icon` | icon | `action-stack.open` | Icon shown in the main trigger. |
 | `size` | DU metric | `row_standard` | Diameter or size of the trigger. |
-| `icon_size` | DU metric | `icon_small` | Size of the trigger icon. |
+| `icon_size` | DU metric | `icon_small` (`4 DU`) | Size of the trigger icon. |
 | `gap` | DU metric | `gap_small` | Gap between stacked actions. |
 | `icon_only` | bool | `false` | Square trigger with only the icon; `label` becomes its accessible name and tooltip. |
 | `anchor_to` | `NodeRef<Div>` | the trigger | Element the stack opens from, such as a whole composite control. |

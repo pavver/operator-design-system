@@ -80,7 +80,7 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | `padding` | DU | `--op-sheet-padding` | `0 DU` |
 | `footer_padding` | DU | `--op-sheet-footer-padding` | `0 DU` |
 | `close_size` | DU | `--op-sheet-close-size` | `row_compact` |
-| `close_icon_size` | DU | `--op-sheet-close-icon-size` | `icon_small` |
+| `close_icon_size` | DU | `--op-sheet-close-icon-size` | `icon_small` (`4 DU`) |
 
 | Color variable | Default |
 | :--- | :--- |

@@ -20,10 +20,10 @@
 | Внутрішній відступ | `1 DU` над елементами та під ними. |
 | Контур | Спільна рамка [Popover](popover.md), `0.25 DU` у кольорі `accent`, плюс м'яка тінь. |
 | Елемент | Висота щонайменше `8 DU`, початковий внутрішній відступ `2 DU`, кінцевий `3 DU`. |
-| Слот піктограми | `4 DU`, залишається порожнім для елементів без піктограми, щоб підписи вирівнювалися. |
+| Слот піктограми | `icon_small` (`4 DU`), залишається порожнім для елементів без піктограми, щоб підписи вирівнювалися. |
 | Сполучення клавіш | Стиль `caption`, `text_secondary`, у кінці. |
 | Розділювач | `0.25 DU` у кольорі `divider` з відступом `1 DU` зверху та знизу. |
-| Заголовок і нижній колонтитул | Відступи пунктів, `1 DU` зверху й знизу та розділювач `0.25 DU` у кольорі `divider` з боку пунктів. |
+| Заголовок і нижній колонтитул | Відступи пунктів і розділювач `0.25 DU` у кольорі `divider` з боку пунктів; заголовок має відступи `gutter` (`2 DU`) зверху й знизу та жирний текст, нижній колонтитул — `pad_tight` (`1 DU`). |
 | Стрілка підменю | `chevron_right`, `4 DU`, `text_secondary`, у кінці елемента з підменю. |
 
 ## Елементи
@@ -89,6 +89,7 @@
 | `icon_size` | реактивна метрика DU | значення дизайн-системи | Встановлює `--op-menu-icon-size`. |
 | `shortcut_font_size` | реактивна метрика TU | значення дизайн-системи | Встановлює `--op-menu-shortcut-font-size`. |
 | `padding_y` | реактивна метрика DU | значення дизайн-системи | Встановлює `--op-menu-padding-y`. |
+| `header_padding_y` | реактивна метрика DU | значення дизайн-системи | Встановлює `--op-menu-header-padding-y`. |
 | `font_size` | реактивна метрика TU | значення дизайн-системи | Встановлює `--op-menu-font-size`. |
 | `line_height` | реактивна метрика TU | значення дизайн-системи | Встановлює `--op-menu-line-height`. |
 | `max_height` | реактивна метрика DU | значення дизайн-системи | Встановлює `--op-menu-max-height`. |
@@ -121,9 +122,10 @@
 | `item_height` | DU | `--op-menu-item-height` | `row_compact` |
 | `padding_end` | DU | `--op-menu-padding-end` | `pad_card` |
 | `padding_start` | DU | `--op-menu-padding-start` | `gutter` |
-| `icon_size` | DU | `--op-menu-icon-size` | `icon_small` |
+| `icon_size` | DU | `--op-menu-icon-size` | `icon_small` (`4 DU`) |
 | `shortcut_font_size` | TU | `--op-menu-shortcut-font-size` | `caption_size` |
 | `padding_y` | DU | `--op-menu-padding-y` | `pad_tight` |
+| `header_padding_y` | DU | `--op-menu-header-padding-y` | `gutter` (`2 DU`) |
 | `font_size` | TU | `--op-menu-font-size` | `body_size` |
 | `line_height` | TU | `--op-menu-line-height` | `body_line` |
 | `max_height` | DU | `--op-menu-max-height` | `calc(100vh - var(--op-menu-viewport-margin, margin_screen) * 2)` |

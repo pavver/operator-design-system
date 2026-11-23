@@ -12,7 +12,7 @@ The field has the shape of [TextField](text-field.md) with a leading slot:
 | Property | Value |
 | :--- | :--- |
 | Height | `10 DU`. |
-| Leading slot | `10 DU` square with a `6 DU` (`icon_large`) search icon in `text_secondary`; `accent` while focused. The loading spinner is `4.5 DU`. |
+| Leading slot | `10 DU` square with an `icon_large` (`6 DU`) search icon in `text_secondary`; `accent` while focused. The loading spinner is `4.5 DU`. |
 | Clear button | `10 DU` square at the end, shown only while the field has text. |
 
 ## Behavior

@@ -59,7 +59,7 @@ Status: **draft** on web.
 | `title_padding_x` | DU | `pad_tight` | Title horizontal padding. |
 | `title_font_size` | TU | `inherit` | Title font size. |
 | `separator_width` | DU | `border` | Separator line thickness. |
-| `separator_height` | DU | `icon_large` | Separator line height. |
+| `separator_height` | DU | `icon_large` (`6 DU`) | Separator line height. |
 | `separator_margin_x` | DU | `pad_tight` | Separator horizontal margins. |
 | `button_size` | DU | `row_compact` (dense: `row_dense`) | Command button size. |
 | `more_label` | string | `toolbar.more` | Accessible name for the overflow button. |

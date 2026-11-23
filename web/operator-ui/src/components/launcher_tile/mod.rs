@@ -7,6 +7,7 @@ use crate::core::{
 };
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, motion};
 
 pub(crate) const CSS: &str = include_str!("launcher_tile.css");
@@ -102,7 +103,7 @@ pub fn LauncherTile(
             let icon_render = if icon_slot.is_set() {
                 icon_slot.run()
             } else {
-                icon.map(|ic| view! { <Icon icon=ic size=8.0 /> }.into_any())
+                icon.map(|ic| view! { <Icon icon=ic size=dim::ICON_XLARGE /> }.into_any())
             };
             Some(
                 view! {
@@ -249,7 +250,7 @@ pub fn LauncherTile(
                 })}
                 {move || pending.get().then(|| view! {
                     <div class="op-launcher-tile-pending">
-                        <Icon icon=operator_ui_tokens::icons::REFRESH size=6.0 />
+                        <Icon icon=operator_ui_tokens::icons::REFRESH size=dim::ICON_LARGE />
                     </div>
                 })}
             </button>

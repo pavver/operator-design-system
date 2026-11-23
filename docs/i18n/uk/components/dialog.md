@@ -93,7 +93,7 @@
 | `font_size` | TU | `--op-dialog-font-size` | `body_size` |
 | `line_height` | TU | `--op-dialog-line-height` | `body_line` |
 | `close_size` | DU | `--op-dialog-close-size` | `row_compact` |
-| `close_icon_size` | DU | `--op-dialog-close-icon-size` | `icon_small` |
+| `close_icon_size` | DU | `--op-dialog-close-icon-size` | `icon_small` (`4 DU`) |
 | `max_height` | DU | `--op-dialog-max-height` | `calc(100vh - var(--op-dialog-padding, margin_screen) * 2)` |
 
 | Змінна кольору | Типове значення |

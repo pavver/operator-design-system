@@ -96,7 +96,7 @@
 | `spinner_stroke` | DU | `--op-checkbox-group-spinner-stroke` | `var(--op-dim-spinner-stroke)` |
 | `width` | DU | `--op-checkbox-group-width` | `100%` |
 
-`item_icon_size` перевизначає наявний enum `icon_size`; якщо його не встановлено, Small використовує `icon_small`, Medium використовує `icon_large`, а Large використовує обчислену `height` мінус два значення `large_icon_inset`.
+`item_icon_size` перевизначає наявний enum `icon_size`; якщо його не встановлено, Small використовує `icon_small` (`4 DU`), Medium використовує `icon_large` (`6 DU`), а Large використовує обчислену `height` мінус два значення `large_icon_inset`.
 
 | Змінна кольору | Типове значення |
 | :--- | :--- |

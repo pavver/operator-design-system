@@ -11,6 +11,7 @@ use crate::components::chat_message::types::{
 };
 use crate::components::primitives::Icon;
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 /// Document or file attachment row.
@@ -166,7 +167,7 @@ pub fn WebPagePreviewView(
                     })}
                 </div>
                 <div class="op-chat-webpage-open-icon">
-                    <Icon icon=icons::OPEN_IN_NEW size=3.5 />
+                    <Icon icon=icons::OPEN_IN_NEW size=dim::ICON_XSMALL />
                 </div>
             </div>
         </div>
@@ -314,7 +315,7 @@ pub fn CodeBlockView(
                     }
                     aria-label="Copy code to clipboard"
                 >
-                    <Icon icon=if is_copied.get() { icons::CHECK } else { icons::CONTENT_COPY } size=3.5 />
+                    <Icon icon=if is_copied.get() { icons::CHECK } else { icons::CONTENT_COPY } size=dim::ICON_XSMALL />
                     <span>{move || if is_copied.get() { "COPIED" } else { "COPY" }}</span>
                 </button>
             </div>

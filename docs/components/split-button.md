@@ -43,7 +43,7 @@ Status: **reviewed** on web.
 | `align` | `LayerAlign` | `Start` | Preferred alignment of the stack across the control. |
 | `height` | DU metric | `row_standard` | Height of the entire control. |
 | `toggle_size` | DU metric | `row_standard` | Width of the toggle button. |
-| `icon_size` | DU metric | `icon_small` | Size of the toggle icon. |
+| `icon_size` | DU metric | `icon_small` (`4 DU`) | Size of the toggle icon. |
 | `leading` | `Slot` | none | Leading slot in the main button. |
 | `trailing` | `Slot` | none | Trailing slot in the main button. |
 | `content` | `Slot` | none | Replaces main button text. |

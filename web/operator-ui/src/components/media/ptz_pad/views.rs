@@ -3,6 +3,7 @@ use crate::components::icon_button::IconButton;
 use crate::components::primitives::Icon;
 use crate::core::Slot;
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 pub fn angle_to_direction(angle_deg: f32, show_diagonals: bool) -> PtzDirection {
@@ -45,16 +46,16 @@ pub fn angle_to_direction(angle_deg: f32, show_diagonals: bool) -> PtzDirection 
 pub fn PtzCardinalArrows(current_dir: RwSignal<PtzDirection>) -> impl IntoView {
     view! {
         <div class="op-ptz-arrow op-ptz-arrow-up" data-active=move || current_dir.get().is_up().to_string()>
-            <Icon icon=icons::ARROW_UPWARD size=5.0 />
+            <Icon icon=icons::ARROW_UPWARD size=dim::ICON_FIELD />
         </div>
         <div class="op-ptz-arrow op-ptz-arrow-down" data-active=move || current_dir.get().is_down().to_string()>
-            <Icon icon=icons::ARROW_DOWNWARD size=5.0 />
+            <Icon icon=icons::ARROW_DOWNWARD size=dim::ICON_FIELD />
         </div>
         <div class="op-ptz-arrow op-ptz-arrow-left" data-active=move || current_dir.get().is_left().to_string()>
-            <Icon icon=icons::ARROW_BACK size=5.0 />
+            <Icon icon=icons::ARROW_BACK size=dim::ICON_FIELD />
         </div>
         <div class="op-ptz-arrow op-ptz-arrow-right" data-active=move || current_dir.get().is_right().to_string()>
-            <Icon icon=icons::CHEVRON_RIGHT size=5.0 />
+            <Icon icon=icons::CHEVRON_RIGHT size=dim::ICON_FIELD />
         </div>
     }
 }
@@ -63,16 +64,16 @@ pub fn PtzCardinalArrows(current_dir: RwSignal<PtzDirection>) -> impl IntoView {
 pub fn PtzDiagonalArrows(current_dir: RwSignal<PtzDirection>) -> impl IntoView {
     view! {
         <div class="op-ptz-arrow op-ptz-arrow-up-left" data-active=move || (current_dir.get() == PtzDirection::UpLeft).to_string()>
-            <Icon icon=icons::ARROW_UPWARD size=3.5 />
+            <Icon icon=icons::ARROW_UPWARD size=dim::ICON_XSMALL />
         </div>
         <div class="op-ptz-arrow op-ptz-arrow-up-right" data-active=move || (current_dir.get() == PtzDirection::UpRight).to_string()>
-            <Icon icon=icons::ARROW_UPWARD size=3.5 />
+            <Icon icon=icons::ARROW_UPWARD size=dim::ICON_XSMALL />
         </div>
         <div class="op-ptz-arrow op-ptz-arrow-down-left" data-active=move || (current_dir.get() == PtzDirection::DownLeft).to_string()>
-            <Icon icon=icons::ARROW_UPWARD size=3.5 />
+            <Icon icon=icons::ARROW_UPWARD size=dim::ICON_XSMALL />
         </div>
         <div class="op-ptz-arrow op-ptz-arrow-down-right" data-active=move || (current_dir.get() == PtzDirection::DownRight).to_string()>
-            <Icon icon=icons::ARROW_UPWARD size=3.5 />
+            <Icon icon=icons::ARROW_UPWARD size=dim::ICON_XSMALL />
         </div>
     }
 }

@@ -3,6 +3,7 @@
 use crate::components::primitives::Icon;
 use crate::core::{Metric, root_class, root_style, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::dim;
 use operator_ui_tokens::icons;
 
 pub(crate) const CSS: &str = include_str!("video.css");
@@ -72,7 +73,7 @@ pub fn Video(
                         >
                             <Icon
                                 icon=icons::VIDEOCAM
-                                size=8.0
+                                size=dim::ICON_XLARGE
                             />
                         </div>
                     }.into_any()
