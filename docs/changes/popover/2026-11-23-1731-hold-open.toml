@@ -1,0 +1,11 @@
+date = "2026-11-23T17:31:51Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "The new `hold_open` signal keeps a layer open while it is true: presses outside, Escape, scroll and resize do not close it, and scroll and resize re-place it."
+check = "On the Fab page, run an action with a long simulator delay and try to close the stack by clicking outside, pressing Escape and scrolling."
+
+[uk]
+summary = "Новий сигнал `hold_open` тримає шар відкритим, поки він true: натискання поза шаром, Escape, прокручування й зміна розміру його не закривають, а прокручування й зміна розміру змінюють його розташування."
+check = "На сторінці Fab запустіть дію з довгою затримкою симулятора й спробуйте закрити стос кліком поза ним, клавішею Escape і прокручуванням."

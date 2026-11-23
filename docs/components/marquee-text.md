@@ -24,6 +24,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the tooltip closes it; scrolling inside it does not.
 ### Scrolling
 
 1. Text that fits never moves.

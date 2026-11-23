@@ -158,7 +158,7 @@ pub fn HoverCard(
         >
             {children()}
         </span>
-        <Popover
+        <Popover dismiss_on_scroll=true
             open=open
             anchor=anchor
             placement=placement

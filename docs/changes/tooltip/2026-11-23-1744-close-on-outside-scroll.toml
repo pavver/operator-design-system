@@ -1,0 +1,11 @@
+date = "2026-11-23T17:44:49Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Scrolling the page or another container now closes the tooltip instead of dragging it along with its anchor. Scrolling inside it does not close it."
+check = "Show a tooltip and scroll the page: it hides."
+
+[uk]
+summary = "Прокручування сторінки чи іншого контейнера тепер закриває підказку, а не тягне за якорем. Прокручування всередині не закриває."
+check = "Покажіть підказку й прокрутіть сторінку: вона ховається."

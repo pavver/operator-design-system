@@ -25,6 +25,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the calendar or color popup closes it; scrolling inside it, or inside its own field, does not.
 * Typing edits only the text; Enter or leaving the field parses it and commits the value.
 * Valid text is re-formatted to the canonical form.
 * Invalid text rolls back to the last value and the field pulses the error state, as an error rolls back a change everywhere.

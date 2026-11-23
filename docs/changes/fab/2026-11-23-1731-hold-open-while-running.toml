@@ -1,0 +1,11 @@
+date = "2026-11-23T17:31:51Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "The stack stays open while an action runs: presses outside, Escape and scrolling no longer close it and hide the pending feedback; it follows the trigger instead."
+check = "Run an action in the Interactive example with a long simulator delay, then click outside, press Escape and scroll the page; the stack stays open until the result, and closes on an outside click once idle."
+
+[uk]
+summary = "Стос лишається відкритим, поки виконується дія: натискання поза ним, Escape і прокручування більше не закривають його й не ховають індикацію очікування; натомість він слідує за кнопкою."
+check = "Запустіть дію в прикладі Interactive з довгою затримкою симулятора, потім клацніть поза стосом, натисніть Escape і прокрутіть сторінку; стос лишається відкритим до результату, а в стані спокою закривається від кліку поза ним."

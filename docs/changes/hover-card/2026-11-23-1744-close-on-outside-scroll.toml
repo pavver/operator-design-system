@@ -1,0 +1,11 @@
+date = "2026-11-23T17:44:49Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Scrolling the page or another container now closes the card instead of dragging it along with its anchor. Scrolling inside it does not close it."
+check = "Open a hover card and scroll the page: it closes; scroll long card content: it stays open."
+
+[uk]
+summary = "Прокручування сторінки чи іншого контейнера тепер закриває картку, а не тягне за якорем. Прокручування всередині не закриває."
+check = "Відкрийте картку й прокрутіть сторінку: вона закривається; прокрутіть довгий вміст картки: вона лишається відкритою."

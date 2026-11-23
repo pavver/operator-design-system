@@ -1,0 +1,11 @@
+date = "2026-11-23T17:44:49Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Scrolling the page or another container now closes the calendar or color popup instead of dragging it along with its anchor. Scrolling inside it does not close it."
+check = "Open the DateTimeField calendar and the ColorField popup and scroll the page: each closes."
+
+[uk]
+summary = "Прокручування сторінки чи іншого контейнера тепер закриває спливний календар чи вибір кольору, а не тягне за якорем. Прокручування всередині не закриває."
+check = "Відкрийте календар DateTimeField і спливне вікно ColorField та прокрутіть сторінку: кожне закривається."

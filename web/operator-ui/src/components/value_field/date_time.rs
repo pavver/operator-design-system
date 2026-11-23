@@ -175,7 +175,7 @@ pub fn DateTimeField(
                 trailing=Some(trailing)
             />
         </div>
-        <Popover node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowStart gap=0.0 class="op-value-popup" role="dialog" label=popup_label.get()>
+        <Popover dismiss_on_scroll=true node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowStart gap=0.0 class="op-value-popup" role="dialog" label=popup_label.get()>
             <div style=move || popup_style.get()>
             <Calendar
                 selected=selected

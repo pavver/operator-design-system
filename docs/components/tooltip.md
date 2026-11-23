@@ -24,6 +24,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the tooltip closes it; scrolling inside it does not.
 ### Opening
 
 * Mouse: opens after `tooltip_show_delay` (`500 ms`) of hover; leaving the anchor closes it at once.

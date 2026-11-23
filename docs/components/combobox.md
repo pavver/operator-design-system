@@ -20,6 +20,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the list closes it; scrolling inside it, or inside its own field, does not.
 * Focus, a click on the field, or Arrow Down opens the list with all options, whatever text is in the field.
 * On opening, the selected option is active and scrolled to the middle of the list.
   With nothing selected, the first option that contains the field text is active instead, or the first option.

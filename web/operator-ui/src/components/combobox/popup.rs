@@ -135,7 +135,7 @@ pub fn ComboboxPopup(
     });
 
     view! {
-        <Popover node_ref=popup_ref
+        <Popover dismiss_on_scroll=true node_ref=popup_ref
             open=open
             anchor=anchor
             placement=placement

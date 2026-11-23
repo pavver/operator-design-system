@@ -187,7 +187,7 @@ pub fn DropdownMenu(
                     }}
                 </button>
                 </Field>
-                <Popover node_ref=popup_ref open=expanded anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox">
+                <Popover dismiss_on_scroll=true node_ref=popup_ref open=expanded anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox">
                     <div class="op-dropdown-list" style=move || popup_style.get()>
                         {header.run()}
                         {before_options.run()}

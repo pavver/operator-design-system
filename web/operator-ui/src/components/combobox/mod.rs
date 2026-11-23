@@ -264,7 +264,7 @@ pub fn Combobox(
                         blocked=Signal::derive(blocked)
                     />
                 </Field>
-                <Popover node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox" restore_focus=false>
+                <Popover dismiss_on_scroll=true node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowStretch class="op-dropdown-menu" role="listbox" restore_focus=false>
                     <ComboList
                         rows=rows
                         handle=list

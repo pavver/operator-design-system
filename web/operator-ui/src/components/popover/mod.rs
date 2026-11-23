@@ -295,6 +295,8 @@ struct Dismiss {
     escape: bool,
     resize: bool,
     scroll: bool,
+    /// While true, nothing closes the layer; scroll and resize re-place it instead.
+    hold: Signal<bool>,
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -312,9 +314,11 @@ fn setup_popover_window_listeners(
         escape: dismiss_on_escape,
         resize: dismiss_on_resize,
         scroll: dismiss_on_scroll,
+        hold,
     } = dismiss;
+    let held = move || hold.get_untracked();
     let down = window_event_listener(ev::pointerdown, move |e| {
-        if !dismiss_on_outside || !open.get_untracked() {
+        if !dismiss_on_outside || !open.get_untracked() || held() {
             return;
         }
         let in_layer = event_in_layer_tree(&e, layer_id);
@@ -326,7 +330,7 @@ fn setup_popover_window_listeners(
         }
     });
     let key = window_event_listener(ev::keydown, move |e| {
-        if dismiss_on_escape && open.get_untracked() && e.key() == "Escape" {
+        if dismiss_on_escape && open.get_untracked() && !held() && e.key() == "Escape" {
             open.set(false);
         }
     });
@@ -334,7 +338,7 @@ fn setup_popover_window_listeners(
         if !open.get_untracked() {
             return;
         }
-        if dismiss_on_resize {
+        if dismiss_on_resize && !held() {
             open.set(false);
         } else {
             measure();
@@ -344,10 +348,21 @@ fn setup_popover_window_listeners(
     // would rewrite the scroll offset and cut the smooth wheel scroll short.
     let on_scroll = wasm_bindgen::prelude::Closure::<dyn FnMut(web_sys::Event)>::new(
         move |e: web_sys::Event| {
-            if !open.get_untracked() || event_in_layer_tree(&e, layer_id) {
+            // Scrolling inside the anchor (a text field moving its caret) moves nothing either.
+            let in_anchor = e
+                .target()
+                .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
+                .is_some_and(|el| {
+                    // The whole scrolled box lies within the anchor; ancestors are larger.
+                    let r = el.get_bounding_client_rect();
+                    let a = anchor.get_untracked();
+                    a.contains(r.left() + 1.0, r.top() + 1.0)
+                        && a.contains(r.right() - 1.0, r.bottom() - 1.0)
+                });
+            if !open.get_untracked() || in_anchor || event_in_layer_tree(&e, layer_id) {
                 return;
             }
-            if dismiss_on_scroll {
+            if dismiss_on_scroll && !held() {
                 open.set(false);
             } else {
                 measure();
@@ -402,6 +417,10 @@ pub fn Popover(
     /// the anchor; scrolling inside the layer keeps it open.
     #[prop(optional)]
     dismiss_on_scroll: bool,
+    /// While true, presses outside, Escape, scroll and resize never close the layer (an
+    /// action inside it is running); scroll and resize re-place it instead.
+    #[prop(default = false.into(), into)]
+    hold_open: Signal<bool>,
     /// Returns focus to the previously focused element when the layer closes.
     #[prop(default = true)]
     restore_focus: bool,
@@ -543,6 +562,7 @@ pub fn Popover(
             escape: dismiss_on_escape,
             resize: dismiss_on_resize,
             scroll: dismiss_on_scroll,
+            hold: hold_open,
         },
         measure,
     );
@@ -553,6 +573,7 @@ pub fn Popover(
         dismiss_on_escape,
         dismiss_on_resize,
         dismiss_on_scroll,
+        hold_open,
         layer_id,
     );
 

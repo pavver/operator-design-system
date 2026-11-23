@@ -48,6 +48,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the menu closes it; scrolling inside it does not.
 * Opening moves focus to the first enabled item.
 * Arrow keys move between enabled items and wrap.
 * Enter or a click runs the item and closes the menu.

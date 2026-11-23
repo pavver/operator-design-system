@@ -1,0 +1,11 @@
+date = "2026-11-23T17:44:49Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "Scrolling inside the anchor, such as a text field moving to its caret, no longer closes or re-places the layer."
+check = "In Combobox, type a value longer than the field while the list is open: the list stays open."
+
+[uk]
+summary = "Прокручування всередині якоря, наприклад текстового поля, що зсувається до курсора, більше не закриває шар і не змінює його розташування."
+check = "У Combobox введіть значення, довше за поле, поки список відкритий: список лишається відкритим."

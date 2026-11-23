@@ -23,6 +23,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the card closes it; scrolling inside it does not.
 * A mouse opens the card after hovering the anchor for the tooltip delay.
 * The card stays open while the pointer is over the anchor or the card; it closes `200 ms` after the pointer leaves both.
 * A press on the anchor (touch, pen or a click) toggles the card, so it works without hover.

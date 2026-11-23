@@ -27,6 +27,7 @@ Status: **draft** on web.
 
 ## Behavior
 
+* Scrolling the page or another container outside the list closes it; scrolling inside it, or inside its own field, does not.
 * Clicking the field opens or closes the list.
 * Clicking outside the list closes it.
 * Choosing an option updates the value, calls the callback, and closes the list.

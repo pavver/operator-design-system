@@ -93,6 +93,7 @@ pub fn Fab(
             <Popover open=open anchor=anchor placement=Signal::derive(move || Placement::Side(side.get(), align.get())) class="op-fab-layer" aria_label=label role="dialog" node_ref=layer style=layer_style
                 dismiss_on_outside=true
                 dismiss_on_scroll=true
+                hold_open=Signal::derive(move || running.get().is_some())
                 on_placed=Callback::new(move |()| { if let Some(el)=layer.get_untracked() && let Ok(Some(first))=el.query_selector("button") { use wasm_bindgen::JsCast; if let Ok(button)=first.dyn_into::<web_sys::HtmlElement>() { let _=button.focus(); } } })>
                 <ScrollView viewport_class="op-fab-actions op-scroll-contain" style=Signal::derive(root_style(vec![Metric::du("--op-fab-gap",gap)],None::<String>.into()))>
                     {actions.get_value().into_iter().enumerate().map(|(index, item)| {

@@ -1,0 +1,11 @@
+date = "2026-11-23T17:44:49Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Scrolling the page or another container now closes the list instead of dragging it along with its anchor. Scrolling inside it does not close it."
+check = "Open the list and scroll the page: it closes; type a value longer than the field so it scrolls: the list stays open."
+
+[uk]
+summary = "Прокручування сторінки чи іншого контейнера тепер закриває список, а не тягне за якорем. Прокручування всередині не закриває."
+check = "Відкрийте список і прокрутіть сторінку: він закривається; введіть значення, довше за поле, щоб воно прокрутилося: список лишається відкритим."

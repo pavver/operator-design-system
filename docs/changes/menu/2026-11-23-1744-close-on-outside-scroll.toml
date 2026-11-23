@@ -1,0 +1,11 @@
+date = "2026-11-23T17:44:49Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Scrolling the page or another container now closes the menu instead of dragging it along with its anchor. Scrolling inside it does not close it."
+check = "Open the menu and scroll the page: it closes; scroll a long menu inside: it stays open."
+
+[uk]
+summary = "Прокручування сторінки чи іншого контейнера тепер закриває меню, а не тягне за якорем. Прокручування всередині не закриває."
+check = "Відкрийте меню й прокрутіть сторінку: воно закривається; прокрутіть довге меню всередині: воно лишається відкритим."

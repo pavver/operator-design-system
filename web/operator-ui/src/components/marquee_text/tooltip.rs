@@ -52,7 +52,7 @@ pub fn MarqueeTooltip(
     tooltip_text: Signal<String>,
 ) -> impl IntoView {
     view! {
-        <Popover
+        <Popover dismiss_on_scroll=true
             node_ref=tip_layer
             open=tip_open
             anchor=tip_anchor

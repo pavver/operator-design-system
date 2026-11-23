@@ -45,6 +45,7 @@ Components built on Popover keep this frame and only map its color to their own 
 * Scrolling of any ancestor and resizing the window re-place an open layer; `dismiss_on_resize` closes it instead (menus).
 * `dismiss_on_scroll` closes the layer when the page or any container outside it scrolls, instead of following the anchor.
 * Scrolling inside the layer neither re-places nor closes it, so its own scroll view keeps its offset and smooth wheel and touch scrolling.
+* Scrolling inside the anchor, such as a text field moving to its caret, neither re-places nor closes it either.
 * A press outside the layer and the anchor closes it (`dismiss_on_outside`, default on).
   A layer opened from another one (`parent_layer`) counts as inside its parent, so a press in a submenu keeps the menu open.
 * Escape closes it (`dismiss_on_escape`, default on).
@@ -63,6 +64,7 @@ Components built on Popover keep this frame and only map its color to their own 
 | `dismiss_on_escape` | bool | `true` | Close on Escape. |
 | `dismiss_on_resize` | bool | `false` | Close instead of following on resize. |
 | `dismiss_on_scroll` | bool | `false` | Close instead of following when anything outside the layer scrolls. |
+| `hold_open` | bool signal | `false` | While true, presses outside, Escape, scroll and resize never close the layer; scroll and resize re-place it. |
 | `restore_focus` | bool | `true` | Return focus on close. |
 | `passive` | bool | `false` | Pointer events pass through. |
 | `class`, `role`, `label` | string | none | Layer element classes, ARIA role and label. |

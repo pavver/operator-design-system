@@ -187,7 +187,7 @@ pub fn Tooltip(
             }
         >
             {children()}
-            <Popover
+            <Popover dismiss_on_scroll=true
                 open=open
                 anchor=anchor
                 placement=Placement::Above

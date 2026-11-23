@@ -239,7 +239,7 @@ pub fn Menu(
     };
 
     view! {
-                <Popover
+                <Popover dismiss_on_scroll=true
                     open=open
                     anchor=popover_anchor
                     placement=placement
