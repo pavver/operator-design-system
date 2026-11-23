@@ -1,0 +1,9 @@
+date = "2026-11-23T21:59:00Z"
+status = "draft"
+kind = "docs"
+
+[en]
+summary = "LauncherTile is reviewed: it moves from the `draft` feature group to `reviewed` and is listed in the README as reviewed."
+
+[uk]
+summary = "LauncherTile перевірено: він переходить із групи фіч `draft` до `reviewed` і позначений у README як перевірений."

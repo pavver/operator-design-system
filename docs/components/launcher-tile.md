@@ -2,7 +2,7 @@
 
 Square launcher tile for dashboards, tool launchpads, and application grids.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 
