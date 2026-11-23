@@ -5,7 +5,7 @@ It sits in the layout flow like any button; each action in the stack runs on its
 
 Unlike [Menu](menu.md), whose items are commands that close the menu on selection, every item here is an [ActionButton](action-button.md) with its own async feedback.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 
