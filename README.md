@@ -122,6 +122,7 @@ New components start as draft and become reviewed after they have been checked i
 | :--- | :--- | :---: |
 | ActionButton | [action-button.md](docs/components/action-button.md) | ✅ |
 | ActionStack | [action-stack.md](docs/components/action-stack.md) | ✅ |
+| SplitButton | [split-button.md](docs/components/split-button.md) | ✅ |
 | IconButton | [icon-button.md](docs/components/icon-button.md) | ✅ |
 | Menu, MenuButton, ContextMenu | [menu.md](docs/components/menu.md) | ✅ |
 | Toolbar | [toolbar.md](docs/components/toolbar.md) | 🚧 |

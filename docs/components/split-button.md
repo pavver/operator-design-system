@@ -3,7 +3,7 @@
 Primary action button with an attached toggle that opens a stack of secondary actions.
 Clicking the main button runs the default action, while the toggle opens an [ActionStack](action-stack.md) under the whole control.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 
