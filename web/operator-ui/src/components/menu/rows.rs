@@ -123,6 +123,6 @@ fn submenu(
 ) -> AnyView {
     let c = customization.get_value();
     view! { <Menu open=open anchor=anchor.into() items=items on_select=on_select label=label parent_layer=parent
-        class=c.class style=c.style option=c.option empty=c.empty before_options=c.before_options after_options=c.after_options header=c.header footer=c.footer submenu_icon=c.submenu_icon_prop/> }
+        class=c.class style=c.style option=c.option empty=c.empty before_options=c.before_options after_options=c.after_options submenu_icon=c.submenu_icon_prop/> }
         .into_any()
 }

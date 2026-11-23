@@ -276,7 +276,7 @@ pub fn Menu(
                         }
                         on:contextmenu=|e| e.prevent_default()
                     >
-                        {customization.with_value(|c| c.header.run())}
+                        {customization.with_value(|c| c.header.run()).map(|h| view! { <div class="op-menu-header">{h}</div> })}
                         {customization.with_value(|c| c.before_options.run())}
                         <ScrollView viewport_class="op-menu-list op-scroll-contain">
                         {items.with_value(Vec::is_empty).then(|| customization.with_value(|c| c.empty.run()))}
@@ -287,7 +287,7 @@ pub fn Menu(
                             .collect_view()}
                         </ScrollView>
                         {customization.with_value(|c| c.after_options.run())}
-                        {customization.with_value(|c| c.footer.run())}
+                        {customization.with_value(|c| c.footer.run()).map(|f| view! { <div class="op-menu-footer">{f}</div> })}
                     </div>
                 </Popover>
     }

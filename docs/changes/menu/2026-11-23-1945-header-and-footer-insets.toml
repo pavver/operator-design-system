@@ -1,0 +1,11 @@
+date = "2026-11-23T19:45:05Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "The `header` and `footer` slots get the item insets and a divider towards the items, and the footer uses `caption` `text_secondary` text; they no longer touch the menu frame, and submenus no longer repeat them. The Customization example measures its anchor on every press, so it opens under its button after the page scrolls, and its custom rows keep the icon, label, trailing text and submenu arrow parts on the theme background."
+check = "Scroll to the Customization example, open it, and check that the title and the hint are inset and divided from the items, and that the Move to zone submenu has neither."
+
+[uk]
+summary = "Слоти `header` і `footer` отримали відступи пунктів і розділювач з боку пунктів, а нижній колонтитул — текст `caption` у кольорі `text_secondary`; вони більше не прилипають до рамки меню, а підменю їх більше не повторюють. Приклад кастомізації вимірює прив'язку при кожному натисканні, тож відкривається під своєю кнопкою після прокручування сторінки, а його власні рядки зберігають піктограму, підпис, текст у кінці й стрілку підменю на фоні теми."
+check = "Прокрутіть до прикладу кастомізації, відкрийте його й перевірте, що заголовок і підказка мають відступи й відділені від пунктів, а підменю Move to zone їх не має."

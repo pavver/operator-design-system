@@ -199,8 +199,8 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
             "Відкривається під кнопкою з вирівнюванням за її кінцевим краєм. Стрілки переміщують фокус, Escape закриває меню."
         }
         "Right-click inside the area." => "Клацніть правою кнопкою всередині області.",
-        "Metric and scoped content overrides apply to submenus too." => {
-            "Перевизначення розмірів і слотів вмісту з доступом до даних застосовуються також до підменю."
+        "Metric and scoped content overrides apply to submenus too; the header and footer frame only the root menu." => {
+            "Перевизначення розмірів і слотів вмісту з доступом до даних застосовуються також до підменю; заголовок і нижній колонтитул обрамлюють лише кореневе меню."
         }
         "2 000 tree rows, virtualized. Arrows navigate the tree; the chevron collapses the panel." => {
             "2 000 віртуалізованих рядків дерева. Стрілки переміщують фокус деревом; шеврон згортає панель."

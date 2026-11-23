@@ -23,6 +23,7 @@ Status: **draft** on web.
 | Icon slot | `4 DU`, kept empty for items without an icon so labels align. |
 | Shortcut | `caption` style, `text_secondary`, at the end. |
 | Separator | `0.25 DU` `divider` with `1 DU` above and below. |
+| Header and footer | Item insets, `1 DU` vertical padding, and a `0.25 DU` `divider` towards the items. |
 | Submenu arrow | `chevron_right`, `4 DU`, `text_secondary`, at the end of an item with a submenu. |
 
 ## Items
@@ -40,6 +41,7 @@ Status: **draft** on web.
 * Arrow Left closes the submenu and returns focus to its item.
 * Picking a command at any level closes the whole menu chain; a press inside any submenu does not close its parents.
 * Submenus nest; keep them at most two levels deep.
+* Submenus take the metric props, colors and content slots of their menu, except `header` and `footer`, which frame only the root menu.
 
 ## Placement
 
@@ -93,8 +95,8 @@ The customization properties are optional and accept reactive values where indic
 | `empty` | `Slot` | none | Content when there are no items. |
 | `before_options` | `Slot` | none | Content before the scrollable items. |
 | `after_options` | `Slot` | none | Content after the scrollable items. |
-| `header` | `Slot` | none | Replaces the title content. |
-| `footer` | `Slot` | none | Content after the body and actions. |
+| `header` | `Slot` | none | Content above the items, such as a title. |
+| `footer` | `Slot` | none | Content below the items, such as a hint. |
 | `label` | reactive string | `menu.label` | Accessible name of the menu. |
 | `submenu_icon` | icon | `menu.submenu` | Submenu arrow override. |
 | `MenuButton.icon` | icon | `menu.more` | Overflow icon override. |
@@ -148,8 +150,8 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | `empty` | Content when there are no items. |
 | `before_options` | Content before the scrollable items. |
 | `after_options` | Content after the scrollable items. |
-| `header` | Replaces the title content. |
-| `footer` | Content after the body and actions. |
+| `header` | Above the items, with the item insets and a divider below. |
+| `footer` | Below the items, with the item insets, a divider above and `caption` `text_secondary` text. |
 
 The metric variables, `class`, `style`, all menu slots, and the submenu icon override propagate to every submenu.
 The `option` slot replaces row content only; keep it free of nested interactive controls.
