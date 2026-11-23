@@ -1,0 +1,11 @@
+date = "2026-11-23T17:16:22Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "A running action now shows Pending on itself and on the trigger, with the running segment and the delayed spinner, instead of turning every button disabled. The other actions stay blocked until it settles; success flashes before the stack closes, an error flashes and keeps it open."
+check = "Set the server simulator to Alternate with a long delay, run an action in the Interactive example, and check the pending segment, the spinner after 700 ms, the success flash before closing, and the error flash with the stack left open."
+
+[uk]
+summary = "Дія, що виконується, тепер показує Pending на собі та на елементі відкриття, з рухомим сегментом і відкладеним спінером, замість того щоб вимикати всі кнопки. Інші дії заблоковано до завершення; успіх спалахує перед закриттям стосу, помилка спалахує й лишає його відкритим."
+check = "Перемкніть симулятор сервера на Почергово з довгою затримкою, запустіть дію в прикладі Interactive і перевірте рухомий сегмент, спінер через 700 мс, спалах успіху перед закриттям і спалах помилки з відкритим стосом."

@@ -30,7 +30,8 @@ Status: **draft** on web.
   * a stack to the left or right falls back below, then above, when it fits on neither of those sides;
   * it shifts along the trigger near a screen edge;
   * when it fits nowhere, it takes the roomier of above and below and scrolls with the library [Scrollbar](scrollbar.md).
-* While open, clicking any action executes it and closes the layer.
+* While open, clicking an action runs it: the action and the trigger show [Pending](../foundations/states.md) (running segment, then the delayed spinner) and the other actions are blocked.
+* Success flashes on the action and then closes the layer; an error flashes and keeps it open.
 * Actions close when disabled, when clicking outside, or when the page or another container scrolls; scrolling the stack itself keeps it open.
 
 ## API

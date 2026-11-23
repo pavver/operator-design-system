@@ -43,7 +43,7 @@ pub fn fab() -> AnyView {
             <Fab enabled=false actions=vec![]/>
         </Example>
         <Example title="Customization" block=true>
-            <Fab label=l("Quick actions", "Швидкі дії") size=12.0 gap=3.0 side=LayerSide::Above actions=vec![
+            <Fab label=l("Add item", "Додати елемент") size=12.0 gap=3.0 side=LayerSide::Above actions=vec![
                 FabAction::new("Create", b.action("create")),
             ]/>
         </Example>
