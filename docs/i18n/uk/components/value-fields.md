@@ -1,6 +1,6 @@
 # Поля значень
 
-Типізовані текстові поля: NumberField, DurationField, TimeField, DateTimeField і ColorField, а також редактори ColorPicker і ClockPicker.
+Типізовані текстові поля: NumberField, DurationField, TimeField, DateTimeField, DateRangeField і ColorField, а також редактори ColorPicker і ClockPicker.
 Кожне виглядає як [TextField](text-field.md) і редагує одне типізоване значення через його текстову форму.
 
 Статус: **чернетка** у вебреалізації.
@@ -12,6 +12,7 @@
 * TimeField: час доби (`07:30`) із циферблатом.
 * ClockPicker: лише циферблат: перетягніть стрілку на годину, потім на хвилину.
 * DateTimeField: локальні дата й час (`2026-11-17 07:30`) із календарем.
+* DateRangeField: діапазон днів на кшталт `12 лип – 5 лис 2026` зі швидким вибором і двома пов'язаними місяцями.
 * ColorField: колір як `#rrggbb` (або `#rrggbbaa` із прозорістю) зі спливним ColorPicker.
 * ColorPicker: лише редактор кольору для панелей і діалогів: режими спектра, RGB, HSL і колірної температури, прозорість, код кольору та зразки.
 
@@ -24,6 +25,8 @@
 | Кнопка вибору | Завширшки `10 DU`, на всю висоту, `arrow_drop_down`; ColorField додає зразок кольору `icon_field` (`5 DU`) перед стрілкою. |
 | Календар | Спливний шар із заголовком `row_compact` (попередній, місяць і рік, наступний), рядком днів тижня `row_dense` і квадратними комірками днів `row_compact`; тижні починаються з понеділка. |
 | ColorPicker | Завширшки `80 DU`, внутрішній відступ `pad_content`, між рядками `gutter`; рядок вкладок режимів заввишки `row_compact` із підкресленням `0.5 DU` у кольорі `accent` на вибраній. |
+| Вікно діапазону дат | Стовпчик `36 DU` швидких діапазонів `row_compact` зі смужкою `0.5 DU` у кольорі `accent` на відповідному й роздільником, далі два календарі поруч і підказка; на вузькому екрані календарі переносяться один під одний. |
+| Дні діапазону | Кінці заповнені `accent`; дні між ними підфарбовані `accent` на 22%. |
 | ClockPicker | Внутрішній відступ `pad_content`; показ із двох кнопок `row_avatar` розміром `type_screen_title_size` з підкресленням `0.5 DU` у кольорі `accent` на активній стрілці та необов'язковою парою AM/PM; круглий циферблат `64 DU` у `surface_alt` із числами `row_compact`, стрілкою `0.5 DU` у кольорі `accent` і круглим кінчиком `row_compact`. |
 | Площина спектра | Заввишки `40 DU`, насиченість по горизонталі, яскравість угору; квадратний маркер `icon_small` (`4 DU`) зі світлим кільцем `0.5 DU` і темним контуром `0.25 DU`. |
 | Рядок каналу | Підпис, смуга `row_dense` із маркером `pad_small`, що виступає на `gap_micro`, і числове поле `14 DU` заввишки `row_compact`; смуга прозорості має шахове тло. |
@@ -45,6 +48,9 @@
 * Зовнішні зміни значення відображаються, якщо поле не у фокусі.
 * Календар зберігає час доби; вибраний день заповнений `accent`, сьогоднішній має контур `accent`.
 * Спливні шари є шарами [Popover](popover.md) і закриваються при натисканні зовні або за Escape.
+* DateRangeField: перше натискання на день починає діапазон, вказівник чи фокус показують його попередньо, а друге натискання завершує, фіксує й закриває вікно; дні можна вибирати в будь-якому порядку.
+* Швидкий діапазон фіксується й закриває вікно одразу; той, що дорівнює значенню, позначено.
+* Відкрите вікно показує місяць початку діапазону й наступний; їхні стрілки рухають обидва разом.
 * ClockPicker спершу задає годину: перетягування рухає стрілку й значення наживо, відпускання фіксує його та перемикає на хвилини; відпускання хвилинної стрілки фіксує значення й викликає `on_done`, що закриває спливне вікно TimeField.
 * У 24-годинному режимі зовнішнє коло містить `12` і `1`–`11`, а внутрішнє — `00` і `13`–`23`; з `hour12` циферблат показує `12` і `1`–`11`, а AM/PM перемикає половину доби.
 * Хвилини прив'язуються до `minute_step`; секунди значення зберігаються.
@@ -64,6 +70,7 @@
 | DurationField | `1h 30m`, `1.5h`, `90s`, `250ms`, `2d`, `1:30` (хвилини та секунди), `1:02:03`, число без суфікса в `default_unit_ms`, початковий `-` | `-1d 2h 3m 4s 500ms`, нуль як `0s`. |
 | TimeField | `7:30`, `0730`, `7:30:15`, `9` | `07:30`, із секундами, коли вони ненульові або встановлено `seconds`. |
 | DateTimeField | `2026-11-17 07:30`, `2026-11-17T07:30:15`, лише дата означає північ | `2026-11-17 07:30`. |
+| DateRangeField | `12 Jul – 5 Nov 2026`, `3 – 10 Aug 2026`, `12 липня – 5 листопада`, `2026-07-12..2026-11-05`, `12.07 - 5.11.2026`, один день; з'єднані `–`, `—`, ` - `, `..` або ` to `; назви місяців зіставляються за першими трьома літерами; рік кінця без року — поточний, рік початку — рік кінця (на рік раніше, якщо початок інакше йшов би після кінця) | `12 Jul – 5 Nov 2026`, `3 – 10 Aug 2026`, `20 Dec 2026 – 3 Jan 2027`, `5 Nov 2026`. |
 | ColorField, код у ColorPicker | `#abc`, `#abcd`, `#aabbcc`, `#aabbccdd`, те саме без `#`, `rgb()`, `rgba()`, `hsl()`, `hsla()`, `hsv()`, температура на кшталт `2700K` | `#aabbcc`, або `#aabbccdd` з `alpha` для напівпрозорих. |
 
 Розбір і форматування містяться в `value_field::parse` і `value_field::color_math` та не потребують бібліотек дат чи кольорів.
@@ -80,7 +87,10 @@
 | `DateTimeField` | `LocalDateTime` | `seconds`, `month_names`, `weekday_names`. |
 | `ColorField` | `String` `#rrggbb` або `#rrggbbaa` | `swatches`, `alpha`, `modes`, `min_kelvin` (`2000`), `max_kelvin` (`6500`), `temperature`. |
 | `ColorPicker` | `String` `#rrggbb` або `#rrggbbaa` | `swatches`, `alpha`, `modes` (`ColorMode::Spectrum`, `Rgb`, `Hsl`, `Temperature`; порожній означає всі), `min_kelvin`, `max_kelvin`, `temperature: Option<RwSignal<Option<u32>>>`, `enabled`, `on_commit`. |
-| `Calendar` | | `selected`, `on_pick`, `month_names`, `weekday_names`. |
+| `DateRangeField` | `Option<DateRange>` | `presets` (`DateRangePreset::defaults()`), `allow_empty`, `short_month_names`, `month_names`, `weekday_names`. |
+| `Calendar` | | `selected`, `on_pick`, `range`, `on_hover`, `month`, `hide_previous`, `hide_next`, `month_names`, `weekday_names`. |
+
+`DateRange` містить включні дні `start` і `end` як `LocalDate` `(рік, місяць, день)`; `DateRangePreset` охоплює сьогодні, учора, цей і минулий тиждень, місяць і рік, останні `n` днів і власні діапазони.
 
 Кожне поле, зокрема ColorField і ParsedField, приймає `label`, `placeholder`, `enabled`, `state` і `on_commit`.
 
@@ -95,39 +105,39 @@
 
 | Властивість | Тип | Типове значення | Компоненти | Опис |
 | :--- | :--- | :--- | :--- | :--- |
-| `placeholder` | `string signal` | ключ рядка | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Перекладний текст; див. Рядки. |
-| `label` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Видимий підпис і доступна назва. |
-| `hint` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Допоміжний текст під полем. |
-| `error` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Текст помилки замінює підказку та малює контур помилки. |
-| `variant` | `FieldVariant signal` | outlined | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Вигляд поля. |
-| `aria_label` | `string signal` | ключ рядка | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Доступна назва, коли підпис не встановлено. |
-| `prepend` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Усередині поля перед елементом керування. |
-| `append` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Усередині поля перед вбудованими елементами розкриття, збереження або вибору. |
-| `before` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Зовні поля перед ним. |
-| `after` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Зовні поля після нього. |
-| `label_slot` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Замінює видиму мітку. |
-| `hint_slot` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Замінює рядок підказки та помилки. |
-| `height` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
-| `padding_x` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
-| `slot_size` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
-| `gap` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
-| `font_size` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar | Перевизначення метрики; див. нижче. |
-| `class` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar | Додатковий клас кореня. |
-| `style` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar | Додатковий стиль кореня. |
+| `placeholder` | `string signal` | ключ рядка | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перекладний текст; див. Рядки. |
+| `label` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Видимий підпис і доступна назва. |
+| `hint` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Допоміжний текст під полем. |
+| `error` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Текст помилки замінює підказку та малює контур помилки. |
+| `variant` | `FieldVariant signal` | outlined | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Вигляд поля. |
+| `aria_label` | `string signal` | ключ рядка | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Доступна назва, коли підпис не встановлено. |
+| `prepend` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Усередині поля перед елементом керування. |
+| `append` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Усередині поля перед вбудованими елементами розкриття, збереження або вибору. |
+| `before` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Зовні поля перед ним. |
+| `after` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Зовні поля після нього. |
+| `label_slot` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Замінює видиму мітку. |
+| `hint_slot` | `slot` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Замінює рядок підказки та помилки. |
+| `height` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
+| `padding_x` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
+| `slot_size` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
+| `gap` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перевизначення метрики; див. нижче. |
+| `font_size` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Перевизначення метрики; див. нижче. |
+| `class` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Додатковий клас кореня. |
+| `style` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Додатковий стиль кореня. |
 | `unit_padding_x` | `number` | не встановлено | NumberField | Перевизначення метрики; див. нижче. |
 | `unit_gap` | `number` | не встановлено | NumberField | Перевизначення метрики; див. нижче. |
-| `state` | `Signal<Option<ControlState>>` | немає | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField | Перевизначення зовнішнього стану елемента керування. |
+| `state` | `Signal<Option<ControlState>>` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перевизначення зовнішнього стану елемента керування. |
 | `day_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
 | `hour_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
 | `minute_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
 | `second_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
 | `millisecond_unit` | `string signal` | ключ рядка | DurationField | Перекладний текст; див. Рядки. |
-| `picker_label` | `string signal` | ключ рядка | DateTimeField, ColorField, TimeField | Перекладний текст; див. Рядки. |
-| `popup_label` | `string signal` | ключ рядка | DateTimeField, ColorField, TimeField | Перекладний текст; див. Рядки. |
-| `icon` | `Option<IconData>` | ключ піктограми | DateTimeField, ColorField, TimeField | Перевизначення вбудованої піктограми; див. Піктограми. |
-| `icon_size` | `number` | не встановлено | DateTimeField, ColorField, TimeField, Calendar | Перевизначення метрики; див. нижче. |
-| `popup_shadow_y` | `number` | не встановлено | DateTimeField, ColorField, TimeField | Перевизначення метрики; див. нижче. |
-| `popup_shadow_blur` | `number` | не встановлено | DateTimeField, ColorField, TimeField | Перевизначення метрики; див. нижче. |
+| `picker_label` | `string signal` | ключ рядка | DateTimeField, DateRangeField, ColorField, TimeField | Перекладний текст; див. Рядки. |
+| `popup_label` | `string signal` | ключ рядка | DateTimeField, DateRangeField, ColorField, TimeField | Перекладний текст; див. Рядки. |
+| `icon` | `Option<IconData>` | ключ піктограми | DateTimeField, DateRangeField, ColorField, TimeField | Перевизначення вбудованої піктограми; див. Піктограми. |
+| `icon_size` | `number` | не встановлено | DateTimeField, DateRangeField, ColorField, TimeField, Calendar | Перевизначення метрики; див. нижче. |
+| `popup_shadow_y` | `number` | не встановлено | DateTimeField, DateRangeField, ColorField, TimeField | Перевизначення метрики; див. нижче. |
+| `popup_shadow_blur` | `number` | не встановлено | DateTimeField, DateRangeField, ColorField, TimeField | Перевизначення метрики; див. нижче. |
 | `calendar_padding` | `number` | не встановлено | DateTimeField | Перевизначення метрики; див. нижче. |
 | `calendar_cell_size` | `number` | не встановлено | DateTimeField | Перевизначення метрики; див. нижче. |
 | `calendar_header_height` | `number` | не встановлено | DateTimeField | Перевизначення метрики; див. нижче. |
@@ -168,6 +178,12 @@
 | `font_size` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
 | `header` | `slot` | немає | ColorPicker | Над вкладками режимів. |
 | `footer` | `slot` | немає | ColorPicker | Під зразками. |
+| `presets_label` | `string signal` | ключ рядка | DateRangeField | Перекладний текст; див. Рядки. |
+| `start_hint` | `string signal` | ключ рядка | DateRangeField | Перекладний текст; див. Рядки. |
+| `end_hint` | `string signal` | ключ рядка | DateRangeField | Перекладний текст; див. Рядки. |
+| `calendar_cell_size` | `number` | не встановлено | DateRangeField | Перевизначення метрики; див. нижче. |
+| `presets_width` | `number` | не встановлено | DateRangeField | Перевизначення метрики; див. нижче. |
+| `preset_height` | `number` | не встановлено | DateRangeField | Перевизначення метрики; див. нижче. |
 | `clock_size` | `number` | не встановлено | TimeField | Перевизначення метрики; див. нижче. |
 | `hours_label` | `string signal` | ключ рядка | ClockPicker | Перекладний текст; див. Рядки. |
 | `minutes_label` | `string signal` | ключ рядка | ClockPicker | Перекладний текст; див. Рядки. |
@@ -200,6 +216,7 @@
 
 * Поле введення має підпис; `aria-invalid` встановлено, поки показується пульсація помилки.
 * Кнопки вибору мають підписи та `aria-expanded`; спливні шари мають роль `dialog`.
+* Швидкі діапазони DateRangeField — підписаний `listbox`; підказка під календарями є ввічливою живою областю.
 * Режими ColorPicker утворюють `tablist`; площина й смуги є `slider` з `aria-valuetext`; числові поля й поле коду мають назви каналів; зразки — підписаний `listbox`.
 
 ## Кастомізація
@@ -210,18 +227,18 @@
 
 | Метричний проп | Одиниця | Змінна | Типове значення | Компоненти |
 | :--- | :--- | :--- | :--- | :--- |
-| `height` | DU | `--op-field-height` | `row_standard` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField |
-| `padding_x` | DU | `--op-field-padding-x` | `pad_card` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField |
-| `slot_size` | DU | `--op-field-slot-size` | `row_standard` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField |
-| `gap` | DU | `--op-field-gap` | `gap_micro` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField |
-| `font_size` | TU | `--op-field-font-size` | `type_body_size` | NumberField, DurationField, TimeField, DateTimeField, ColorField, ParsedField, Calendar |
+| `height` | DU | `--op-field-height` | `row_standard` | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField |
+| `padding_x` | DU | `--op-field-padding-x` | `pad_card` | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField |
+| `slot_size` | DU | `--op-field-slot-size` | `row_standard` | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField |
+| `gap` | DU | `--op-field-gap` | `gap_micro` | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField |
+| `font_size` | TU | `--op-field-font-size` | `type_body_size` | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar |
 | `unit_padding_x` | DU | `--op-field-unit-padding-x` | `pad_card` | NumberField |
 | `unit_gap` | DU | `--op-field-unit-gap` | `pad_tight` | NumberField |
-| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) для стрілок вибору | DateTimeField, ColorField, TimeField, Calendar |
-| `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, ColorField, TimeField |
-| `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, ColorField, TimeField |
+| `icon_size` | DU | `--op-field-icon-size` | `icon_small` (`4 DU`); `icon_field` (`5 DU`) для стрілок вибору | DateTimeField, DateRangeField, ColorField, TimeField, Calendar |
+| `popup_shadow_y` | DU | `--op-field-popup-shadow-y` | `2 DU` | DateTimeField, DateRangeField, ColorField, TimeField |
+| `popup_shadow_blur` | DU | `--op-field-popup-shadow-blur` | `6 DU` | DateTimeField, DateRangeField, ColorField, TimeField |
 | `calendar_padding` | DU | `--op-field-calendar-padding` | `pad_tight` | DateTimeField |
-| `calendar_cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | DateTimeField |
+| `calendar_cell_size` | DU | `--op-field-calendar-cell-size` | `row_compact` | DateTimeField, DateRangeField |
 | `calendar_header_height` | DU | `--op-field-calendar-header-height` | `row_compact` | DateTimeField |
 | `calendar_weekday_height` | DU | `--op-field-calendar-weekday-height` | `row_dense` | DateTimeField |
 | `preview_size` | DU | `--op-field-preview-size` | `icon_field` (`5 DU`) | ColorField |
@@ -237,6 +254,8 @@
 | `tab_height` | DU | `--op-field-color-tab-height` | `row_compact` | ColorPicker |
 | `number_width` | DU | `--op-field-color-number-width` | `14 DU` | ColorPicker |
 | `font_size` | TU | `--op-field-font-size` | `type_body_size` | ColorPicker |
+| `presets_width` | DU | `--op-field-range-presets-width` | `36 DU` | DateRangeField |
+| `preset_height` | DU | `--op-field-range-preset-height` | `row_compact` | DateRangeField |
 | `clock_size`, `size` | DU | `--op-field-clock-size` | `64 DU` | TimeField, ClockPicker |
 | `number_size` | DU | `--op-field-clock-number-size` | `row_compact` | ClockPicker |
 | `hand_width` | DU | `--op-field-clock-hand-width` | `border_thick` | ClockPicker |
@@ -262,6 +281,7 @@
 | `--op-field-popup-shadow` | `existing black at 35% opacity` |
 | `--op-field-swatch-border` | `existing black at 25% opacity` |
 | `--op-field-surface-alt` | `surface_alt` для циферблата й показу часу ClockPicker |
+| `--op-field-range` | `accent` на 22% для днів усередині діапазону |
 | `--op-field-border` | `border` для числових полів і поля коду ColorPicker |
 | `--op-field-hover` | `hover` для вкладок ColorPicker |
 | `--op-field-divider` | `divider` під вкладками ColorPicker |
@@ -306,6 +326,23 @@ DurationField приймає перекладені суфікси поряд і
 | `clock-picker.minutes` | `minutes_label` | `Minutes` |
 | `clock-picker.am` | `am_label` | `AM` |
 | `clock-picker.pm` | `pm_label` | `PM` |
+| `date-range-field.placeholder` | `placeholder` | `(empty)` |
+| `date-range-field.label` | `aria_label` | `Date range` |
+| `date-range-field.pick` | `picker_label` | `Pick dates` |
+| `date-range-field.popup` | `popup_label` | `Date range` |
+| `date-range-field.presets` | `presets_label` | `Quick ranges` |
+| `date-range-field.start-hint` | `start_hint` | `Pick the first day` |
+| `date-range-field.end-hint` | `end_hint` | `Pick the last day` |
+| `date-range-field.months` | `short_month_names` | `Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec` |
+| `date-range-field.today` | `presets` | `Today` |
+| `date-range-field.yesterday` | `presets` | `Yesterday` |
+| `date-range-field.this-week` | `presets` | `This week` |
+| `date-range-field.last-week` | `presets` | `Last week` |
+| `date-range-field.this-month` | `presets` | `This month` |
+| `date-range-field.last-month` | `presets` | `Last month` |
+| `date-range-field.last-days` | `presets` | `Last {n} days` |
+| `date-range-field.this-year` | `presets` | `This year` |
+| `date-range-field.last-year` | `presets` | `Last year` |
 | `date-time-field.placeholder` | `placeholder` | `(empty)` |
 | `date-time-field.label` | `aria_label` | `Date and time` |
 | `date-time-field.pick` | `picker_label` | `Pick a date` |
@@ -358,6 +395,7 @@ DurationField приймає перекладені суфікси поряд і
 | Ключ | Проп | Типове значення |
 | :--- | :--- | :--- |
 | `time-field.expand` | `icon` | `arrow_drop_down` |
+| `date-range-field.expand` | `icon` | `arrow_drop_down` |
 | `date-time-field.expand` | `icon` | `arrow_drop_down` |
 | `color-field.expand` | `icon` | `arrow_drop_down` |
 | `calendar.previous` | `previous_icon` | `chevron_left` |

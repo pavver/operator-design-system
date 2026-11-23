@@ -24,6 +24,8 @@ pub fn value_fields() -> AnyView {
     let lamp = RwSignal::new("#ffb46b".to_string());
     let lamp_kelvin = RwSignal::new(Some(3000_u32));
     let picked = RwSignal::new("#457b9d".to_string());
+    let trip = RwSignal::new(Some(DateRange::new((2026, 7, 12), (2026, 11, 5))));
+    let report = RwSignal::new(None::<DateRange>);
     let wake = RwSignal::new(6 * 3600 + 45 * 60_u32);
     let meeting = RwSignal::new(14 * 3600 + 30 * 60_u32);
     let dial = RwSignal::new(21 * 3600 + 15 * 60_u32);
@@ -53,6 +55,16 @@ pub fn value_fields() -> AnyView {
                 <DateTimeField label="Start" value=when/>
                 <ColorField label="Colour" value=color swatches=swatches.get_value()/>
             </div>
+        </Example>
+        <Example title="Date range" note="Press the first day, move to preview, press the last day; or pick a quick range. Text such as 12 Jul – 5 Nov or 2026-07-12..2026-11-05 works too." block=true>
+            <div class="demo-grid-2">
+                <DateRangeField label=l("Trip", "Подорож") value=trip/>
+                <DateRangeField label=l("Report period (optional)", "Звітний період (необов'язково)") value=report allow_empty=true
+                    presets=vec![DateRangePreset::LastDays(7), DateRangePreset::LastMonth, DateRangePreset::LastYear]/>
+            </div>
+            <span class="op-t-caption demo-muted">
+                {move || format!("trip={:?} report={:?}", trip.get(), report.get())}
+            </span>
         </Example>
         <Example title="Clock dial" note="The arrow opens a dial: drag the hand to the hour, then to the minute. The inner ring holds 00 and 13–23." block=true>
             <div class="demo-grid-2">

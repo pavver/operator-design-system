@@ -270,3 +270,37 @@
 }
 .op-clock-number[data-inner] { color: var(--op-field-secondary-text, var(--op-text-secondary)); font-size: var(--op-type-caption-size); }
 .op-clock-number[data-selected] { color: var(--op-field-on-accent, var(--op-on-accent)); }
+
+/* Calendar ranges: the days between the ends are tinted. */
+.op-calendar-day[data-in-range]:not([aria-selected="true"]) { background-color: var(--op-field-range, color-mix(in srgb, var(--op-field-accent, var(--op-accent)) 22%, transparent)); }
+.op-calendar-day[data-in-range]:not([aria-selected="true"]):hover { background-color: var(--op-field-pressed, var(--op-pressed)); }
+
+/* DateRangeField popup: presets beside two linked months. */
+.op-range-popup { display: flex; flex-wrap: wrap; max-width: calc(100vw - var(--op-dim-margin-screen) * 2); }
+.op-range-presets {
+  display: flex;
+  flex-direction: column;
+  width: var(--op-field-range-presets-width, calc(var(--op-du) * 36));
+  padding: var(--op-dim-pad-tight) 0;
+  box-shadow: inset calc(var(--op-dim-border) * -1) 0 0 var(--op-field-divider, var(--op-divider));
+}
+.op-range-preset {
+  display: flex;
+  align-items: center;
+  height: var(--op-field-range-preset-height, var(--op-dim-row-compact));
+  padding: 0 var(--op-dim-pad-card);
+  border: 0;
+  background: transparent;
+  color: var(--op-field-text, var(--op-text-primary));
+  font: inherit;
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-range-preset:hover { background-color: var(--op-field-hover, var(--op-hover)); }
+.op-range-preset[aria-selected="true"] { color: var(--op-field-accent, var(--op-accent)); box-shadow: inset var(--op-dim-border-thick) 0 0 var(--op-field-accent, var(--op-accent)); }
+.op-root .op-range-preset:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+.op-range-main { display: flex; flex-direction: column; }
+.op-range-months { display: flex; flex-wrap: wrap; }
+.op-range-status { padding: 0 var(--op-dim-pad-card) var(--op-dim-pad-tight); color: var(--op-field-secondary-text, var(--op-text-secondary)); }

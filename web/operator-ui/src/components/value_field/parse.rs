@@ -334,3 +334,221 @@ pub fn dial_minute(angle: f64, step: u32) -> u32 {
     let m = ((angle.rem_euclid(360.0) / 6.0 / step).round() * step) as u32;
     m % 60
 }
+
+/// A calendar day as `(year, month, day)`.
+pub type LocalDate = (i32, u32, u32);
+
+/// The date `days` after 1970-01-01 (inverse of [`days_from_civil`]).
+pub fn civil_from_days(days: i64) -> LocalDate {
+    let z = days + 719_468;
+    let era = z.div_euclid(146_097);
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    let y = yoe + era * 400 + i64::from(m <= 2);
+    (
+        i32::try_from(y).unwrap_or(0),
+        u32::try_from(m).unwrap_or(1),
+        u32::try_from(d).unwrap_or(1),
+    )
+}
+
+/// `date` moved by `days`.
+pub fn add_days(date: LocalDate, days: i64) -> LocalDate {
+    civil_from_days(days_from_civil(date.0, date.1, date.2) + days)
+}
+
+/// An inclusive range of days; `start` is never after `end`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct DateRange {
+    pub start: LocalDate,
+    pub end: LocalDate,
+}
+
+impl DateRange {
+    /// The range between two days in either order.
+    pub fn new(a: LocalDate, b: LocalDate) -> Self {
+        Self {
+            start: a.min(b),
+            end: a.max(b),
+        }
+    }
+
+    /// Number of days, both ends included.
+    pub fn days(self) -> i64 {
+        days_from_civil(self.end.0, self.end.1, self.end.2)
+            - days_from_civil(self.start.0, self.start.1, self.start.2)
+            + 1
+    }
+
+    pub fn contains(self, d: LocalDate) -> bool {
+        self.start <= d && d <= self.end
+    }
+}
+
+/// Ready-made ranges relative to today; weeks start on Monday.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum DateRangePreset {
+    Today,
+    Yesterday,
+    ThisWeek,
+    LastWeek,
+    ThisMonth,
+    LastMonth,
+    /// The last `n` days ending today.
+    LastDays(u32),
+    ThisYear,
+    LastYear,
+    /// A fixed range with its own label.
+    Custom(String, DateRange),
+}
+
+impl DateRangePreset {
+    /// The presets DateRangeField offers by default.
+    pub fn defaults() -> Vec<Self> {
+        vec![
+            Self::Today,
+            Self::Yesterday,
+            Self::ThisWeek,
+            Self::LastWeek,
+            Self::ThisMonth,
+            Self::LastMonth,
+            Self::LastDays(7),
+            Self::LastDays(30),
+            Self::ThisYear,
+        ]
+    }
+
+    /// The range for `today`.
+    pub fn resolve(&self, today: LocalDate) -> DateRange {
+        let (y, m, _) = today;
+        let monday = add_days(today, -i64::from(weekday(today.0, today.1, today.2)));
+        let month_start = (y, m, 1);
+        let previous_month = if m == 1 { (y - 1, 12) } else { (y, m - 1) };
+        match self {
+            Self::Today => DateRange::new(today, today),
+            Self::Yesterday => {
+                let d = add_days(today, -1);
+                DateRange::new(d, d)
+            }
+            Self::ThisWeek => DateRange::new(monday, add_days(monday, 6)),
+            Self::LastWeek => DateRange::new(add_days(monday, -7), add_days(monday, -1)),
+            Self::ThisMonth => DateRange::new(month_start, (y, m, days_in_month(y, m))),
+            Self::LastMonth => DateRange::new(
+                (previous_month.0, previous_month.1, 1),
+                (
+                    previous_month.0,
+                    previous_month.1,
+                    days_in_month(previous_month.0, previous_month.1),
+                ),
+            ),
+            Self::LastDays(n) => DateRange::new(add_days(today, 1 - i64::from((*n).max(1))), today),
+            Self::ThisYear => DateRange::new((y, 1, 1), (y, 12, 31)),
+            Self::LastYear => DateRange::new((y - 1, 1, 1), (y - 1, 12, 31)),
+            Self::Custom(_, r) => *r,
+        }
+    }
+}
+
+/// `12 Jul – 5 Nov 2026`, `3 – 10 Aug 2026`, `12 Jul 2025 – 5 Nov 2026`, or `5 Nov 2026` for one
+/// day, with
+/// `short_months` January first.
+pub fn format_date_range(r: DateRange, short_months: &[String]) -> String {
+    let name = |m: u32| {
+        short_months
+            .get(usize::try_from(m).unwrap_or(1).saturating_sub(1))
+            .cloned()
+            .unwrap_or_else(|| format!("{m:02}"))
+    };
+    let (s, e) = (r.start, r.end);
+    if s == e {
+        return format!("{} {} {}", e.2, name(e.1), e.0);
+    }
+    if s.0 == e.0 && s.1 == e.1 {
+        format!("{} – {} {} {}", s.2, e.2, name(e.1), e.0)
+    } else if s.0 == e.0 {
+        format!("{} {} – {} {} {}", s.2, name(s.1), e.2, name(e.1), e.0)
+    } else {
+        format!(
+            "{} {} {} – {} {} {}",
+            s.2,
+            name(s.1),
+            s.0,
+            e.2,
+            name(e.1),
+            e.0
+        )
+    }
+}
+
+/// One day as `YYYY-MM-DD`, `D.M[.YYYY]` or `D Mon [YYYY]`; the year defaults to `year`.
+fn parse_day(text: &str, months: &[Vec<String>], year: i32) -> Option<LocalDate> {
+    let t = text.trim();
+    let date = |y: i32, m: u32, d: u32| (LocalDateTime::new(y, m, d, 0)).map(|_| (y, m, d));
+    let words: Vec<&str> = t.split_whitespace().collect();
+    if words.len() >= 2 {
+        let day: u32 = words[0].trim_end_matches('.').parse().ok()?;
+        let word = words[1].trim_end_matches(['.', ',']).to_lowercase();
+        let month = month_from_word(&word, months)?;
+        let y = match words.get(2) {
+            Some(y) => y.parse().ok()?,
+            None => year,
+        };
+        return (words.len() <= 3).then(|| date(y, month, day)).flatten();
+    }
+    let parts: Vec<&str> = t.split(['-', '.', '/']).collect();
+    match parts.as_slice() {
+        [y, m, d] if y.len() == 4 => date(y.parse().ok()?, m.parse().ok()?, d.parse().ok()?),
+        [d, m, y] => date(y.parse().ok()?, m.parse().ok()?, d.parse().ok()?),
+        [d, m] => date(year, m.parse().ok()?, d.parse().ok()?),
+        _ => None,
+    }
+}
+
+/// The month whose name in any list shares its first three letters with `word`, so
+/// inflected forms such as `липня` match `Липень`.
+fn month_from_word(word: &str, months: &[Vec<String>]) -> Option<u32> {
+    let stem = |w: &str| w.to_lowercase().chars().take(3).collect::<String>();
+    let key = stem(word);
+    if key.chars().count() < 3 {
+        return None;
+    }
+    months.iter().find_map(|list| {
+        list.iter()
+            .position(|name| stem(name) == key)
+            .and_then(|i| u32::try_from(i + 1).ok())
+    })
+}
+
+/// A range from text: two days joined by `–`, `—`, ` - `, `..` or ` to `, or one day. Missing
+/// years default to `year` for the end and to the end's year for the start (a year earlier
+/// when that would put the start after the end). `months` holds month-name lists, January
+/// first, matched by prefix.
+pub fn parse_date_range(text: &str, months: &[Vec<String>], year: i32) -> Option<DateRange> {
+    let t = text.trim();
+    if t.is_empty() {
+        return None;
+    }
+    let separators = [" – ", "–", " — ", "—", " - ", "..", " to "];
+    let (a, b) = separators
+        .iter()
+        .find_map(|s| t.split_once(s))
+        .unwrap_or((t, t));
+    let end = parse_day(b, months, year)?;
+    // A bare day number before the separator takes the month and year of the end.
+    if let Ok(day) = a.trim().parse::<u32>() {
+        return LocalDateTime::new(end.0, end.1, day, 0)
+            .map(|_| DateRange::new((end.0, end.1, day), end));
+    }
+    let start = parse_day(a, months, end.0)?;
+    let explicit_start_year = a.split(|c: char| !c.is_ascii_digit()).any(|p| p.len() == 4);
+    let start = if start > end && !explicit_start_year {
+        parse_day(a, months, end.0 - 1)?
+    } else {
+        start
+    };
+    Some(DateRange::new(start, end))
+}

@@ -343,6 +343,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "The arrow opens a dial: drag the hand to the hour, then to the minute. The inner ring holds 00 and 13–23." => {
             "Стрілка відкриває циферблат: перетягніть стрілку на годину, потім на хвилину. Внутрішнє коло містить 00 і 13–23."
         }
+        "Press the first day, move to preview, press the last day; or pick a quick range. Text such as 12 Jul – 5 Nov or 2026-07-12..2026-11-05 works too." => {
+            "Натисніть перший день, ведіть для попереднього перегляду, натисніть останній; або виберіть швидкий діапазон. Текст на кшталт 12 лип – 5 лис чи 2026-07-12..2026-11-05 теж працює."
+        }
         "The dial alone, for panels and dialogs." => "Лише циферблат — для панелей і діалогів.",
         "The editor alone, for panels and dialogs." => "Лише редактор — для панелей і діалогів.",
         "The arrow opens a calendar or the swatches; text input works too." => {

@@ -224,3 +224,97 @@ fn dial_maps_angles_to_hours_and_minutes() {
     assert_eq!(dial_minute(100.0, 5), 15);
     assert_eq!(dial_minute(350.0, 15), 0);
 }
+
+mod ranges {
+    use super::super::parse::*;
+
+    fn months() -> Vec<Vec<String>> {
+        let en = [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        ];
+        let uk = [
+            "Січень",
+            "Лютий",
+            "Березень",
+            "Квітень",
+            "Травень",
+            "Червень",
+            "Липень",
+            "Серпень",
+            "Вересень",
+            "Жовтень",
+            "Листопад",
+            "Грудень",
+        ];
+        vec![
+            en.iter().map(|s| (*s).to_string()).collect(),
+            uk.iter().map(|s| (*s).to_string()).collect(),
+        ]
+    }
+
+    #[test]
+    fn days_round_trip() {
+        for d in [(1970, 1, 1), (2000, 2, 29), (2026, 12, 31), (1969, 12, 31)] {
+            assert_eq!(civil_from_days(days_from_civil(d.0, d.1, d.2)), d);
+        }
+        assert_eq!(add_days((2026, 2, 28), 1), (2026, 3, 1));
+        assert_eq!(add_days((2026, 1, 1), -1), (2025, 12, 31));
+    }
+
+    #[test]
+    fn ranges_format_and_parse() {
+        let m = months();
+        let r = DateRange::new((2026, 11, 5), (2026, 7, 12));
+        assert_eq!(r.days(), 117);
+        let text = format_date_range(r, &m[0]);
+        assert_eq!(text, "12 Jul – 5 Nov 2026");
+        assert_eq!(parse_date_range(&text, &m, 2020), Some(r));
+        assert_eq!(parse_date_range("з 12 липня", &m, 2026), None);
+        assert_eq!(
+            parse_date_range("12 липня – 5 листопада", &m, 2026),
+            Some(r)
+        );
+        assert_eq!(
+            parse_date_range("2026-07-12..2026-11-05", &m, 2000),
+            Some(r)
+        );
+        assert_eq!(parse_date_range("12.07 - 5.11.2026", &m, 2000), Some(r));
+        let wrap = parse_date_range("20 Dec – 3 Jan 2027", &m, 2000);
+        assert_eq!(wrap, Some(DateRange::new((2026, 12, 20), (2027, 1, 3))));
+        assert_eq!(
+            format_date_range(DateRange::new((2026, 12, 20), (2027, 1, 3)), &m[0]),
+            "20 Dec 2026 – 3 Jan 2027"
+        );
+        assert_eq!(
+            parse_date_range("5 Nov 2026", &m, 2000),
+            Some(DateRange::new((2026, 11, 5), (2026, 11, 5)))
+        );
+        assert_eq!(parse_date_range("31 Feb 2026", &m, 2000), None);
+        let august = DateRange::new((2026, 8, 3), (2026, 8, 10));
+        assert_eq!(format_date_range(august, &m[0]), "3 – 10 Aug 2026");
+        assert_eq!(parse_date_range("3 – 10 Aug 2026", &m, 2000), Some(august));
+    }
+
+    #[test]
+    fn presets_resolve() {
+        // 2026-11-18 is a Wednesday.
+        let today = (2026, 11, 18);
+        assert_eq!(
+            DateRangePreset::ThisWeek.resolve(today),
+            DateRange::new((2026, 11, 16), (2026, 11, 22))
+        );
+        assert_eq!(
+            DateRangePreset::LastWeek.resolve(today),
+            DateRange::new((2026, 11, 9), (2026, 11, 15))
+        );
+        assert_eq!(
+            DateRangePreset::LastMonth.resolve((2026, 1, 10)),
+            DateRange::new((2025, 12, 1), (2025, 12, 31))
+        );
+        assert_eq!(DateRangePreset::LastDays(7).resolve(today).days(), 7);
+        assert_eq!(
+            DateRangePreset::ThisMonth.resolve(today).end,
+            (2026, 11, 30)
+        );
+    }
+}

@@ -1,0 +1,11 @@
+date = "2026-11-23T23:36:18Z"
+status = "draft"
+kind = "new"
+
+[en]
+summary = "New DateRangeField for ranges such as `12 Jul – 5 Nov 2026`: quick ranges (today, this week, last month, last 7 days…), two linked months with a hover preview, and text input in day-month or ISO forms. Calendar gains `range`, `on_hover`, `month`, `hide_previous` and `hide_next`."
+check = "Open both demo range fields, pick two days in either order and across the two months, watch the preview, pick quick ranges, type `3 – 10 Aug 2026`, `20 грудня – 3 січня 2027` and an invalid date, and clear the optional field."
+
+[uk]
+summary = "Новий DateRangeField для діапазонів на кшталт `12 лип – 5 лис 2026`: швидкий вибір (сьогодні, цей тиждень, минулий місяць, останні 7 днів…), два пов'язані місяці з попереднім переглядом під вказівником і текстове введення у формах «день місяць» або ISO. Calendar отримав `range`, `on_hover`, `month`, `hide_previous` і `hide_next`."
+check = "Відкрийте обидва демонстраційні поля діапазону, виберіть два дні в будь-якому порядку й через два місяці, стежте за попереднім переглядом, виберіть швидкі діапазони, введіть `3 – 10 Aug 2026`, `20 грудня – 3 січня 2027` і некоректну дату, очистіть необов'язкове поле."

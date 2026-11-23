@@ -1,4 +1,5 @@
-//! Typed text fields: NumberField, DurationField, TimeField, DateTimeField and ColorField.
+//! Typed text fields: NumberField, DurationField, TimeField, DateTimeField, DateRangeField and
+//! ColorField, with the ColorPicker, ClockPicker and Calendar editors.
 //!
 //! Each one is a [`ParsedField`]: the text is parsed on Enter or blur; invalid text rolls back to
 //! the last value and the field pulses the error state.
@@ -11,6 +12,7 @@ mod parsed;
     any(
         feature = "color-field",
         feature = "date-time-field",
+        feature = "date-range-field",
         feature = "time-field"
     ),
     not(feature = "dropdown-menu")
@@ -21,13 +23,14 @@ mod portal_style;
     any(
         feature = "color-field",
         feature = "date-time-field",
+        feature = "date-range-field",
         feature = "time-field"
     ),
     feature = "dropdown-menu"
 ))]
 use super::dropdown_menu::portal_style;
 
-#[cfg(feature = "date-time-field")]
+#[cfg(any(feature = "date-time-field", feature = "date-range-field"))]
 mod calendar;
 #[cfg(feature = "time-field")]
 mod clock;
@@ -35,6 +38,8 @@ mod clock;
 mod color;
 #[cfg(feature = "color-field")]
 mod color_picker;
+#[cfg(feature = "date-range-field")]
+mod date_range;
 #[cfg(feature = "date-time-field")]
 mod date_time;
 #[cfg(feature = "duration-field")]
@@ -44,7 +49,7 @@ mod number;
 #[cfg(feature = "time-field")]
 mod time;
 
-#[cfg(feature = "date-time-field")]
+#[cfg(any(feature = "date-time-field", feature = "date-range-field"))]
 pub use calendar::Calendar;
 #[cfg(feature = "time-field")]
 pub use clock::ClockPicker;
@@ -52,6 +57,8 @@ pub use clock::ClockPicker;
 pub use color::ColorField;
 #[cfg(feature = "color-field")]
 pub use color_picker::{ColorMode, ColorPicker};
+#[cfg(feature = "date-range-field")]
+pub use date_range::DateRangeField;
 #[cfg(feature = "date-time-field")]
 pub use date_time::DateTimeField;
 #[cfg(feature = "duration-field")]

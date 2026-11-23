@@ -1,5 +1,5 @@
 //! Localized month grid used by DateTimeField.
-use super::parse::{days_in_month, weekday};
+use super::parse::{DateRange, days_in_month, weekday};
 use crate::components::primitives::Icon;
 use crate::core::{Metric, Slot, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
@@ -22,7 +22,7 @@ pub(super) const MONTHS: [&str; 12] = [
 pub(super) const WEEKDAYS: [&str; 7] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
 /// Today's local date from the browser clock.
-fn today() -> (i32, u32, u32) {
+pub(super) fn today() -> (i32, u32, u32) {
     let d = js_sys::Date::new_0();
     #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     (d.get_full_year() as i32, d.get_month() + 1, d.get_date())
@@ -35,6 +35,21 @@ pub fn Calendar(
     #[prop(into)]
     selected: Signal<Option<(i32, u32, u32)>>,
     on_pick: Callback<(i32, u32, u32)>,
+    /// Highlights a range of days: its ends are filled, the days between are tinted.
+    #[prop(optional, into)]
+    range: Signal<Option<DateRange>>,
+    /// Runs with the day under the pointer, and with `None` when the pointer leaves the grid.
+    #[prop(optional)]
+    on_hover: Option<Callback<Option<(i32, u32, u32)>>>,
+    /// The shown month as `(year, month)`; set it to link calendars or to jump.
+    #[prop(optional)]
+    month: Option<RwSignal<(i32, u32)>>,
+    /// Hides the previous-month button (the first of two linked calendars keeps it).
+    #[prop(optional)]
+    hide_previous: bool,
+    /// Hides the next-month button.
+    #[prop(optional)]
+    hide_next: bool,
     /// Month names, January first (English by default).
     #[prop(optional)]
     month_names: Option<Vec<String>>,
@@ -61,7 +76,7 @@ pub fn Calendar(
 ) -> impl IntoView {
     let now = today();
     let start = selected.get_untracked().unwrap_or(now);
-    let shown = RwSignal::new((start.0, start.1));
+    let shown = month.unwrap_or_else(|| RwSignal::new((start.0, start.1)));
     let month_keys = [
         "calendar.january",
         "calendar.february",
@@ -159,15 +174,15 @@ pub fn Calendar(
         <div class=root_class("op-calendar", class) style=custom_style>
             {header.run()}
             <div class="op-calendar-head">
-                <button type="button" class="op-rippled op-calendar-nav" aria-label=move || previous_label.get() on:click=move |_| shift(-1)>
+                <button type="button" class="op-rippled op-calendar-nav" style:visibility=hide_previous.then_some("hidden") aria-label=move || previous_label.get() on:click=move |_| shift(-1)>
                     {move || view! { <Icon icon=previous_icon.get() size=dim::ICON_SMALL attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-small));height:var(--op-field-icon-size, var(--op-dim-icon-small));"/> }}
                 </button>
                 <span class="op-calendar-title">{title}</span>
-                <button type="button" class="op-rippled op-calendar-nav" aria-label=move || next_label.get() on:click=move |_| shift(1)>
+                <button type="button" class="op-rippled op-calendar-nav" style:visibility=hide_next.then_some("hidden") aria-label=move || next_label.get() on:click=move |_| shift(1)>
                     {move || view! { <Icon icon=next_icon.get() size=dim::ICON_SMALL attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-small));height:var(--op-field-icon-size, var(--op-dim-icon-small));"/> }}
                 </button>
             </div>
-            <div class="op-calendar-grid" role="grid">
+            <div class="op-calendar-grid" role="grid" on:pointerleave=move |_| if let Some(cb) = on_hover { cb.run(None) }>
                 {weekdays.into_iter().map(|w| view! { <span class="op-calendar-weekday op-t-caption">{move || w.get()}</span> }).collect_view()}
                 {move || {
                     let (y, m) = shown.get();
@@ -182,7 +197,12 @@ pub fn Calendar(
                                         type="button"
                                         class="op-rippled op-calendar-day"
                                         data-today=(date == now).then_some("")
-                                        aria-selected=move || (selected.get() == Some(date)).to_string()
+                                        aria-selected=move || (selected.get() == Some(date) || range.get().is_some_and(|r| r.start == date || r.end == date)).to_string()
+                                        data-in-range=move || range.get().is_some_and(|r| r.contains(date)).then_some("")
+                                        data-range-start=move || range.get().is_some_and(|r| r.start == date && r.end != date).then_some("")
+                                        data-range-end=move || range.get().is_some_and(|r| r.end == date && r.start != date).then_some("")
+                                        on:pointerenter=move |_| if let Some(cb) = on_hover { cb.run(Some(date)) }
+                                        on:focus=move |_| if let Some(cb) = on_hover { cb.run(Some(date)) }
                                         on:click=move |_| on_pick.run(date)
                                     >
                                         {d}

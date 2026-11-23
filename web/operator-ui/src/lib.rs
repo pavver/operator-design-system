@@ -195,21 +195,29 @@ pub mod prelude {
     pub use crate::components::tree::*;
     #[cfg(feature = "uploader")]
     pub use crate::components::uploader::*;
+    #[cfg(any(feature = "date-time-field", feature = "date-range-field"))]
+    pub use crate::components::value_field::Calendar;
+    #[cfg(feature = "date-time-field")]
+    pub use crate::components::value_field::DateTimeField;
     #[cfg(feature = "duration-field")]
     pub use crate::components::value_field::DurationField;
     #[cfg(feature = "number-field")]
     pub use crate::components::value_field::NumberField;
-    #[cfg(feature = "date-time-field")]
-    pub use crate::components::value_field::{Calendar, DateTimeField};
     #[cfg(feature = "time-field")]
     pub use crate::components::value_field::{ClockPicker, TimeField};
     #[cfg(feature = "color-field")]
     pub use crate::components::value_field::{ColorField, ColorMode, ColorPicker};
+    #[cfg(feature = "date-range-field")]
+    pub use crate::components::value_field::{
+        DateRangeField,
+        parse::{DateRange, DateRangePreset, LocalDate},
+    };
     #[cfg(any(
         feature = "number-field",
         feature = "duration-field",
         feature = "time-field",
         feature = "date-time-field",
+        feature = "date-range-field",
         feature = "color-field"
     ))]
     pub use crate::components::value_field::{ParsedField, parse::LocalDateTime};

@@ -182,6 +182,7 @@ pub mod uploader;
     feature = "duration-field",
     feature = "time-field",
     feature = "date-time-field",
+    feature = "date-range-field",
     feature = "color-field"
 ))]
 pub mod value_field;

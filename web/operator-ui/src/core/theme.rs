@@ -132,6 +132,7 @@ fn stylesheet() -> &'static str {
                 feature = "duration-field",
                 feature = "time-field",
                 feature = "date-time-field",
+                feature = "date-range-field",
                 feature = "color-field"
             ))]
             crate::components::value_field::CSS,

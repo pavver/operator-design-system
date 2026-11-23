@@ -74,6 +74,7 @@ draft = [
     "color-field",
     "combobox",
     "data-table",
+    "date-range-field",
     "date-time-field",
     "dropdown-menu",
     "duration-field",
@@ -165,6 +166,7 @@ console-terminal = ["scrollbar"]
 counter = []
 data-table = ["linear-progress", "primitives", "scrollbar"]
 dialog = ["action-button", "icon-button", "scrollbar"]
+date-range-field = ["field", "popover", "primitives"]
 date-time-field = ["field", "popover", "primitives"]
 duration-field = ["field"]
 dropdown-menu = ["field", "popover", "primitives", "scrollbar", "virtual-list"]
