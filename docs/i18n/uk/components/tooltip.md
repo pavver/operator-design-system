@@ -16,7 +16,7 @@
 | Властивість | Значення |
 | :--- | :--- |
 | Тип | Стиль `caption`. |
-| Тло | `surface_alt` із контуром `0.25 DU` у кольорі `border_strong` і тією самою тінню, що й [Menu](menu.md), щоб вирізнятися на сторінці. |
+| Тло | `surface_alt` зі спільною рамкою [Popover](popover.md) `0.25 DU` у кольорі `accent` і тією самою тінню, що й [Menu](menu.md), щоб вирізнятися на сторінці. |
 | Внутрішній відступ | `1 DU` × `2 DU`. |
 | Ширина | За шириною вмісту, до `75 DU`; щонайбільше 6 рядків, потім трикрапка. |
 | Зміщення | `1.5 DU` від якоря. |
@@ -87,7 +87,7 @@
 | Змінна кольору | Типове значення |
 | :--- | :--- |
 | `--op-tooltip-background` | `surface_alt` |
-| `--op-tooltip-border` | `border_strong` |
+| `--op-tooltip-border` | `accent` |
 | `--op-tooltip-shadow` | `rgb(0 0 0 / 35%)` |
 | `--op-tooltip-text` | `text_primary` |
 

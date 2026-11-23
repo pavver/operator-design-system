@@ -1,0 +1,11 @@
+date = "2026-11-23T15:55:14Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "The floating layer uses the shared Popover frame, a `0.25 DU` `accent` border like DropdownMenu, colored by `--op-menu-border` instead of a `border_strong` outline."
+check = "Open the layer and check the `0.25 DU` `accent` frame, the same as DropdownMenu, with no second outline inside it."
+
+[uk]
+summary = "Спливний шар використовує спільну рамку Popover, бордер `0.25 DU` у кольорі `accent`, як у DropdownMenu, з кольором через `--op-menu-border` замість контуру `border_strong`."
+check = "Відкрийте шар і перевірте рамку `0.25 DU` у кольорі `accent`, таку саму, як у DropdownMenu, без другого контуру всередині."

@@ -1,0 +1,11 @@
+date = "2026-11-23T15:55:14Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "The action stack opens over the trigger instead of the middle of its container, is as wide as its widest action but never narrower than the trigger, centers above or (with `below`) below, flips and shifts to stay on screen, and scrolls when it fits on neither side. It follows the trigger, closes when the page or another container scrolls, and uses the shared accent frame (`--op-fab-border`)."
+check = "Open the Interactive and Long action list examples, scroll the page so the button is near the top or bottom, and check the stack position, width, wheel, drag and touch scrolling of the list, and that scrolling the page closes it; Open the layer and check the `0.25 DU` `accent` frame, the same as DropdownMenu, with no second outline inside it."
+
+[uk]
+summary = "Стос дій відкривається над кнопкою, а не посередині контейнера, має ширину найширшої дії, але не вужчий за кнопку, центрується над нею або (з `below`) під нею, перевертається та зсувається, щоб лишатися на екрані, і прокручується, коли не вміщується з жодного боку. Він слідує за кнопкою, закривається при прокручуванні сторінки чи іншого контейнера та використовує спільну акцентну рамку (`--op-fab-border`)."
+check = "Відкрийте приклади Interactive і Long action list, прокрутіть сторінку так, щоб кнопка була біля верху чи низу, і перевірте положення, ширину, прокручування списку коліщатком, повзунком і дотиком та те, що прокручування сторінки закриває його; Відкрийте шар і перевірте рамку `0.25 DU` у кольорі `accent`, таку саму, як у DropdownMenu, без другого контуру всередині."

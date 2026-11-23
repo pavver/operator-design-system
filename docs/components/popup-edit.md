@@ -61,6 +61,7 @@ Status: **draft** on web.
 | `--op-popup-edit-background` | `surface` |
 | `--op-popup-edit-text` | `inherit` |
 | `--op-popup-edit-accent` | `accent` |
+| `--op-popup-edit-border` | `accent` |
 
 | Slot | Place |
 | :--- | :--- |

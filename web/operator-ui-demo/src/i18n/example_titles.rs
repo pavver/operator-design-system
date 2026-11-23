@@ -8,6 +8,7 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Interactive" => "Інтерактивний приклад",
         "Static states" => "Статичні стани",
         "Long text" => "Довгий текст",
+        "Long action list" => "Довгий список дій",
         "Link mode" => "Режим посилання",
         "16:9 widescreen box" => "Широкоформатний блок 16:9",
         "1:1 square box" => "Квадратний блок 1:1",

@@ -18,7 +18,7 @@
 | Властивість | Значення |
 | :--- | :--- |
 | Радіус кутів | `0 DU` (стандартна квадратна геометрія). |
-| Стандартна рамка | `0.25 DU` контурна рамка контейнера. |
+| Стандартна рамка | `0.25 DU` контурна рамка контейнера; у Popover на комп'ютері її замінює спільна рамка [Popover](popover.md) `0.25 DU` у кольорі `accent`. |
 | Ширина на комп'ютері | `85 DU` (`--op-media-keyboard-width`). |
 | Висота | `70 DU` (`--op-media-keyboard-height`). |
 
@@ -69,6 +69,7 @@
 | :--- | :--- | :--- |
 | `--op-media-keyboard-bg` | `var(--op-surface)` | Фон клавіатури. |
 | `--op-media-keyboard-border` | `var(--op-border)` | Рамка клавіатури. |
+| `--op-media-keyboard-layer-border` | `var(--op-accent)` | Рамка спливного шару Popover на комп'ютері. |
 | `--op-media-keyboard-accent` | `var(--op-accent)` | Лінія активної вкладки та фокус. |
 | `--op-media-keyboard-text` | `var(--op-text-primary)` | Колір тексту клавіатури. |
 

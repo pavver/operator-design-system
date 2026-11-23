@@ -140,7 +140,7 @@ pub fn PopupEdit(
                 on:click=move |_| {if available.get_untracked() && let Some(el)=trigger.get_untracked() {draft.set(value.get_untracked());error.set(None);anchor.set(PopoverAnchor::of(&el));open.update(|v|*v= !*v);}}>
                 {if content.is_set() {content.run()} else {Some(view! {{move || value.get()}}.into_any())}}
             </button>
-            <Popover open=open anchor=anchor aria_label=label role="dialog" node_ref=layer dismiss_on_outside=false dismiss_on_escape=false
+            <Popover open=open anchor=anchor class="op-popup-edit-layer" aria_label=label role="dialog" node_ref=layer dismiss_on_outside=false dismiss_on_escape=false
                 on_placed=Callback::new(move |()| {if let Some(el)=layer.get_untracked() && let Ok(Some(el))=el.query_selector("input") && let Ok(el)=el.dyn_into::<web_sys::HtmlElement>() {let _=el.focus();}})>
                 <div class="op-popup-edit-panel" style=root_style(vec![Metric::du("--op-popup-edit-width",width),Metric::du("--op-popup-edit-padding",padding),Metric::du("--op-popup-edit-gap",gap)],style)>
                     {header.run()}

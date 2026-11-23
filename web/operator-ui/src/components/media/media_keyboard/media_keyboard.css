@@ -104,3 +104,7 @@
   height: calc(var(--op-du) * 5);
   fill: currentColor;
 }
+
+/* In a floating layer the shared accent frame of Popover replaces the panel outline. */
+.op-media-keyboard-layer { --op-popover-border: var(--op-media-keyboard-layer-border, var(--op-accent)); }
+.op-media-keyboard-layer > .op-media-keyboard { border-width: 0; }

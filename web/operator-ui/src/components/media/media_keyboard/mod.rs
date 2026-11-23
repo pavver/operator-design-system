@@ -250,6 +250,7 @@ pub fn MediaKeyboard(
                             anchor=anchor_sig
                             open=open_rw
                             placement=Placement::Above
+                            class="op-media-keyboard-layer"
                         >
                             {render_panel()}
                         </Popover>

@@ -19,16 +19,31 @@ Status: **draft** on web.
 | `BelowStart` | Under the anchor, start edges aligned; flips above when there is no room below. |
 | `BelowEnd` | Under the anchor, end edges aligned; flips above when there is no room below. |
 | `BelowStretch` | Under the anchor with the anchor's width, for lists of a field. |
-| `Above` | Centered above the anchor, `gap` DU away; flips below near the top edge. |
+| `Above` | Centered above the anchor, `gap` DU away; flips below when it fits only there. |
+| `Below` | Centered below the anchor, `gap` DU away; flips above when it fits only there. |
 | `AtPoint` | At a pointer position, shifted to stay inside the viewport (context menus). |
 | `SideStart` | Beside the anchor, top edges aligned, to the right or else to the left (submenus). |
 
 The layer is always clamped to the viewport.
+A centered layer (`Above`, `Below`) near a side edge shifts sideways to stay on screen, and is never wider than the viewport.
+When it fits neither above nor below, it takes the side with more room, gets that height as its limit and clips.
+Content that can grow puts its rows in a [ScrollView](scrollbar.md), which fills the limited layer and scrolls with the library scrollbar instead of the native one.
 It is measured hidden in the first frame and shown placed in the next one, so it never flashes at a wrong position.
+
+## Appearance
+
+| Property | Value |
+| :--- | :--- |
+| Surface | `surface`. |
+| Frame | `0.25 DU` `accent` border inside the bounds, the same for every floating layer. |
+
+Components built on Popover keep this frame and only map its color to their own variable, for example `--op-menu-border`.
 
 ## Behavior
 
 * Scrolling of any ancestor and resizing the window re-place an open layer; `dismiss_on_resize` closes it instead (menus).
+* `dismiss_on_scroll` closes the layer when the page or any container outside it scrolls, instead of following the anchor.
+* Scrolling inside the layer neither re-places nor closes it, so its own scroll view keeps its offset and smooth wheel and touch scrolling.
 * A press outside the layer and the anchor closes it (`dismiss_on_outside`, default on).
   A layer opened from another one (`parent_layer`) counts as inside its parent, so a press in a submenu keeps the menu open.
 * Escape closes it (`dismiss_on_escape`, default on).
@@ -46,6 +61,7 @@ It is measured hidden in the first frame and shown placed in the next one, so it
 | `dismiss_on_outside` | bool | `true` | Close on a press outside. |
 | `dismiss_on_escape` | bool | `true` | Close on Escape. |
 | `dismiss_on_resize` | bool | `false` | Close instead of following on resize. |
+| `dismiss_on_scroll` | bool | `false` | Close instead of following when anything outside the layer scrolls. |
 | `restore_focus` | bool | `true` | Return focus on close. |
 | `passive` | bool | `false` | Pointer events pass through. |
 | `class`, `role`, `label` | string | none | Layer element classes, ARIA role and label. |
@@ -79,7 +95,8 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 
 | Color variable | Default |
 | :--- | :--- |
-| `--op-popover-background` | `transparent` |
+| `--op-popover-background` | `surface` |
+| `--op-popover-border` | `accent` |
 | `--op-popover-text` | `inherit` |
 
 | Slot | Place |

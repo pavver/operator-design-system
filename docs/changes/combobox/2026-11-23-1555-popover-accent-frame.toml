@@ -1,0 +1,11 @@
+date = "2026-11-23T15:55:14Z"
+status = "draft"
+kind = "refactor"
+
+[en]
+summary = "The accent frame moved from the inner list to the shared Popover layer frame, still colored by `--op-field-accent`; the look is unchanged."
+check = "Open the layer and check the `0.25 DU` `accent` frame, the same as DropdownMenu, with no second outline inside it."
+
+[uk]
+summary = "Акцентна рамка перейшла з внутрішнього списку на спільну рамку шару Popover, і далі з кольором `--op-field-accent`; вигляд не змінився."
+check = "Відкрийте шар і перевірте рамку `0.25 DU` у кольорі `accent`, таку саму, як у DropdownMenu, без другого контуру всередині."

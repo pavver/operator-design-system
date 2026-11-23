@@ -19,7 +19,7 @@
 | Висота | До `100 DU`; довший вміст прокручується всередині картки. |
 | Внутрішній відступ | `pad_card`; між блоками вмісту `pad_tight`. |
 | Відстань | `1.5 DU` від якоря. |
-| Поверхня | `surface_alt`, `0.25 DU` у кольорі `border_strong` всередині меж і тінь піднятого шару, як у [Menu](menu.md). |
+| Поверхня | `surface_alt`, спільна рамка [Popover](popover.md) `0.25 DU` у кольорі `accent` всередині меж і тінь піднятого шару, як у [Menu](menu.md). |
 
 ## Поведінка
 
@@ -84,7 +84,7 @@
 | Змінна кольору | Типове значення |
 | :--- | :--- |
 | `--op-hover-card-background` | `surface_alt` |
-| `--op-hover-card-border` | `border_strong` |
+| `--op-hover-card-border` | `accent` |
 | `--op-hover-card-shadow` | `rgb(0 0 0 / 35%)` |
 | `--op-hover-card-text` | `text_primary` |
 

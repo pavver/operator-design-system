@@ -18,7 +18,7 @@ Status: **draft** on web.
 | Width | `45 DU` to `80 DU`, from the longest item. |
 | Height | Content height, at most the viewport minus `8 DU`, then scrolls. |
 | Padding | `1 DU` above and below the items. |
-| Outline | `0.25 DU` `border_strong` plus a soft drop shadow. |
+| Outline | The shared [Popover](popover.md) frame, `0.25 DU` `accent`, plus a soft drop shadow. |
 | Item | At least `8 DU` tall, `2 DU` start and `3 DU` end padding. |
 | Icon slot | `4 DU`, kept empty for items without an icon so labels align. |
 | Shortcut | `caption` style, `text_secondary`, at the end. |
@@ -128,7 +128,7 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | Color variable | Default |
 | :--- | :--- |
 | `--op-menu-background` | `surface` |
-| `--op-menu-border` | `border_strong` |
+| `--op-menu-border` | `accent` |
 | `--op-menu-shadow` | `rgb(0 0 0 / 35%)` |
 | `--op-menu-text` | `text_primary` |
 | `--op-menu-hover` | `hover` |

@@ -139,7 +139,7 @@ media = [
 
 # Component features
 editor = ["action-button", "field", "icon-button", "primitives", "text-field", "tooltip", "web-sys/Selection", "web-sys/Range", "web-sys/ClipboardEvent", "web-sys/DataTransfer", "web-sys/DomParser", "web-sys/SupportedType"]
-fab = ["action-button", "popover"]
+fab = ["action-button", "popover", "scrollbar"]
 field = ["primitives"]
 accordion = ["primitives"]
 action-button = ["primitives"]

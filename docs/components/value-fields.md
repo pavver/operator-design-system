@@ -179,7 +179,7 @@ All text-like inputs provide the same six field slots.
 | `--op-field-background` | `surface` |
 | `--op-field-text` | `text_primary` |
 | `--op-field-secondary-text` | `text_secondary` |
-| `--op-field-popup-border` | `border_strong` |
+| `--op-field-popup-border` | `accent` for the popup frame, `border_strong` for the color preview |
 | `--op-field-pressed` | `pressed` |
 | `--op-field-accent` | `accent` |
 | `--op-field-on-accent` | `on_accent` |

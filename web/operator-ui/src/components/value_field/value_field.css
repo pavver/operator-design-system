@@ -10,10 +10,10 @@
   color: var(--op-field-secondary-text, var(--op-text-secondary));
   font-size: var(--op-field-font-size, var(--op-type-body-size));
 }
+.op-value-popup { --op-popover-border: var(--op-field-popup-border, var(--op-accent)); }
 .op-value-popup > div {
   background-color: var(--op-field-background, var(--op-surface));
   box-shadow:
-    inset 0 0 0 var(--op-dim-border) var(--op-field-popup-border, var(--op-border-strong)),
     0 var(--op-field-popup-shadow-y, calc(var(--op-du) * 2)) var(--op-field-popup-shadow-blur, calc(var(--op-du) * 6)) var(--op-field-popup-shadow, var(--op-shadow));
 }
 

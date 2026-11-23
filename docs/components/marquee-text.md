@@ -18,7 +18,7 @@ Status: **draft** on web.
 | Height | One line of the applied type style. |
 | Padding | `0 DU`; the parent provides insets. |
 | Loop gap | `6 DU` between the end of the text and its repeated start. |
-| Tooltip | `caption` style, `surface` background, `0.25 DU` `border` outline, padding `1 DU` × `2 DU`. |
+| Tooltip | `caption` style, `surface_alt` background, the shared [Popover](popover.md) `0.25 DU` `accent` frame, padding `1 DU` × `2 DU`. |
 | Tooltip width | Up to `75 DU`; at most 6 lines, then an ellipsis. |
 | Tooltip offset | `1.5 DU` from the text. |
 
@@ -118,7 +118,7 @@ Border widths remain the fixed geometry specified above.
 | :--- | :--- |
 | `--op-marquee-text-text` | `inherit` |
 | `--op-marquee-text-tooltip-background` | `surface_alt` |
-| `--op-marquee-text-tooltip-border` | `border_strong` |
+| `--op-marquee-text-tooltip-border` | `accent` |
 | `--op-marquee-text-tooltip-text` | `text_primary` |
 | `--op-marquee-text-tooltip-shadow` | `rgb(0 0 0 / 35%)` |
 

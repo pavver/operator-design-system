@@ -4,10 +4,10 @@
   z-index: 60;
   width: max-content;
   padding: var(--op-tooltip-padding-y, var(--op-dim-pad-tight)) var(--op-tooltip-padding-x, var(--op-dim-gutter));
-  /* Raised layer, like Menu: sunken fill, strong outline and a drop shadow separate it from the page. */
+  /* Raised layer, like Menu: sunken fill, the shared accent frame and a drop shadow separate it from the page. */
   background-color: var(--op-tooltip-background, var(--op-surface-alt));
+  --op-popover-border: var(--op-tooltip-border, var(--op-accent));
   box-shadow:
-    inset 0 0 0 var(--op-dim-border) var(--op-tooltip-border, var(--op-border-strong)),
     0 var(--op-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-tooltip-shadow, var(--op-shadow));
   color: var(--op-tooltip-text, var(--op-text-primary));
   white-space: normal;

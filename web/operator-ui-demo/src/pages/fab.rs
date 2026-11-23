@@ -14,6 +14,11 @@ pub fn fab() -> AnyView {
                 FabAction::new("Refresh", b.action("refresh")).icon(icons::REFRESH),
             ]/>
         </Example>
+        <Example title="Long action list" block=true>
+            <Fab label=l("Long action list", "Довгий список дій") actions=(1..=16)
+                .map(|n| FabAction::new(format!("Workspace action number {n}"), b.action("workspace action")))
+                .collect()/>
+        </Example>
         <Example title="States" block=true>
             <Fab enabled=false actions=vec![]/>
         </Example>

@@ -19,7 +19,7 @@ Status: **draft** on web.
 | Height | Up to `100 DU`; longer content scrolls inside the card. |
 | Padding | `pad_card`; content blocks `pad_tight` apart. |
 | Distance | `1.5 DU` from the anchor. |
-| Surface | `surface_alt`, `0.25 DU` `border_strong` inside the bounds and the raised-layer shadow, like [Menu](menu.md). |
+| Surface | `surface_alt`, the shared [Popover](popover.md) `0.25 DU` `accent` frame inside the bounds and the raised-layer shadow, like [Menu](menu.md). |
 
 ## Behavior
 
@@ -84,7 +84,7 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | Color variable | Default |
 | :--- | :--- |
 | `--op-hover-card-background` | `surface_alt` |
-| `--op-hover-card-border` | `border_strong` |
+| `--op-hover-card-border` | `accent` |
 | `--op-hover-card-shadow` | `rgb(0 0 0 / 35%)` |
 | `--op-hover-card-text` | `text_primary` |
 

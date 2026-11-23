@@ -16,7 +16,7 @@ Status: **draft** on web.
 | Property | Value |
 | :--- | :--- |
 | Type | `caption` style. |
-| Background | `surface_alt` with a `0.25 DU` `border_strong` outline and the same drop shadow as [Menu](menu.md), so it stands out from the page. |
+| Background | `surface_alt` with the shared [Popover](popover.md) `0.25 DU` `accent` frame and the same drop shadow as [Menu](menu.md), so it stands out from the page. |
 | Padding | `1 DU` × `2 DU`. |
 | Width | Content width, up to `75 DU`; at most 6 lines, then an ellipsis. |
 | Offset | `1.5 DU` from the anchor. |
@@ -87,7 +87,7 @@ Metric props write the corresponding variables; an explicit `style` declaration 
 | Color variable | Default |
 | :--- | :--- |
 | `--op-tooltip-background` | `surface_alt` |
-| `--op-tooltip-border` | `border_strong` |
+| `--op-tooltip-border` | `accent` |
 | `--op-tooltip-shadow` | `rgb(0 0 0 / 35%)` |
 | `--op-tooltip-text` | `text_primary` |
 

@@ -18,7 +18,7 @@
 | Висота | Один рядок застосованого типографічного стилю. |
 | Внутрішній відступ | `0 DU`; відступи задає батьківський елемент. |
 | Проміжок циклу | `6 DU` між кінцем тексту та його повторним початком. |
-| Спливна підказка | Стиль `caption`, фон `surface`, контур `0.25 DU` у кольорі `border`, внутрішні відступи `1 DU` × `2 DU`. |
+| Спливна підказка | Стиль `caption`, фон `surface_alt`, спільна рамка [Popover](popover.md) `0.25 DU` у кольорі `accent`, внутрішні відступи `1 DU` × `2 DU`. |
 | Ширина підказки | До `75 DU`; щонайбільше 6 рядків, потім трикрапка. |
 | Зміщення підказки | `1.5 DU` від тексту. |
 
@@ -118,7 +118,7 @@
 | :--- | :--- |
 | `--op-marquee-text-text` | `inherit` |
 | `--op-marquee-text-tooltip-background` | `surface_alt` |
-| `--op-marquee-text-tooltip-border` | `border_strong` |
+| `--op-marquee-text-tooltip-border` | `accent` |
 | `--op-marquee-text-tooltip-text` | `text_primary` |
 | `--op-marquee-text-tooltip-shadow` | `rgb(0 0 0 / 35%)` |
 

@@ -1,0 +1,11 @@
+date = "2026-11-23T15:55:14Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Every layer now has one frame: `surface` with a `0.25 DU` `accent` border (`--op-popover-border`). The new `Below` placement and `Above` center on the anchor, flip to the side where the layer fits, shift sideways near screen edges, and scroll when neither side fits. Placement now measures the viewport without page scrollbars. Scrolling inside a layer no longer re-places it, so its scroll view keeps smooth wheel and touch scrolling, and the new `dismiss_on_scroll` closes a layer when anything outside it scrolls."
+check = "Open the long list on the Fab page near the top, middle and bottom of the window; open any layer next to the right edge and check it stays clear of the scrollbar."
+
+[uk]
+summary = "Кожен шар тепер має одну рамку: `surface` із бордером `0.25 DU` у кольорі `accent` (`--op-popover-border`). Нове розташування `Below` і `Above` центруються на якорі, перевертаються на бік, де шар уміщується, зсуваються вбік біля країв екрана й прокручуються, коли не вміщуються з жодного боку. Розташування тепер вимірює область перегляду без смуг прокручування сторінки. Прокручування всередині шару більше не змінює його розташування, тож його область прокручування зберігає плавну прокрутку коліщатком і дотиком, а новий `dismiss_on_scroll` закриває шар, коли прокручується будь-що поза ним."
+check = "Відкрийте довгий список на сторінці Fab біля верху, посередині та внизу вікна; відкрийте будь-який шар біля правого краю й перевірте, що він не заходить під смугу прокручування."

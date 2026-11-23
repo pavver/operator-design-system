@@ -26,6 +26,7 @@
   line-height: var(--op-marquee-text-tooltip-line-height, var(--op-type-caption-line));
   background-color: var(--op-marquee-text-tooltip-background, var(--op-surface-alt));
   color: var(--op-marquee-text-tooltip-text, var(--op-text-primary));
-  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-marquee-text-tooltip-border, var(--op-border-strong)), 0 var(--op-marquee-text-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-marquee-text-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-marquee-text-tooltip-shadow, var(--op-shadow));
+  --op-popover-border: var(--op-marquee-text-tooltip-border, var(--op-accent));
+  box-shadow: 0 var(--op-marquee-text-tooltip-shadow-y, calc(var(--op-du) * 2)) var(--op-marquee-text-tooltip-shadow-blur, calc(var(--op-du) * 6)) var(--op-marquee-text-tooltip-shadow, var(--op-shadow));
 }
 .op-marquee-tooltip-content { max-width: var(--op-marquee-text-tooltip-max-width, calc(var(--op-du) * 75)); }

@@ -18,7 +18,7 @@ On phones, it docks to the bottom edge and replaces the software virtual keyboar
 | Property | Value |
 | :--- | :--- |
 | Corner radius | `0 DU` (standard square geometry). |
-| Standard border | `0.25 DU` container outline border. |
+| Standard border | `0.25 DU` container outline border; as a Popover on desktop, the shared `0.25 DU` `accent` frame of [Popover](popover.md) replaces it. |
 | Desktop width | `85 DU` (`--op-media-keyboard-width`). |
 | Height | `70 DU` (`--op-media-keyboard-height`). |
 
@@ -69,6 +69,7 @@ On phones, it docks to the bottom edge and replaces the software virtual keyboar
 | :--- | :--- | :--- |
 | `--op-media-keyboard-bg` | `var(--op-surface)` | Keyboard background. |
 | `--op-media-keyboard-border` | `var(--op-border)` | Keyboard outline border. |
+| `--op-media-keyboard-layer-border` | `var(--op-accent)` | Frame of the desktop Popover layer. |
 | `--op-media-keyboard-accent` | `var(--op-accent)` | Active tab underline and focus border. |
 | `--op-media-keyboard-text` | `var(--op-text-primary)` | Keyboard text color. |
 

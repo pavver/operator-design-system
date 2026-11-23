@@ -12,4 +12,9 @@
 }
 .op-popover { scroll-margin-top: var(--op-popover-gap, calc(var(--op-du) * 0)); }
 
-:where(.op-popover) { background-color: var(--op-popover-background, transparent); color: var(--op-popover-text, inherit); }
+:where(.op-popover) {
+  /* One frame for every floating layer: the accent outline of DropdownMenu, inside the bounds. */
+  background-color: var(--op-popover-background, var(--op-surface));
+  color: var(--op-popover-text, inherit);
+  border: var(--op-dim-border) solid var(--op-popover-border, var(--op-accent));
+}

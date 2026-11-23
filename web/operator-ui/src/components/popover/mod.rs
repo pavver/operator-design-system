@@ -1,7 +1,7 @@
 //! Floating layer: Popover, the shared base of menus, lists, tooltips and hover cards.
 
 use crate::core::overlay::{
-    FloatPos, OverlayHost, place_above, place_at, place_below_start, viewport,
+    FloatLimit, FloatPos, OverlayHost, place_at, place_below_start, place_centered, viewport,
 };
 use crate::core::{Metric, Slot, root_class, root_style, ui_text};
 use leptos::portal::Portal;
@@ -77,6 +77,8 @@ pub enum Placement {
     BelowStretch,
     /// Centered above; flips below without room.
     Above,
+    /// Centered below; flips above without room.
+    Below,
     /// At the anchor point (context menus); shifted inside the viewport.
     AtPoint,
     /// Beside the anchor, top edges aligned, to the right or else to the left (submenus).
@@ -109,18 +111,37 @@ fn unreachable_host() -> web_sys::Element {
 
 /// Computes the layer position for a measured size.
 pub fn place(anchor: PopoverAnchor, placement: Placement, w: f64, h: f64, gap: f32) -> FloatPos {
+    place_limited(anchor, placement, w, h, gap).0
+}
+
+/// Computes the layer position and, for centered placements, the size limits that keep the
+/// layer inside the viewport (it scrolls when it fits on neither side).
+pub fn place_limited(
+    anchor: PopoverAnchor,
+    placement: Placement,
+    w: f64,
+    h: f64,
+    gap: f32,
+) -> (FloatPos, FloatLimit) {
     let Some(rect) = anchor.rect() else {
-        return FloatPos {
-            left: 0.0,
-            top: 0.0,
-        };
+        return (
+            FloatPos {
+                left: 0.0,
+                top: 0.0,
+            },
+            FloatLimit::default(),
+        );
     };
+    let unlimited = |pos| (pos, FloatLimit::default());
     match placement {
-        Placement::BelowStart | Placement::BelowStretch => place_below_start(&rect, w, h, gap),
-        Placement::BelowEnd => place_end(&rect, w, h, gap),
-        Placement::Above => place_above(&rect, w, h, gap),
-        Placement::AtPoint => place_at(rect.left(), rect.top(), w, h),
-        Placement::SideStart => place_side(&rect, w, h, gap),
+        Placement::BelowStart | Placement::BelowStretch => {
+            unlimited(place_below_start(&rect, w, h, gap))
+        }
+        Placement::BelowEnd => unlimited(place_end(&rect, w, h, gap)),
+        Placement::Above => place_centered(&rect, w, h, gap, true),
+        Placement::Below => place_centered(&rect, w, h, gap, false),
+        Placement::AtPoint => unlimited(place_at(rect.left(), rect.top(), w, h)),
+        Placement::SideStart => unlimited(place_side(&rect, w, h, gap)),
     }
 }
 
@@ -152,6 +173,7 @@ fn place_side(rect: &web_sys::DomRect, w: f64, h: f64, gap: f32) -> FloatPos {
 fn compute_popover_style(
     position: Option<FloatPos>,
     width: Option<f64>,
+    limit: FloatLimit,
     custom_style: Option<String>,
 ) -> String {
     let visibility = if position.is_some() {
@@ -168,10 +190,75 @@ fn compute_popover_style(
         })
         .unwrap_or_default();
     let width = width.map(|w| format!("width:{w}px;")).unwrap_or_default();
+    // A limited layer clips; its content scrolls in a ScrollView that fills the column, so the
+    // library Scrollbar is used instead of the native one.
+    let clip = if limit.max_width.is_some() || limit.max_height.is_some() {
+        "display:flex;flex-direction:column;overflow:hidden;"
+    } else {
+        ""
+    };
+    let max_width = limit
+        .max_width
+        .map(|w| format!("max-width:{w}px;{clip}"))
+        .unwrap_or_default();
+    let max_height = limit
+        .max_height
+        .map(|h| {
+            format!(
+                "max-height:{h}px;{}",
+                if max_width.is_empty() { clip } else { "" }
+            )
+        })
+        .unwrap_or_default();
+    // The viewport limits come last: they must win over a caller's sizes.
     format!(
-        "visibility:{visibility};{coordinates}{width}{}",
+        "visibility:{visibility};{coordinates}{width}{}{max_width}{max_height}",
         custom_style.unwrap_or_default()
     )
+}
+
+/// Layer size without the viewport limits of the previous placement.
+fn natural_size(el: &web_sys::HtmlDivElement) -> (f64, f64) {
+    let saved = el.get_attribute("style");
+    // Lifting the limits lets scroll views grow, which resets their scroll offset; keep it.
+    let scrolled: Vec<(web_sys::Element, i32)> = el
+        .query_selector_all(".op-scrollview-viewport")
+        .ok()
+        .map(|list| {
+            (0..list.length())
+                .filter_map(|i| list.item(i))
+                .filter_map(|node| node.dyn_into::<web_sys::Element>().ok())
+                .map(|e| {
+                    let top = e.scroll_top();
+                    (e, top)
+                })
+                .filter(|(_, top)| *top != 0)
+                .collect()
+        })
+        .unwrap_or_default();
+    let style = web_sys::HtmlElement::style(el);
+    for property in [
+        "max-width",
+        "max-height",
+        "overflow",
+        "display",
+        "flex-direction",
+    ] {
+        let _ = style.remove_property(property);
+    }
+    let size = (f64::from(el.offset_width()), f64::from(el.offset_height()));
+    match saved {
+        Some(s) => {
+            let _ = el.set_attribute("style", &s);
+        }
+        None => {
+            let _ = el.remove_attribute("style");
+        }
+    }
+    for (e, top) in scrolled {
+        e.set_scroll_top(top);
+    }
+    size
 }
 
 fn restore_popover_focus(
@@ -194,18 +281,32 @@ fn restore_popover_focus(
     }
 }
 
+/// Which outside events close an open layer.
+#[cfg(target_arch = "wasm32")]
+#[derive(Clone, Copy)]
+struct Dismiss {
+    outside: bool,
+    escape: bool,
+    resize: bool,
+    scroll: bool,
+}
+
 #[cfg(target_arch = "wasm32")]
 fn setup_popover_window_listeners(
     open: RwSignal<bool>,
     anchor: Signal<PopoverAnchor>,
     layer_id: u64,
-    dismiss_on_outside: bool,
-    dismiss_on_escape: bool,
-    dismiss_on_resize: bool,
+    dismiss: Dismiss,
     measure: impl Fn() + Copy + 'static,
 ) {
     use crate::core::overlay::event_in_layer_tree;
     use leptos::ev;
+    let Dismiss {
+        outside: dismiss_on_outside,
+        escape: dismiss_on_escape,
+        resize: dismiss_on_resize,
+        scroll: dismiss_on_scroll,
+    } = dismiss;
     let down = window_event_listener(ev::pointerdown, move |e| {
         if !dismiss_on_outside || !open.get_untracked() {
             return;
@@ -233,11 +334,20 @@ fn setup_popover_window_listeners(
             measure();
         }
     });
-    let on_scroll = wasm_bindgen::prelude::Closure::<dyn FnMut()>::new(move || {
-        if open.get_untracked() {
-            measure();
-        }
-    });
+    // Scrolling inside the layer (its own ScrollView) never moves the anchor; re-placing then
+    // would rewrite the scroll offset and cut the smooth wheel scroll short.
+    let on_scroll = wasm_bindgen::prelude::Closure::<dyn FnMut(web_sys::Event)>::new(
+        move |e: web_sys::Event| {
+            if !open.get_untracked() || event_in_layer_tree(&e, layer_id) {
+                return;
+            }
+            if dismiss_on_scroll {
+                open.set(false);
+            } else {
+                measure();
+            }
+        },
+    );
     if let Some(w) = web_sys::window() {
         let _ = w.add_event_listener_with_callback_and_bool(
             "scroll",
@@ -282,6 +392,10 @@ pub fn Popover(
     /// Closes when the window is resized instead of following the anchor.
     #[prop(optional)]
     dismiss_on_resize: bool,
+    /// Closes when the page or any container outside the layer scrolls, instead of following
+    /// the anchor; scrolling inside the layer keeps it open.
+    #[prop(optional)]
+    dismiss_on_scroll: bool,
     /// Returns focus to the previously focused element when the layer closes.
     #[prop(default = true)]
     restore_focus: bool,
@@ -327,6 +441,7 @@ pub fn Popover(
     let layer_id = layer_id.unwrap_or_else(new_layer_id);
     let pos = RwSignal::new(None::<FloatPos>);
     let width = RwSignal::new(None::<f64>);
+    let limit = RwSignal::new(FloatLimit::default());
     let previous_focus = StoredValue::new(None::<SendWrapper<web_sys::HtmlElement>>);
     let host = use_context::<OverlayHost>();
 
@@ -341,7 +456,9 @@ pub fn Popover(
         {
             width.set(Some(w));
         }
-        let (w, h) = (f64::from(el.offset_width()), f64::from(el.offset_height()));
+        // Natural size: the limits of the previous pass are lifted for this one read, so a
+        // layer that scrolls its content is measured at full size and the limit never locks in.
+        let (w, h) = natural_size(&el);
         let first = pos.get_untracked().is_none();
         let gap = window()
             .get_computed_style(&el)
@@ -351,7 +468,9 @@ pub fn Popover(
             .and_then(|s| s.trim_end_matches("px").parse::<f32>().ok())
             .unwrap_or(0.0)
             / operator_ui_tokens::DU_POINTS;
-        pos.set(Some(place(a, placement, w, h, gap)));
+        let (placed, limits) = place_limited(a, placement, w, h, gap);
+        limit.set(limits);
+        pos.set(Some(placed));
         // The layer becomes visible on the next render; focusing a hidden element fails.
         if first && let Some(cb) = on_placed {
             request_animation_frame(move || cb.run(()));
@@ -369,6 +488,7 @@ pub fn Popover(
             );
             pos.set(None);
             width.set(None);
+            limit.set(FloatLimit::default());
             request_animation_frame(measure);
         } else if !is_open && was_open == Some(true) && restore_focus {
             restore_popover_focus(
@@ -412,9 +532,12 @@ pub fn Popover(
         open,
         anchor,
         layer_id,
-        dismiss_on_outside,
-        dismiss_on_escape,
-        dismiss_on_resize,
+        Dismiss {
+            outside: dismiss_on_outside,
+            escape: dismiss_on_escape,
+            resize: dismiss_on_resize,
+            scroll: dismiss_on_scroll,
+        },
         measure,
     );
     #[cfg(not(target_arch = "wasm32"))]
@@ -423,6 +546,7 @@ pub fn Popover(
         dismiss_on_outside,
         dismiss_on_escape,
         dismiss_on_resize,
+        dismiss_on_scroll,
         layer_id,
     );
 
@@ -435,8 +559,9 @@ pub fn Popover(
         ],
         style,
     );
-    let full_style =
-        Signal::derive(move || compute_popover_style(pos.get(), width.get(), custom_style()));
+    let full_style = Signal::derive(move || {
+        compute_popover_style(pos.get(), width.get(), limit.get(), custom_style())
+    });
     let role = StoredValue::new(role);
 
     view! {
