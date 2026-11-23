@@ -1,0 +1,11 @@
+date = "2026-11-23T21:15:29Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "New `enabled` switches every button of the group, and `exclusive` (on by default) disables the other buttons while one runs its action, with `aria-busy` on the group. The examples now run real async actions, and the shared border overlap uses `--op-dim-border` instead of an undefined variable."
+check = "Run an action in Standard joined buttons and check the others wait; toggle Whole group switch; start two cameras at once in Parallel actions."
+
+[uk]
+summary = "Новий проп `enabled` вмикає або вимикає всі кнопки групи, а `exclusive` (типово увімкнений) вимикає інші кнопки, поки одна виконує дію, і встановлює `aria-busy` на групі. Приклади тепер виконують справжні асинхронні дії, а накладання спільних рамок використовує `--op-dim-border` замість невизначеної змінної."
+check = "Запустіть дію в прикладі зі з’єднаними кнопками й перевірте, що інші чекають; перемкніть приклад із перемикачем усієї групи; запустіть дві камери одночасно в прикладі паралельних дій."

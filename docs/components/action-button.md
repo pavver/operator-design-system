@@ -36,6 +36,7 @@ A **dangerous** button uses `error` content on `error` at 15% when idle, and `er
 
 ## Behavior
 
+* Inside a [ButtonGroup](button-group.md), the button also follows the group's `enabled` and, with `exclusive`, is disabled while another button of the group runs.
 1. A click starts the action and enters `Pending`; clicks are ignored while pending.
 2. On completion the button enters the result state for `800 ms`.
    For the first `500 ms` only the result icon is shown.

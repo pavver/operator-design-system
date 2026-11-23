@@ -24,6 +24,8 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Icon buttons group" => "Група кнопок із піктограмами",
         "Spread mode" => "Розтягування на всю ширину",
         "Vertical mode" => "Вертикальний режим",
+        "Whole group switch" => "Перемикач усієї групи",
+        "Parallel actions" => "Паралельні дії",
         "Conversation Thread & Grouping" => "Гілка розмови та групування",
         "Rich Content Payloads" => "Різноманітний вміст повідомлень",
         "Attribution, Reactions, TTL & Actions" => "Авторство, реакції, час існування та дії",

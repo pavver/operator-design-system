@@ -32,6 +32,7 @@ Status: **reviewed** on web.
 
 ## Behavior
 
+* Inside a [ButtonGroup](button-group.md), the button also follows the group's `enabled` and, with `exclusive`, is disabled while another button of the group runs.
 * A synchronous click runs its callback immediately and has no async states.
 * An async click enters `Pending` and ignores further clicks until the result arrives.
 * The result icon is shown for `500 ms`, then the original icon returns in the result color for `300 ms`.

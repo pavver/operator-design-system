@@ -22,11 +22,11 @@
 
 /* Share borders between joined buttons */
 .op-button-group:not([data-vertical]) > *:not(:first-child) {
-    margin-left: calc(-1 * var(--op-border-standard, calc(var(--op-du) * 0.25)));
+    margin-left: calc(-1 * var(--op-dim-border));
 }
 
 .op-button-group[data-vertical] > *:not(:first-child) {
-    margin-top: calc(-1 * var(--op-border-standard, calc(var(--op-du) * 0.25)));
+    margin-top: calc(-1 * var(--op-dim-border));
 }
 
 .op-button-group > *:focus-visible,

@@ -1,0 +1,11 @@
+date = "2026-11-23T21:15:29Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "Inside a ButtonGroup the button follows the group's `enabled` and, when the group is exclusive, is disabled while another button of the group runs; outside a group nothing changes."
+check = "Open the ButtonGroup page and run an action in a group."
+
+[uk]
+summary = "Усередині ButtonGroup кнопка враховує `enabled` групи і, коли група ексклюзивна, вимкнена, поки виконується інша кнопка групи; поза групою нічого не змінюється."
+check = "Відкрийте сторінку ButtonGroup і запустіть дію в групі."

@@ -55,6 +55,8 @@ pub fn ActionButton(
     #[prop(optional, into)] error_label: MaybeProp<String>,
     #[prop(optional)] error_icon: Option<IconData>,
 ) -> impl IntoView {
+    // Inside a ButtonGroup the group can switch the button off and block it while another runs.
+    let (enabled, on_click) = crate::core::join_action_scope(enabled, on_click);
     let loading_label = ui_text(loading_label, "action-button.loading", "Loading");
     let success_label = ui_text(success_label, "action-button.success", "Success");
     let success_icon = ui_icon(success_icon, "action-button.success", icons::CHECK);

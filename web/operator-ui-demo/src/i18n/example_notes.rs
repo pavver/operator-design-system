@@ -30,10 +30,18 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
             "Згортає середні елементи в меню, коли їхня кількість перевищує max_items."
         }
         "Uses a chevron icon separator." => "Використовує піктограму шеврона як роздільник.",
-        "Adjacent buttons share borders seamlessly." => {
-            "Сусідні кнопки мають спільні рамки без розривів."
+        "Adjacent buttons share borders. While one action runs, the others wait." => {
+            "Сусідні кнопки мають спільні рамки. Поки виконується одна дія, решта чекають."
         }
-        "Joined icon actions." => "З’єднані кнопки дій із піктограмами.",
+        "Joined icon actions with their own pending and result feedback." => {
+            "З’єднані кнопки дій із піктограмами з власним очікуванням і результатом."
+        }
+        "One enabled prop turns every button of the group on or off." => {
+            "Один проп enabled вмикає або вимикає всі кнопки групи."
+        }
+        "With exclusive off, every button runs independently." => {
+            "Коли exclusive вимкнено, кожна кнопка виконує дію незалежно."
+        }
         "Stretches buttons to fill available width." => "Розтягує кнопки на всю доступну ширину.",
         "Vertical stack sharing horizontal borders." => {
             "Вертикальний стос зі спільними горизонтальними рамками."

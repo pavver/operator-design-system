@@ -1,6 +1,7 @@
 //! Shared interaction primitives: control states, async actions, state-border visuals, ripple and units.
 
 mod action;
+mod action_scope;
 pub mod custom;
 pub mod glyph;
 #[cfg(feature = "observers")]
@@ -21,6 +22,7 @@ pub(crate) use action::ToggleControl;
 #[cfg(any(feature = "code-block", feature = "property-list"))]
 pub(crate) use action::copy_action;
 pub use action::{ActionResult, AsyncAction, JobToken, copy_text, sleep_ms};
+pub use action_scope::{ActionScope, join_action_scope};
 pub use custom::*;
 #[cfg(feature = "observers")]
 pub use observers::*;
