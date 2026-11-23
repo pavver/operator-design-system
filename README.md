@@ -152,6 +152,7 @@ New components start as draft and become reviewed after they have been checked i
 | SearchField | [search-field.md](docs/components/search-field.md) | ✅ |
 | DropdownMenu | [dropdown-menu.md](docs/components/dropdown-menu.md) | ✅ |
 | Combobox | [combobox.md](docs/components/combobox.md) | ✅ |
+| LanguagePicker | [language-picker.md](docs/components/language-picker.md) | ✅ |
 
 **Feedback**
 

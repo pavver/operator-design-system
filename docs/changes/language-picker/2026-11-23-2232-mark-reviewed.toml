@@ -1,0 +1,9 @@
+date = "2026-11-23T22:32:38Z"
+status = "draft"
+kind = "docs"
+
+[en]
+summary = "LanguagePicker is reviewed: it moves from the `draft` feature group to `reviewed` and is listed in the README."
+
+[uk]
+summary = "LanguagePicker перевірено: він переходить із групи фіч `draft` до `reviewed` і з'являється в README."

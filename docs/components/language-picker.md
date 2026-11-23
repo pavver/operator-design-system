@@ -2,7 +2,7 @@
 
 Combobox variant for choosing an interface language.
 
-Status: **draft** on web.
+Status: **reviewed** on web.
 
 ## Use
 
