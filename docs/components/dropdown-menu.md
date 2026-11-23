@@ -24,6 +24,7 @@ Status: **draft** on web.
 | List | `surface` with an `accent` outline; the library [Scrollbar](scrollbar.md). |
 | Selected option | `accent` at 8% background, `accent` bold text. |
 | Pressed option | `pressed`. |
+| Focused option | `0.5 DU` `accent` ring inside, `hover` background unless selected. |
 
 ## Behavior
 

@@ -1,0 +1,11 @@
+date = "2026-11-23T20:22:27Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "Keyboard focus on an item shows a ring inside it instead of the start bar. Lists, menus, stacks and tables now share one focus look from States: a `0.5 DU` `accent` ring inside the item and the `hover` background while it is at rest."
+check = "Open the Overflow menu with the keyboard and move through it with the arrows, including a submenu."
+
+[uk]
+summary = "Клавіатурний фокус на пункті показує рамку всередині замість смуги на початку. Списки, меню, стоси й таблиці тепер мають однаковий вигляд фокуса зі Станів: рамку `0.5 DU` у кольорі `accent` усередині пункту й тло `hover` у стані спокою."
+check = "Відкрийте меню переповнення з клавіатури й пройдіть його стрілками, зокрема підменю."

@@ -34,6 +34,7 @@
 .op-table tbody tr[data-selected] td { background-color: var(--op-data-table-selected, var(--op-selection)); }
 .op-table tbody tr[data-selected] td:first-child { box-shadow: inset var(--op-dim-border-thick) 0 0 var(--op-data-table-accent, var(--op-accent)), inset 0 calc(var(--op-dim-border) * -1) 0 var(--op-data-table-divider, var(--op-divider)); }
 .op-root .op-table tbody tr:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-data-table-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+.op-table tbody tr:not([data-selected]):focus-visible td { background-color: var(--op-data-table-hover, var(--op-hover)); }
 .op-table-empty td { height: auto; padding: 0; white-space: normal; }
 .op-table-empty-text { display: block; padding: var(--op-data-table-empty-padding, var(--op-dim-section-gap)); text-align: center; color: var(--op-data-table-secondary-text, var(--op-text-secondary)); }
 

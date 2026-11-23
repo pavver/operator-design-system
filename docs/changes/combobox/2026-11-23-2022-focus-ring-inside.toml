@@ -1,0 +1,11 @@
+date = "2026-11-23T20:22:27Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "The active option shows a ring inside it and, unless selected, the `hover` background instead of the `pressed` background. Lists, menus, stacks and tables now share one focus look from States: a `0.5 DU` `accent` ring inside the item and the `hover` background while it is at rest."
+check = "Open a combobox and move the active option with the arrows over unselected options and the selected one."
+
+[uk]
+summary = "Активна опція показує рамку всередині й, якщо не вибрана, тло `hover` замість тла `pressed`. Списки, меню, стоси й таблиці тепер мають однаковий вигляд фокуса зі Станів: рамку `0.5 DU` у кольорі `accent` усередині пункту й тло `hover` у стані спокою."
+check = "Відкрийте комбобокс і переміщуйте активну опцію стрілками по невибраних опціях і вибраній."

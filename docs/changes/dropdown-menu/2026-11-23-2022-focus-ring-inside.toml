@@ -1,0 +1,11 @@
+date = "2026-11-23T20:22:27Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "A focused option shows a ring inside it and, unless selected, the `hover` background; the outer ring was clipped by the list. Lists, menus, stacks and tables now share one focus look from States: a `0.5 DU` `accent` ring inside the item and the `hover` background while it is at rest."
+check = "Open a dropdown and move to an option with Tab; check an unselected and the selected option."
+
+[uk]
+summary = "Варіант у фокусі показує рамку всередині й, якщо не вибраний, тло `hover`; зовнішню рамку обрізав список. Списки, меню, стоси й таблиці тепер мають однаковий вигляд фокуса зі Станів: рамку `0.5 DU` у кольорі `accent` усередині пункту й тло `hover` у стані спокою."
+check = "Відкрийте список і перейдіть до варіанта клавішею Tab; перевірте невибраний і вибраний варіанти."

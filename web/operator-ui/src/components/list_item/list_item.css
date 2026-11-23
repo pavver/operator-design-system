@@ -37,3 +37,6 @@
 .op-list-item > .op-divider { background-color: var(--op-list-item-divider, var(--op-divider)); }
 
 @media (hover: hover) { .op-list-item .op-list-row[role="button"][data-bg="idle"]:hover { background-color: var(--op-list-item-hover, var(--op-hover)); } }
+/* Focus inside a list: ring inside the row, hover fill while idle (states.md). */
+.op-root .op-list-item .op-list-row:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-list-item-focus, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+.op-list-item .op-list-row[data-bg="idle"]:focus-visible { background-color: var(--op-list-item-hover, var(--op-hover)); }

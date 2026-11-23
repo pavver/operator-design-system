@@ -32,6 +32,7 @@ A single-line row centers its content vertically; a multi-line row aligns it to 
 ## Behavior
 
 * The row is clickable only when it has a click handler and is enabled.
+* A focused row shows a `0.5 DU` `accent` ring inside it and the `hover` background while idle, as in [States](../foundations/states.md).
 * Trailing controls such as switches handle their own input independently of the row.
 
 ## API
@@ -101,6 +102,7 @@ Border widths remain the fixed geometry specified above.
 | `--op-list-item-secondary-text` | `text_secondary` |
 | `--op-list-item-divider` | `divider` |
 | `--op-list-item-hover` | `hover` |
+| `--op-list-item-focus` | `accent` |
 
 | Slot | Place |
 | :--- | :--- |

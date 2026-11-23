@@ -31,6 +31,7 @@ Status: **draft** on web.
 ## Selection
 
 * With selection or a row handler, rows are focusable and show the `pressed` background on hover.
+* A focused row shows a `0.5 DU` `accent` ring inside it and, unless selected, the `hover` background, as in [States](../foundations/states.md).
 * The selected row has the `selection` background and a `0.5 DU` `accent` bar on its first cell.
 * Enter or Space on a focused row selects it.
 

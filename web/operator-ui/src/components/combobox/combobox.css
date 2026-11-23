@@ -2,7 +2,8 @@
 /* Combobox                                                            */
 /* ------------------------------------------------------------------ */
 .op-combobox-arrow { pointer-events: none; }
-.op-dropdown-item[data-active] { background-color: var(--op-field-pressed, var(--op-pressed)); }
+.op-combo-option[data-active] { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+.op-combo-option[data-active]:not([aria-selected="true"]) { background-color: var(--op-hover); }
 .op-combobox-none { color: var(--op-field-secondary-text, var(--op-text-secondary)); font-weight: 400; cursor: default; }
 .op-match { background: none; color: var(--op-field-accent, var(--op-accent)); font-weight: 700; }
 

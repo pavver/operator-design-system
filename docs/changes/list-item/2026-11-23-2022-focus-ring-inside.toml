@@ -1,0 +1,11 @@
+date = "2026-11-23T20:22:27Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "A focused clickable row shows a ring inside it with the `hover` background instead of an outer ring over its neighbours; new `--op-list-item-focus` variable. Lists, menus, stacks and tables now share one focus look from States: a `0.5 DU` `accent` ring inside the item and the `hover` background while it is at rest."
+check = "Tab through clickable rows and check that the ring stays inside each row."
+
+[uk]
+summary = "Клікабельний рядок у фокусі показує рамку всередині з тлом `hover` замість зовнішньої рамки поверх сусідів; нова змінна `--op-list-item-focus`. Списки, меню, стоси й таблиці тепер мають однаковий вигляд фокуса зі Станів: рамку `0.5 DU` у кольорі `accent` усередині пункту й тло `hover` у стані спокою."
+check = "Пройдіть клікабельні рядки клавішею Tab і перевірте, що рамка лишається всередині кожного рядка."

@@ -15,7 +15,7 @@ Status: **draft** on web.
 * The field is a [TextField](text-field.md) with a trailing `arrow_drop_down` icon.
 * The list is the DropdownMenu popup: under the field, full width, at most `50 DU` tall, `accent` outline.
 * The matched part of each option is shown in `accent` bold.
-* The active option, moved by the keyboard or the pointer, has the `pressed` background.
+* The active option, moved by the keyboard or the pointer, has a `0.5 DU` `accent` ring inside it and, unless selected, the `hover` background, as in [States](../foundations/states.md).
 * The selected option keeps the DropdownMenu selected style.
 
 ## Behavior

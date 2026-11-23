@@ -1,0 +1,11 @@
+date = "2026-11-23T20:22:27Z"
+status = "draft"
+kind = "fix"
+
+[en]
+summary = "A focused row adds the `hover` background to its inner ring unless it is selected. Lists, menus, stacks and tables now share one focus look from States: a `0.5 DU` `accent` ring inside the item and the `hover` background while it is at rest."
+check = "Tab into a table with selection and move between rows; check a selected row keeps its tint."
+
+[uk]
+summary = "Рядок у фокусі додає до внутрішньої рамки тло `hover`, якщо він не вибраний. Списки, меню, стоси й таблиці тепер мають однаковий вигляд фокуса зі Станів: рамку `0.5 DU` у кольорі `accent` усередині пункту й тло `hover` у стані спокою."
+check = "Перейдіть клавішею Tab у таблицю з вибором і переміщуйтеся між рядками; перевірте, що вибраний рядок зберігає свій відтінок."

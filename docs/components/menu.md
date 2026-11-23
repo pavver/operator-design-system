@@ -31,7 +31,8 @@ Status: **draft** on web.
 * Default: `text_primary`, icon in `icon`.
 * Danger: label and icon in `error`; place it last, after a separator.
 * Disabled: `text_disabled`, cannot be chosen or focused.
-* Hover and keyboard focus: `pressed` background; keyboard focus also shows a `0.5 DU` `accent` start bar.
+* Hover: `hover` background.
+* Keyboard focus: a `0.5 DU` `accent` ring inside the item and the `hover` background, as in [States](../foundations/states.md).
 
 ## Submenus
 

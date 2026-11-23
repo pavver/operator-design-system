@@ -26,7 +26,7 @@
   color: var(--op-menu-text, var(--op-text-primary));
 }
 .op-menu-item:hover, .op-menu-item:focus-visible { background-color: var(--op-menu-hover, var(--op-hover)); }
-.op-root .op-menu-item:focus-visible { outline: none; box-shadow: inset var(--op-dim-border-thick) 0 0 var(--op-menu-focus, var(--op-accent)); }
+.op-root .op-menu-item:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-menu-focus, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
 .op-menu-item[data-danger] { color: var(--op-menu-danger, var(--op-error)); }
 .op-menu-item[aria-disabled="true"] { color: var(--op-menu-disabled, var(--op-text-disabled)); background: none; cursor: default; }
 .op-menu-icon { display: inline-flex; width: var(--op-menu-icon-size, var(--op-dim-icon-small)); flex: none; color: var(--op-menu-icon, var(--op-icon)); }

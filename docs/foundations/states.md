@@ -105,4 +105,7 @@ Touch screens have no hover state; press feedback alone confirms the touch.
 ## Focus
 
 Keyboard focus shows a `0.5 DU` `accent` ring outside the control, offset by `0.5 DU`.
+Items inside lists, menus, stacks, tables and floating layers draw the same `0.5 DU` `accent` ring inside their bounds instead, so a scroll view never clips it and it never overlaps a neighbour.
+Such an item also shows the `hover` background while it is otherwise at rest; a selected, pressed or pending item keeps its own background.
+An option highlighted from the keyboard while a text field keeps the focus, such as the active option of a combobox, looks the same.
 Text fields show focus through their own state border instead.

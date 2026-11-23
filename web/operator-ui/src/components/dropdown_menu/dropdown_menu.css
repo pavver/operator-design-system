@@ -41,3 +41,6 @@
 .op-field-list-probe { position: absolute; width: 0; visibility: hidden; pointer-events: none; }
 
 .op-dropdown-spinner circle { stroke-width: var(--op-field-spinner-stroke, var(--op-dim-spinner-stroke)); }
+/* Focus inside a list: ring inside the option, hover fill unless selected (states.md). */
+.op-root .op-dropdown-item:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+.op-dropdown-item:not([aria-selected="true"]):focus-visible { background-color: var(--op-hover); }
