@@ -1,0 +1,11 @@
+date = "2026-11-24T00:24:55Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "NumberField `steppers` adds − and + buttons that step within `min` and `max` and turn off at the bounds."
+check = "Press − and + on the Guests field up to both bounds and check that the buttons turn off there."
+
+[uk]
+summary = "`steppers` у NumberField додає кнопки − і +, що змінюють значення в межах `min` і `max` та вимикаються на межах."
+check = "Натискайте − і + у полі «Гості» до обох меж і перевірте, що кнопки там вимикаються."

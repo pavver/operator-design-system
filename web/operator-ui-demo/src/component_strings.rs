@@ -220,6 +220,8 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "menu.more-actions" => "Інші дії",
         "menu.context" => "Контекстне меню",
         "navigation-rail.label" => "Навігація",
+        "number-field.increase" => "Збільшити",
+        "number-field.decrease" => "Зменшити",
         "number-field.placeholder" => "",
         "number-field.label" => "Число",
         "pagination.label" => "Навігація сторінками",

@@ -387,3 +387,6 @@
 .op-duration-number:focus { box-shadow: inset 0 0 0 var(--op-dim-border-thick) var(--op-field-accent, var(--op-accent)); }
 .op-duration-unit { text-align: center; color: var(--op-field-secondary-text, var(--op-text-secondary)); }
 .op-root .op-duration-step:focus-visible, .op-root .op-duration-sign:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
+
+/* NumberField steppers. */
+.op-number-step:disabled { cursor: default; opacity: 0.4; }

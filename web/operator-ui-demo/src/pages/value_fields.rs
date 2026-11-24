@@ -24,6 +24,7 @@ pub fn value_fields() -> AnyView {
     let lamp = RwSignal::new("#ffb46b".to_string());
     let lamp_kelvin = RwSignal::new(Some(3000_u32));
     let picked = RwSignal::new("#457b9d".to_string());
+    let people = RwSignal::new(Some(4.0));
     let cook = RwSignal::new(45 * 60_000_i64);
     let shift_by = RwSignal::new(-(26 * 3_600_000_i64));
     let trip = RwSignal::new(Some(DateRange::new((2026, 7, 12), (2026, 11, 5))));
@@ -56,6 +57,11 @@ pub fn value_fields() -> AnyView {
             <div class="demo-grid-2">
                 <DateTimeField label="Start" value=when/>
                 <ColorField label="Colour" value=color swatches=swatches.get_value()/>
+            </div>
+        </Example>
+        <Example title="Steppers" note="The − and + buttons step within min and max and turn off at the bounds." block=true>
+            <div class="demo-grid-2">
+                <NumberField label=l("Guests", "Гості") value=people min=1.0 max=12.0 steppers=true decimals=0/>
             </div>
         </Example>
         <Example title="Duration picker" note="The arrow opens one column per unit; the buttons carry minutes into hours, and a signed field adds a sign switch." block=true>

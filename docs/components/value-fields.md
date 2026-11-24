@@ -22,6 +22,7 @@ Status: **draft** on web.
 | Property | Value |
 | :--- | :--- |
 | Field | As [TextField](text-field.md): `row_standard` (`10 DU`), `pad_card` padding, tabular digits. |
+| Steppers | NumberField `steppers` adds − and + buttons `slot_size` wide after the unit, with `icon_field` icons; a button at its bound turns off. |
 | Unit | After the value, `text_secondary`, `pad_tight` from the text. |
 | Picker button | `10 DU` wide, full height, `arrow_drop_down`; ColorField adds an `icon_field` (`5 DU`) colour preview before the arrow. |
 | Calendar | Popup with a `row_compact` header (previous, month and year, next), a weekday row of `row_dense` and `row_compact` square day cells; weeks start on Monday. |
@@ -48,6 +49,7 @@ The ClockPicker dial, its centre, the hand tip and the selected number are round
 * Valid text is re-formatted to the canonical form.
 * Invalid text rolls back to the last value and the field pulses the error state, as an error rolls back a change everywhere.
 * Escape restores the text of the current value without committing.
+* NumberField − and + buttons step like Arrow Down and Up and commit at once.
 * Arrow Up and Down step the value: NumberField by `step` within `min` and `max`, DurationField by `step_ms`, TimeField by `step_s` around midnight.
 * External changes of the value show up unless the field has focus.
 * The calendar title opens a grid of months, and again a grid of twelve years; picking a year returns to its months and picking a month returns to its days; the arrows move by a month, a year or twelve years.
@@ -88,7 +90,7 @@ Applications that need localized forms wrap [`ParsedField`](#parsedfield) with t
 
 | Component | Value | Properties |
 | :--- | :--- | :--- |
-| `NumberField` | `Option<f64>` | `min`, `max`, `step` (`1`), `decimals` (`3`), `unit`, `allow_empty`. |
+| `NumberField` | `Option<f64>` | `min`, `max`, `step` (`1`), `decimals` (`3`), `unit`, `allow_empty`, `steppers`. |
 | `DurationField` | `i64` milliseconds | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`), `no_picker`, `picker_days`, `picker_seconds` (`true`), `picker_milliseconds`. |
 | `DurationPicker` | `i64` milliseconds | `signed`, `days`, `seconds` (`true`), `milliseconds`, `enabled`, `on_commit`. |
 | `TimeField` | `u32` seconds since midnight | `seconds`, `step_s` (`60`), `hour12`, `minute_step` (`1`), `no_picker`. |
@@ -133,6 +135,10 @@ Labels are visible above the box; use `aria_label` for an accessible name alone.
 | `font_size` | `number` | unset | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Metric override; see below. |
 | `class` | `string signal` | none | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Additional root class. |
 | `style` | `string signal` | none | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Additional root style. |
+| `increase_label` | `string signal` | string key | NumberField | Translatable text; see Strings. |
+| `decrease_label` | `string signal` | string key | NumberField | Translatable text; see Strings. |
+| `increase_icon` | `Option<IconData>` | icon key | NumberField | Built-in icon override; see Icons. |
+| `decrease_icon` | `Option<IconData>` | icon key | NumberField | Built-in icon override; see Icons. |
 | `unit_padding_x` | `number` | unset | NumberField | Metric override; see below. |
 | `unit_gap` | `number` | unset | NumberField | Metric override; see below. |
 | `state` | `Signal<Option<ControlState>>` | none | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | External control-state override. |
@@ -345,6 +351,8 @@ DurationField accepts translated suffixes as well as canonical English forms.
 
 | Key | Prop | Default |
 | :--- | :--- | :--- |
+| `number-field.increase` | `increase_label` | `Increase` |
+| `number-field.decrease` | `decrease_label` | `Decrease` |
 | `number-field.placeholder` | `placeholder` | `(empty)` |
 | `number-field.label` | `aria_label` | `Number` |
 | `duration-field.placeholder` | `placeholder` | `(empty)` |
@@ -445,6 +453,8 @@ DurationField accepts translated suffixes as well as canonical English forms.
 
 | Key | Prop | Default |
 | :--- | :--- | :--- |
+| `number-field.increase` | `increase_icon` | `add` |
+| `number-field.decrease` | `decrease_icon` | `remove` |
 | `duration-field.expand` | `icon` | `arrow_drop_down` |
 | `duration-picker.increase` | `increase_icon` | `add` |
 | `duration-picker.decrease` | `decrease_icon` | `remove` |

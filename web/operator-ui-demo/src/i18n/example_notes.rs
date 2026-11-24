@@ -349,6 +349,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "The arrow opens one column per unit; the buttons carry minutes into hours, and a signed field adds a sign switch." => {
             "Стрілка відкриває колонку для кожної одиниці; кнопки переносять хвилини в години, а поле зі знаком додає перемикач знака."
         }
+        "The − and + buttons step within min and max and turn off at the bounds." => {
+            "Кнопки − і + змінюють значення в межах min і max та вимикаються на межах."
+        }
         "The dial alone, for panels and dialogs." => "Лише циферблат — для панелей і діалогів.",
         "The editor alone, for panels and dialogs." => "Лише редактор — для панелей і діалогів.",
         "The arrow opens a calendar or the swatches; text input works too." => {

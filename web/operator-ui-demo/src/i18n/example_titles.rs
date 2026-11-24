@@ -142,6 +142,7 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Number with a unit" => "Число з одиницею вимірювання",
         "Duration and time" => "Тривалість і час",
         "Date, time and colour" => "Дата, час і колір",
+        "Steppers" => "Кнопки кроку",
         "Duration picker" => "Вибір тривалості",
         "Date range" => "Діапазон дат",
         "Clock dial" => "Циферблат",

@@ -3,10 +3,13 @@
 use super::parse::{format_number, parse_number, step_number};
 use super::parsed::ParsedField;
 use crate::components::field::FieldVariant;
-use crate::core::{ControlState, Metric, Slot, root_style, ui_text};
+use crate::components::primitives::Icon;
+use crate::core::{ControlState, Metric, Slot, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::{Icon as IconData, dim, icons};
 
-/// Number input with a unit after the value; arrows step it within the bounds.
+/// Number input with a unit after the value; arrows, and the optional − and + buttons, step it
+/// within the bounds.
 ///
 /// The value is `None` when the field is empty and `allow_empty` is set.
 #[component]
@@ -26,6 +29,13 @@ pub fn NumberField(
     /// Accepts an empty field as no value.
     #[prop(optional)]
     allow_empty: bool,
+    /// Shows − and + buttons after the value.
+    #[prop(optional)]
+    steppers: bool,
+    #[prop(optional, into)] increase_label: MaybeProp<String>,
+    #[prop(optional, into)] decrease_label: MaybeProp<String>,
+    #[prop(optional)] increase_icon: Option<IconData>,
+    #[prop(optional)] decrease_icon: Option<IconData>,
     #[prop(optional, into)] placeholder: MaybeProp<String>,
     #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(optional, into)] hint: MaybeProp<String>,
@@ -81,9 +91,58 @@ pub fn NumberField(
             max,
         ))
     });
-    let trailing = unit.map(|u| -> ChildrenFn {
+    let increase_label = ui_text(increase_label, "number-field.increase", "Increase");
+    let decrease_label = ui_text(decrease_label, "number-field.decrease", "Decrease");
+    let increase_icon = ui_icon(increase_icon, "number-field.increase", icons::ADD);
+    let decrease_icon = ui_icon(decrease_icon, "number-field.decrease", icons::REMOVE);
+    let blocked = move || {
+        !enabled.get()
+            || matches!(
+                state.get(),
+                Some(ControlState::Disabled | ControlState::Pending)
+            )
+    };
+    let press = move |delta: i32| {
+        if blocked() {
+            return;
+        }
+        let next = on_step.run((value.get_untracked(), delta));
+        if next != value.get_untracked() {
+            value.set(next);
+            if let Some(cb) = on_commit {
+                cb.run(next);
+            }
+        }
+    };
+    let at_min = move || matches!((value.get(), min), (Some(v), Some(m)) if v <= m);
+    let at_max = move || matches!((value.get(), max), (Some(v), Some(m)) if v >= m);
+    let icon_style = "width:var(--op-field-icon-size, var(--op-dim-icon-field));height:var(--op-field-icon-size, var(--op-dim-icon-field));";
+    let trailing = (unit.is_some() || steppers).then(|| -> ChildrenFn {
         std::sync::Arc::new(move || {
-            view! { <span class="op-value-unit">{move || u.get()}</span> }.into_any()
+            view! {
+                {unit.map(|u| view! { <span class="op-value-unit">{move || u.get()}</span> })}
+                {steppers.then(|| view! {
+                    <button
+                        type="button"
+                        class="op-rippled op-field-reveal op-number-step"
+                        aria-label=move || decrease_label.get()
+                        disabled=move || blocked() || at_min()
+                        on:click=move |_| press(-1)
+                    >
+                        {move || view! { <Icon icon=decrease_icon.get() size=dim::ICON_FIELD attr:style=icon_style/> }}
+                    </button>
+                    <button
+                        type="button"
+                        class="op-rippled op-field-reveal op-number-step"
+                        aria-label=move || increase_label.get()
+                        disabled=move || blocked() || at_max()
+                        on:click=move |_| press(1)
+                    >
+                        {move || view! { <Icon icon=increase_icon.get() size=dim::ICON_FIELD attr:style=icon_style/> }}
+                    </button>
+                })}
+            }
+            .into_any()
         })
     });
     view! {

@@ -22,6 +22,7 @@
 | Властивість | Значення |
 | :--- | :--- |
 | Поле | Як у [TextField](text-field.md): `row_standard` (`10 DU`), внутрішній відступ `pad_card`, табличні цифри. |
+| Кнопки кроку | `steppers` у NumberField додає кнопки − і + завширшки `slot_size` після одиниці з піктограмами `icon_field`; кнопка на своїй межі вимикається. |
 | Одиниця | Після значення, `text_secondary`, на відстані `pad_tight` від тексту. |
 | Кнопка вибору | Завширшки `10 DU`, на всю висоту, `arrow_drop_down`; ColorField додає зразок кольору `icon_field` (`5 DU`) перед стрілкою. |
 | Календар | Спливний шар із заголовком `row_compact` (попередній, місяць і рік, наступний), рядком днів тижня `row_dense` і квадратними комірками днів `row_compact`; тижні починаються з понеділка. |
@@ -48,6 +49,7 @@
 * Коректний текст переформатовується в канонічну форму.
 * Некоректний текст відкочується до останнього значення, а поле пульсує станом помилки, як помилка відкочує зміну всюди.
 * Escape відновлює текст поточного значення без фіксації.
+* Кнопки − і + у NumberField діють як Arrow Down і Up та одразу фіксують значення.
 * Arrow Up і Down змінюють значення кроками: NumberField на `step` у межах `min` і `max`, DurationField на `step_ms`, TimeField на `step_s` із переходом через північ.
 * Зовнішні зміни значення відображаються, якщо поле не у фокусі.
 * Заголовок календаря відкриває сітку місяців, а повторно — сітку з дванадцяти років; вибір року повертає до його місяців, а вибір місяця — до його днів; стрілки рухають на місяць, рік або дванадцять років.
@@ -88,7 +90,7 @@
 
 | Компонент | Значення | Властивості |
 | :--- | :--- | :--- |
-| `NumberField` | `Option<f64>` | `min`, `max`, `step` (`1`), `decimals` (`3`), `unit`, `allow_empty`. |
+| `NumberField` | `Option<f64>` | `min`, `max`, `step` (`1`), `decimals` (`3`), `unit`, `allow_empty`, `steppers`. |
 | `DurationField` | `i64` мілісекунд | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`), `no_picker`, `picker_days`, `picker_seconds` (`true`), `picker_milliseconds`. |
 | `DurationPicker` | `i64` мілісекунд | `signed`, `days`, `seconds` (`true`), `milliseconds`, `enabled`, `on_commit`. |
 | `TimeField` | `u32` секунд від півночі | `seconds`, `step_s` (`60`), `hour12`, `minute_step` (`1`), `no_picker`. |
@@ -133,6 +135,10 @@
 | `font_size` | `number` | не встановлено | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Перевизначення метрики; див. нижче. |
 | `class` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Додатковий клас кореня. |
 | `style` | `string signal` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField, Calendar | Додатковий стиль кореня. |
+| `increase_label` | `string signal` | ключ рядка | NumberField | Перекладний текст; див. Рядки. |
+| `decrease_label` | `string signal` | ключ рядка | NumberField | Перекладний текст; див. Рядки. |
+| `increase_icon` | `Option<IconData>` | ключ піктограми | NumberField | Перевизначення вбудованої піктограми; див. Піктограми. |
+| `decrease_icon` | `Option<IconData>` | ключ піктограми | NumberField | Перевизначення вбудованої піктограми; див. Піктограми. |
 | `unit_padding_x` | `number` | не встановлено | NumberField | Перевизначення метрики; див. нижче. |
 | `unit_gap` | `number` | не встановлено | NumberField | Перевизначення метрики; див. нижче. |
 | `state` | `Signal<Option<ControlState>>` | немає | NumberField, DurationField, TimeField, DateTimeField, DateRangeField, ColorField, ParsedField | Перевизначення зовнішнього стану елемента керування. |
@@ -345,6 +351,8 @@ DurationField приймає перекладені суфікси поряд і
 
 | Ключ | Проп | Типове значення |
 | :--- | :--- | :--- |
+| `number-field.increase` | `increase_label` | `Increase` |
+| `number-field.decrease` | `decrease_label` | `Decrease` |
 | `number-field.placeholder` | `placeholder` | `(empty)` |
 | `number-field.label` | `aria_label` | `Number` |
 | `duration-field.placeholder` | `placeholder` | `(empty)` |
@@ -445,6 +453,8 @@ DurationField приймає перекладені суфікси поряд і
 
 | Ключ | Проп | Типове значення |
 | :--- | :--- | :--- |
+| `number-field.increase` | `increase_icon` | `add` |
+| `number-field.decrease` | `decrease_icon` | `remove` |
 | `duration-field.expand` | `icon` | `arrow_drop_down` |
 | `duration-picker.increase` | `increase_icon` | `add` |
 | `duration-picker.decrease` | `decrease_icon` | `remove` |
