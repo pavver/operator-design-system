@@ -552,3 +552,33 @@ pub fn parse_date_range(text: &str, months: &[Vec<String>], year: i32) -> Option
     };
     Some(DateRange::new(start, end))
 }
+
+/// Unit sizes in milliseconds: day, hour, minute, second, millisecond.
+pub const DURATION_UNITS_MS: [i64; 5] = [86_400_000, 3_600_000, 60_000, 1_000, 1];
+
+/// Splits the magnitude of `ms` into the units marked in `shown` (day, hour, minute, second,
+/// millisecond); the largest shown unit takes everything above it and anything below the
+/// smallest shown unit is dropped.
+pub fn split_duration(ms: i64, shown: [bool; 5]) -> [i64; 5] {
+    let mut rest = ms.unsigned_abs();
+    let mut out = [0_i64; 5];
+    for (i, size) in DURATION_UNITS_MS.iter().enumerate() {
+        if shown[i] {
+            let size = size.unsigned_abs();
+            out[i] = i64::try_from(rest / size).unwrap_or(i64::MAX);
+            rest %= size;
+        }
+    }
+    out
+}
+
+/// The total of `parts` in milliseconds with the given sign.
+pub fn join_duration(parts: [i64; 5], negative: bool) -> i64 {
+    let total = parts
+        .iter()
+        .zip(DURATION_UNITS_MS)
+        .fold(0_i64, |acc, (p, size)| {
+            acc.saturating_add(p.saturating_mul(size))
+        });
+    if negative { -total } else { total }
+}

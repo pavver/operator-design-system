@@ -1,0 +1,11 @@
+date = "2026-11-24T00:13:40Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "DurationField gains a stepper popup, and the new DurationPicker shows one column per unit (days, hours, minutes, seconds, milliseconds) with increase and decrease buttons, number inputs and a sign switch for signed values."
+check = "Open both demo duration pickers, step across 59 minutes, type into a column, flip the sign, and check that an unsigned picker stops at zero."
+
+[uk]
+summary = "DurationField отримав спливний вибір кроками, а новий DurationPicker показує колонку для кожної одиниці (дні, години, хвилини, секунди, мілісекунди) з кнопками збільшення й зменшення, полями для чисел і перемикачем знака для значень зі знаком."
+check = "Відкрийте обидва демонстраційні пікери тривалості, перейдіть через 59 хвилин, введіть число в колонку, змініть знак і перевірте, що пікер без знака зупиняється на нулі."

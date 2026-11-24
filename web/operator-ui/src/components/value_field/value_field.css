@@ -348,3 +348,42 @@
 /* DateTimeField popup: the calendar and the clock dial side by side. */
 .op-date-time-popup { display: flex; flex-wrap: wrap; align-items: flex-start; }
 .op-date-time-popup > .op-clock-picker { box-shadow: inset var(--op-dim-border) 0 0 var(--op-field-divider, var(--op-divider)); padding: var(--op-dim-pad-tight) var(--op-dim-pad-content); }
+
+/* DurationPicker: one stepper column per unit. */
+.op-duration-picker { display: flex; flex-direction: column; gap: var(--op-field-popup-gap, var(--op-dim-gutter)); padding: var(--op-field-popup-padding, var(--op-dim-pad-content)); color: var(--op-field-text, var(--op-text-primary)); font-size: var(--op-field-font-size, var(--op-type-body-size)); }
+.op-duration-columns { display: flex; align-items: center; gap: var(--op-field-popup-gap, var(--op-dim-gutter)); }
+.op-duration-column { display: flex; flex-direction: column; align-items: stretch; width: var(--op-field-duration-column-width, calc(var(--op-du) * 16)); }
+.op-duration-step, .op-duration-sign {
+  display: grid;
+  place-items: center;
+  height: var(--op-field-duration-button-height, var(--op-dim-row-compact));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--op-field-secondary-text, var(--op-text-secondary));
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--op-motion-state-color) var(--op-ease-standard);
+}
+.op-duration-step:hover, .op-duration-sign:hover { background-color: var(--op-field-hover, var(--op-hover)); }
+.op-duration-step:disabled, .op-duration-sign:disabled { cursor: default; opacity: 0.5; }
+.op-duration-sign { width: var(--op-dim-row-standard); height: var(--op-field-duration-number-height, var(--op-dim-row-control)); box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-field-border, var(--op-border)); font-size: var(--op-type-section-title-size); font-weight: 700; color: var(--op-field-text, var(--op-text-primary)); }
+.op-duration-sign[aria-pressed="true"] { color: var(--op-field-accent, var(--op-accent)); box-shadow: inset 0 0 0 var(--op-dim-border-thick) var(--op-field-accent, var(--op-accent)); }
+.op-duration-number {
+  height: var(--op-field-duration-number-height, var(--op-dim-row-control));
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  box-shadow: inset 0 0 0 var(--op-dim-border) var(--op-field-border, var(--op-border));
+  background-color: var(--op-field-background, var(--op-surface));
+  color: inherit;
+  font: inherit;
+  font-size: var(--op-type-section-title-size);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.op-duration-number:focus { box-shadow: inset 0 0 0 var(--op-dim-border-thick) var(--op-field-accent, var(--op-accent)); }
+.op-duration-unit { text-align: center; color: var(--op-field-secondary-text, var(--op-text-secondary)); }
+.op-root .op-duration-step:focus-visible, .op-root .op-duration-sign:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }

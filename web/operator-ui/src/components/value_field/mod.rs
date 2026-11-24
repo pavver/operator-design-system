@@ -7,12 +7,15 @@
 pub mod color_math;
 pub mod parse;
 mod parsed;
+#[cfg(feature = "duration-field")]
+mod picker_popup;
 // Reuse the popup helper without adding dropdown-menu as a value-field dependency.
 #[cfg(all(
     any(
         feature = "color-field",
         feature = "date-time-field",
         feature = "date-range-field",
+        feature = "duration-field",
         feature = "time-field"
     ),
     not(feature = "dropdown-menu")
@@ -24,6 +27,7 @@ mod portal_style;
         feature = "color-field",
         feature = "date-time-field",
         feature = "date-range-field",
+        feature = "duration-field",
         feature = "time-field"
     ),
     feature = "dropdown-menu"
@@ -44,6 +48,8 @@ mod date_range;
 mod date_time;
 #[cfg(feature = "duration-field")]
 mod duration;
+#[cfg(feature = "duration-field")]
+mod duration_picker;
 #[cfg(feature = "number-field")]
 mod number;
 #[cfg(feature = "time-field")]
@@ -63,6 +69,8 @@ pub use date_range::DateRangeField;
 pub use date_time::DateTimeField;
 #[cfg(feature = "duration-field")]
 pub use duration::DurationField;
+#[cfg(feature = "duration-field")]
+pub use duration_picker::DurationPicker;
 #[cfg(feature = "number-field")]
 pub use number::NumberField;
 pub use parsed::ParsedField;

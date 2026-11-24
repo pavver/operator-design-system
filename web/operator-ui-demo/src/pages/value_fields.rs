@@ -24,6 +24,8 @@ pub fn value_fields() -> AnyView {
     let lamp = RwSignal::new("#ffb46b".to_string());
     let lamp_kelvin = RwSignal::new(Some(3000_u32));
     let picked = RwSignal::new("#457b9d".to_string());
+    let cook = RwSignal::new(45 * 60_000_i64);
+    let shift_by = RwSignal::new(-(26 * 3_600_000_i64));
     let trip = RwSignal::new(Some(DateRange::new((2026, 7, 12), (2026, 11, 5))));
     let report = RwSignal::new(None::<DateRange>);
     let wake = RwSignal::new(6 * 3600 + 45 * 60_u32);
@@ -55,6 +57,13 @@ pub fn value_fields() -> AnyView {
                 <DateTimeField label="Start" value=when/>
                 <ColorField label="Colour" value=color swatches=swatches.get_value()/>
             </div>
+        </Example>
+        <Example title="Duration picker" note="The arrow opens one column per unit; the buttons carry minutes into hours, and a signed field adds a sign switch." block=true>
+            <div class="demo-grid-2">
+                <DurationField label=l("Cooking time", "Час готування") value=cook picker_seconds=false/>
+                <DurationField label=l("Clock shift", "Зсув годинника") value=shift_by picker_days=true/>
+            </div>
+            <span class="op-t-caption demo-muted">{move || format!("cook={}ms shift={}ms", cook.get(), shift_by.get())}</span>
         </Example>
         <Example title="Date range" note="Press the first day, move to preview, press the last day; or pick a quick range. Text such as 12 Jul – 5 Nov or 2026-07-12..2026-11-05 works too." block=true>
             <div class="demo-grid-2">

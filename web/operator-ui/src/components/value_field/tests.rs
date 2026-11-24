@@ -318,3 +318,24 @@ mod ranges {
         );
     }
 }
+
+#[test]
+fn durations_split_into_shown_units() {
+    let ms = -(26 * 3_600_000 + 5 * 60_000 + 7_250);
+    assert_eq!(
+        split_duration(ms, [true, true, true, true, false]),
+        [1, 2, 5, 7, 0]
+    );
+    assert_eq!(
+        split_duration(ms, [false, true, true, true, false]),
+        [0, 26, 5, 7, 0]
+    );
+    assert_eq!(
+        split_duration(ms, [false, true, true, false, false]),
+        [0, 26, 5, 0, 0]
+    );
+    assert_eq!(
+        join_duration([0, 26, 5, 7, 0], true),
+        -(26 * 3_600_000 + 5 * 60_000 + 7_000)
+    );
+}

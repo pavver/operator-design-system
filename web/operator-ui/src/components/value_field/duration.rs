@@ -1,12 +1,17 @@
-//! DurationField: a signed duration in milliseconds.
+//! DurationField: a signed duration in milliseconds, with a DurationPicker popup.
 
+use super::duration_picker::DurationPicker;
 use super::parse::{format_duration, parse_duration};
 use super::parsed::ParsedField;
-use crate::components::field::FieldVariant;
-use crate::core::{ControlState, Slot, ui_text};
+use super::picker_popup::PickerPopup;
+use crate::components::field::{FieldMetrics, FieldVariant};
+use crate::components::popover::{Placement, Popover};
+use crate::core::{ControlState, Metric, Slot, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
+use operator_ui_tokens::{Icon as IconData, icons};
 
-/// Duration input: `1h 30m`, `90s`, `1:30`, `-5m`; the value is in milliseconds.
+/// Duration input: `1h 30m`, `90s`, `1:30`, `-5m`, with a [`DurationPicker`] popup; the value is
+/// in milliseconds.
 #[component]
 pub fn DurationField(
     value: RwSignal<i64>,
@@ -47,6 +52,24 @@ pub fn DurationField(
     #[prop(default = true.into(), into)] enabled: Signal<bool>,
     #[prop(optional, into)] state: Signal<Option<ControlState>>,
     #[prop(optional)] on_commit: Option<Callback<i64>>,
+    /// Hides the picker button; the field takes text only.
+    #[prop(optional)]
+    no_picker: bool,
+    /// Shows a days column in the picker.
+    #[prop(optional)]
+    picker_days: bool,
+    /// Shows a seconds column in the picker.
+    #[prop(default = true)]
+    picker_seconds: bool,
+    /// Shows a milliseconds column in the picker.
+    #[prop(optional)]
+    picker_milliseconds: bool,
+    #[prop(optional, into)] picker_label: MaybeProp<String>,
+    #[prop(optional, into)] popup_label: MaybeProp<String>,
+    #[prop(optional)] icon: Option<IconData>,
+    #[prop(optional, into)] icon_size: MaybeProp<f32>,
+    #[prop(optional, into)] popup_shadow_y: MaybeProp<f32>,
+    #[prop(optional, into)] popup_shadow_blur: MaybeProp<f32>,
 ) -> impl IntoView {
     let placeholder = ui_text(placeholder, "duration-field.placeholder", "");
     let aria_label = ui_text(aria_label, "duration-field.label", "Duration");
@@ -66,7 +89,40 @@ pub fn DurationField(
         let next = v.saturating_add(step_ms.saturating_mul(i64::from(delta)));
         if signed { next } else { next.max(0) }
     });
+    let picker_label = ui_text(picker_label, "duration-field.pick", "Pick a duration");
+    let popup_label = ui_text(popup_label, "duration-field.popup", "Duration");
+    let icon = ui_icon(icon, "duration-field.expand", icons::ARROW_DROP_DOWN);
+    let blocked = move || {
+        !enabled.get()
+            || matches!(
+                state.get(),
+                Some(ControlState::Disabled | ControlState::Pending)
+            )
+    };
+    let mut metrics = FieldMetrics {
+        height,
+        padding_x,
+        slot_size,
+        gap,
+        font_size,
+    }
+    .vars();
+    metrics.push(Metric::du("--op-field-icon-size", icon_size));
+    metrics.push(Metric::du("--op-field-popup-shadow-y", popup_shadow_y));
+    metrics.push(Metric::du(
+        "--op-field-popup-shadow-blur",
+        popup_shadow_blur,
+    ));
+    let custom_style = Signal::derive(root_style(metrics, style));
+    let popup = PickerPopup::new(custom_style, popup_label, blocked);
+    let trailing = (!no_picker).then(|| popup.button(picker_label, icon, blocked));
+    let commit = Callback::new(move |v: i64| {
+        if let Some(cb) = on_commit {
+            cb.run(v);
+        }
+    });
     view! {
+        <div class=root_class("op-value-anchor op-duration-field", class) style=move || custom_style.get() node_ref=popup.host>
         <ParsedField
             value=value
             format=format
@@ -84,17 +140,25 @@ pub fn DurationField(
             after=after
             label_slot=label_slot
             hint_slot=hint_slot
-            height=height
-            padding_x=padding_x
-            slot_size=slot_size
-            gap=gap
-            font_size=font_size
-            class=class
-            style=style
             enabled=enabled
             state=state
             on_commit=on_commit
+            trailing=trailing
         />
+        </div>
+        <Popover dismiss_on_scroll=true node_ref=popup.popup_ref open=popup.open anchor=popup.anchor placement=Placement::BelowStart class="op-value-popup" role="dialog" label=popup_label.get()>
+            <div style=move || popup.style.get()>
+                <DurationPicker
+                    value=value
+                    signed=signed
+                    days=picker_days
+                    seconds=picker_seconds
+                    milliseconds=picker_milliseconds
+                    enabled=Signal::derive(move || !blocked())
+                    on_commit=commit
+                />
+            </div>
+        </Popover>
     }
 }
 

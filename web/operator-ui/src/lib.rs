@@ -199,8 +199,6 @@ pub mod prelude {
     pub use crate::components::value_field::Calendar;
     #[cfg(feature = "date-time-field")]
     pub use crate::components::value_field::DateTimeField;
-    #[cfg(feature = "duration-field")]
-    pub use crate::components::value_field::DurationField;
     #[cfg(feature = "number-field")]
     pub use crate::components::value_field::NumberField;
     #[cfg(feature = "time-field")]
@@ -212,6 +210,8 @@ pub mod prelude {
         DateRangeField,
         parse::{DateRange, DateRangePreset, LocalDate},
     };
+    #[cfg(feature = "duration-field")]
+    pub use crate::components::value_field::{DurationField, DurationPicker};
     #[cfg(any(
         feature = "number-field",
         feature = "duration-field",

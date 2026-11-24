@@ -346,6 +346,9 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "Press the first day, move to preview, press the last day; or pick a quick range. Text such as 12 Jul – 5 Nov or 2026-07-12..2026-11-05 works too." => {
             "Натисніть перший день, ведіть для попереднього перегляду, натисніть останній; або виберіть швидкий діапазон. Текст на кшталт 12 лип – 5 лис чи 2026-07-12..2026-11-05 теж працює."
         }
+        "The arrow opens one column per unit; the buttons carry minutes into hours, and a signed field adds a sign switch." => {
+            "Стрілка відкриває колонку для кожної одиниці; кнопки переносять хвилини в години, а поле зі знаком додає перемикач знака."
+        }
         "The dial alone, for panels and dialogs." => "Лише циферблат — для панелей і діалогів.",
         "The editor alone, for panels and dialogs." => "Лише редактор — для панелей і діалогів.",
         "The arrow opens a calendar or the swatches; text input works too." => {
