@@ -35,7 +35,7 @@ Status: **draft** on web.
 | ClockPicker | `pad_content` padding; a readout of two `row_avatar` buttons in `type_screen_title_size` with a `0.5 DU` `accent` underline on the active hand, an optional AM/PM pair; a `64 DU` round dial in `surface_alt` with `row_compact` numbers, a `0.5 DU` `accent` hand and a round `row_compact` tip. |
 | Spectrum plane | `40 DU` high, saturation across and brightness up; an `icon_small` (`4 DU`) square marker with a `0.5 DU` light ring and a `0.25 DU` dark outline. |
 | Channel row | A caption, a `row_dense` bar with a `pad_small` marker that overhangs it by `gap_micro`, and a `14 DU` number input `row_compact` high; opacity bars show a checkerboard. |
-| Colour code | A `row_compact` input with an `icon_field` (`5 DU`) sample, the code, and the CSS form of the current mode. |
+| Colour code | A `row_compact` input with an `icon_field` (`5 DU`) sample, the code, the CSS form of the current mode and, where the browser offers the EyeDropper API, a `row_compact` screen colour picker button with an `icon_small` icon. |
 | Swatches | `row_compact` squares filling the width, `gap_micro` apart, with a `0.5 DU` `accent` outline on the selected one. |
 
 ## Geometry exceptions
@@ -71,6 +71,7 @@ The ClockPicker dial, its centre, the hand tip and the selected number are round
 * The temperature bar runs from `min_kelvin` to `max_kelvin` along the black-body curve; while the colour comes from it, `temperature` holds the kelvin value, and any other edit sets it to `None`.
 * Without `alpha` the value is always opaque; with it, an opaque colour stays `#rrggbb` and a translucent one becomes `#rrggbbaa`.
 * Invalid text in a number or the code input restores the shown value.
+* The screen colour picker button keeps the current opacity and commits the picked colour; it is absent where the browser lacks the EyeDropper API.
 
 ## Text forms
 
@@ -181,6 +182,8 @@ Labels are visible above the box; use `aria_label` for an accessible name alone.
 | `alpha_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
 | `hex_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
 | `swatches_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `eyedropper_label` | `string signal` | string key | ColorPicker | Translatable text; see Strings. |
+| `eyedropper_icon` | `Option<IconData>` | icon key | ColorPicker | Built-in icon override; see Icons. |
 | `width` | `number` | unset | ColorPicker | Metric override; see below. |
 | `padding` | `number` | unset | ColorPicker | Metric override; see below. |
 | `gap` | `number` | unset | ColorPicker | Metric override; see below. |
@@ -420,6 +423,7 @@ DurationField accepts translated suffixes as well as canonical English forms.
 | `color-picker.alpha` | `alpha_label` | `Opacity` |
 | `color-picker.hex` | `hex_label` | `Colour code` |
 | `color-picker.swatches` | `swatches_label` | `Presets` |
+| `color-picker.eyedropper` | `eyedropper_label` | `Pick from the screen` |
 | `parsed-field.placeholder` | `placeholder` | `(empty)` |
 | `parsed-field.label` | `aria_label` | `Value` |
 | `calendar.previous` | `previous_label` | `Previous month` |
@@ -462,5 +466,6 @@ DurationField accepts translated suffixes as well as canonical English forms.
 | `date-range-field.expand` | `icon` | `arrow_drop_down` |
 | `date-time-field.expand` | `icon` | `arrow_drop_down` |
 | `color-field.expand` | `icon` | `arrow_drop_down` |
+| `color-picker.eyedropper` | `eyedropper_icon` | `colorize` |
 | `calendar.previous` | `previous_icon` | `chevron_left` |
 | `calendar.next` | `next_icon` | `chevron_right` |

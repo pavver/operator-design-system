@@ -5,9 +5,42 @@ use super::color_math::{
     Hsl, Hsv, Rgba, hsl_to_rgb, hsv_keeping, hsv_to_rgb, kelvin_to_rgb, parse_rgba, rgb_to_hsl,
     rgb_to_kelvin,
 };
-use crate::core::{Metric, Slot, root_class, root_style, ui_text};
+use crate::components::primitives::Icon;
+use crate::core::{Metric, Slot, root_class, root_style, ui_icon, ui_text};
 use leptos::prelude::*;
+use leptos::task::spawn_local;
+use operator_ui_tokens::{Icon as IconData, dim, icons};
 use wasm_bindgen::JsCast;
+
+/// True when the browser offers the EyeDropper API.
+fn has_eyedropper() -> bool {
+    web_sys::window()
+        .and_then(|w| js_sys::Reflect::has(&w, &"EyeDropper".into()).ok())
+        .unwrap_or(false)
+}
+
+/// Lets the user pick a colour anywhere on the screen; `None` when cancelled or unsupported.
+async fn eyedrop() -> Option<String> {
+    let window = web_sys::window()?;
+    let ctor = js_sys::Reflect::get(&window, &"EyeDropper".into())
+        .ok()?
+        .dyn_into::<js_sys::Function>()
+        .ok()?;
+    let dropper = js_sys::Reflect::construct(&ctor, &js_sys::Array::new()).ok()?;
+    let open = js_sys::Reflect::get(&dropper, &"open".into())
+        .ok()?
+        .dyn_into::<js_sys::Function>()
+        .ok()?;
+    let promise = open
+        .call0(&dropper)
+        .ok()?
+        .dyn_into::<js_sys::Promise>()
+        .ok()?;
+    let result = wasm_bindgen_futures::JsFuture::from(promise).await.ok()?;
+    js_sys::Reflect::get(&result, &"sRGBHex".into())
+        .ok()?
+        .as_string()
+}
 
 /// An editor tab of [`ColorPicker`].
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -251,6 +284,10 @@ pub fn ColorPicker(
     #[prop(optional, into)] alpha_label: MaybeProp<String>,
     #[prop(optional, into)] hex_label: MaybeProp<String>,
     #[prop(optional, into)] swatches_label: MaybeProp<String>,
+    /// Accessible name of the screen colour picker button, shown where the browser supports it.
+    #[prop(optional, into)]
+    eyedropper_label: MaybeProp<String>,
+    #[prop(optional)] eyedropper_icon: Option<IconData>,
     #[prop(optional, into)] width: MaybeProp<f32>,
     #[prop(optional, into)] padding: MaybeProp<f32>,
     #[prop(optional, into)] gap: MaybeProp<f32>,
@@ -285,6 +322,12 @@ pub fn ColorPicker(
     let alpha_label = ui_text(alpha_label, "color-picker.alpha", "Opacity");
     let hex_label = ui_text(hex_label, "color-picker.hex", "Colour code");
     let swatches_label = ui_text(swatches_label, "color-picker.swatches", "Presets");
+    let eyedropper_label = ui_text(
+        eyedropper_label,
+        "color-picker.eyedropper",
+        "Pick from the screen",
+    );
+    let eyedropper_icon = ui_icon(eyedropper_icon, "color-picker.eyedropper", icons::COLORIZE);
     let custom_style = root_style(
         vec![
             Metric::du("--op-field-color-width", width),
@@ -752,6 +795,23 @@ pub fn ColorPicker(
                     }
                 />
                 <span class="op-color-readout op-t-caption">{readout}</span>
+                {has_eyedropper().then(|| view! {
+                    <button
+                        type="button"
+                        class="op-rippled op-color-eyedropper"
+                        aria-label=move || eyedropper_label.get()
+                        title=move || eyedropper_label.get()
+                        disabled=move || !enabled.get()
+                        on:click=move |_| spawn_local(async move {
+                            if let Some(c) = eyedrop().await.and_then(|t| parse_rgba(&t)) {
+                                let c = Rgba { a: a.get_untracked(), ..c };
+                                set_rgba(c, true);
+                            }
+                        })
+                    >
+                        {move || view! { <Icon icon=eyedropper_icon.get() size=dim::ICON_SMALL attr:style="width:var(--op-field-icon-size, var(--op-dim-icon-small));height:var(--op-field-icon-size, var(--op-dim-icon-small));"/> }}
+                    </button>
+                })}
             </div>
             {has_swatches.then(|| view! {
                 <div class="op-color-swatches" role="listbox" aria-label=move || swatches_label.get()>

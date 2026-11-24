@@ -1,0 +1,11 @@
+date = "2026-11-24T00:33:54Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "ColorPicker adds a screen colour picker button where the browser offers the EyeDropper API; the `colorize` icon joins the icon set."
+check = "In Chromium, press the button next to the colour code, pick a colour on the screen, and check that the value and opacity are right; in Firefox the button is absent."
+
+[uk]
+summary = "ColorPicker додає кнопку вибору кольору з екрана там, де браузер підтримує EyeDropper API; до набору піктограм додано `colorize`."
+check = "У Chromium натисніть кнопку поруч із кодом кольору, виберіть колір на екрані й перевірте значення та прозорість; у Firefox кнопки немає."

@@ -114,6 +114,7 @@ pub fn ukrainian(key: &str) -> Option<&'static str> {
         "color-picker.blue" => "Синій",
         "color-picker.alpha" => "Непрозорість",
         "color-picker.hex" => "Код кольору",
+        "color-picker.eyedropper" => "Взяти колір з екрана",
         "color-picker.swatches" => "Шаблони",
         "combobox.placeholder" => "",
         "combobox.label" => "Виберіть значення",

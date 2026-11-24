@@ -475,6 +475,13 @@ pub mod icons {
             "m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z",
         ],
     };
+    pub const COLORIZE: Icon = Icon {
+        name: "colorize",
+        view_box: "0 -960 960 960",
+        paths: &[
+            "M144-144v-178l342-342-54-53 51-51 72 72 137-137 139 142-135 135 72 73-51 51-54-54-341 342H144Zm72-72h76l320-320-75-76-321 320v76Zm424-385 90-91-38-39-91 90 39 40Zm0 0-39-40 39 40Z",
+        ],
+    };
     pub const CONTENT_COPY: Icon = Icon {
         name: "content_copy",
         view_box: "0 -960 960 960",
@@ -640,6 +647,7 @@ pub mod icons {
         CHEVRON_LEFT,
         CHEVRON_RIGHT,
         CLOSE,
+        COLORIZE,
         CONTENT_COPY,
         DARK_MODE,
         DELETE,

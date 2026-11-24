@@ -44,3 +44,4 @@ edit = { material = "edit" }
 download = { material = "download" }
 filter_list = { material = "filter_list" }
 open_in_new = { material = "open_in_new" }
+colorize = { material = "colorize" }

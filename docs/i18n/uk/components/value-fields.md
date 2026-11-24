@@ -35,7 +35,7 @@
 | ClockPicker | Внутрішній відступ `pad_content`; показ із двох кнопок `row_avatar` розміром `type_screen_title_size` з підкресленням `0.5 DU` у кольорі `accent` на активній стрілці та необов'язковою парою AM/PM; круглий циферблат `64 DU` у `surface_alt` із числами `row_compact`, стрілкою `0.5 DU` у кольорі `accent` і круглим кінчиком `row_compact`. |
 | Площина спектра | Заввишки `40 DU`, насиченість по горизонталі, яскравість угору; квадратний маркер `icon_small` (`4 DU`) зі світлим кільцем `0.5 DU` і темним контуром `0.25 DU`. |
 | Рядок каналу | Підпис, смуга `row_dense` із маркером `pad_small`, що виступає на `gap_micro`, і числове поле `14 DU` заввишки `row_compact`; смуга прозорості має шахове тло. |
-| Код кольору | Поле `row_compact` зі зразком `icon_field` (`5 DU`), кодом і CSS-формою поточного режиму. |
+| Код кольору | Поле `row_compact` зі зразком `icon_field` (`5 DU`), кодом, CSS-формою поточного режиму та, якщо браузер підтримує EyeDropper API, кнопкою вибору кольору з екрана `row_compact` із піктограмою `icon_small`. |
 | Зразки | Квадрати `row_compact` на всю ширину з проміжком `gap_micro`, із контуром `0.5 DU` у кольорі `accent` на вибраному. |
 
 ## Винятки геометрії
@@ -71,6 +71,7 @@
 * Смуга температури йде від `min_kelvin` до `max_kelvin` уздовж кривої чорного тіла; поки колір задано нею, `temperature` містить значення в кельвінах, а будь-яке інше редагування встановлює `None`.
 * Без `alpha` значення завжди непрозоре; з ним непрозорий колір лишається `#rrggbb`, а напівпрозорий стає `#rrggbbaa`.
 * Некоректний текст у числовому полі чи полі коду відновлює показане значення.
+* Кнопка вибору кольору з екрана зберігає поточну прозорість і фіксує вибраний колір; її немає, якщо браузер не підтримує EyeDropper API.
 
 ## Текстові форми
 
@@ -181,6 +182,8 @@
 | `alpha_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
 | `hex_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
 | `swatches_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `eyedropper_label` | `string signal` | ключ рядка | ColorPicker | Перекладний текст; див. Рядки. |
+| `eyedropper_icon` | `Option<IconData>` | ключ піктограми | ColorPicker | Перевизначення вбудованої піктограми; див. Піктограми. |
 | `width` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
 | `padding` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
 | `gap` | `number` | не встановлено | ColorPicker | Перевизначення метрики; див. нижче. |
@@ -420,6 +423,7 @@ DurationField приймає перекладені суфікси поряд і
 | `color-picker.alpha` | `alpha_label` | `Opacity` |
 | `color-picker.hex` | `hex_label` | `Colour code` |
 | `color-picker.swatches` | `swatches_label` | `Presets` |
+| `color-picker.eyedropper` | `eyedropper_label` | `Pick from the screen` |
 | `parsed-field.placeholder` | `placeholder` | `(empty)` |
 | `parsed-field.label` | `aria_label` | `Value` |
 | `calendar.previous` | `previous_label` | `Previous month` |
@@ -462,5 +466,6 @@ DurationField приймає перекладені суфікси поряд і
 | `date-range-field.expand` | `icon` | `arrow_drop_down` |
 | `date-time-field.expand` | `icon` | `arrow_drop_down` |
 | `color-field.expand` | `icon` | `arrow_drop_down` |
+| `color-picker.eyedropper` | `eyedropper_icon` | `colorize` |
 | `calendar.previous` | `previous_icon` | `chevron_left` |
 | `calendar.next` | `next_icon` | `chevron_right` |

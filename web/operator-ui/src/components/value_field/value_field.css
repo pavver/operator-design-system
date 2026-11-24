@@ -390,3 +390,20 @@
 
 /* NumberField steppers. */
 .op-number-step:disabled { cursor: default; opacity: 0.4; }
+
+/* ColorPicker screen colour picker. */
+.op-color-eyedropper {
+  flex: none;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: var(--op-dim-row-compact);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--op-field-secondary-text, var(--op-text-secondary));
+  cursor: pointer;
+  box-shadow: inset var(--op-dim-border) 0 0 var(--op-field-border, var(--op-border));
+}
+.op-color-eyedropper:hover { background-color: var(--op-field-hover, var(--op-hover)); color: var(--op-field-text, var(--op-text-primary)); }
+.op-root .op-color-eyedropper:focus-visible { outline: var(--op-dim-border-thick) solid var(--op-field-accent, var(--op-accent)); outline-offset: calc(var(--op-dim-border-thick) * -1); }
