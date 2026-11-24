@@ -1,6 +1,7 @@
 //! DateTimeField and its month Calendar.
 
 use super::calendar::Calendar;
+use super::clock::ClockPicker;
 use super::parse::{LocalDateTime, format_date_time, parse_date_time};
 use super::parsed::ParsedField;
 use super::portal_style::{field_popup_label, field_popup_style};
@@ -14,13 +15,23 @@ use operator_ui_tokens::dim;
 use operator_ui_tokens::{Icon as IconData, icons};
 use std::sync::Arc;
 
-/// Local date and time input (`2026-11-17 07:30`) with a calendar for the date.
+/// Local date and time input (`2026-11-17 07:30`) with a calendar for the date and a clock dial
+/// for the time.
 #[component]
 pub fn DateTimeField(
     value: RwSignal<LocalDateTime>,
     /// Always shows seconds.
     #[prop(optional)]
     seconds: bool,
+    /// Hides the clock dial; the popup holds the calendar alone and closes when a day is picked.
+    #[prop(optional)]
+    no_clock: bool,
+    /// The dial shows 12 hours with AM and PM.
+    #[prop(optional)]
+    hour12: bool,
+    /// Minutes snap to this step on the dial.
+    #[prop(default = 1)]
+    minute_step: u32,
     #[prop(optional, into)] placeholder: MaybeProp<String>,
     #[prop(optional, into)] label: MaybeProp<String>,
     #[prop(optional, into)] hint: MaybeProp<String>,
@@ -132,7 +143,32 @@ pub fn DateTimeField(
                 cb.run(next);
             }
         }
-        open.set(false);
+        if no_clock {
+            open.set(false);
+        }
+    });
+    // The dial edits the time of day of the value.
+    let time = RwSignal::new(value.get_untracked().second_of_day);
+    Effect::new(move |_| {
+        let t = value.get().second_of_day;
+        if time.get_untracked() != t {
+            time.set(t);
+        }
+    });
+    Effect::new(move |_| {
+        let t = time.get();
+        let current = value.get_untracked();
+        if current.second_of_day != t {
+            value.set(LocalDateTime {
+                second_of_day: t,
+                ..current
+            });
+        }
+    });
+    let time_commit = Callback::new(move |_: u32| {
+        if let Some(cb) = on_commit {
+            cb.run(value.get_untracked());
+        }
     });
     let trailing: ChildrenFn = Arc::new(move || {
         view! {
@@ -177,13 +213,24 @@ pub fn DateTimeField(
             />
         </div>
         <Popover dismiss_on_scroll=true node_ref=popup_ref open=open anchor=anchor placement=Placement::BelowStart gap=0.0 class="op-value-popup" role="dialog" label=popup_label.get()>
-            <div style=move || popup_style.get()>
+            <div class="op-date-time-popup" style=move || popup_style.get()>
             <Calendar
                 selected=selected
                 on_pick=pick
                 month_names=months.get_value().unwrap_or_default()
                 weekday_names=weekdays.get_value().unwrap_or_default()
             />
+            {(!no_clock).then(|| view! {
+                <ClockPicker
+                    value=time
+                    hour12=hour12
+                    minute_step=minute_step
+                    enabled=Signal::derive(move || !blocked())
+                    on_commit=time_commit
+                    on_done=Callback::new(move |()| open.set(false))
+                    size=48.0
+                />
+            })}
             </div>
         </Popover>
     }

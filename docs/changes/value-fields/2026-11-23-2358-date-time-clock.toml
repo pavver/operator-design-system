@@ -1,0 +1,11 @@
+date = "2026-11-23T23:58:32Z"
+status = "draft"
+kind = "feature"
+
+[en]
+summary = "DateTimeField shows a clock dial beside the calendar: a picked day keeps the popup open, the dial sets the time, and releasing the minute closes it. `no_clock` restores the calendar alone; `hour12` and `minute_step` configure the dial."
+check = "Open the Start field, pick a day, drag the hour and the minute, and check the text and that the popup closes after the minute."
+
+[uk]
+summary = "DateTimeField показує циферблат поруч із календарем: вибраний день лишає вікно відкритим, циферблат задає час, а відпускання хвилини закриває його. `no_clock` повертає лише календар; `hour12` і `minute_step` налаштовують циферблат."
+check = "Відкрийте поле «Початок», виберіть день, перетягніть годину й хвилину, перевірте текст і те, що вікно закривається після хвилини."

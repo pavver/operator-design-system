@@ -32,7 +32,7 @@ use super::dropdown_menu::portal_style;
 
 #[cfg(any(feature = "date-time-field", feature = "date-range-field"))]
 mod calendar;
-#[cfg(feature = "time-field")]
+#[cfg(any(feature = "time-field", feature = "date-time-field"))]
 mod clock;
 #[cfg(feature = "color-field")]
 mod color;

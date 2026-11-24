@@ -11,7 +11,7 @@ Status: **draft** on web.
 * DurationField: signed durations such as delays and offsets (`1h 30m`, `-15m`).
 * TimeField: a time of day (`07:30`) with a clock dial.
 * ClockPicker: the clock dial alone: drag the hand to the hour, then to the minute.
-* DateTimeField: a local date and time (`2026-11-17 07:30`) with a calendar.
+* DateTimeField: a local date and time (`2026-11-17 07:30`) with a calendar and a clock dial.
 * DateRangeField: a range of days such as `12 Jul – 5 Nov 2026` with quick ranges and two linked months.
 * ColorField: a colour as `#rrggbb` (or `#rrggbbaa` with opacity) with a ColorPicker popup.
 * ColorPicker: the colour editor alone, for panels and dialogs: spectrum, RGB, HSL and colour temperature modes, opacity, a colour code and swatches.

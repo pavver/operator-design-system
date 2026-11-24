@@ -344,3 +344,7 @@
 .op-range-main { display: flex; flex-direction: column; }
 .op-range-months { display: flex; flex-wrap: wrap; }
 .op-range-status { padding: 0 var(--op-dim-pad-card) var(--op-dim-pad-tight); color: var(--op-field-secondary-text, var(--op-text-secondary)); }
+
+/* DateTimeField popup: the calendar and the clock dial side by side. */
+.op-date-time-popup { display: flex; flex-wrap: wrap; align-items: flex-start; }
+.op-date-time-popup > .op-clock-picker { box-shadow: inset var(--op-dim-border) 0 0 var(--op-field-divider, var(--op-divider)); padding: var(--op-dim-pad-tight) var(--op-dim-pad-content); }
