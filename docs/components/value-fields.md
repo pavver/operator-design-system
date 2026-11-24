@@ -26,6 +26,7 @@ Status: **draft** on web.
 | Calendar | Popup with a `row_compact` header (previous, month and year, next), a weekday row of `row_dense` and `row_compact` square day cells; weeks start on Monday. |
 | ColorPicker | `80 DU` wide, `pad_content` padding, `gutter` between rows; a row of mode tabs `row_compact` high with a `0.5 DU` `accent` underline on the selected one. |
 | Date range popup | A `36 DU` column of `row_compact` quick ranges with a `0.5 DU` `accent` start stripe on the matching one and a divider, then two calendars side by side and a caption hint; the calendars wrap below each other when the screen is narrow. |
+| Date and time popup | The calendar, then a `48 DU` ClockPicker after a divider; they wrap below each other when the screen is narrow. |
 | Month and year grids | Three columns and four rows filling the day grid, with the same `accent` fill for the selected month or year and outline for the current one. |
 | Range days | The ends are filled with `accent`; the days between are tinted with `accent` at 22%. |
 | ClockPicker | `pad_content` padding; a readout of two `row_avatar` buttons in `type_screen_title_size` with a `0.5 DU` `accent` underline on the active hand, an optional AM/PM pair; a `64 DU` round dial in `surface_alt` with `row_compact` numbers, a `0.5 DU` `accent` hand and a round `row_compact` tip. |
@@ -48,6 +49,7 @@ The ClockPicker dial, its centre, the hand tip and the selected number are round
 * Arrow Up and Down step the value: NumberField by `step` within `min` and `max`, DurationField by `step_ms`, TimeField by `step_s` around midnight.
 * External changes of the value show up unless the field has focus.
 * The calendar title opens a grid of months, and again a grid of twelve years; picking a year returns to its months and picking a month returns to its days; the arrows move by a month, a year or twelve years.
+* In DateTimeField a picked day keeps the popup open for the dial; the dial changes the time live, and releasing the minute hand closes the popup; with `no_clock` a picked day closes it.
 * The calendar keeps the time of day; the selected day is filled with `accent`, today has an `accent` outline.
 * Popups are [Popover](popover.md) layers and close on a press outside or Escape.
 * DateRangeField: the first press on a day starts the range, the pointer or focus previews it, and the second press ends it, commits and closes the popup; the two days may come in any order.
@@ -86,7 +88,7 @@ Applications that need localized forms wrap [`ParsedField`](#parsedfield) with t
 | `DurationField` | `i64` milliseconds | `signed` (`true`), `default_unit_ms` (`1000`), `step_ms` (`1000`). |
 | `TimeField` | `u32` seconds since midnight | `seconds`, `step_s` (`60`), `hour12`, `minute_step` (`1`), `no_picker`. |
 | `ClockPicker` | `u32` seconds since midnight | `hour12`, `minute_step` (`1`), `enabled`, `on_commit`, `on_done`. |
-| `DateTimeField` | `LocalDateTime` | `seconds`, `month_names`, `weekday_names`. |
+| `DateTimeField` | `LocalDateTime` | `seconds`, `no_clock`, `hour12`, `minute_step` (`1`), `month_names`, `weekday_names`. |
 | `ColorField` | `String` `#rrggbb` or `#rrggbbaa` | `swatches`, `alpha`, `modes`, `min_kelvin` (`2000`), `max_kelvin` (`6500`), `temperature`. |
 | `ColorPicker` | `String` `#rrggbb` or `#rrggbbaa` | `swatches`, `alpha`, `modes` (`ColorMode::Spectrum`, `Rgb`, `Hsl`, `Temperature`; empty means all), `min_kelvin`, `max_kelvin`, `temperature: Option<RwSignal<Option<u32>>>`, `enabled`, `on_commit`. |
 | `DateRangeField` | `Option<DateRange>` | `presets` (`DateRangePreset::defaults()`), `allow_empty`, `short_month_names`, `month_names`, `weekday_names`. |
